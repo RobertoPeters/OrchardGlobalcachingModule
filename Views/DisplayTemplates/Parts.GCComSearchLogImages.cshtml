@@ -1,0 +1,144 @@
+﻿@using Orchard.Mvc.Html
+@model Globalcaching.Models.GCComSearchLogImagesResult
+
+@{
+    Style.Require("datetimepicker.Style");
+}
+
+<div class="form-group">
+    <label for="startdate1" class="col-sm-2 control-label">@T("Vanaf datum")</label>
+    <div class='col-sm-10 input-group date' id='startdate1'>
+        <input type='text' class="form-control" />
+        <span class="input-group-addon">
+            <span class="fa fa-calendar"></span>
+        </span>
+    </div>
+</div>
+<div class="form-group">
+    <label for="enddate1" class="col-sm-2 control-label">@T("Tot en met datum")</label>
+    <div class='col-sm-10 input-group date' id='enddate1'>
+        <input type='text' class="form-control" />
+        <span class="input-group-addon">
+            <span class="fa fa-calendar"></span>
+        </span>
+    </div>
+</div>
+<div class="form-group">
+    <label for="CountryCode" class="col-sm-2 control-label">@T("Land")</label>
+    <div class="col-sm-10">
+        @Html.DropDownListFor(
+                        m => m.Filter.CountryID,
+                       new SelectList(
+                              new List<Object>{
+                                   new { value = 0 , text = "Alle"  },
+                                   new { value = 141 , text = "Nederland"  },
+                                   new { value = 4 , text = "Belgie" },
+                                   new { value = 8 , text = "Luxemburg"}
+                                },
+                              "value",
+                              "text",
+                           Model.Filter.CountryID
+           )
+        )
+    </div>
+</div>
+<button class="btn btn-default" type="button" id="gccomSearchLogImagesButton">Zoek!</button>
+
+<div id="gccomSearchLogImagesTopPager">
+</div>
+<div class="row" id="logImagesContent">
+
+</div>
+<div id="gccomSearchLogImagesBottomPager">
+</div>
+
+<script type="text/javascript">
+
+    initGlobalcachingPager("gccomSearchLogImagesTopPager", "gccomSearchLogImages");
+    initGlobalcachingPager("gccomSearchLogImagesBottomPager", "gccomSearchLogImages");
+
+    function requestgccomSearchLogImagesPage(page) {
+        var resultElementName = "#logImagesContent";
+        var pagerElementName = ".gccomSearchLogImages";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).html('');
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Index", "GCComSearchLogImages", new { area = "Globalcaching" })',
+            data: {
+                StartDate: $("#startdate1").data("DateTimePicker").getDate().toISOString(),
+                EndDate: $("#enddate1").data("DateTimePicker").getDate().toISOString(),
+                CountryID: $("#Filter_CountryID").val(),
+                page: page,
+                pageSize: "30",
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+
+                updateList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function updateList(response) {
+        var resultElementName = "#logImagesContent";
+        var pagerElementName = ".gccomSearchLogImages";
+        var html = '<table width="100%">';
+        var col = 0;
+        for (var i = 0; i < response.Items.length; i++) {
+            var line = response.Items[i];
+
+            if (col == 0) {
+                html += '<tr>';
+            }
+
+            var d = eval('new' + line.VisitDate.replace(/\//g, ' '));
+            html += '<td><table width="100%">';
+            html += '<tr><td colspan="2"><center><a href="' + line.ImageUrl + '" target="_blank"><img src="' + line.ThumbUrl + '"/></a><br /><a href="' + line.LogUrl + '" target="_blank">Log</a></center></td></tr>';
+            html += '<tr><td>Naam:</td><td>' + line.Name + '</td></tr>';
+            html += '<tr><td>Datum:</td><td>' + d.toLocaleDateString() + '</td></tr>';
+            html += '<tr><td>Door:</td><td><a href="http://www.geocaching.com/profile/?guid=' + line.UserNameGuid + '" target="_blank">' + line.UserName + '</a></td></tr>';
+            html += '<tr><td>Cache:</td><td><a href="@Href("~/Geocache/")' + line.GeocacheCode + '">' + line.GeocacheName + '</a></td></tr>';
+            html += '</table></td>';
+
+            col++;
+            if (col>=5)
+            {
+                col = 0;
+                html += '</tr>';
+            }
+        }
+        if (col > 0)
+        {
+            html += '</tr>';
+        }
+        html += '</table>';
+        $(resultElementName).html(html);
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestgccomSearchLogImagesPage");
+    }
+
+    updateList(@Html.Raw(Json.Encode(@Model)));
+
+    $("#gccomSearchLogImagesButton").click(function () {
+        requestgccomSearchLogImagesPage('1');
+    });
+
+    $(function () {
+        var d = moment('@Model.Filter.StartDate.Month' + '/' + '@Model.Filter.StartDate.Day'+ '/' +  '@Model.Filter.StartDate.Year');
+        $('#startdate1').datetimepicker({
+            defaultDate: d
+        });
+        var e = moment('@Model.Filter.EndDate.Month' + '/' + '@Model.Filter.EndDate.Day' + '/' + '@Model.Filter.EndDate.Year');
+        $('#enddate1').datetimepicker({
+            defaultDate: e
+        });
+    });
+</script>

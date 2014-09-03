@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D132A50B-152C-4360-8E1C-C77D19280D97}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Globalcaching</RootNamespace>
+    <AssemblyName>Globalcaching</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetOpenAuth">
+      <HintPath>.\DotNetOpenAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Media\logtypes\1.gif" />
+    <None Include="Media\logtypes\10.gif" />
+    <None Include="Media\logtypes\11.gif" />
+    <None Include="Media\logtypes\12.gif" />
+    <None Include="Media\logtypes\13.gif" />
+    <None Include="Media\logtypes\14.gif" />
+    <None Include="Media\logtypes\15.gif" />
+    <None Include="Media\logtypes\16.gif" />
+    <None Include="Media\logtypes\18.gif" />
+    <None Include="Media\logtypes\19.gif" />
+    <None Include="Media\logtypes\2.gif" />
+    <None Include="Media\logtypes\22.gif" />
+    <None Include="Media\logtypes\23.gif" />
+    <None Include="Media\logtypes\24.gif" />
+    <None Include="Media\logtypes\25.gif" />
+    <None Include="Media\logtypes\3.gif" />
+    <None Include="Media\logtypes\4.gif" />
+    <None Include="Media\logtypes\45.gif" />
+    <None Include="Media\logtypes\46.gif" />
+    <None Include="Media\logtypes\47.gif" />
+    <None Include="Media\logtypes\48.gif" />
+    <None Include="Media\logtypes\5.gif" />
+    <None Include="Media\logtypes\6.gif" />
+    <None Include="Media\logtypes\68.gif" />
+    <None Include="Media\logtypes\69.gif" />
+    <None Include="Media\logtypes\7.gif" />
+    <None Include="Media\logtypes\70.gif" />
+    <None Include="Media\logtypes\74.gif" />
+    <None Include="Media\logtypes\75.gif" />
+    <None Include="Media\logtypes\9.gif" />
+    <None Include="Media\WptTypes\s\11.gif" />
+    <None Include="Media\WptTypes\s\12.gif" />
+    <None Include="Media\WptTypes\s\137.gif" />
+    <None Include="Media\WptTypes\s\15.gif" />
+    <None Include="Media\WptTypes\s\1858.gif" />
+    <None Include="Media\WptTypes\s\2.gif" />
+    <None Include="Media\WptTypes\s\3.gif" />
+    <None Include="Media\WptTypes\s\4.gif" />
+    <None Include="Media\WptTypes\s\5.gif" />
+    <None Include="Media\WptTypes\s\6.gif" />
+    <None Include="Media\WptTypes\s\8.gif" />
+    <None Include="Media\WptTypes\11.gif" />
+    <None Include="Media\WptTypes\12.gif" />
+    <None Include="Media\WptTypes\13.gif" />
+    <None Include="Media\WptTypes\137.gif" />
+    <None Include="Media\WptTypes\1858.gif" />
+    <None Include="Media\WptTypes\2.gif" />
+    <None Include="Media\WptTypes\3.gif" />
+    <None Include="Media\WptTypes\4.gif" />
+    <None Include="Media\WptTypes\5.gif" />
+    <None Include="Media\WptTypes\6.gif" />
+    <None Include="Media\WptTypes\8.gif" />
+    <None Include="Media\compass\E.gif" />
+    <None Include="Media\compass\N.gif" />
+    <None Include="Media\compass\NE.gif" />
+    <None Include="Media\compass\NW.gif" />
+    <None Include="Media\compass\S.gif" />
+    <None Include="Media\compass\SE.gif" />
+    <None Include="Media\compass\SW.gif" />
+    <None Include="Media\compass\W.gif" />
+    <None Include="Media\specialicons\check.gif" />
+    <None Include="Media\specialicons\mine.gif" />
+    <None Include="Media\container\1.gif" />
+    <None Include="Media\container\2.gif" />
+    <None Include="Media\container\3.gif" />
+    <None Include="Media\container\4.gif" />
+    <None Include="Media\container\5.gif" />
+    <None Include="Media\container\6.gif" />
+    <None Include="Media\container\8.gif" />
+    <None Include="Media\WptTypes\map\0.png" />
+    <None Include="Media\WptTypes\map\11.png" />
+    <None Include="Media\WptTypes\map\12.png" />
+    <None Include="Media\WptTypes\map\137.png" />
+    <None Include="Media\WptTypes\map\2.png" />
+    <None Include="Media\WptTypes\map\3.png" />
+    <None Include="Media\WptTypes\map\5.png" />
+    <None Include="Media\WptTypes\map\6.png" />
+    <None Include="Media\WptTypes\map\8.png" />
+    <None Include="Media\WptTypes\map\found.png" />
+    <None Include="Media\WptTypes\map\myown.png" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.nl.js" />
+    <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
+    <Content Include="Scripts\GlobalcachingPager.js" />
+    <Content Include="packages.config" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\gmapv3.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\keydragzoom_packed.js" />
+    <Content Include="Scripts\markerclusterer_compiled.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Styles\datetimepicker.css" />
+    <Content Include="Styles\usersonline.css" />
+    <Content Include="Web.config" />
+    <Content Include="Scripts\Web.config" />
+    <Content Include="Styles\Web.config" />
+    <Content Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Module.txt" />
+    <Content Include="Views\DisplayTemplates\Parts.LiveAPISettings.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\CacheList\Search.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.GCComQuickGeocacheSearch.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.GCComSearchLogImages.cshtml" />
+    <Content Include="Views\CacheMap\ShowMap.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.UsersOnline.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.EditCCCSettings.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.CheckCCC.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.StatisticsGeocachesPerYear.cshtml" />
+    <Content Include="Views\DisplayGeocache\Home.cshtml" />
+    <Content Include="Views\DisplayGeocache\NotAuthorized.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.GeocacheFilterMacro.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
+      <Project>{2D1D92BB-4555-4CBE-8D0E-63563D6CE4C6}</Project>
+      <Name>Orchard.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Orchard.Core.csproj">
+      <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
+      <Name>Orchard.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Orchard.Users\Orchard.Users.csproj">
+      <Project>{79aed36e-abd0-4747-93d3-8722b042454b}</Project>
+      <Name>Orchard.Users</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\CacheListController.cs" />
+    <Compile Include="Controllers\CacheMapController.cs" />
+    <Compile Include="Controllers\CheckCCCController.cs" />
+    <Compile Include="Controllers\EditCCCSettingsController.cs" />
+    <Compile Include="Controllers\GCComSearchLogImagesController.cs" />
+    <Compile Include="Controllers\LiveAPIOAuthController.cs" />
+    <Compile Include="Controllers\DisplayGeocacheController.cs" />
+    <Compile Include="Controllers\EditUserSettingsController.cs" />
+    <Compile Include="Controllers\GCComGeocacheLogsSearchController.cs" />
+    <Compile Include="Controllers\GCComUserSearchController.cs" />
+    <Compile Include="Controllers\MacroController.cs" />
+    <Compile Include="Core\DBCon.cs" />
+    <Compile Include="Core\Helper.cs" />
+    <Compile Include="Core\InMemoryTokenManager.cs" />
+    <Compile Include="Core\LatLon.cs" />
+    <Compile Include="Core\Live.cs" />
+    <Compile Include="Core\LiveAPIClient.cs" />
+    <Compile Include="Core\PetaPoco.cs" />
+    <Compile Include="Core\SmileySupport.cs" />
+    <Compile Include="Drivers\CheckCCCPartDriver.cs" />
+    <Compile Include="Drivers\EditCCCSettingsPartDriver.cs" />
+    <Compile Include="Drivers\GCComQuickGeocacheSearchPartDriver.cs" />
+    <Compile Include="Drivers\GCComSearchLogImagesPartDriver.cs" />
+    <Compile Include="Drivers\GCEuGeocacheFilterMacroPartDriver.cs" />
+    <Compile Include="Drivers\LiveAPISettingsPartDriver.cs" />
+    <Compile Include="Drivers\EditUserSettingsPartDriver.cs" />
+    <Compile Include="Drivers\GCComSearchGeocacheLogsOfUserPartDriver.cs" />
+    <Compile Include="Drivers\GCComSearchUserPartDriver.cs" />
+    <Compile Include="Drivers\OnlineUsersPartDriver.cs" />
+    <Compile Include="Drivers\StatisticsGeocachesPerYearDriver.cs" />
+    <Compile Include="Drivers\YafMostRecentShoutPartDriver.cs" />
+    <Compile Include="Drivers\YafMostRecentPostsPartDriver.cs" />
+    <Compile Include="Gavaghan.Geodesy\Angle.cs" />
+    <Compile Include="Gavaghan.Geodesy\Ellipsoid.cs" />
+    <Compile Include="Gavaghan.Geodesy\GeodeticCalculator.cs" />
+    <Compile Include="Gavaghan.Geodesy\GeodeticCurve.cs" />
+    <Compile Include="Gavaghan.Geodesy\GeodeticMeasurement.cs" />
+    <Compile Include="Gavaghan.Geodesy\GlobalCoordinates.cs" />
+    <Compile Include="Gavaghan.Geodesy\GlobalPosition.cs" />
+    <Compile Include="Migrations.cs" />
+    <Compile Include="Models\CheckCCCPart.cs" />
+    <Compile Include="Models\CheckCCCResult.cs" />
+    <Compile Include="Models\GCComGeocache.cs" />
+    <Compile Include="Models\GCComGeocacheLog.cs" />
+    <Compile Include="Models\GCComGeocacheLogImage.cs" />
+    <Compile Include="Models\GCComQuickGeocacheSearch.cs" />
+    <Compile Include="Models\GCComSearchLogImagesFilter.cs" />
+    <Compile Include="Models\GCComSearchLogImagesPart.cs" />
+    <Compile Include="Models\GCComSearchLogImagesResult.cs" />
+    <Compile Include="Models\GCComSearchLogsPart.cs" />
+    <Compile Include="Models\GCComQuickGeocacheSearchPart.cs" />
+    <Compile Include="Models\GCComSearchUserPart.cs" />
+    <Compile Include="Models\GCComUser.cs" />
+    <Compile Include="Models\GCEuCCCUser.cs" />
+    <Compile Include="Models\GCEuGeocache.cs" />
+    <Compile Include="Models\GCEuUserSettings.cs" />
+    <Compile Include="Models\GCEuCCCSettingsPart.cs" />
+    <Compile Include="Models\GCEuGeocacheFilterMacro.cs" />
+    <Compile Include="Models\GeocacheSearchFilter.cs" />
+    <Compile Include="Models\GeocacheSearchResult.cs" />
+    <Compile Include="Models\LiveAPISettingsPart.cs" />
+    <Compile Include="Models\GCEuUserSettingsPart.cs" />
+    <Compile Include="Models\StatisticsModels.cs" />
+    <Compile Include="Models\UsersOnlinePart.cs" />
+    <Compile Include="Models\YafMostRecentShoutPart.cs" />
+    <Compile Include="Models\YafMostRecentPostsPart.cs" />
+    <Compile Include="Models\YafPost.cs" />
+    <Compile Include="Models\YafShout.cs" />
+    <Compile Include="ResourceManifest.cs" />
+    <Compile Include="Routes.cs" />
+    <Compile Include="Services\GCComSearchGeocacheLogsService.cs" />
+    <Compile Include="Services\GCComSearchLogImagesService.cs" />
+    <Compile Include="Services\GCComSearchUserService.cs" />
+    <Compile Include="Services\GCEuCCCSettingsService.cs" />
+    <Compile Include="Services\GCEuUserSettingsService.cs" />
+    <Compile Include="Services\GlobalcachingScriptsFilter.cs" />
+    <Compile Include="Services\LiveAPISettingsService.cs" />
+    <Compile Include="Services\MacroService.cs" />
+    <Compile Include="Services\StatisticsService.cs" />
+    <Compile Include="Services\UsersOnlineService.cs" />
+    <Compile Include="Services\YafMembershipService.cs" />
+    <Compile Include="Services\YafMostRecentShoutService.cs" />
+    <Compile Include="Services\YafMostRecentPostsService.cs" />
+    <Compile Include="ViewModels\CacheMapSettings.cs" />
+    <Compile Include="ViewModels\EditCCCSettingsModel.cs" />
+    <Compile Include="ViewModels\EditUserSettingsModel.cs" />
+    <Compile Include="ViewModels\GeocacheDataModel.cs" />
+    <Compile Include="ViewModels\GeocacheFilterMacroModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DisplayTemplates\Parts.GCComSearchUser.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DisplayTemplates\Yaf.MostRecentPosts.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Placement.info" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DisplayTemplates\Yaf.MostRecentShout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Handlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DisplayTemplates\Parts.EditUserSettings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DisplayTemplates\Parts.GCComSearchGeocacheLogsUser.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Media\Web.config" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target> -->
+  <Target Name="AfterBuild" DependsOnTargets="AfterBuildCompiler">
+    <PropertyGroup>
+      <AreasManifestDir>$(ProjectDir)\..\Manifests</AreasManifestDir>
+    </PropertyGroup>
+    <!-- If this is an area child project, uncomment the following line:
+    <CreateAreaManifest AreaName="$(AssemblyName)" AreaType="Child" AreaPath="$(ProjectDir)" ManifestPath="$(AreasManifestDir)" ContentFiles="@(Content)" />
+    -->
+    <!-- If this is an area parent project, uncomment the following lines:
+    <CreateAreaManifest AreaName="$(AssemblyName)" AreaType="Parent" AreaPath="$(ProjectDir)" ManifestPath="$(AreasManifestDir)" ContentFiles="@(Content)" />
+    <CopyAreaManifests ManifestPath="$(AreasManifestDir)" CrossCopy="false" RenameViews="true" />
+    -->
+  </Target>
+  <Target Name="AfterBuildCompiler" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)\..\$(ProjectName)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>45979</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://orchard.codeplex.com</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

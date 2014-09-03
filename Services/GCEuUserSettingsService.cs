@@ -1,0 +1,125 @@
+﻿using Globalcaching.Models;
+using Orchard;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Web;
+
+namespace Globalcaching.Services
+{
+    public interface IGCEuUserSettingsService : IDependency
+    {
+        GCEuUserSettings GetSettings();
+        void UpdateSettings(GCEuUserSettings settings);
+    }
+
+    public class GCEuUserSettingsService : IGCEuUserSettingsService
+    {
+        public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
+        public static string dbYafForumConnString = ConfigurationManager.ConnectionStrings["yafnet"].ToString();
+
+        private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IOrchardServices _orchardServices;
+
+        public GCEuUserSettingsService(IWorkContextAccessor workContextAccessor,
+            IOrchardServices orchardServices)
+        {
+            _workContextAccessor = workContextAccessor;
+            _orchardServices = orchardServices;
+        }
+
+        private HttpContextBase HttpContext
+        {
+            get { return _workContextAccessor.GetContext().HttpContext; }
+        }
+
+        public GCEuUserSettings GetSettings()
+        {
+            GCEuUserSettings result = null;
+            if (_orchardServices.WorkContext.CurrentUser != null)
+            {
+                result = HttpContext.Session["GCEuUserSettings"] as GCEuUserSettings;
+                if (result != null)
+                {
+                    //just to be sure, check it!
+                    if (HttpContext.Session["GCEuUserSettingsForUser"] as string == _orchardServices.WorkContext.CurrentUser.UserName)
+                    {
+                        //ok
+                    }
+                    else
+                    {
+                        HttpContext.Session["GCEuUserSettings"] = null;
+                        HttpContext.Session["GCEuUserSettingsForUser"] = null;
+                        result = null;
+                    }
+                }
+                if (result == null)
+                {
+                    //get it!
+                    int? YafUserID = null;
+                    using (PetaPoco.Database db = new PetaPoco.Database(dbYafForumConnString, "System.Data.SqlClient"))
+                    {
+                        var idl = db.Fetch<int?>("select UserID from Yaf_User where Name=@0", _orchardServices.WorkContext.CurrentUser.UserName);
+                        if (idl != null && idl.Count > 0)
+                        {
+                            YafUserID = (int)idl[0];
+                        }
+                    }
+                    if (YafUserID != null)
+                    {
+                        using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                        {
+                            result = db.SingleOrDefault<GCEuUserSettings>("where YafUserID = @0", YafUserID);
+
+                            if (result == null)
+                            {
+                                result = new GCEuUserSettings();
+                                result.YafUserID = (int)YafUserID;
+                                result.DefaultCountryCode = 141;
+                                db.Insert(result);
+                            }
+                        }
+                        HttpContext.Session["GCEuUserSettings"] = result;
+                        HttpContext.Session["GCEuUserSettingsForUser"] = _orchardServices.WorkContext.CurrentUser.UserName;
+                    }
+                }
+            }
+            else
+            {
+                result = HttpContext.Session["GCEuUserSettings"] as GCEuUserSettings;
+                if (result != null)
+                {
+                    if (result.YafUserID > 1)
+                    {
+                        result = null;
+                    }
+                }
+                if (result == null)
+                {
+                    result = new GCEuUserSettings();
+                    result.YafUserID = 1;
+                    result.DefaultCountryCode = 141;
+                    HttpContext.Session["GCEuUserSettings"] = result;
+                    HttpContext.Session["GCEuUserSettingsForUser"] = "";
+                }
+            }
+            return result;
+        }
+
+        public void UpdateSettings(GCEuUserSettings settings)
+        {
+            if (_orchardServices.WorkContext.CurrentUser != null)
+            {
+                GCEuUserSettings currentSettings = GetSettings();
+                if (currentSettings != null && currentSettings.YafUserID>1 && currentSettings.YafUserID == settings.YafUserID)
+                {
+                    using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                    {
+                        db.Update("GCEuUserSettings", "YafUserID", settings);
+                    }
+                }
+            }
+       }
+    }
+}

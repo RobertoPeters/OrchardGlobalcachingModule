@@ -1,0 +1,10 @@
+﻿Name: Globalcaching
+AntiForgery: disabled
+Author: Globalcaching
+Website: http://www.globalcaching.eu
+Version: 1.0
+OrchardVersion: 1.0
+Description: Globalcaching specific modules
+Features:
+    Globalcaching:
+        Description: Globalcaching specific modules.

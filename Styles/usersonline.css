@@ -1,0 +1,19 @@
+﻿.infotext {
+    color: #ffffff;
+}
+
+.normaluser {
+    color: #ffffff;
+    cursor: pointer; 
+}
+
+.donatoruser {
+    color: #0026ff;
+    cursor: pointer; 
+}
+
+.postinguser {
+    color: #000000;
+    font-style: italic;
+    cursor: pointer; 
+}

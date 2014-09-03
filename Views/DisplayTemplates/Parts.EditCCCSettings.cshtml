@@ -1,0 +1,83 @@
+﻿@model Globalcaching.ViewModels.EditCCCSettingsModel
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Update", "EditCCCSettings", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form", @class="form-horizontal" }))
+{
+    if (@Model.CCCSettings == null)
+    {
+        <div class="alert alert-danger">Je moet ingelogd zijn om jouw CCC instellingen te wijzigen.</div>
+    }
+    else if (@Model.CCCSettings.GCComUserID <= 0)
+    {
+        <div class="alert alert-danger">Je moet Live API geautoriseerd te hebben om jouw CCC instellingen te wijzigen.</div>        
+    }
+    else
+    { 
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.CCCSettings.Active)
+                    @T("Actief")
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="CCCSettings.Telnr" class="col-sm-3 control-label">@T("Telefoonnummer (optioneel)")</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.CCCSettings.Telnr, new { placeholder = T("06 12312312"), @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.CCCSettings.SMS)
+                    @T("SMS mogelijk")
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.CCCSettings.PreferSMS)
+                    @T("Voorkeur voor SMS")
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.CCCSettings.HideEmailAddress)
+                    @T("Verberg emailadres in mobiele applicaties")
+                </label>
+            </div>
+        </div>
+    </div>
+       
+    <div class="form-group">
+        <label for="CCCSettings.TwitterUsername" class="col-sm-3 control-label">@T("Twitternaam (optioneel)")</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.CCCSettings.TwitterUsername, new { placeholder = T(""), @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="CCCSettings.Comment" class="col-sm-3 control-label">@T("Opmerking")</label>
+        <div class="col-sm-9">
+            @Html.TextAreaFor(m => m.CCCSettings.Comment, new { placeholder = T(""), @class = "form-control" })
+        </div>
+    </div>
+                 
+    @Html.HiddenFor(m => m.ReturnUrl)
+    <button type="submit" value="Update" class="btn btn-default">@T("Opslaan")</button>
+    }
+}

@@ -1,0 +1,8 @@
+﻿<ul>
+    @foreach (var l in Model)
+    {
+        <li>
+            <strong>@l.Username</strong> op @l.PostedAt.ToString("yyyy-MM-dd HH:mm") in @Html.Raw("<a href=" + l.PostUrl + "\" />" + @l.Topic + "</a>")
+        </li>
+    }
+</ul>

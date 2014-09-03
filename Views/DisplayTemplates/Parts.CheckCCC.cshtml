@@ -1,0 +1,112 @@
+﻿@model Globalcaching.Models.CheckCCCResult
+
+<div class="input-group">
+    <input type="text" class="form-control" id="cccSearchFor" placeholder="GC12345">
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" id="cccSearchForButton">Zoek!</button>
+    </span>
+</div><!-- /input-group -->
+
+<div id="cccContentTopPager">
+</div>
+<div id="cccContent"></div>
+<div id="cccContentBottomPager">
+</div>
+
+
+<script type="text/javascript">
+
+    initGlobalcachingPager("cccContentTopPager", "cccSearch");
+    initGlobalcachingPager("cccContentBottomPager", "cccSearch");
+
+    function requestcccSearchGeocachePage(page) {
+        var resultElementName = "#cccContent";
+        var pagerElementName = ".cccSearch";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).html('');
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Index", "CheckCCC", new { area = "Globalcaching" })',
+            data: {
+                id: $("#cccSearchFor").val(),
+                page: page,
+                pageSize: "50",
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+
+                updateList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function updateList(response) {
+        var resultElementName = "#cccContent";
+        var pagerElementName = ".cccSearch";
+
+        if (response.GeocacheCode != null && response.GeocacheCode != '')
+        {
+            $("#cccSearchFor").val(response.GeocacheCode);
+        }
+
+        var s = '';
+        if (response.Owner != null) {
+            var sms = response.Owner.SMS ? "Ja" : "Nee";
+            var presms = response.Owner.PreferSMS ? "Ja" : "Nee";
+
+            s += '<div class="row"><div class="col-md-12"><strong>Eigenaar</strong></div></div>';
+            s += '<div class="row"><div class="col-md-12"><img src="' + response.Owner.AvatarUrl + '" height="48" width="48"/> <a href="http://www.geocaching.com/profile/?guid=' + response.Owner.PublicGuid + '" target="_blank">' + response.Owner.UserName + '</a> (' + response.Owner.FindCount + ') </div></div>';
+            s += '<div class="row"><div class="col-md-3">Telefoonnummer</div><div class="col-md-9">' + response.Owner.Telnr + '</div></div>';
+            s += '<div class="row"><div class="col-md-3">SMS</div><div class="col-md-9">' + sms + '</div></div>';
+            s += '<div class="row"><div class="col-md-3">Voorkeur SMS</div><div class="col-md-9">' + presms + '</div></div>';
+            s += '<div class="row"><div class="col-md-3">Twitternaam (optioneel)</div><div class="col-md-9">' + response.Owner.TwitterUsername + '</div></div>';
+            s += '<div class="row"><div class="col-md-3">Opmerking</div><div class="col-md-9">' + response.Owner.Comment + '</div></div>';
+        }
+
+        s += '<table class="table table-striped table-hover">';
+        if (response.Items != null) {
+            for (var i = 0; i < response.Items.length; i++) {
+                var item = response.Items[i];
+
+                var sms = item.SMS ? "Ja" : "Nee";
+                var presms = item.PreferSMS ? "Ja" : "Nee";
+                var d = eval('new' + item.VisitDate.replace(/\//g, ' '));
+
+                s += '<tr><td>';
+                s += '<div class="row"><div class="col-md-12"><img src="' + item.AvatarUrl + '" height="48" width="48"/> <a href="http://www.geocaching.com/profile/?guid=' + item.PublicGuid + '" target="_blank">' + item.UserName + '</a> (' + item.FindCount + ') </div></div>';
+                s += '<div class="row"><div class="col-md-3">Telefoonnummer</div><div class="col-md-9">' + item.Telnr + '</div></div>';
+                s += '<div class="row"><div class="col-md-3">SMS</div><div class="col-md-9">' + sms + '</div></div>';
+                s += '<div class="row"><div class="col-md-3">Voorkeur SMS</div><div class="col-md-9">' + presms + '</div></div>';
+                s += '<div class="row"><div class="col-md-3">Twitternaam (optioneel)</div><div class="col-md-9">' + item.TwitterUsername + '</div></div>';
+                s += '<div class="row"><div class="col-md-3">Opmerking</div><div class="col-md-9">' + item.Comment + '</div></div>';
+                s += '<div class="row"><div class="col-md-3">Logdatum</div><div class="col-md-9">' + d.toLocaleDateString() + '</div></div>';
+                s += '</td></tr>';
+            }
+        }
+        s += '</table>';
+
+        $(resultElementName).html(s);
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestcccSearchGeocachePage");
+    }
+
+    $('#cccSearchFor').keypress(function (e) {
+        if (e.which == '13') {
+            requestcccSearchGeocachePage('1');
+        }
+    });
+
+    $("#cccSearchForButton").click(function () {
+        requestcccSearchGeocachePage('1');
+    });
+
+    updateList(@Html.Raw(Json.Encode(@Model)));
+
+</script>

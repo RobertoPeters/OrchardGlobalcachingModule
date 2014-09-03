@@ -1,0 +1,8 @@
+﻿<ul>
+    @foreach (var l in Model)
+    {
+        <li>
+            <strong>@l.Username</strong> op @l.PostedAt.ToString("yyyy-MM-dd HH:mm") : @Html.Raw(@l.Message)
+        </li>
+    }
+</ul>

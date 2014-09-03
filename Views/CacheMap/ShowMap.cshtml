@@ -1,0 +1,43 @@
+﻿@using Orchard.Mvc.Html
+
+<table>
+    <tr><td><div id="map_canvas"></div></td><td valign="top"><div id="WPInfo"></div></td></tr>
+</table>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+@{
+    Script.Require("keydragzoom_packed.Script");
+    Script.Require("markerclusterer_compiled.Script");
+    Script.Require("gmapv3.Script");
+}
+
+<script type="text/javascript">
+    var filter = @Html.Raw(Json.Encode(new {
+        Page = Model.Filter.Page,
+        PageSize = Model.Filter.PageSize,
+        OwnerID = Model.Filter.OwnerID ?? null,
+        CountryID = Model.Filter.CountryID ?? null,
+        HomeLat = Model.Filter.HomeLat ?? null,
+        HomeLon = Model.Filter.HomeLon ?? null,
+        CenterLat = Model.Filter.CenterLat ?? null,
+        CenterLon = Model.Filter.CenterLon ?? null,
+        Radius = Model.Filter.Radius ?? null,
+        OrderBy = Model.Filter.OrderBy ?? null,
+        OrderByDirection = Model.Filter.OrderByDirection ?? null,
+        NameContainsWord = Model.Filter.NameContainsWord ?? null,
+        MacroResult = Model.Filter.MacroResult ?? null,
+        OwnerName = Model.Filter.OwnerName ?? null
+        }));
+
+    var getGeocachesUrl = '@Url.Action("SearchGeocaches", "CacheMap", new { area = "Globalcaching" })';
+    var getwpUrl = '@Url.Action("GetWaypointInfo", "CacheMap", new { area = "Globalcaching" })';
+
+    var initMapSettings = @Html.Raw(Json.Encode(new {
+                         centerLat = Model.CenterLat,
+                         centerLon = Model.CenterLon,
+                         initialZoomLevel = Model.InitialZoomLevel
+        }));
+
+    $(function () {
+        initializeMap(initMapSettings.centerLat, initMapSettings.centerLon, initMapSettings.initialZoomLevel, '@Href("~/")', filter, getGeocachesUrl, getwpUrl);
+    });
+</script>

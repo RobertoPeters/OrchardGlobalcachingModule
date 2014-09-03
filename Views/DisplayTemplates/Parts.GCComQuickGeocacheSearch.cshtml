@@ -1,0 +1,51 @@
+﻿@model Globalcaching.Models.GCComQuickGeocacheSearch
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("QuickSearch", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+{
+    <div class="form-group">
+        <label for="Homelocation" class="col-sm-3 control-label">@T("Locatie")</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.Location, new { placeholder = T("Plaats, adres of coordinaat"), @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Homelocation" class="col-sm-3 control-label">@T("Radius")</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.Radius, new { placeholder = T("radius in km"), @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="Homelocation" class="col-sm-3 control-label">@T("Naam bevat tekst")</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.NameContainsWord, new { placeholder = T("tekst of deel van tekst"), @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Homelocation" class="col-sm-3 control-label">@T("Verborgen door")</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.HiddenBy, new { placeholder = T("Naam of deel van naam"), @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="CountryID" class="col-sm-3 control-label">@T("Land")</label>
+        <div class="col-sm-9">
+            @Html.DropDownListFor(
+            m => m.CountryID,
+           new SelectList(
+                  new List<Object>{
+                       new { value = 0 , text = "Alle"  },
+                       new { value = 141 , text = "Nederland"  },
+                       new { value = 4 , text = "Belgie" },
+                       new { value = 8 , text = "Luxemburg"}
+                    },
+                  "value",
+                  "text",
+               Model.CountryID
+           )
+        )
+        </div>
+    </div>
+    
+    <button type="submit" value="Update" class="btn btn-default">@T("Zoek")</button>
+}

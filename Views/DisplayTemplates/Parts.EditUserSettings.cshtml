@@ -1,0 +1,45 @@
+﻿@model Globalcaching.ViewModels.EditUserSettingsModel
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Update", "EditUserSettings", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form", @class="form-horizontal" }))
+{
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.ShowGeocachesOnGlobal)
+                    @T("Laat geocaches op globalcaching.eu zien")
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Homelocation" class="col-sm-3 control-label">@T("Thuiscoordinaten")</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.Homelocation, new { placeholder = T("N51 5.123 E6 5.321"), @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="DefaultCountryCode" class="col-sm-3 control-label">@T("Standaard landselectie")</label>
+        <div class="col-sm-9">
+            @Html.DropDownListFor(
+               m => m.DefaultCountryCode,
+           new SelectList(
+                  new List<Object>{
+                       new { value = 141 , text = "Nederland"  },
+                       new { value = 4 , text = "Belgie" },
+                       new { value = 8 , text = "Luxemburg"}
+                    },
+                  "value",
+                  "text",
+                  Model.DefaultCountryCode
+           )
+        )
+        </div>
+        <span class="help-block">@T("Bij lijsten waar je een land kunt selecteren zal dit de standaard instelling zijn.")</span>
+    </div>
+    
+    @Html.HiddenFor(m => m.ReturnUrl)
+    <button type="submit" value="Update" class="btn btn-default">@T("Opslaan")</button>
+}

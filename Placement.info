@@ -1,0 +1,15 @@
+﻿<Placement>
+  <Place Yaf_MostRecentPosts="Content:1"/>
+  <Place Parts_GCComSearchUser="Content:1"/>
+  <Place Yaf_MostRecentShout="Content:1"/>
+  <Place Parts_EditUserSettings="Content:1"/>
+  <Place Parts_GCComSearchGeocacheLogsUser="Content:1"/>
+  <Place Parts_LiveAPISettings="Content:1"/>
+  <Place Parts_GCComQuickGeocacheSearch="Content:1"/>
+  <Place Parts_GCComSearchLogImages="Content:1"/>
+  <Place Parts_UsersOnline="Content:1"/>
+  <Place Parts_EditCCCSettings="Content:1"/>
+  <Place Parts_CheckCCC="Content:1"/>
+  <Place Parts_StatisticsGeocachesPerYear="Content:1"/>
+  <Place Parts_GeocacheFilterMacro="Content:1"/>
+</Placement>

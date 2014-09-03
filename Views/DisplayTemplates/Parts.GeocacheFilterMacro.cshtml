@@ -1,0 +1,272 @@
+﻿@model Globalcaching.ViewModels.GeocacheFilterMacroModel
+
+    <div class="form-group">
+        <label for="name">Selecteer macro</label>
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                Macro
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="macrolist"></ul>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="name">Naam</label>
+        <input type="text" class="form-control" id="macroname" placeholder="Naam">
+    </div>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-info" id="panel2">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-target="#collapseMacroInfo"
+                   href="#collapseMacroInfo" class="collapsed">
+                    Beschikbare macro functies
+                </a>
+            </h4>
+        </div>
+        <div id="collapseMacroInfo" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div id="functionlist" class="col-xs-4 list-group" style="max-height: 300px; overflow-y: scroll;">
+                </div>
+                <div class="col-xs-8">
+                    <dl>
+                        <dt>Functie:</dt>
+                        <dd id="functienaam"></dd>
+                        <dt>Prototype:</dt>
+                        <dd id="functionprototype"></dd>
+                        <dt>Beschrijving:</dt>
+                        <dd id="functiondescr"></dd>
+                        <dt>Voorbeeld:</dt>
+                        <dd id="functionexample"></dd>
+                        <dt>Premium Member functie:</dt>
+                        <dd id="functionpmo"></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="form-group">
+        <label for="exampleInputPassword1">Macro</label>
+        <textarea class="form-control" id="macrotext" rows="10"></textarea>
+    </div>
+    <button class="btn btn-default" id="savemacro">Opslaan</button>
+    <button class="btn btn-primary" id="runmacro">Uitvoeren</button>
+    <button class="btn btn-danger pull-right" id="deletemacro">Verwijderen</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button id="dlgclosebutton1" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Bezig met uitvoeren van macro...</h4>
+                </div>
+                <div class="modal-body" id="dlgmacrovoortgang">
+                </div>
+                <div class="modal-footer">
+                    <button id="dlgclosebutton2" type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+                    <a id="viewlistbutton" type="button" class="btn btn-primary" href='@Url.Action("MacroResult", "CacheList" , new { area="Globalcaching" })'>Bekijk lijst</a>
+                    <a id="viewmapbutton" type="button" class="btn btn-primary" href='@Url.Action("MacroResult", "CacheMap" , new { area="Globalcaching" })'>Bekijk kaart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        var availableMacros;
+        var availableFunctions;
+        var activeMacro;
+
+        function htmlEncode(value) {
+            return $('<div/>').text(value).html();
+        }
+
+        function htmlDecode(value) {
+            return $('<div/>').html(value).text();
+        }
+
+        function selectFunctionIndex(index) {
+            $('#functienaam').text(availableFunctions[index].Name);
+            $('#functionprototype').text(availableFunctions[index].ProtoType);
+            $('#functiondescr').html(htmlEncode(availableFunctions[index].Description).replace(/\r/g, "<br />").replace(/\n/g, ""));
+            $('#functionexample').html(htmlEncode(availableFunctions[index].Examples).replace(/\r/g, "<br />").replace(/\n/g, ""));
+            if (availableFunctions[index].PMOnly) {
+                $('#functionpmo').text('Ja');
+            }
+            else {
+                $('#functionpmo').text('Nee');
+            }
+            return false;
+        }
+
+        function selectMacroIndex(index) {
+            activeMacro = availableMacros[index];
+            $("#macroname").val(availableMacros[index].Name);
+            $("#macrotext").val(availableMacros[index].RawMacro);
+            return false;
+        }
+
+        function updateFunctionList(response) {
+            availableFunctions = response;
+
+            $('#functionlist').find("a").remove();
+            for (var i = 0; i < availableFunctions.length; i++) {
+                $('#functionlist').append('<a href="#" class="list-group-item" onclick="return selectFunctionIndex(' + i + ');">' + htmlEncode(availableFunctions[i].Name) + '</a>');
+            }
+        }
+
+        function updateMacroList(response) {
+            availableMacros = response;
+
+            $('#macrolist').find("li").remove();
+            for (var i = 0; i < availableMacros.length; i++) {
+                $('#macrolist').append('<li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return selectMacroIndex(' + i + ');">' + htmlEncode(availableMacros[i].Name) + '</a></li>');
+            }
+
+            //restore active macro
+            activeMacro = null;
+            var n = $("#macroname").val().toLowerCase();
+            for (var i = 0; i < availableMacros.length; i++) {
+                if (availableMacros[i].Name.toLowerCase() == n) {
+                    activeMacro = availableMacros[i];
+                }
+            }
+        }
+
+        function updateMacroProgress() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetMacro", "Macro", new { area = "Globalcaching" })',
+                data: {
+                    id: activeMacro.ID,
+                    __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+                },
+                success: function (response) {
+                    $('#dlgmacrovoortgang').html(htmlEncode(response.ProcessInfo).replace(/\r/g, "<br />").replace(/\n/g, ""));
+
+                    if (response.ProcessedSteps < 0 || response.FinishedTime != null) {
+                        $('#dlgclosebutton1').show();
+                        $('#dlgclosebutton2').show();
+
+                        if (response.ProcessedSteps > 0) {
+                            $('#viewlistbutton').show();
+                            $('#viewmapbutton').show();
+                        }
+                    }
+                    else {
+                        setTimeout(function () { updateMacroProgress(); }, 2000);
+                    }
+                },
+                error: function (data, errorText) {
+                    $('#dlgclosebutton1').show();
+                    $('#dlgclosebutton2').show();
+                    alert(errorText);
+                }
+            });
+
+        }
+
+        function saveMacro() {
+
+            myApp.showPleaseWait();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Save", "Macro", new { area = "Globalcaching" })',
+                data: {
+                    id: $("#macroname").val(),
+                    macro: $("#macrotext").val(),
+                    __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+                },
+                success: function (response) {
+                    myApp.hidePleaseWait();
+
+                    updateMacroList(response);
+                },
+                error: function (data, errorText) {
+                    myApp.hidePleaseWait();
+                    alert(errorText);
+                }
+            });
+        }
+
+        function runMacro() {
+
+            myApp.showPleaseWait();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Run", "Macro", new { area = "Globalcaching" })',
+                data: {
+                    id: $("#macroname").val(),
+                    macro: $("#macrotext").val(),
+                    __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+                },
+                success: function (response) {
+                    myApp.hidePleaseWait();
+
+                    updateMacroList(response);
+                    //show progress dialog
+                    $('#dlgmacrovoortgang').text('');
+                    $('#dlgclosebutton1').hide();
+                    $('#dlgclosebutton2').hide();
+                    $('#viewlistbutton').hide();
+                    $('#viewmapbutton').hide();
+                    $('#myModal').modal({ show: true, backdrop: 'static', keyboard: false });
+
+                    setTimeout(function () { updateMacroProgress(); }, 2000);
+                },
+                error: function (data, errorText) {
+                    myApp.hidePleaseWait();
+                    alert(errorText);
+                }
+            });
+        }
+
+        function deleteMacro() {
+            $("#macroname").val('');
+            $("#macrotext").val('');
+            if (activeMacro != null) {
+                myApp.showPleaseWait();
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteMacro", "Macro", new { area = "Globalcaching" })',
+                    data: {
+                        id: activeMacro.ID,
+                        __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+                    },
+                    success: function (response) {
+                        myApp.hidePleaseWait();
+
+                        updateMacroList(response);
+                    },
+                    error: function (data, errorText) {
+                        myApp.hidePleaseWait();
+                        alert(errorText);
+                    }
+                });
+            }
+        }
+
+        $("#savemacro").click(function () {
+            saveMacro();
+        });
+
+        $("#runmacro").click(function () {
+            runMacro();
+        });
+
+        $("#deletemacro").click(function () {
+            deleteMacro();
+        });
+
+        updateMacroList(@Html.Raw(Json.Encode(@Model.Macros)));
+        updateFunctionList(@Html.Raw(Json.Encode(@Model.Functions)));
+
+    </script>

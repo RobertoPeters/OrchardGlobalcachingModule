@@ -1,0 +1,23 @@
+﻿@using Orchard.Utility.Extensions
+@using Globalcaching.Models
+@model Globalcaching.Models.GCComUser
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Index", "LiveAPIOAuth", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+{
+    string memberType;
+    if (Model.MemberTypeId > 1) { memberType = "Premium"; } else { memberType = "Basic"; }
+        @: <p>
+    if (Model.ID>0)
+    {
+        @: Je hebt Globalcaching.eu geautoriseerd voor geocaching.com toegang.<br />
+        @: Jouw account op geocaching.com is <strong>@Model.UserName</strong> en je bent <strong>@memberType</strong> member.
+    }
+    else
+    {
+        @: Je hebt Globalcaching.eu niet geautoriseerd voor geocaching.com toegang.
+        @: Druk op Autoriseer om globalcaching.eu te autoriseren en om zo meer functionaliteiten op deze website te kunnen gebruiken.<br />     
+    }
+        @: </p>
+    <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@Context.Request.ToUrlString()" />
+    <button type="submit" value="Update" class="btn btn-default">@T("Autoriseer")</button>
+}
