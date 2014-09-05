@@ -190,6 +190,7 @@
     <Content Include="Views\DisplayGeocache\Home.cshtml" />
     <Content Include="Views\DisplayGeocache\NotAuthorized.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheFilterMacro.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.SearchByAttributes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -235,6 +236,7 @@
     <Compile Include="Drivers\GCComSearchGeocacheLogsOfUserPartDriver.cs" />
     <Compile Include="Drivers\GCComSearchUserPartDriver.cs" />
     <Compile Include="Drivers\OnlineUsersPartDriver.cs" />
+    <Compile Include="Drivers\SearchByAttributesPartDriver.cs" />
     <Compile Include="Drivers\StatisticsGeocachesPerYearDriver.cs" />
     <Compile Include="Drivers\YafMostRecentShoutPartDriver.cs" />
     <Compile Include="Drivers\YafMostRecentPostsPartDriver.cs" />
@@ -246,32 +248,23 @@
     <Compile Include="Gavaghan.Geodesy\GlobalCoordinates.cs" />
     <Compile Include="Gavaghan.Geodesy\GlobalPosition.cs" />
     <Compile Include="Migrations.cs" />
-    <Compile Include="Models\CheckCCCPart.cs" />
     <Compile Include="Models\CheckCCCResult.cs" />
     <Compile Include="Models\GCComGeocache.cs" />
     <Compile Include="Models\GCComGeocacheLog.cs" />
     <Compile Include="Models\GCComGeocacheLogImage.cs" />
     <Compile Include="Models\GCComQuickGeocacheSearch.cs" />
     <Compile Include="Models\GCComSearchLogImagesFilter.cs" />
-    <Compile Include="Models\GCComSearchLogImagesPart.cs" />
     <Compile Include="Models\GCComSearchLogImagesResult.cs" />
-    <Compile Include="Models\GCComSearchLogsPart.cs" />
-    <Compile Include="Models\GCComQuickGeocacheSearchPart.cs" />
-    <Compile Include="Models\GCComSearchUserPart.cs" />
     <Compile Include="Models\GCComUser.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
     <Compile Include="Models\GCEuGeocache.cs" />
     <Compile Include="Models\GCEuUserSettings.cs" />
-    <Compile Include="Models\GCEuCCCSettingsPart.cs" />
     <Compile Include="Models\GCEuGeocacheFilterMacro.cs" />
     <Compile Include="Models\GeocacheSearchFilter.cs" />
     <Compile Include="Models\GeocacheSearchResult.cs" />
-    <Compile Include="Models\LiveAPISettingsPart.cs" />
-    <Compile Include="Models\GCEuUserSettingsPart.cs" />
+    <Compile Include="Models\Parts.cs" />
     <Compile Include="Models\StatisticsModels.cs" />
-    <Compile Include="Models\UsersOnlinePart.cs" />
-    <Compile Include="Models\YafMostRecentShoutPart.cs" />
-    <Compile Include="Models\YafMostRecentPostsPart.cs" />
+    <Compile Include="Models\UsersOnline.cs" />
     <Compile Include="Models\YafPost.cs" />
     <Compile Include="Models\YafShout.cs" />
     <Compile Include="ResourceManifest.cs" />

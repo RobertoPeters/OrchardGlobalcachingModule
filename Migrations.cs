@@ -187,5 +187,19 @@ namespace Globalcaching
             return 13;
         }
 
+        public int UpdateFrom13()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("SearchByAttributesWidget",
+                cfg => cfg
+                    .DisplayedAs("Geocache Search By Attributes")
+                    .WithPart("SearchByAttributesPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 14;
+        }
+
     }
 }

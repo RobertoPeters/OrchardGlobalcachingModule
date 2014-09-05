@@ -6,10 +6,6 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
-    public class UsersOnlinePart : ContentPart
-    {
-    }
-
     public class OnlineUser
     {
         public int YafUserID { get; set; }

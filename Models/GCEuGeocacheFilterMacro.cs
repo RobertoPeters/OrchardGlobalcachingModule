@@ -6,10 +6,6 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
-    public class GCEuGeocacheFilterMacroPart : ContentPart
-    {
-    }
-
     [PetaPoco.TableName("GCEuGeocacheFilterMacro")]
     [PetaPoco.PrimaryKey("ID")]
     public class GCEuGeocacheFilterMacro

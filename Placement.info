@@ -12,4 +12,5 @@
   <Place Parts_CheckCCC="Content:1"/>
   <Place Parts_StatisticsGeocachesPerYear="Content:1"/>
   <Place Parts_GeocacheFilterMacro="Content:1"/>
+  <Place Parts_SearchByAttributes="Content:1"/>
 </Placement>

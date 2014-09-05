@@ -6,10 +6,6 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
-    public class StatisticsGeocachesPerYearPart : ContentPart
-    {
-    }
-
     public class StatisticsGeocachesPerYear
     {
         public string Jaar { get; set; }
