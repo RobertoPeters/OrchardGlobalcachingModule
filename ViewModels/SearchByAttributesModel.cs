@@ -9,5 +9,6 @@ namespace Globalcaching.ViewModels
     public class SearchByAttributesModel
     {
         public List<GCComGeocacheType> GeocacheTypes { get; set; }
+        public List<int> Containers { get; set; }
     }
 }

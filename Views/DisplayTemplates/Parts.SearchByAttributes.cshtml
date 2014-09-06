@@ -31,6 +31,20 @@
     </div>
 </div>
 
+<!-- Container type -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkcontainertype" type="checkbox" data-toggle="collapse" data-target="#pnlcontainertype" />
+        &nbsp;&nbsp;Container
+    </div>
+    <div id="pnlcontainertype" class="panel-body collapse in">
+        @foreach (var gt in Model.Containers)
+        {
+            <div class="col-md-1"><center><img src="@Href(string.Format("~/Modules/Globalcaching/Media/container/{0}.gif", gt))" /><br /><input type="checkbox" id="@string.Format("contype{0}", @gt)" /></center></div>
+        }
+    </div>
+</div>
+
 <button class="btn btn-primary" id="runmacrox">Uitvoeren</button>
 
     <!-- Modal -->
@@ -56,8 +70,11 @@
 <script type="text/javascript">
     $('#pnllocation').collapse();
     $('#pnlgeocachetype').collapse();
+    $('#pnlcontainertype').collapse();
 
     var activeMacrox;
+    var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
+    var containerTypes = @Html.Raw(Json.Encode(@Model.Containers));
 
     function addMacroFunction(r, f) {
         if (r == "") {
@@ -74,6 +91,42 @@
         if ($('#chklocation').prop('checked'))
         {
             result = addMacroFunction(result, 'BinnenStraal("' + $('#location').val().replace(/\"/g, "\\\"") + '", ' + $('#radius').val() + ')');
+        }
+        if ($('#chkgeocachetype').prop('checked'))
+        {
+            var lst = "";
+            for(var i=0; i<geocacheTypes.length; i++)
+            {
+                if ($('#gctype'+geocacheTypes[i].ID.toString()).prop('checked'))
+                {
+                    if (lst=="")
+                    {
+                        lst = lst + geocacheTypes[i].ID.toString();
+                    }
+                    else{
+                        lst = lst + ", " + geocacheTypes[i].ID.toString();
+                    }
+                }
+            }
+            result = addMacroFunction(result, "CacheType("+lst+")");
+        }
+        if ($('#chkcontainertype').prop('checked'))
+        {
+            var lst = "";
+            for(var i=0; i<containerTypes.length; i++)
+            {
+                if ($('#contype'+containerTypes[i].toString()).prop('checked'))
+                {
+                    if (lst=="")
+                    {
+                        lst = lst + containerTypes[i].toString();
+                    }
+                    else{
+                        lst = lst + ", " + containerTypes[i].toString();
+                    }
+                }
+            }
+            result = addMacroFunction(result, "Container("+lst+")");
         }
         return result;
     }

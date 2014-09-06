@@ -26,6 +26,7 @@ namespace Globalcaching.Drivers
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
                 m.GeocacheTypes = db.Fetch<GCComGeocacheType>("where ID in (2, 3, 4, 5, 6, 8, 11, 12, 15, 137, 1858) order by ID");
+                m.Containers = new List<int> { 1, 2, 3, 4, 5, 6, 8 };
             }
 
             return ContentShape("Parts_SearchByAttributes",
