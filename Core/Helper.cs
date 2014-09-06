@@ -121,6 +121,16 @@ namespace Globalcaching.Core
             return result;
         }
 
+        public static LatLon GetLocation(string loc)
+        {
+            LatLon result = LatLon.FromString(loc);
+            if (result == null)
+            {
+                result = GetLocationOfCity(loc);
+            }
+            return result;
+        }
+
         public static LatLon GetLocationOfCity(string city)
         {
             LatLon result = null;

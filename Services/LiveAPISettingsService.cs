@@ -55,7 +55,7 @@ namespace Globalcaching.Services
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
-                        result = db.SingleOrDefault<GCComUser>("where ID=@0", settings.GCComUserID);
+                        result = db.FirstOrDefault<GCComUser>("where ID=@0", settings.GCComUserID);
                     }
                     HttpContext.Session["GCComUser"] = result;
                 }

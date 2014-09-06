@@ -131,7 +131,7 @@ namespace Globalcaching.Controllers
                     .From("GCComGeocache with (nolock)")
                     .Where("GCComGeocache.Code=@0", code);
 
-                wpi = db.SingleOrDefault<WaypointInfo>(sql);
+                wpi = db.FirstOrDefault<WaypointInfo>(sql);
             }
             return Json(wpi);
         }

@@ -916,13 +916,13 @@ namespace Globalcaching.Services
                     break;
                 case "binnenstraal":
                     {
-                        LatLon ll = LatLon.FromString(parameters[0]);
+                        LatLon ll = Helper.GetLocation(parameters[0]);
                         whereClauses.Add(string.Format(" GcComData.dbo.F_GREAT_CIRCLE_DISTANCE(GcComData.dbo.GCComGeocache.Latitude, GcComData.dbo.GCComGeocache.Longitude, {0}, {1}) < {2}", ll.lat.ToString().Replace(',', '.'), ll.lon.ToString().Replace(',', '.'), getDouble(parameters[1])));
                     }
                     break;
                 case "nietbinnenstraal":
                     {
-                        LatLon ll = LatLon.FromString(parameters[0]);
+                        LatLon ll = Helper.GetLocation(parameters[0]);
                         whereClauses.Add(string.Format(" GcComData.dbo.F_GREAT_CIRCLE_DISTANCE(GcComData.dbo.GCComGeocache.Latitude, GcComData.dbo.GCComGeocache.Longitude, {0}, {1}) >= {2}", ll.lat.ToString().Replace(',', '.'), ll.lon.ToString().Replace(',', '.'), getDouble(parameters[1])));
                     }
                     break;

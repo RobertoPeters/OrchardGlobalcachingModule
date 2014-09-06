@@ -42,7 +42,7 @@ namespace Globalcaching.Services
             {
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                 {
-                    result = db.SingleOrDefault<GCEuCCCUser>("where UserID = @0", settings.YafUserID);
+                    result = db.FirstOrDefault<GCEuCCCUser>("where UserID = @0", settings.YafUserID);
                 }
             }
             return result;
@@ -54,7 +54,7 @@ namespace Globalcaching.Services
             {
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                 {
-                    if (db.SingleOrDefault<GCEuCCCUser>("where UserID = @0", settings.UserID) != null)
+                    if (db.FirstOrDefault<GCEuCCCUser>("where UserID = @0", settings.UserID) != null)
                     {
                         db.Update("GCEuCCCUser", "UserID", settings);
                     }

@@ -70,7 +70,7 @@ namespace Globalcaching.Services
                     {
                         using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                         {
-                            result = db.SingleOrDefault<GCEuUserSettings>("where YafUserID = @0", YafUserID);
+                            result = db.FirstOrDefault<GCEuUserSettings>("where YafUserID = @0", YafUserID);
 
                             if (result == null)
                             {

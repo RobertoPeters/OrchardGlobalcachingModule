@@ -23,7 +23,7 @@ namespace Globalcaching.Services
             GCComUser result = null;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
-                result = db.SingleOrDefault<GCComUser>("where UserName=@0", name);
+                result = db.FirstOrDefault<GCComUser>("where UserName=@0", name);
             }
             return result;
         }

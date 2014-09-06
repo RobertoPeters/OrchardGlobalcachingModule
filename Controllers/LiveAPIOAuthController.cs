@@ -91,7 +91,7 @@ namespace Globalcaching.Controllers
                                 settings.GCComUserID = profile.User.Id;
                                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                                 {
-                                    var usr = db.SingleOrDefault<GCComUser>("where ID=@0", profile.User.Id);
+                                    var usr = db.FirstOrDefault<GCComUser>("where ID=@0", profile.User.Id);
                                     if (usr == null)
                                     {
                                         db.Insert(GCComUser.From(profile.User));

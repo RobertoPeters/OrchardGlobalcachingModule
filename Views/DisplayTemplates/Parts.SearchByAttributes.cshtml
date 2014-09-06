@@ -1,23 +1,155 @@
-﻿<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chklocation" type="checkbox" data-toggle="collapse" data-target="#location" />
-        &nbsp;&nbsp;Locatie
-    </div>
-    <div id="location" class="panel-body collapse in">
-        Panel content
-    </div>
-</div>
+﻿@using Globalcaching.Models
+@model Globalcaching.ViewModels.SearchByAttributesModel
+
+<!-- Location -->
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <input id="chkgeocachetype" type="checkbox" data-toggle="collapse" data-target="#geocachetype" />
-        &nbsp;&nbsp;Geocache type
+        <input id="chklocation" type="checkbox" data-toggle="collapse" data-target="#pnllocation" />
+        &nbsp;&nbsp;Locatie
     </div>
-    <div id="geocachetype" class="panel-body collapse in">
-        Panel content
+    <div id="pnllocation" class="panel-body collapse in">
+        <div class="form-group">
+            <input id="location" type="text" class="form-control" placeholder="Plaats / Coordinaat">
+        </div>
+        <div class="form-group">
+            <input id="radius" type="text" class="form-control" placeholder="Radius in km">
+        </div>
     </div>
 </div>
 
+<!-- Geocache type -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkgeocachetype" type="checkbox" data-toggle="collapse" data-target="#pnlgeocachetype" />
+        &nbsp;&nbsp;Geocache type
+    </div>
+    <div id="pnlgeocachetype" class="panel-body collapse in">
+@foreach (var gt in Model.GeocacheTypes)
+{
+    <div class="col-md-1"><center><img src="@Href(string.Format("~/Modules/Globalcaching/Media/WptTypes/s/{0}.gif", gt.ID))" /><br /><input type="checkbox" id="@string.Format("gctype{0}", @gt.ID)" /></center></div>
+}
+    </div>
+</div>
+
+<button class="btn btn-primary" id="runmacrox">Uitvoeren</button>
+
+    <!-- Modal -->
+<div class="modal fade" id="myModalx" tabindex="-1" role="dialog" aria-labelledby="myModalLabelx" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="dlgclosebutton1x" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabelx">Bezig met uitvoeren van macro...</h4>
+            </div>
+            <div class="modal-body" id="dlgmacrovoortgangx">
+            </div>
+            <div class="modal-footer">
+                <button id="dlgclosebutton2x" type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+                <a id="viewlistbuttonx" type="button" class="btn btn-primary" href='@Url.Action("MacroResult", "CacheList" , new { area="Globalcaching" })'>Bekijk lijst</a>
+                <a id="viewmapbuttonx" type="button" class="btn btn-primary" href='@Url.Action("MacroResult", "CacheMap" , new { area="Globalcaching" })'>Bekijk kaart</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
-    $('#location').collapse();
-    $('#geocachetype').collapse();
+    $('#pnllocation').collapse();
+    $('#pnlgeocachetype').collapse();
+
+    var activeMacrox;
+
+    function addMacroFunction(r, f) {
+        if (r == "") {
+            return "Resultaat = " + f;
+        }
+        else {
+            return r + " en " + f;
+        }
+    }
+
+    function createMacroFromSelection() {
+        var result = "";
+        //test
+        if ($('#chklocation').prop('checked'))
+        {
+            result = addMacroFunction(result, 'BinnenStraal("' + $('#location').val().replace(/\"/g, "\\\"") + '", ' + $('#radius').val() + ')');
+        }
+        return result;
+    }
+
+    function updateMacroProgressx() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetMacro", "Macro", new { area = "Globalcaching" })',
+            data: {
+                id: activeMacrox.ID,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $('#dlgmacrovoortgangx').html(htmlEncode(response.ProcessInfo).replace(/\r/g, "<br />").replace(/\n/g, ""));
+
+                if (response.ProcessedSteps < 0 || response.FinishedTime != null) {
+                    $('#dlgclosebutton1x').show();
+                    $('#dlgclosebutton2x').show();
+
+                    if (response.ProcessedSteps > 0) {
+                        $('#viewlistbuttonx').show();
+                        $('#viewmapbuttonx').show();
+                    }
+                }
+                else {
+                    setTimeout(function () { updateMacroProgressx(); }, 2000);
+                }
+            },
+            error: function (data, errorText) {
+                $('#dlgclosebutton1x').show();
+                $('#dlgclosebutton2x').show();
+                alert(errorText);
+            }
+        });
+
+    }
+
+    function runSba() {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Run", "Macro", new { area = "Globalcaching" })',
+            data: {
+                id: "ZoekenOpEigenschappen",
+                macro: createMacroFromSelection(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+
+                updateMacroList(response);
+                for (var i = 0; i < response.length; i++) {
+                    if (response[i].Name == "ZoekenOpEigenschappen") {
+                        activeMacrox = availableMacros[i];
+                    }
+                }
+                //show progress dialog
+                $('#dlgmacrovoortgangx').text('');
+                $('#dlgclosebutton1x').hide();
+                $('#dlgclosebutton2x').hide();
+                $('#viewlistbuttonx').hide();
+                $('#viewmapbuttonx').hide();
+                $('#myModalx').modal({ show: true, backdrop: 'static', keyboard: false });
+
+                setTimeout(function () { updateMacroProgressx(); }, 2000);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $("#runmacrox").click(function () {
+        runSba();
+    });
+
 </script>
