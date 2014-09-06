@@ -131,6 +131,10 @@
         return result;
     }
 
+    function htmlEncodex(value) {
+        return $('<div/>').text(value).html();
+    }
+
     function updateMacroProgressx() {
         $.ajax({
             type: "POST",
@@ -140,7 +144,7 @@
                 __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
             },
             success: function (response) {
-                $('#dlgmacrovoortgangx').html(htmlEncode(response.ProcessInfo).replace(/\r/g, "<br />").replace(/\n/g, ""));
+                $('#dlgmacrovoortgangx').html(htmlEncodex(response.ProcessInfo).replace(/\r/g, "<br />").replace(/\n/g, ""));
 
                 if (response.ProcessedSteps < 0 || response.FinishedTime != null) {
                     $('#dlgclosebutton1x').show();
@@ -178,10 +182,9 @@
             success: function (response) {
                 myApp.hidePleaseWait();
 
-                updateMacroList(response);
                 for (var i = 0; i < response.length; i++) {
                     if (response[i].Name == "ZoekenOpEigenschappen") {
-                        activeMacrox = availableMacros[i];
+                        activeMacrox = response[i];
                     }
                 }
                 //show progress dialog
