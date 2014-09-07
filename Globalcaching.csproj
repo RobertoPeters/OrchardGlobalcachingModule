@@ -153,6 +153,15 @@
     <None Include="Media\WptTypes\map\8.png" />
     <None Include="Media\WptTypes\map\found.png" />
     <None Include="Media\WptTypes\map\myown.png" />
+    <None Include="Media\stars\stars1.gif" />
+    <None Include="Media\stars\stars1_5.gif" />
+    <None Include="Media\stars\stars2.gif" />
+    <None Include="Media\stars\stars2_5.gif" />
+    <None Include="Media\stars\stars3.gif" />
+    <None Include="Media\stars\stars3_5.gif" />
+    <None Include="Media\stars\stars4.gif" />
+    <None Include="Media\stars\stars4_5.gif" />
+    <None Include="Media\stars\stars5.gif" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.nl.js" />
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
