@@ -253,6 +253,7 @@
     <Compile Include="Models\GCComGeocacheLog.cs" />
     <Compile Include="Models\GCComGeocacheLogImage.cs" />
     <Compile Include="Models\GCComGeocacheType.cs" />
+    <Compile Include="Models\GCComLogType.cs" />
     <Compile Include="Models\GCComQuickGeocacheSearch.cs" />
     <Compile Include="Models\GCComSearchLogImagesFilter.cs" />
     <Compile Include="Models\GCComSearchLogImagesResult.cs" />

@@ -1,6 +1,119 @@
 ﻿@using Orchard.Mvc.Html;
+@using System.Linq
+@using System.Data.Linq
 @{
     Layout.Title = @Model.GCComGeocacheData.Name;
 }
 
-Hello
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Informatie
+    </div>
+    <div class="panel-body">
+        <div class="col-md-12">
+            <h1><img src="@Href(string.Format("~/Modules/Globalcaching/Media/WptTypes/{0}.gif",@Model.GCComGeocacheData.GeocacheTypeId))" /> @Model.GCComGeocacheData.Name</h1>
+        </div>
+        <div class="col-md-8">
+            <div class="col-md-2"><strong>Eigenaar:</strong></div><div class="col-md-10"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.Owner.UserName</a></div>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Beschrijving
+    </div>
+    <div class="panel-body">
+@if (@Model.GCComGeocacheData.ShortDescription!=null)
+{
+    if (@Model.GCComGeocacheData.ShortDescriptionIsHtml)
+    {
+        @Html.Raw(@Model.GCComGeocacheData.ShortDescription)
+    }
+    else
+    {
+        @Model.GCComGeocacheData.ShortDescription.Replace("\r", "<br />")
+    }
+}
+@if (@Model.GCComGeocacheData.LongDescription != null)
+{
+    if (@Model.GCComGeocacheData.LongDescriptionIsHtml)
+    {
+        @Html.Raw(@Model.GCComGeocacheData.LongDescription)
+    }
+    else
+    {
+        @Model.GCComGeocacheData.LongDescription.Replace("\r", "<br />")
+    }
+}
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Logs
+    </div>
+    <div class="panel-body">
+        <table id="logs" class="table table-hover table-striped">
+            <tbody>
+@foreach (var gcl in Model.GCComGeocacheLogs)
+{
+                <tr>
+                    <td class="col-md-2">
+                        <a href="http://www.geocaching.com/profile/?guid=@gcl.Writer.PublicGuid" target="blank">@gcl.Writer.UserName</a><br />
+                        <small>
+                            @if(gcl.Writer.MemberTypeId > 1)
+                            {
+                                @Html.Raw("Premium Member")
+                            }else
+                            {
+                                @Html.Raw("Member")
+                            }
+                        </small><br />
+                        <img src="@gcl.Writer.AvatarUrl" /><br />
+                        <img src="@Href("~/Modules/Globalcaching/Media/logtypes/")2.gif" />&nbsp; @gcl.Writer.FindCount
+                    </td>
+                    <td class="col-md-10">
+                        <img src="@Href(string.Format("~/Modules/Globalcaching/Media/logtypes/{0}.gif",@gcl.Log.WptLogTypeId))" />&nbsp;
+                        @foreach (var g in @Model.LogTypes)
+                        {
+                            if (g.ID == @gcl.Log.WptLogTypeId)
+                            {
+                                @g.WptLogTypeName
+                                break;
+                            }
+                        }
+                        <span class="pull-right"> @gcl.Log.VisitDate.ToString("d")</span><br />
+                        @Html.Raw(@HttpUtility.HtmlEncode(gcl.Log.LogText).Replace("\r", "<br />"))
+                    </td>
+                </tr>
+}
+            </tbody>
+        </table>
+        <button class="btn btn-primary" id="getalllogs">Laat alle logs zien</button>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var geocacheCode = '@Model.GCComGeocacheData.Code';
+
+    function getAllLogs()
+    {
+        myApp.showPleaseWait();
+        window.location.assign('@Href("~/Geocache/")' + geocacheCode + '?al=1#logs');
+    }
+
+    $("#getalllogs").click(function () {
+        getAllLogs();
+    });
+
+    $(function () {
+        if (window.location.href.indexOf('?al=1') > 0) {
+            $("#getalllogs").hide();
+        }
+    });
+</script>

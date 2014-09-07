@@ -16,6 +16,7 @@ namespace Globalcaching.Controllers
     public class DisplayGeocacheController : Controller
     {
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
+        private IWorkContextAccessor _workContextAccessor;
         public IOrchardServices Services { get; set; }
         public Localizer T { get; set; }
 
@@ -23,10 +24,12 @@ namespace Globalcaching.Controllers
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
 
         public DisplayGeocacheController(IGCEuUserSettingsService gcEuUserSettingsService,
+            IWorkContextAccessor workContextAccessor,
             IOrchardServices services)
         {
             _gcEuUserSettingsService = gcEuUserSettingsService;
             Services = services;
+            _workContextAccessor = workContextAccessor;
             T = NullLocalizer.Instance;
         }
 
@@ -38,7 +41,7 @@ namespace Globalcaching.Controllers
             {
                 if (!string.IsNullOrEmpty(usrSettings.LiveAPIToken))
                 {
-                    GeocacheDataModel data = GetGeocacheData(id, 5);
+                    GeocacheDataModel data = GetGeocacheData(id, _workContextAccessor.GetContext().HttpContext.Request.QueryString["al"]==null? 5: 30000);
                     if (data != null)
                     {
                         return View("Home", data);
@@ -62,6 +65,16 @@ namespace Globalcaching.Controllers
             }
         }
 
+        public ActionResult GetAllLogs(int id)
+        {
+            List<GeocacheLogInfo> result = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+            {
+                result = GetLogsOfGeocache(db, id, 30000);
+            }
+            return Json(result);
+        }
+
         public GeocacheDataModel GetGeocacheData(string geocacheCode, int maxLogs)
         {
             GeocacheDataModel result = null;
@@ -75,13 +88,34 @@ namespace Globalcaching.Controllers
                     result = new GeocacheDataModel();
                     result.GCComGeocacheData = comGcData;
                     result.GCEuGeocacheData = db.FirstOrDefault<GCEuGeocache>(string.Format("select * from [{0}].[dbo].[GCEuGeocache] where ID=@0", gcEuDatabase), comGcData.ID);
-                    result.GCComGeocacheLogs = db.Fetch<GCComGeocacheLog, GCComUser, GeocacheLogInfo>(
-        (l, u) => { l.FinderId = u.ID; return new GeocacheLogInfo(l, u); },
-        string.Format(@"SELECT TOP {0} * FROM GCComGeocacheLog with (nolock) LEFT JOIN GCComUser with (nolock) ON GCComGeocacheLog.FinderId = GCComUser.ID WHERE GCComGeocacheLog.GeocacheID=@0 ORDER BY GCComGeocacheLog.VisitDate desc, GCComGeocacheLog.ID desc", maxLogs), comGcData.ID);
+                    result.Owner = db.FirstOrDefault<GCComUser>("where ID=@0", result.GCComGeocacheData.OwnerId);
+                    if (result.GCEuGeocacheData != null)
+                    {
+                        if (result.GCEuGeocacheData.FTFUserID != null)
+                        {
+                            result.FTF = db.FirstOrDefault<GCComUser>("where ID=@0", result.GCEuGeocacheData.FTFUserID);
+                        }
+                        if (result.GCEuGeocacheData.STFUserID != null)
+                        {
+                            result.STF = db.FirstOrDefault<GCComUser>("where ID=@0", result.GCEuGeocacheData.STFUserID);
+                        }
+                        if (result.GCEuGeocacheData.TTFUserID != null)
+                        {
+                            result.TTF = db.FirstOrDefault<GCComUser>("where ID=@0", result.GCEuGeocacheData.TTFUserID);
+                        }
+                    }
+                    result.LogTypes = db.Fetch<GCComLogType>("");
+                    result.GCComGeocacheLogs = GetLogsOfGeocache(db, comGcData.ID, maxLogs);
                 }
             }
             return result;
         }
 
+        public List<GeocacheLogInfo> GetLogsOfGeocache(PetaPoco.Database db, long geocacheID, int maxLogs)
+        {
+            return db.Fetch<GCComGeocacheLog, GCComUser, GeocacheLogInfo>(
+                (l, u) => { l.FinderId = u.ID; return new GeocacheLogInfo(l, u); },
+                string.Format(@"SELECT TOP {0} * FROM GCComGeocacheLog with (nolock) LEFT JOIN GCComUser with (nolock) ON GCComGeocacheLog.FinderId = GCComUser.ID WHERE GCComGeocacheLog.GeocacheID=@0 ORDER BY GCComGeocacheLog.VisitDate desc, GCComGeocacheLog.ID desc", maxLogs), geocacheID);
+        }
     }
 }

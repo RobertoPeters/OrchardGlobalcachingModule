@@ -22,6 +22,11 @@ namespace Globalcaching.ViewModels
     {
         public GCComGeocache GCComGeocacheData { get; set; }
         public GCEuGeocache GCEuGeocacheData { get; set; }
+        public GCComUser Owner { get; set; }
+        public GCComUser FTF { get; set; }
+        public GCComUser STF { get; set; }
+        public GCComUser TTF { get; set; }
         public List<GeocacheLogInfo> GCComGeocacheLogs { get; set; }
+        public List<GCComLogType> LogTypes { get; set; }
     }
 }
