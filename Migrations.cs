@@ -201,5 +201,18 @@ namespace Globalcaching
             return 14;
         }
 
+        public int UpdateFrom14()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("AreaInformationWidget",
+                cfg => cfg
+                    .DisplayedAs("Area Information")
+                    .WithPart("AreaInformationPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 15;
+        }
     }
 }

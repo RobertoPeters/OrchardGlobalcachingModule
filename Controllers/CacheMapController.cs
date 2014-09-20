@@ -1,4 +1,5 @@
-﻿using Globalcaching.Models;
+﻿using Globalcaching.Core;
+using Globalcaching.Models;
 using Globalcaching.Services;
 using Globalcaching.ViewModels;
 using Orchard;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -20,15 +22,23 @@ namespace Globalcaching.Controllers
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
 
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
+        private readonly IWorkContextAccessor _workContextAccessor;
         public IOrchardServices Services { get; set; }
         public Localizer T { get; set; }
 
         public CacheMapController(IGCEuUserSettingsService gcEuUserSettingsService,
-            IOrchardServices services)
+            IOrchardServices services,
+            IWorkContextAccessor workContextAccessor)
         {
             _gcEuUserSettingsService = gcEuUserSettingsService;
+            _workContextAccessor = workContextAccessor;
             Services = services;
             T = NullLocalizer.Instance;
+        }
+
+        private HttpContextBase HttpContext
+        {
+            get { return _workContextAccessor.GetContext().HttpContext; }
         }
 
         [Themed]
@@ -118,6 +128,130 @@ namespace Globalcaching.Controllers
             public string Code { get; set; }
             public int GeocacheTypeId { get; set; }
 
+        }
+
+        [HttpPost]
+        public ActionResult GetLatLonCoords(string id)
+        {
+            LatLon ll = LatLon.FromString(id);
+            if (ll == null)
+            {
+                ll = Helper.GetLocationOfCity(id);
+            }
+            if (ll != null)
+            {
+                GeocacheMapInfo gmi = new GeocacheMapInfo();
+                gmi.a = ll.lat;
+                gmi.o = ll.lon;
+                return Json(gmi);
+            }
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult GetLocationCoords(string id)
+        {
+            string result = id;
+            LatLon ll = LatLon.FromString(id);
+            if (ll == null)
+            {
+                ll = Helper.GetLocationOfCity(id);
+            }
+            if (ll != null)
+            {
+                return Content(Helper.GetCoordinatesPresentation(ll.lat, ll.lon));
+            }
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult GetAreaInfo(string id)
+        {
+            string result = "";
+            LatLon ll = LatLon.FromString(id);
+            if (ll != null)
+            {
+                List<Globalcaching.Core.SHP.AreaInfo> ais = Globalcaching.Core.SHP.ShapeFilesManager.Instance.GetAreasOfLocation(ll, Globalcaching.Core.SHP.ShapeFilesManager.Instance.GetAreasByLevel(Globalcaching.Core.SHP.AreaType.Other));
+                StringBuilder sb = new StringBuilder();
+                foreach (Globalcaching.Core.SHP.AreaInfo ai in ais)
+                {
+                    if (!string.IsNullOrEmpty(ai.Owner.EMail))
+                    {
+                        sb.AppendLine(string.Format("Gebied: {0}<br />", HttpUtility.HtmlEncode(ai.Name)));
+                        sb.AppendLine(string.Format("Beheerder: {0}<br />", HttpUtility.HtmlEncode(ai.Owner.Name)));
+                        sb.AppendLine(string.Format("Website: <a href=\"{0}\" target=\"_blank\">{0}</a><br />", HttpUtility.HtmlEncode(ai.Owner.Website)));
+                        List<string> extraInfo = Globalcaching.Core.SHP.ShapeFilesManager.Instance.GetAdditionalInfoOfArea(ai, ll);
+                        sb.AppendLine("Additionele informatie:<br />");
+                        foreach (string s in extraInfo)
+                        {
+                            sb.AppendLine(string.Format("{0}<br />", HttpUtility.HtmlEncode(s)));
+                        }
+                    }
+                }
+                result = sb.ToString();
+            }
+            return Content(result);
+        }
+
+        [HttpPost]
+        public ActionResult GetAreaPolygons(string minlatminlon, string maxlatmaxlon, string reset)
+        {
+            StringBuilder result = new StringBuilder();
+
+            List<object> processedIds;
+            processedIds = (List<object>)HttpContext.Session["AREAINFO_IDS"];
+            if (processedIds == null)
+            {
+                processedIds = new List<object>();
+                HttpContext.Session["AREAINFO_IDS"] = processedIds;
+            }
+            if (reset == "1")
+            {
+                processedIds.Clear();
+            }
+            string[] parts = minlatminlon.Split(new char[] { ' ', ',', '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
+            double minlat = Helper.ConvertToDouble(parts[0]);
+            double minlon = Helper.ConvertToDouble(parts[1]);
+            parts = maxlatmaxlon.Split(new char[] { ' ', ',', '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
+            double maxlat = Helper.ConvertToDouble(parts[0]);
+            double maxlon = Helper.ConvertToDouble(parts[1]);
+
+            //get areasinfo that is visible
+            Globalcaching.Core.SHP.ShapeFilesManager sm = Globalcaching.Core.SHP.ShapeFilesManager.Instance;
+            List<Globalcaching.Core.SHP.AreaInfo> allais = sm.GetAreasByLevel(Globalcaching.Core.SHP.AreaType.Other);
+            List<Globalcaching.Core.SHP.AreaInfo> aiInView = (from ai in allais where !string.IsNullOrEmpty(ai.Owner.EMail) && maxlat > ai.MinLat && minlat < ai.MaxLat && maxlon > ai.MinLon && minlon < ai.MaxLon select ai).ToList();
+            bool first = true;
+            result.Append("[");
+            foreach (Globalcaching.Core.SHP.AreaInfo ai in aiInView)
+            {
+                List<Globalcaching.Core.SHP.ShapeFile.IndexRecord> recs = (from r in ai.Owner.IndexRecords where !processedIds.Contains(r.ID) && r.Name == ai.Name && maxlat > r.YMin && minlat < r.YMax && maxlon > r.XMin && minlon < r.XMax select r).ToList();
+                foreach (Globalcaching.Core.SHP.ShapeFile.IndexRecord rec in recs)
+                {
+                    List<LatLonPolygon> polys = sm.GetPolygonOfArea(rec);
+                    foreach (LatLonPolygon poly in polys)
+                    {
+                        if (!first) result.Append(",");
+                        first = false;
+                        result.AppendFormat("{{'id': '{0}', 'points': [ ", rec.ID.ToString().Replace('\'', ' '));
+                        bool firstpoint = true;
+                        foreach (LatLon ll in poly.points)
+                        {
+                            if (!firstpoint) result.Append(",");
+                            firstpoint = false;
+                            result.AppendFormat("{{'lat': {0}, 'lon': {1}}} ", ll.lat.ToString("0.0000").Replace(',', '.'), ll.lon.ToString("0.0000").Replace(',', '.'));
+                        }
+                        processedIds.Add(rec.ID);
+                        result.Append("]}");
+                    }
+
+                    if (result.ToString().Length > 50000)
+                    {
+                        break;
+                    }
+                }
+            }
+            result.Append("]");
+            return Content(result.ToString());
         }
 
         [HttpPost]

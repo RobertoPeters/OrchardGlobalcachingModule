@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class AreaInformationPart : ContentPart
+    {
+    }
+
     public class SearchByAttributesPart : ContentPart
     {
     }

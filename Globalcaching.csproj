@@ -162,6 +162,8 @@
     <None Include="Media\stars\stars4.gif" />
     <None Include="Media\stars\stars4_5.gif" />
     <None Include="Media\stars\stars5.gif" />
+    <None Include="Media\gmap\dragzoom_btn.png" />
+    <None Include="Media\gmap\reqpoints.png" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.nl.js" />
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
@@ -200,6 +202,7 @@
     <Content Include="Views\DisplayGeocache\NotAuthorized.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheFilterMacro.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.SearchByAttributes.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.AreaInformation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -228,13 +231,29 @@
     <Compile Include="Controllers\GCComUserSearchController.cs" />
     <Compile Include="Controllers\MacroController.cs" />
     <Compile Include="Core\DBCon.cs" />
+    <Compile Include="Core\DotNetDBF\DBFBase.cs" />
+    <Compile Include="Core\DotNetDBF\DBFException.cs" />
+    <Compile Include="Core\DotNetDBF\DBFField.cs" />
+    <Compile Include="Core\DotNetDBF\DBFFieldType.cs" />
+    <Compile Include="Core\DotNetDBF\DBFHeader.cs" />
+    <Compile Include="Core\DotNetDBF\DBFReader.cs" />
+    <Compile Include="Core\DotNetDBF\DBFWriter.cs" />
+    <Compile Include="Core\DotNetDBF\DBTHeader.cs" />
+    <Compile Include="Core\DotNetDBF\MemoValue.cs" />
+    <Compile Include="Core\DotNetDBF\Utils.cs" />
     <Compile Include="Core\Helper.cs" />
     <Compile Include="Core\InMemoryTokenManager.cs" />
     <Compile Include="Core\LatLon.cs" />
+    <Compile Include="Core\LatLonPolygon.cs" />
     <Compile Include="Core\Live.cs" />
     <Compile Include="Core\LiveAPIClient.cs" />
     <Compile Include="Core\PetaPoco.cs" />
+    <Compile Include="Core\SHP\AreaInfo.cs" />
+    <Compile Include="Core\SHP\AreaType.cs" />
+    <Compile Include="Core\SHP\ShapeFile.cs" />
+    <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
+    <Compile Include="Drivers\AreaInformationDriver.cs" />
     <Compile Include="Drivers\CheckCCCPartDriver.cs" />
     <Compile Include="Drivers\EditCCCSettingsPartDriver.cs" />
     <Compile Include="Drivers\GCComQuickGeocacheSearchPartDriver.cs" />

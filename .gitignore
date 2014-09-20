@@ -172,3 +172,30 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+/Core/SHP/Shapefiles/Waterschapsgrenzen_Communicatie.shx
+/Core/SHP/Shapefiles/Waterschapsgrenzen_Communicatie.shp
+/Core/SHP/Shapefiles/Waterschapsgrenzen_Communicatie.dbf
+/Core/SHP/Shapefiles/update_sbb_terreinen_oktober_2013.shx
+/Core/SHP/Shapefiles/update_sbb_terreinen_oktober_2013.shp
+/Core/SHP/Shapefiles/update_sbb_terreinen_oktober_2013.dbf
+/Core/SHP/Shapefiles/provinciegrenzen2013.shx
+/Core/SHP/Shapefiles/provinciegrenzen2013.shp
+/Core/SHP/Shapefiles/provinciegrenzen2013.dbf
+/Core/SHP/Shapefiles/natuurgebieden_natuurmonumenten.shx
+/Core/SHP/Shapefiles/natuurgebieden_natuurmonumenten.shp
+/Core/SHP/Shapefiles/natuurgebieden_natuurmonumenten.dbf
+/Core/SHP/Shapefiles/nat_geb_en_beheerder.shx
+/Core/SHP/Shapefiles/nat_geb_en_beheerder.shp
+/Core/SHP/Shapefiles/nat_geb_en_beheerder.dbf
+/Core/SHP/Shapefiles/gemeentegrenzen2014c.shx
+/Core/SHP/Shapefiles/gemeentegrenzen2014c.shp
+/Core/SHP/Shapefiles/gemeentegrenzen2014c.dbf
+/Core/SHP/Shapefiles/20110930_nelis_natgeb_lnh.shx
+/Core/SHP/Shapefiles/20110930_nelis_natgeb_lnh.shp
+/Core/SHP/Shapefiles/20110930_nelis_natgeb_lnh.dbf
+/Core/SHP/Shapefiles/20101021_nelis_natgeb_landschapoverijssel.shx
+/Core/SHP/Shapefiles/20101021_nelis_natgeb_landschapoverijssel.shp
+/Core/SHP/Shapefiles/20101021_nelis_natgeb_landschapoverijssel.dbf
+/Core/SHP/Shapefiles/20101020_nelis_natgeb_sfl.shx
+/Core/SHP/Shapefiles/20101020_nelis_natgeb_sfl.shp
+/Core/SHP/Shapefiles/20101020_nelis_natgeb_sfl.dbf
