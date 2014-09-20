@@ -13,6 +13,7 @@
 
 <script type="text/javascript">
     var map;
+    var reqId = 0;
     var overlay;
     var infowindow;
     var marker;
@@ -49,8 +50,9 @@
         }
     }
     function loadPolygons(reset) {
+        reqId++;
         var bnds = map.getBounds();
-        requestAreaPolygons(bnds.getSouthWest().toUrlValue(), bnds.getNorthEast().toUrlValue(), reset);
+        requestAreaPolygons(reqId, bnds.getSouthWest().toUrlValue(), bnds.getNorthEast().toUrlValue(), reset);
     }
     function load() {
         var latlng = new google.maps.LatLng(52.15034402766093, 5.526123046875);
@@ -83,7 +85,8 @@
             $('#gotoLocation').val(point.lat() + ", " + point.lng());
             showAddress($('#gotoLocation').val());
         });
-    }
+    }
+
     function requestLocation(loc) {
         $.ajax({
             type: "POST",
@@ -148,7 +151,9 @@
         });
     }
 
-    function requestAreaPolygons(minlatminlon, maxlatmaxlon, reset) {
+    function requestAreaPolygons(requestSequence, minlatminlon, maxlatmaxlon, reset) {
+        if (requestSequence < reqId) return;
+
         overlay.show();
         $.ajax({
             type: "POST",
@@ -175,13 +180,12 @@
                             }
                         }
                         if (squareMapVis) { polyArea.forEach(polyvisChanged); }
-                        else { setTimeout("loadPolygons(0)", 100); }
+                        else { setTimeout(function () { if (requestSequence == reqId) { requestAreaPolygons(requestSequence, minlatminlon, maxlatmaxlon, 0); }}, 100); }
                     }
-                } else { setTimeout("loadPolygons(1)", 100); }
+                } else { setTimeout(function () { if (requestSequence == reqId) { requestAreaPolygons(requestSequence, minlatminlon, maxlatmaxlon, 1); } }, 100); }
             },
             error: function (data, errorText) {
                 overlay.hide();
-                alert('Fout bij het ophalen van de gebiedsinformatie');
             }
         });
     }
@@ -317,7 +321,8 @@
         } else {
             this.setMap(this.map_);
         }
-    }
+    }
+
     $(function () {
         load();
     });
