@@ -214,5 +214,19 @@ namespace Globalcaching
 
             return 15;
         }
+
+        public int UpdateFrom15()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("OnlineToolsWidget",
+                cfg => cfg
+                    .DisplayedAs("Online Tools")
+                    .WithPart("OnlineToolsPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 16;
+        }
     }
 }

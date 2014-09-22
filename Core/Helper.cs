@@ -222,6 +222,122 @@ namespace Globalcaching.Core
             return result;
         }
 
+        public static string DecryptHint(string s)
+        {
+            string result;
+            char[] chars = s.ToCharArray();
+            for (int i = 0; i < chars.Length; i++)
+            {
+                //we might do a typecase and calculate
+                //but lets not think now
+                if (chars[i] == 'a')
+                    chars[i] = 'n';
+                else if (chars[i] == 'A')
+                    chars[i] = 'N';
+                else if (chars[i] == 'b')
+                    chars[i] = 'o';
+                else if (chars[i] == 'B')
+                    chars[i] = 'O';
+                else if (chars[i] == 'c')
+                    chars[i] = 'p';
+                else if (chars[i] == 'C')
+                    chars[i] = 'P';
+                else if (chars[i] == 'd')
+                    chars[i] = 'q';
+                else if (chars[i] == 'D')
+                    chars[i] = 'Q';
+                else if (chars[i] == 'e')
+                    chars[i] = 'r';
+                else if (chars[i] == 'E')
+                    chars[i] = 'R';
+                else if (chars[i] == 'f')
+                    chars[i] = 's';
+                else if (chars[i] == 'F')
+                    chars[i] = 'S';
+                else if (chars[i] == 'g')
+                    chars[i] = 't';
+                else if (chars[i] == 'G')
+                    chars[i] = 'T';
+                else if (chars[i] == 'h')
+                    chars[i] = 'u';
+                else if (chars[i] == 'H')
+                    chars[i] = 'U';
+                else if (chars[i] == 'i')
+                    chars[i] = 'v';
+                else if (chars[i] == 'I')
+                    chars[i] = 'V';
+                else if (chars[i] == 'j')
+                    chars[i] = 'w';
+                else if (chars[i] == 'J')
+                    chars[i] = 'W';
+                else if (chars[i] == 'k')
+                    chars[i] = 'x';
+                else if (chars[i] == 'K')
+                    chars[i] = 'X';
+                else if (chars[i] == 'l')
+                    chars[i] = 'y';
+                else if (chars[i] == 'L')
+                    chars[i] = 'Y';
+                else if (chars[i] == 'm')
+                    chars[i] = 'z';
+                else if (chars[i] == 'M')
+                    chars[i] = 'Z';
+                else if (chars[i] == 'n')
+                    chars[i] = 'a';
+                else if (chars[i] == 'N')
+                    chars[i] = 'A';
+                else if (chars[i] == 'o')
+                    chars[i] = 'b';
+                else if (chars[i] == 'O')
+                    chars[i] = 'b';
+                else if (chars[i] == 'p')
+                    chars[i] = 'c';
+                else if (chars[i] == 'P')
+                    chars[i] = 'C';
+                else if (chars[i] == 'q')
+                    chars[i] = 'd';
+                else if (chars[i] == 'Q')
+                    chars[i] = 'D';
+                else if (chars[i] == 'r')
+                    chars[i] = 'e';
+                else if (chars[i] == 'R')
+                    chars[i] = 'E';
+                else if (chars[i] == 's')
+                    chars[i] = 'f';
+                else if (chars[i] == 'S')
+                    chars[i] = 'F';
+                else if (chars[i] == 't')
+                    chars[i] = 'g';
+                else if (chars[i] == 'T')
+                    chars[i] = 'G';
+                else if (chars[i] == 'u')
+                    chars[i] = 'h';
+                else if (chars[i] == 'U')
+                    chars[i] = 'H';
+                else if (chars[i] == 'v')
+                    chars[i] = 'i';
+                else if (chars[i] == 'V')
+                    chars[i] = 'I';
+                else if (chars[i] == 'w')
+                    chars[i] = 'j';
+                else if (chars[i] == 'W')
+                    chars[i] = 'J';
+                else if (chars[i] == 'x')
+                    chars[i] = 'k';
+                else if (chars[i] == 'X')
+                    chars[i] = 'K';
+                else if (chars[i] == 'y')
+                    chars[i] = 'l';
+                else if (chars[i] == 'Y')
+                    chars[i] = 'L';
+                else if (chars[i] == 'z')
+                    chars[i] = 'm';
+                else if (chars[i] == 'Z')
+                    chars[i] = 'M';
+            }
+            result = new string(chars);
+            return result;
+        }
 
     }
 }

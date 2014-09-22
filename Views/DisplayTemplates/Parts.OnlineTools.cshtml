@@ -1,0 +1,124 @@
+﻿<ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#rot13" data-target="#rot13" data-toggle="tab">ROT13</a></li>
+    <li><a href="#woordwaarde" data-target="#woordwaarde" data-toggle="tab">Woordwaarde</a></li>
+    <li><a href="#ASCII" data-target="#ASCII" data-toggle="tab">ASCII</a></li>
+    <li><a href="#Frequentieteller" data-target="#Frequentieteller" data-toggle="tab">Frequentieteller</a></li>
+    <li><a href="#Cipher" data-target="#Cipher" data-toggle="tab">Cipher</a></li>
+    <li><a href="#Projectie" data-target="#Projectie" data-toggle="tab">Projectie</a></li>
+    <li><a href="#AfstandHoek" data-target="#AfstandHoek" data-toggle="tab">AfstandHoek</a></li>
+    <li><a href="#CoordConv" data-target="#CoordConv" data-toggle="tab">CoordConv</a></li>
+</ul>
+
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade in active" id="rot13">
+        <div class="form-group">
+            <div class="col-sm-11">
+                <textarea id="rot13Input" rows="7" class="form-control" placeholder="de tekst die je wilt omzetten" ></textarea>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" type="button" id="rot13Button">Encrypt/Decrypt</button>
+            </div>
+            <div class="col-sm-11">
+                <textarea id="rot13Result" rows="7" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="woordwaarde">
+        <div class="form-group">
+            <div class="col-sm-11">
+                <textarea id="woordwaardeInput" rows="7" class="form-control" placeholder="de tekst die je wilt omzetten"></textarea>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" type="button" id="woordwaardeButton">Omzetten</button>
+            </div>
+            <div class="col-sm-11">
+                <textarea id="woordwaardeResult" rows="7" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="ASCII">
+        <div class="form-group">
+            <div class="col-sm-11">
+                <textarea id="asciiInput" rows="7" class="form-control" placeholder="de tekst die je wilt omzetten"></textarea>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" type="button" id="asciiButton">Omzetten</button>
+            </div>
+            <div class="col-sm-11">
+                <textarea id="asciiResult" rows="7" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="Frequentieteller">
+        <p>Frequentieteller.</p>
+    </div>
+    <div class="tab-pane fade" id="Cipher">
+        <p>Cipher.</p>
+    </div>
+    <div class="tab-pane fade" id="Projectie">
+        <p>Projectie.</p>
+    </div>
+    <div class="tab-pane fade" id="AfstandHoek">
+        <p>AfstandHoek.</p>
+    </div>
+    <div class="tab-pane fade" id="CoordConv">
+        <p>CoordConv.</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#rot13Button").click(function () {
+        $("#rot13Result").val('');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Rot13", "OnlineTools", new { area = "Globalcaching" })',
+            data: {
+                id: $("#rot13Input").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $("#rot13Result").val(response);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    });
+
+    $("#woordwaardeButton").click(function () {
+        $("#woordwaardeResult").val('');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("WoordWaarde", "OnlineTools", new { area = "Globalcaching" })',
+            data: {
+                id: $("#woordwaardeInput").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $("#woordwaardeResult").val(response);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    });
+
+    $("#asciiButton").click(function () {
+        $("#asciiResult").val('');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ASCIIConvert", "OnlineTools", new { area = "Globalcaching" })',
+            data: {
+                id: $("#asciiInput").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $("#asciiResult").val(response);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    });
+
+</script>

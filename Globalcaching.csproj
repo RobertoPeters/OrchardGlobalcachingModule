@@ -203,6 +203,7 @@
     <Content Include="Views\DisplayTemplates\Parts.GeocacheFilterMacro.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.SearchByAttributes.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.AreaInformation.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.OnlineTools.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -230,6 +231,7 @@
     <Compile Include="Controllers\GCComGeocacheLogsSearchController.cs" />
     <Compile Include="Controllers\GCComUserSearchController.cs" />
     <Compile Include="Controllers\MacroController.cs" />
+    <Compile Include="Controllers\OnlineToolsController.cs" />
     <Compile Include="Core\DBCon.cs" />
     <Compile Include="Core\DotNetDBF\DBFBase.cs" />
     <Compile Include="Core\DotNetDBF\DBFException.cs" />
@@ -263,6 +265,7 @@
     <Compile Include="Drivers\EditUserSettingsPartDriver.cs" />
     <Compile Include="Drivers\GCComSearchGeocacheLogsOfUserPartDriver.cs" />
     <Compile Include="Drivers\GCComSearchUserPartDriver.cs" />
+    <Compile Include="Drivers\OnlineToolsPartDriver.cs" />
     <Compile Include="Drivers\OnlineUsersPartDriver.cs" />
     <Compile Include="Drivers\SearchByAttributesPartDriver.cs" />
     <Compile Include="Drivers\StatisticsGeocachesPerYearDriver.cs" />

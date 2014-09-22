@@ -450,8 +450,53 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "Rot13",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "OnlineTools"},
+                            {"action", "Rot13"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "WoordWaarde",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "OnlineTools"},
+                            {"action", "WoordWaarde"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ASCIIConvert",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "OnlineTools"},
+                            {"action", "ASCIIConvert"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
-            };
+             };
         }
     }
 }
