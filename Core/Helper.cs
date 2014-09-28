@@ -222,6 +222,17 @@ namespace Globalcaching.Core
             return result;
         }
 
+        public static GeodeticMeasurement CalculateDistance(LatLon l1, LatLon l2)
+        {
+            GlobalCoordinates p1 = new GlobalCoordinates(new Angle(l1.lat), new Angle(l1.lon));
+            GlobalCoordinates p2 = new GlobalCoordinates(new Angle(l2.lat), new Angle(l2.lon));
+            GeodeticCalculator gc = new GeodeticCalculator();
+            GlobalPosition gp1 = new GlobalPosition(p1);
+            GlobalPosition gp2 = new GlobalPosition(p2);
+            GeodeticMeasurement gm = gc.CalculateGeodeticMeasurement(Ellipsoid.WGS84, gp1, gp2);
+            return gm;
+        }
+
         public static string DecryptHint(string s)
         {
             string result;

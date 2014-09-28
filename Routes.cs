@@ -495,6 +495,81 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "FrequencyCounter",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "OnlineTools"},
+                            {"action", "FrequencyCounter"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "Cypher",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "OnlineTools"},
+                            {"action", "Cypher"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "Projection",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "OnlineTools"},
+                            {"action", "Projection"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "AfstandHoek",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "OnlineTools"},
+                            {"action", "AfstandHoek"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "CoordConv",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "OnlineTools"},
+                            {"action", "CoordConv"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
              };
         }

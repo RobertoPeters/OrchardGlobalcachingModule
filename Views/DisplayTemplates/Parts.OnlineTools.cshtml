@@ -6,7 +6,7 @@
     <li><a href="#Cipher" data-target="#Cipher" data-toggle="tab">Cipher</a></li>
     <li><a href="#Projectie" data-target="#Projectie" data-toggle="tab">Projectie</a></li>
     <li><a href="#AfstandHoek" data-target="#AfstandHoek" data-toggle="tab">AfstandHoek</a></li>
-    <li><a href="#CoordConv" data-target="#CoordConv" data-toggle="tab">CoordConv</a></li>
+    <li><a href="#CoordConv" data-target="#CoordConv" data-toggle="tab">Coord conversie</a></li>
 </ul>
 
 <div id="myTabContent" class="tab-content">
@@ -50,19 +50,113 @@
         </div>
     </div>
     <div class="tab-pane fade" id="Frequentieteller">
-        <p>Frequentieteller.</p>
+        <div class="form-group">
+            <div class="col-sm-11">
+                <textarea id="freqInput" rows="7" class="form-control" placeholder="de tekst die je wilt omzetten"></textarea>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" type="button" id="freqButton">Tellen</button>
+            </div>
+            <div class="col-sm-11">
+                <textarea id="freqResult" rows="7" class="form-control"></textarea>
+            </div>
+        </div>
     </div>
     <div class="tab-pane fade" id="Cipher">
-        <p>Cipher.</p>
+        <div class="form-group">
+            <div class="col-sm-11">
+                <textarea id="cypherInput" rows="7" class="form-control" placeholder="de tekst die je wilt omzetten"></textarea>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" type="button" id="cypherButton">Omzetten</button>
+            </div>
+            <div class="col-sm-11">
+                <textarea id="cypherResult" rows="7" class="form-control"></textarea>
+            </div>
+        </div>
     </div>
     <div class="tab-pane fade" id="Projectie">
-        <p>Projectie.</p>
+        <div class="form-group">
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Coordinaat:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="projectionInput" class="form-control" placeholder="coordinaat" />
+            </div>
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Afstand in meters:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="projectionDistance" class="form-control" placeholder="Afstand in meters" />
+            </div>
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Hoek in graden:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="projectionAngle" class="form-control" placeholder="Hoek in graden" />
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" type="button" id="projectionButton">Bereken</button>
+            </div>
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Berekend coordinaat:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="projectionResult" class="form-control" />
+            </div>
+        </div>
     </div>
     <div class="tab-pane fade" id="AfstandHoek">
-        <p>AfstandHoek.</p>
+        <div class="form-group">
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Coordinaat 1:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="afstandHoekInput1" class="form-control" placeholder="coordinaat 1" />
+            </div>
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Coordinaat 2:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="afstandHoekInput2" class="form-control" placeholder="coordinaat 2" />
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" type="button" id="afstandHoekButton">Bereken hoek en afstand</button>
+            </div>
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Afstand:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="afstandHoekResult1" class="form-control" />
+            </div>
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Hoek:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="afstandHoekResult2" class="form-control" />
+            </div>
+        </div>
     </div>
     <div class="tab-pane fade" id="CoordConv">
-        <p>CoordConv.</p>
+        <p>Converteer RD coordinaten naar WGS84 en andersom.<br />
+        Geef hiervoor de Lat/Lon op (bv N51 55.345 E6 12.345) of x/y (bv 211308 437421)</p>
+        <div class="form-group">
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Coordinaat (Lat/Lon of x/y):")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="coordConvInput" class="form-control" placeholder="N51 55.345 E6 12.345" />
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" type="button" id="coordConvButton">Converteer</button>
+            </div>
+            <div class="col-sm-11">
+                <label class="col-sm-11 control-label">@T("Geconverteerde coordinaat:")</label>
+            </div>
+            <div class="col-sm-11">
+                <input id="coordConvResult" class="form-control" />
+            </div>
+        </div>
     </div>
 </div>
 
@@ -114,6 +208,101 @@
             },
             success: function (response) {
                 $("#asciiResult").val(response);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    });
+
+    $("#freqButton").click(function () {
+        $("#freqResult").val('');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("FrequencyCounter", "OnlineTools", new { area = "Globalcaching" })',
+            data: {
+                id: $("#freqInput").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $("#freqResult").val(response);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    });
+
+    $("#cypherButton").click(function () {
+        $("#cypherResult").val('');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Cypher", "OnlineTools", new { area = "Globalcaching" })',
+            data: {
+                id: $("#cypherInput").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $("#cypherResult").val(response);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    });
+
+    $("#projectionButton").click(function () {
+        $("#projectionResult").val('');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Projection", "OnlineTools", new { area = "Globalcaching" })',
+            data: {
+                coord: $("#projectionInput").val(),
+                distance: $("#projectionDistance").val(),
+                angle: $("#projectionAngle").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $("#projectionResult").val(response);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    });
+
+    $("#afstandHoekButton").click(function () {
+        $("#afstandHoekResult1").val('');
+        $("#afstandHoekResult2").val('');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AfstandHoek", "OnlineTools", new { area = "Globalcaching" })',
+            data: {
+                coord1: $("#afstandHoekInput1").val(),
+                coord2: $("#afstandHoekInput2").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $("#afstandHoekResult1").val(response[0]);
+                $("#afstandHoekResult2").val(response[1]);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    });
+
+    $("#coordConvButton").click(function () {
+        $("#coordConvResult").val('');
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CoordConv", "OnlineTools", new { area = "Globalcaching" })',
+            data: {
+                id: $("#coordConvInput").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $("#coordConvResult").val(response);
             },
             error: function (data, errorText) {
                 alert(errorText);
