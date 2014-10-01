@@ -206,6 +206,7 @@
     <Content Include="Views\DisplayTemplates\Parts.OnlineTools.cshtml" />
     <Content Include="Views\LogGCCom\LogGeocache.cshtml" />
     <Content Include="Views\LogGCCom\NotAuthorized.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.TrackableBatchLog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -272,6 +273,7 @@
     <Compile Include="Drivers\OnlineUsersPartDriver.cs" />
     <Compile Include="Drivers\SearchByAttributesPartDriver.cs" />
     <Compile Include="Drivers\StatisticsGeocachesPerYearDriver.cs" />
+    <Compile Include="Drivers\TrackableBatchLogDriver.cs" />
     <Compile Include="Drivers\YafMostRecentShoutPartDriver.cs" />
     <Compile Include="Drivers\YafMostRecentPostsPartDriver.cs" />
     <Compile Include="Gavaghan.Geodesy\Angle.cs" />

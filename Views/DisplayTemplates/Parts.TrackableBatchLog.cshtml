@@ -1,0 +1,103 @@
+﻿<div class="row">
+    <div class="col-md-5">
+        Te loggen trackables:<br />
+        <textarea id="tbstolog" rows="7" cols="40" placeholder="plaats hier jouw lijst met trackable nummers"></textarea>
+    </div>
+    <div class="col-md-5 col-offset-1">
+        Gelogde trackables:<br />
+        <textarea id="tbslogged" rows="7" cols="40" readonly="readonly"></textarea>
+    </div>
+</div>
+<div class="row">
+    Datum:<br />
+    <div class='col-md-5 input-group date' id='visitDateDiv'>
+        <input type='text' class="form-control" id='visitDate' />
+        <span class="input-group-addon">
+            <span class="fa fa-calendar"></span>
+        </span>
+    </div>
+</div>
+<div class="row">
+    Logtekst:<br />
+    <div class="col-md-9">
+        <textarea id="logText" rows="7" cols="80" placeholder="plaats hier jouw log"></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" id="stopateachtb" />
+                @T("Stop bij elke trackable (om bv log aan te passen)")
+            </label>
+        </div>
+    </div>
+</div>
+
+<a type="button" class="col-sm-9 btn btn-primary" href="#" id="submitLogButton">Log trackables als discovered</a>
+<a type="button" class="col-sm-9 btn btn-primary" href="#" id="cancelButton">Stop het loggen</a>
+
+<script type="text/javascript">
+
+    var repTimer = null;
+
+    function submitLog() {
+        repTimer = null;
+        myApp.showPleaseWait();
+        $("#submitLogButton").show();
+        $("#cancelButton").hide();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LogTB", "LogGCCom", new { area = "Globalcaching" })',
+            data: {
+                tbsToLog: $("#tbstolog").val(),
+                tbsLogged: $("#tbslogged").val(),
+                visitDate: $("#visitDateDiv").data("DateTimePicker").getDate().toISOString(),
+                logText: $("#logText").val(),
+                favorite: $("#stopateachtb").is(':checked'),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response != null) {
+                    if (response[0] == "OK") {
+                        $("#tbstolog").val(response[1]);
+                        $("#tbslogged").val(response[2]);
+
+                        if (response[1] != "" && !$("#stopateachtb").is(':checked')) {
+                            $("#submitLogButton").hide();
+                            $("#cancelButton").show();
+                            //again
+                            repTimer = setTimeout(function () { submitLog(); }, 2000);
+                        }
+                    }
+                    else {
+                        alart("ERROR");
+                    }
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $("#submitLogButton").click(function () {
+        submitLog();
+    });
+
+    $("#cancelButton").hide();
+    $("#cancelButton").click(function () {
+        clearTimeout(repTimer);
+        $("#submitLogButton").show();
+        $("#cancelButton").hide();
+    });
+
+    $(function () {
+        var d = moment();
+        $('#visitDateDiv').datetimepicker({
+            defaultDate: d
+        });
+    });
+</script>

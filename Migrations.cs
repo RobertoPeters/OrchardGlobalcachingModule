@@ -228,5 +228,20 @@ namespace Globalcaching
 
             return 16;
         }
+
+        public int UpdateFrom16()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("TrackableBatchLogWidget",
+                cfg => cfg
+                    .DisplayedAs("Trackable Batch Log")
+                    .WithPart("TrackableBatchLogPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 17;
+        }
+
     }
 }

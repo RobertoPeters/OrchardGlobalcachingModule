@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class TrackableBatchLogPart : ContentPart
+    {
+    }
+
     public class OnlineToolsPart : ContentPart
     {
     }

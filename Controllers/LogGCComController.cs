@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -105,5 +106,45 @@ namespace Globalcaching.Controllers
             }
             return Json(result);
         }
+
+        [HttpPost]
+        public ActionResult LogTB(string tbsToLog, string tbsLogged, DateTime visitDate, string logText)
+        {
+            string[] result = new string[3];
+            result[0] = "ERROR";
+            var usrSettings = _gcEuUserSettingsService.GetSettings();
+            if (usrSettings != null && usrSettings.YafUserID > 0 && !string.IsNullOrEmpty(usrSettings.LiveAPIToken))
+            {
+                string sbToLog = tbsToLog;
+                string sbLogged = tbsLogged;
+
+                string[] tbl = tbsToLog.Split(new char[] { ' ', ',', '\t', '\r', '\n', '-' }, StringSplitOptions.RemoveEmptyEntries);
+                if (tbl.Length > 0)
+                {
+                    string tb = tbl[0].ToUpper();
+                    if (!tb.StartsWith("TB"))
+                    {
+                        if (LiveAPIClient.LogTrackable(usrSettings.LiveAPIToken, tb.ToUpper(), logText, visitDate.Date))
+                        {
+                            //if succeeded
+                            if (tbl.Length > 0)
+                            {
+                                sbToLog = string.Join(", ", tbl.Skip(1).ToArray());
+                            }
+                            else
+                            {
+                                sbToLog = "";
+                            }
+                            sbLogged = string.Concat(sbLogged, tb, "\r\n");
+                            result[0] = "OK";
+                            result[1] = sbToLog.ToString();
+                            result[2] = sbLogged.ToString();
+                        }
+                    }
+                }
+            }
+            return Json(result);
+        }
+
     }
 }

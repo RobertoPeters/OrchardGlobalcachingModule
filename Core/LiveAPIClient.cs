@@ -77,5 +77,55 @@ namespace Globalcaching.Core
             return result;
         }
 
+        public static bool LogTrackable(string token, string TrackableID, string logText, DateTime logDate)
+        {
+            bool result = false;
+
+            LiveClient lc = GetLiveClient();
+            try
+            {
+                /*
+                string TrackingNumber = "";
+
+
+                GetTrackableResponse tr = lc.GetTrackablesByTrackingNumber(GetWcfAccessToken(), TrackableID, 0);
+                if (tr != null && tr.Status.StatusCode == 0)
+                {
+                    if (tr.Trackables != null && tr.Trackables.Length == 1)
+                    {
+                        TrackingNumber = tr.Trackables[0].Code;
+                    }
+                }
+                */
+
+                //System.Threading.Thread.Sleep(500);
+
+                //test data: TB2CKRC-SB7N85
+                //if (TrackingNumber.Length > 0)
+                {
+                    CreateTrackableLogRequest lr = new CreateTrackableLogRequest();
+                    lr.AccessToken = token;
+                    //lr.TravelBugCode = "TB2CKRC";
+                    //lr.TrackingNumber = "SB7N85";
+                    //lr.TravelBugCode = TrackingNumber;
+                    lr.TrackingNumber = TrackableID;
+                    lr.LogType = 48;
+                    lr.Note = logText.Replace("\r\n", "\r").Replace("\r", "\r\n");
+                    logDate = logDate.AddHours(12);
+                    lr.UTCDateLogged = logDate.ToUniversalTime();
+                    CreateTrackableLogResponse tlr = lc.CreateTrackableLog(lr);
+                    if (tlr != null && tlr.Status.StatusCode == 0)
+                    {
+                        result = true;
+                    }
+                }
+            }
+            catch
+            {
+            }
+            lc.Close();
+            return result;
+        }
+
     }
 }

@@ -15,4 +15,5 @@
   <Place Parts_SearchByAttributes="Content:1"/>
   <Place Parts_AreaInformation="Content:1"/>
   <Place Parts_OnlineTools="Content:1"/>
+  <Place Parts_TrackableBatchLog="Content:1"/>
 </Placement>

@@ -601,6 +601,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "LogTB",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LogGCCom"},
+                            {"action", "LogTB"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
              };
         }
