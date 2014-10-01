@@ -1,0 +1,87 @@
+﻿
+@using Orchard.Mvc.Html
+@model Globalcaching.Models.GCComGeocache
+
+@{
+    Style.Require("datetimepicker.Style");
+}
+
+<div class="col-md-12">
+    <h1><img src="@Href(string.Format("~/Modules/Globalcaching/Media/WptTypes/{0}.gif",@Model.GeocacheTypeId))" /> @Model.Name</h1>
+</div>
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <label for="visitDateDiv" class="col-sm-3 control-label">@T("Datum")</label>
+        <div class='col-sm-9 input-group date' id='visitDateDiv'>
+            <input type='text' class="form-control" id='visitDate' />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar"></span>
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="logText" class="col-sm-3 control-label">@T("Tekst")</label>
+        <div class="col-sm-9">
+            <textarea id="logText" rows="7" class="form-control" placeholder="plaats hier jouw log"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="favorite" />
+                    @T("Favorite")
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="gcid" value="@Model.Code" />
+    <a type="button" class="col-sm-offset-3 col-sm-9 btn btn-primary" href="#" id="submitLogButton">Log geocache als gevonden</a>
+</div>
+<script type="text/javascript">
+
+    function submitLog(page) {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LogGC", "LogGCCom", new { area = "Globalcaching" })',
+            data: {
+                gcid: $("#gcid").val(),
+                visitDate: $("#visitDateDiv").data("DateTimePicker").getDate().toISOString(),
+                logText: $("#logText").val(),
+                favorite: $("#favorite").is(':checked'),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response != null) {
+                    if (response[0] == "OK") {
+                        window.location.href = response[1];
+                    }
+                    else {
+                        alart("ERROR");
+                    }
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $("#submitLogButton").click(function () {
+        submitLog();
+    });
+
+    $(function () {
+        var d = moment();
+        $('#visitDateDiv').datetimepicker({
+            defaultDate: d
+        });
+    });
+</script>

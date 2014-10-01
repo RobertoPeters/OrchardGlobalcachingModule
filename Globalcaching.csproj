@@ -204,6 +204,8 @@
     <Content Include="Views\DisplayTemplates\Parts.SearchByAttributes.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.AreaInformation.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.OnlineTools.cshtml" />
+    <Content Include="Views\LogGCCom\LogGeocache.cshtml" />
+    <Content Include="Views\LogGCCom\NotAuthorized.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -230,6 +232,7 @@
     <Compile Include="Controllers\EditUserSettingsController.cs" />
     <Compile Include="Controllers\GCComGeocacheLogsSearchController.cs" />
     <Compile Include="Controllers\GCComUserSearchController.cs" />
+    <Compile Include="Controllers\LogGCComController.cs" />
     <Compile Include="Controllers\MacroController.cs" />
     <Compile Include="Controllers\OnlineToolsController.cs" />
     <Compile Include="Core\DBCon.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
+using Tucson.Geocaching.WCF.API.Geocaching1.Types;
 using www.geocaching.com.Geocaching1.Live.data;
 
 namespace Globalcaching.Core
@@ -36,6 +37,41 @@ namespace Globalcaching.Core
             }
             catch
             {
+            }
+            lc.Close();
+            return result;
+        }
+
+
+        public static GeocacheLog LogGeocache(string token, string GCCode, string logText, DateTime logDate, bool favorite)
+        {
+            GeocacheLog result = null;
+
+            LiveClient lc = GetLiveClient();
+            try
+            {
+                CreateFieldNoteAndPublishRequest cfnr = new CreateFieldNoteAndPublishRequest();
+                cfnr.AccessToken = token;
+                cfnr.CacheCode = GCCode;
+                cfnr.Note = logText.Replace("\r\n", "\r").Replace("\r", "\r\n");
+                cfnr.PromoteToLog = true;
+                logDate = logDate.AddHours(12);
+                cfnr.UTCDateLogged = logDate.ToUniversalTime();
+                //cfnr.UTCDateLogged.Kind = DateTimeKind.Utc;
+                cfnr.WptLogTypeId = 2;
+                cfnr.FavoriteThisCache = favorite;
+                CreateFieldNoteAndPublishResponse resp = lc.CreateFieldNoteAndPublish(cfnr);
+
+                if (resp != null && resp.Status.StatusCode == 0)
+                {
+                    result = resp.Log;
+
+                    //todo: add log to database!!
+                }
+            }
+            catch
+            {
+                result = null;
             }
             lc.Close();
             return result;

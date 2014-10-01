@@ -570,6 +570,37 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "LogGeocache/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LogGCCom"},
+                            {"action", "LogGeocache"}, 
+                            {"id", UrlParameter.Optional}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "LogGC",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LogGCCom"},
+                            {"action", "LogGC"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
              };
         }
