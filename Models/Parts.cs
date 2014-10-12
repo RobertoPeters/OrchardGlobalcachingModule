@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class FavoriteGeocachesPart : ContentPart
+    {
+    }
+
     public class TrackableBatchLogPart : ContentPart
     {
     }

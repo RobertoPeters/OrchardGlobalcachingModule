@@ -207,6 +207,7 @@
     <Content Include="Views\LogGCCom\LogGeocache.cshtml" />
     <Content Include="Views\LogGCCom\NotAuthorized.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.TrackableBatchLog.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.FavoriteGeocaches.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -260,6 +261,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
+    <Compile Include="Drivers\FavoriteGeocachesPartDriver.cs" />
     <Compile Include="Drivers\CheckCCCPartDriver.cs" />
     <Compile Include="Drivers\EditCCCSettingsPartDriver.cs" />
     <Compile Include="Drivers\GCComQuickGeocacheSearchPartDriver.cs" />
@@ -307,6 +309,7 @@
     <Compile Include="Models\YafShout.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
+    <Compile Include="Services\FavoriteGeocachesService.cs" />
     <Compile Include="Services\GCComSearchGeocacheLogsService.cs" />
     <Compile Include="Services\GCComSearchLogImagesService.cs" />
     <Compile Include="Services\GCComSearchUserService.cs" />
@@ -323,6 +326,7 @@
     <Compile Include="ViewModels\CacheMapSettings.cs" />
     <Compile Include="ViewModels\EditCCCSettingsModel.cs" />
     <Compile Include="ViewModels\EditUserSettingsModel.cs" />
+    <Compile Include="ViewModels\FavoriteGeocachesModel.cs" />
     <Compile Include="ViewModels\GeocacheDataModel.cs" />
     <Compile Include="ViewModels\GeocacheFilterMacroModel.cs" />
     <Compile Include="ViewModels\SearchByAttributesModel.cs" />
