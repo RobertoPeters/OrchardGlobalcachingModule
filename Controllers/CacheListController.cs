@@ -51,6 +51,12 @@ namespace Globalcaching.Controllers
         }
 
         [Themed]
+        public ActionResult FromOwner(int id)
+        {
+            return Search(new GeocacheSearchFilter() { OrderBy = (int)OrderOnItem.HiddenDate, OrderByDirection = -1,  OwnerID = id });
+        }
+
+        [Themed]
         public ActionResult MacroResult()
         {
             return Search(new GeocacheSearchFilter() { OrderBy = (int)OrderOnItem.HiddenDate, OrderByDirection = -1, MacroResult=true });
@@ -244,7 +250,7 @@ namespace Globalcaching.Controllers
                     if (settings != null && settings.GCComUserID != null)
                     {
                         item.Own = item.OwnerId == settings.GCComUserID;
-                        List<long> ll = db.Fetch<long>("select top 1 ID from GCComGeocacheLog where GeocacheID=@0 and FinderId=@1 and WptLogTypeId in (2, 10, 11)", item.ID, settings.GCComUserID);
+                        item.Found = db.Fetch<long>("select top 1 ID from GCComGeocacheLog where GeocacheID=@0 and FinderId=@1 and WptLogTypeId in (2, 10, 11)", item.ID, settings.GCComUserID).Count()>0;
                     }
                     else
                     {

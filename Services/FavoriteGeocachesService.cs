@@ -1,4 +1,6 @@
-﻿using Globalcaching.ViewModels;
+﻿using Gavaghan.Geodesy;
+using Globalcaching.Core;
+using Globalcaching.ViewModels;
 using Orchard;
 using System;
 using System.Collections.Generic;
@@ -16,9 +18,11 @@ namespace Globalcaching.Services
     public class FavoriteGeocachesService : IFavoriteGeocachesService
     {
         public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
+        private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
 
-        public FavoriteGeocachesService()
+        public FavoriteGeocachesService(IGCEuUserSettingsService gcEuUserSettingsService)
         {
+            _gcEuUserSettingsService = gcEuUserSettingsService;
         }
 
         public FavoriteGeocachesModel GetFavoriteGeocaches(int page, int pageSize, FavoriteGeocacheFilter filter)
@@ -29,7 +33,7 @@ namespace Globalcaching.Services
             result.Filter = filter;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
-                var sql = PetaPoco.Sql.Builder.Append("select GCComGeocache.Code, GCComGeocache.Latitude, GCComGeocache.Longitude, GCComGeocache.Name, GCComGeocache.Archived, GCComGeocache.Available, GCComGeocache.GeocacheTypeId, GCComGeocache.OwnerId, GCComGeocache.ContainerTypeId, GCComGeocache.FavoritePoints, GCComUser.UserName, GCComUser.PublicGuid, GCComUser.AvatarUrl, DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE()) as DaysOnline, 'FavPer100Found' = CASE WHEN GCEuGeocache.FoundCount=0 THEN 0 ELSE 100*CONVERT(FLOAT,GCComGeocache.FavoritePoints)/CONVERT(FLOAT,GCEuGeocache.FoundCount) END from GCComGeocache");
+                var sql = PetaPoco.Sql.Builder.Append("select GCComGeocache.ID, GCComGeocache.Code, GCComGeocache.Latitude, GCComGeocache.Longitude, GCComGeocache.Name, GCComGeocache.Archived, GCComGeocache.Available, GCComGeocache.GeocacheTypeId, GCComGeocache.OwnerId, GCComGeocache.ContainerTypeId, GCComGeocache.FavoritePoints, GCComGeocache.Url, GCComUser.UserName, GCComUser.PublicGuid, GCComUser.AvatarUrl, GCEuGeocache.FoundCount, DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE()) as DaysOnline, 'FavPer100Found' = CASE WHEN GCEuGeocache.FoundCount=0 THEN 0 ELSE 100*CONVERT(FLOAT,GCComGeocache.FavoritePoints)/CONVERT(FLOAT,GCEuGeocache.FoundCount) END from GCComGeocache");
                 sql = sql.InnerJoin("GCComUser").On("GCComGeocache.OwnerId = GCComUser.ID");
                 sql = sql.InnerJoin("[GCEuData].[dbo].[GCEuGeocache]").On("GCComGeocache.ID = GCEuGeocache.ID");
                 sql = sql.Where("GCComGeocache.Archived=0");
@@ -42,6 +46,29 @@ namespace Globalcaching.Services
                 result.CurrentPage = items.CurrentPage;
                 result.PageCount = items.TotalPages;
                 result.TotalCount = items.TotalItems;
+
+                var settings = _gcEuUserSettingsService.GetSettings();
+                foreach (var item in result.FavoriteGeocaches)
+                {
+                    if (settings != null && settings.HomelocationLat != null && settings.HomelocationLon != null && item.Latitude != null && item.Longitude != null)
+                    {
+                        GeodeticMeasurement gm = Helper.CalculateDistance((double)settings.HomelocationLat, (double)settings.HomelocationLon, (double)item.Latitude, (double)item.Longitude);
+                        item.DirectionIcon = Helper.GetWindDirection(gm.Azimuth);
+                        item.DistanceFromHome = gm.EllipsoidalDistance / 1000.0;
+
+                    }
+                    if (settings != null && settings.GCComUserID != null)
+                    {
+                        item.Own = item.OwnerId == settings.GCComUserID;
+                        item.Found = db.Fetch<long>("select top 1 ID from GCComGeocacheLog where GeocacheID=@0 and FinderId=@1 and WptLogTypeId in (2, 10, 11)", item.ID, settings.GCComUserID).Count()>0;
+                    }
+                    else
+                    {
+                        item.Found = false;
+                        item.Own = false;
+                    }
+                }
+
             }
             return result;
         }

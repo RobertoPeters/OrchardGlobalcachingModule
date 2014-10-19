@@ -228,6 +228,7 @@
     <Compile Include="Controllers\CacheMapController.cs" />
     <Compile Include="Controllers\CheckCCCController.cs" />
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
+    <Compile Include="Controllers\FavoriteGeocachesController.cs" />
     <Compile Include="Controllers\GCComSearchLogImagesController.cs" />
     <Compile Include="Controllers\LiveAPIOAuthController.cs" />
     <Compile Include="Controllers\DisplayGeocacheController.cs" />

@@ -214,6 +214,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GeocachesVanEigenaar/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "FromOwner"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "SearchLogImages",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -610,6 +625,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "LogGCCom"},
                             {"action", "LogTB"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetFavoriteGeocaches",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FavoriteGeocaches"},
+                            {"action", "GetFavoriteGeocaches"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {
