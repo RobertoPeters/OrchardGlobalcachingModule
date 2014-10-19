@@ -23,6 +23,7 @@ namespace Globalcaching.Models
         public DateTime? STFAtDate { get; set; }
         public DateTime? TTFAtDate { get; set; }
         public DateTime? PublishedAtDate { get; set; }
+        public double? FavPer100Found { get; set; }
 
         public static GCEuGeocache From(Geocache src)
         {
@@ -42,6 +43,7 @@ namespace Globalcaching.Models
             result.STFAtDate = null;
             result.TTFAtDate = null;
             result.PublishedAtDate = null;
+            result.FavPer100Found = null;
             return result;
         }
     }

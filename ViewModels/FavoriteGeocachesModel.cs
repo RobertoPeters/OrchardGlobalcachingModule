@@ -37,10 +37,10 @@ namespace Globalcaching.ViewModels
 
         //GCEuGeocache
         public int FoundCount { get; set; }
+        public double FavPer100Found { get; set; }
 
         //computed
         public int DaysOnline { get; set; }
-        public double FavPer100Found { get; set; }
 
         [PetaPoco.Ignore]
         public string DirectionIcon { get; set; }

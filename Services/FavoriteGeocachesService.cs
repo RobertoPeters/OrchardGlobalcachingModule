@@ -33,7 +33,7 @@ namespace Globalcaching.Services
             result.Filter = filter;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
-                var sql = PetaPoco.Sql.Builder.Append("select GCComGeocache.ID, GCComGeocache.Code, GCComGeocache.Latitude, GCComGeocache.Longitude, GCComGeocache.Name, GCComGeocache.Archived, GCComGeocache.Available, GCComGeocache.GeocacheTypeId, GCComGeocache.OwnerId, GCComGeocache.ContainerTypeId, GCComGeocache.FavoritePoints, GCComGeocache.Url, GCComUser.UserName, GCComUser.PublicGuid, GCComUser.AvatarUrl, GCEuGeocache.FoundCount, DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE()) as DaysOnline, 'FavPer100Found' = CASE WHEN GCEuGeocache.FoundCount=0 THEN 0 ELSE 100*CONVERT(FLOAT,GCComGeocache.FavoritePoints)/CONVERT(FLOAT,GCEuGeocache.FoundCount) END from GCComGeocache");
+                var sql = PetaPoco.Sql.Builder.Append("select GCComGeocache.ID, GCComGeocache.Code, GCComGeocache.Latitude, GCComGeocache.Longitude, GCComGeocache.Name, GCComGeocache.Archived, GCComGeocache.Available, GCComGeocache.GeocacheTypeId, GCComGeocache.OwnerId, GCComGeocache.ContainerTypeId, GCComGeocache.FavoritePoints, GCComGeocache.Url, GCComUser.UserName, GCComUser.PublicGuid, GCComUser.AvatarUrl, GCEuGeocache.FoundCount, DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE()) as DaysOnline, GCEuGeocache.FavPer100Found from GCComGeocache");
                 sql = sql.InnerJoin("GCComUser").On("GCComGeocache.OwnerId = GCComUser.ID");
                 sql = sql.InnerJoin("[GCEuData].[dbo].[GCEuGeocache]").On("GCComGeocache.ID = GCEuGeocache.ID");
                 sql = sql.Where("GCComGeocache.Archived=0");
@@ -41,6 +41,14 @@ namespace Globalcaching.Services
                 sql = sql.Append("and DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE()) >= @0", filter.MinDaysOnline);
                 sql = sql.Append("and GCComGeocache.FavoritePoints >= @0", filter.MinFavorites);
                 sql = sql.Append("and GCEuGeocache.FoundCount >= @0", filter.MinFoundCount);
+                if (filter.SortOn == 0)
+                {
+                    sql = sql.Append("order by FavoritePoints desc");
+                }
+                else
+                {
+                    sql = sql.Append("order by FavPer100Found desc");
+                }
                 var items = db.Page<FavoriteGeocacheInfo>(page, pageSize, sql);
                 result.FavoriteGeocaches = items.Items.ToList();
                 result.CurrentPage = items.CurrentPage;
