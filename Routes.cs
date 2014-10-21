@@ -646,6 +646,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetFavoriteGeocachers",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FavoriteGeocachers"},
+                            {"action", "GetFavoriteGeocachers"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
              };
         }

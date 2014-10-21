@@ -257,5 +257,19 @@ namespace Globalcaching
             return 18;
         }
 
+        public int UpdateFrom18()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("FavoriteGeocachersWidget",
+                cfg => cfg
+                    .DisplayedAs("Favorite Geocachers")
+                    .WithPart("FavoriteGeocachersPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 19;
+        }
+
     }
 }

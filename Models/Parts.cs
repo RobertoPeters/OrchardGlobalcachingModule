@@ -10,6 +10,10 @@ namespace Globalcaching.Models
     {
     }
 
+    public class FavoriteGeocachersPart : ContentPart
+    {
+    }
+
     public class TrackableBatchLogPart : ContentPart
     {
     }
