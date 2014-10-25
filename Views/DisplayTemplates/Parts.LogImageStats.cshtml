@@ -8,12 +8,23 @@
         </select>
     </div>
     <div class="form-group">
+        <label class="control-label">Cachetype:</label>
+        <select class="form-control" id="cachetype">
+            <option value="2">Traditional Cache</option>
+            <option value="3">Multi-cache</option>
+            <option value="4">Virtual cache</option>
+            <option value="5">Letterbox Hybrid</option>
+            <option value="8">Unknown (Mystery) Cache</option>
+            <option value="1858">Wherigo Cache</option>
+        </select>
+    </div>
+    <div class="form-group">
         <label class="control-label">Minimaal aantal dagen online:</label>
         <input class="form-control" id="minDaysOnline" value="@Model.Filter.MinDaysOnline" />
     </div>
     <div class="form-group">
-        <label class="control-label">Minimaal aantal Favorites:</label>
-        <input class="form-control" id="minFavorites" value="@Model.Filter.MinFavorites" />
+        <label class="control-label">Minimaal aantal plaatjes:</label>
+        <input class="form-control" id="minImageCount" value="@Model.Filter.MinImageCount" />
     </div>
     <div class="form-group">
         <label class="control-label">Minimaal aantal keer gevonden:</label>
@@ -22,8 +33,8 @@
     <div class="form-group">
         <label class="control-label">Sorteer op:</label>
         <select class="form-control" id="sorton">
-            <option value="0">Aantal Favorites</option>
-            <option value="1">Percentage Favorites (van totaal aantal keer gevonden)</option>
+            <option value="0">Aantal Plaatjes</option>
+            <option value="1">Percentage plaatjes (van totaal aantal keer gevonden)</option>
         </select>
     </div>
 
@@ -39,8 +50,8 @@
             <th></th>
             <th>Type</th>
             <th></th>
-            <th>#Fav</th>
-            <th>%Fav</th>
+            <th>#Img</th>
+            <th>%Img</th>
             <th>Gevonden</th>
             <th>#Dagen</th>
         </tr>
@@ -60,8 +71,8 @@
         var resultElementName = "#searchFavoritesResults";
         var pagerElementName = ".favoritesPager";
 
-        for (var i = 0; i < response.FavoriteGeocaches.length; i++) {
-            var line = response.FavoriteGeocaches[i];
+        for (var i = 0; i < response.Geocaches.length; i++) {
+            var line = response.Geocaches[i];
             // insert after last row!
             var td1 = "";
             var td2 = "";
@@ -82,11 +93,14 @@
                 td2 = '<img src="@Href("~/Modules/Globalcaching/Media/specialicons/check.gif")' + '"/>';
             }
             td3 = '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId + '.gif"/><br />';
-            td4 = '<a href="@Href("~/Geocache/")' + line.Code + '">' + line.Name + '</a> (<a href="' + line.Url + '" target="_blank">' + line.Code + '</a>)<br />door <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="_blank">' + line.UserName + '</a> | <a href="@Href("~/GeocachesVanEigenaar/")' + line.OwnerId + '">Alle caches</a>';
-            if (line.FavoritePoints != null) {
-                td5 = line.FavoritePoints.toString();
+            td4 = '<a href="@Href("~/Geocache/")' + line.Code + '">' + line.Name + '</a> (<a href="' + line.Url + '" target="_blank">' + line.Code + '</a>)<br />door <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="_blank">' + line.UserName + '</a> | <a href="@Href("~/GeocachesVanEigenaar/")' + line.OwnerId + '">Alle caches</a><br />';
+            for (var k = 0; k < line.LogImages.length; k++) {
+                td4 += '<a href="' + line.LogImages[k].Url + '" target="_blank"><img src="' + line.LogImages[k].ThumbUrl + '" /></a>';
             }
-            td6 = line.FavPer100Found.toFixed(1);
+            if (line.LogImageCount != null) {
+                td5 = line.LogImageCount.toString();
+            }
+            td6 = line.LogImagePer100Found.toFixed(1);
             td7 = line.FoundCount.toString();
             td8 = line.DaysOnline.toString();
 
@@ -106,12 +120,13 @@
         $(pagerElementName).find("li").remove();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetFavoriteGeocaches", "FavoriteGeocaches", new { area = "Globalcaching" })',
+            url: '@Url.Action("GetLogImageStats", "LogImageStats", new { area = "Globalcaching" })',
             data: {
                 page: page,
-                pageSize: "50",
+                pageSize: "25",
                 countryId: $("#country").val(),
-                minFav: $("#minFavorites").val(),
+                cacheType: $("#cachetype").val(),
+                minImgs: $("#minImageCount").val(),
                 minFounds: $("#minFounds").val(),
                 minDays: $("#minDaysOnline").val(),
                 sortOn: $("#sorton").val(),
@@ -133,6 +148,7 @@
     });
 
     $("#country").val(@Model.Filter.CountryId);
+    $("#cachetype").val(@Model.Filter.CacheTypeId);
     $("#sorton").val(@Model.Filter.SortOn);
 
     updateFavoritesList(@Html.Raw(Json.Encode(@Model)));

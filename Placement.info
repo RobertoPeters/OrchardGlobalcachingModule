@@ -18,4 +18,5 @@
   <Place Parts_TrackableBatchLog="Content:1"/>
   <Place Parts_FavoriteGeocaches="Content:1"/>
   <Place Parts_FavoriteGeocachers="Content:1"/>
+  <Place Parts_LogImageStats="Content:1"/>
 </Placement>

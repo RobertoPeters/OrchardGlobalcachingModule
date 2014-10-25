@@ -271,5 +271,19 @@ namespace Globalcaching
             return 19;
         }
 
+        public int UpdateFrom19()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("LogImageStatsWidget",
+                cfg => cfg
+                    .DisplayedAs("Log Image Stats")
+                    .WithPart("LogImageStatsPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 20;
+        }
+
     }
 }
