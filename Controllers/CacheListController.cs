@@ -51,6 +51,12 @@ namespace Globalcaching.Controllers
         }
 
         [Themed]
+        public ActionResult NameSeries(int countryId, string nameSeriesMatch)
+        {
+            return Search(new GeocacheSearchFilter() { OrderBy = (int)OrderOnItem.HiddenDate, OrderByDirection = -1, CountryID = countryId, NameSeriesMatch = nameSeriesMatch });
+        }
+
+        [Themed]
         public ActionResult FromOwner(int id)
         {
             return Search(new GeocacheSearchFilter() { OrderBy = (int)OrderOnItem.HiddenDate, OrderByDirection = -1,  OwnerID = id });
@@ -187,15 +193,26 @@ namespace Globalcaching.Controllers
                     }
                     if (!string.IsNullOrEmpty(filter.NameContainsWord))
                     {
-                        sql = sql.Append(string.Format("and GCComGeocache.Name like '%{0}%'", filter.NameContainsWord.Replace("'", "''")));
+                        sql = sql.Append(string.Format("and GCComGeocache.Name like '%{0}%'", filter.NameContainsWord.Replace("'", "''").Replace("@", "@@")));
                     }
                     if (filter.OwnerName != null)
                     {
-                        sql = sql.Append(string.Format("and GCComUser.UserName like '%{0}%'", filter.OwnerName.Replace("'", "''")));
+                        sql = sql.Append(string.Format("and GCComUser.UserName like '%{0}%'", filter.OwnerName.Replace("'", "''").Replace("@", "@@")));
                     }
                     if (filter.CenterLat != null && filter.CenterLon != null && filter.Radius != null)
                     {
                         sql.Append("and dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, @0, @1) < @2", filter.HomeLat, filter.HomeLon, filter.Radius);
+                    }
+                    if (!string.IsNullOrEmpty(filter.NameSeriesMatch))
+                    {
+                        //sep = ...
+                        int pos = filter.NameSeriesMatch.IndexOf("---");
+                        if (pos >= 0)
+                        {
+                            string ltext = filter.NameSeriesMatch.Substring(0, pos);
+                            string rtext = filter.NameSeriesMatch.Substring(pos + 3);
+                            sql.Append(string.Format("and GCComGeocache.Name LIKE '{0}%' AND GCComGeocache.Name LIKE '%{1}'", ltext.Replace("'", "''").Replace("@", "@@"), rtext.Replace("'", "''").Replace("@", "@@")));
+                        }
                     }
                 }
 

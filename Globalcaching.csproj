@@ -210,6 +210,7 @@
     <Content Include="Views\DisplayTemplates\Parts.FavoriteGeocaches.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FavoriteGeocachers.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.LogImageStats.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.GeocacheSeries.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -230,6 +231,7 @@
     <Compile Include="Controllers\CacheMapController.cs" />
     <Compile Include="Controllers\CheckCCCController.cs" />
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
+    <Compile Include="Controllers\GeocacheSeriesController.cs" />
     <Compile Include="Controllers\FavoriteGeocachersController.cs" />
     <Compile Include="Controllers\LogImageStatsController.cs" />
     <Compile Include="Controllers\FavoriteGeocachesController.cs" />
@@ -266,6 +268,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
+    <Compile Include="Drivers\GeocacheSeriesPartDriver.cs" />
     <Compile Include="Drivers\FavoriteGeocachersPartDriver.cs" />
     <Compile Include="Drivers\LogImageStatsPartDriver.cs" />
     <Compile Include="Drivers\FavoriteGeocachesPartDriver.cs" />
@@ -317,6 +320,7 @@
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
+    <Compile Include="Services\GeocacheSeriesService.cs" />
     <Compile Include="Services\LogImageStatsService.cs" />
     <Compile Include="Services\FavoriteGeocachesService.cs" />
     <Compile Include="Services\GCComSearchGeocacheLogsService.cs" />
@@ -335,6 +339,7 @@
     <Compile Include="ViewModels\CacheMapSettings.cs" />
     <Compile Include="ViewModels\EditCCCSettingsModel.cs" />
     <Compile Include="ViewModels\EditUserSettingsModel.cs" />
+    <Compile Include="ViewModels\GeocacheSeriesModel.cs" />
     <Compile Include="ViewModels\LogImageStatsModel.cs" />
     <Compile Include="ViewModels\FavoriteGeocachersModel.cs" />
     <Compile Include="ViewModels\FavoriteGeocachesModel.cs" />

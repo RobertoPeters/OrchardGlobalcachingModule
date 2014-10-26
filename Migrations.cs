@@ -285,5 +285,19 @@ namespace Globalcaching
             return 20;
         }
 
+        public int UpdateFrom20()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("GeocacheSeriesWidget",
+                cfg => cfg
+                    .DisplayedAs("Geocache Series")
+                    .WithPart("GeocacheSeriesPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 21;
+        }
+
     }
 }

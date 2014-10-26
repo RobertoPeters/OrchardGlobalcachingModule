@@ -184,6 +184,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "NaamSeries/{countryId}/{nameSeriesMatch}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "NameSeries"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "MacroResultaatLijst",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -670,6 +685,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "LogImageStats"},
                             {"action", "GetLogImageStats"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetGeocacheSeries",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheSeries"},
+                            {"action", "GetGeocacheSeries"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {

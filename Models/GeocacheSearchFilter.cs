@@ -23,5 +23,6 @@ namespace Globalcaching.Models
         public int? OrderBy { get; set; }
         public int? OrderByDirection { get; set; }
         public bool? MacroResult { get; set; }
+        public string NameSeriesMatch { get; set; }
     }
 }
