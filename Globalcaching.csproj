@@ -169,27 +169,22 @@
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
     <Content Include="Scripts\GlobalcachingPager.js" />
     <Content Include="packages.config" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\gmapv3.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\keydragzoom_packed.js" />
     <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\zabuto_calendar.js" />
+    <Content Include="Scripts\zabuto_calendar.min.js" />
     <Content Include="Styles\datetimepicker.css" />
     <Content Include="Styles\usersonline.css" />
+    <Content Include="Styles\zabuto_calendar.css" />
+    <Content Include="Styles\zabuto_calendar.min.css" />
     <Content Include="Web.config" />
     <Content Include="Scripts\Web.config" />
     <Content Include="Styles\Web.config" />
     <Content Include="Properties\AssemblyInfo.cs" />
     <Content Include="Module.txt" />
     <Content Include="Views\DisplayTemplates\Parts.LiveAPISettings.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\CacheList\Search.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GCComQuickGeocacheSearch.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GCComSearchLogImages.cshtml" />
@@ -211,6 +206,7 @@
     <Content Include="Views\DisplayTemplates\Parts.FavoriteGeocachers.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.LogImageStats.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheSeries.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.EventCalendar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -268,6 +264,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
+    <Compile Include="Drivers\EventCalendarPartDriver.cs" />
     <Compile Include="Drivers\GeocacheSeriesPartDriver.cs" />
     <Compile Include="Drivers\FavoriteGeocachersPartDriver.cs" />
     <Compile Include="Drivers\LogImageStatsPartDriver.cs" />
@@ -320,6 +317,7 @@
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
+    <Compile Include="Services\EventCalendarService.cs" />
     <Compile Include="Services\GeocacheSeriesService.cs" />
     <Compile Include="Services\LogImageStatsService.cs" />
     <Compile Include="Services\FavoriteGeocachesService.cs" />
@@ -339,6 +337,7 @@
     <Compile Include="ViewModels\CacheMapSettings.cs" />
     <Compile Include="ViewModels\EditCCCSettingsModel.cs" />
     <Compile Include="ViewModels\EditUserSettingsModel.cs" />
+    <Compile Include="ViewModels\EventCalendarModel.cs" />
     <Compile Include="ViewModels\GeocacheSeriesModel.cs" />
     <Compile Include="ViewModels\LogImageStatsModel.cs" />
     <Compile Include="ViewModels\FavoriteGeocachersModel.cs" />

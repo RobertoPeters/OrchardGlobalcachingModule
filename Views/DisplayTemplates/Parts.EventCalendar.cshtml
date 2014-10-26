@@ -1,0 +1,52 @@
+﻿@{
+    Script.Require("zabuto_calendar.Script").AtHead();
+    Style.Require("zabuto_calendar.Style").AtHead();
+}
+
+<div id="date-popover" class="popover top">
+    <div id="date-popover-content" class="popover-content"></div>
+</div>
+
+<div id="my-calendar"></div>
+
+<script type="application/javascript">
+
+    var eventData = [
+        {"date":"2014-10-01","badge":false,"title":"Example 1"},
+        {"date":"2014-10-02","badge":true,"body":"test", "footer":"At Paisley Park", "classname":"purple-event"}
+    ];
+
+    $(document).ready(function () {
+        $("#my-calendar").zabuto_calendar({
+            language: "nl", 
+            data: eventData,
+            legend: [
+                    {type: "text", label: "Special event", badge: "00"},
+                    {type: "block", label: "Regular event", classname: "purple"},
+                  ],
+            action: function () {
+                return myDateFunction(this.id);
+            },
+            action_nav: function () {
+                return myNavFunction(this.id);
+            }
+        });
+    });
+
+        function myDateFunction(id) {
+                $("#date-popover").hide();
+                var date = $("#" + id).data("date");
+                var hasEvent = $("#" + id).data("hasEvent");
+                if (!hasEvent) {
+                    return false;
+                }
+                $("#date-popover-content").html('You clicked on date ' + date);
+                $("#date-popover").show();
+                return true;
+            }
+
+            function myNavFunction(id) {
+                $("#date-popover").hide();
+            }
+
+</script>

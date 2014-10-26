@@ -299,5 +299,19 @@ namespace Globalcaching
             return 21;
         }
 
+        public int UpdateFrom21()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("EventCalendarWidget",
+                cfg => cfg
+                    .DisplayedAs("Event Calendar")
+                    .WithPart("EventCalendarPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 22;
+        }
+
     }
 }

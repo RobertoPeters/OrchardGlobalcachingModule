@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class EventCalendarPart : ContentPart
+    {
+    }
+
     public class GeocacheSeriesPart : ContentPart
     {
     }
