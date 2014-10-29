@@ -3,26 +3,80 @@
     Style.Require("zabuto_calendar.Style").AtHead();
 }
 
-<div id="date-popover" class="popover top">
-    <div id="date-popover-content" class="popover-content"></div>
-</div>
+<style>
+    .evtype6 {
+        background-color: lightgreen;
+    }
+
+    .evtype13 {
+        background-color:  lightcyan;
+    }
+
+    .evtype453 {
+        background-color:  aqua;
+    }
+</style>
+
 
 <div id="my-calendar"></div>
 
-<script type="application/javascript">
+<div id="eventday">
+    <table class="table table-striped table-hover" id="selectedcaches">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    
+</div>
 
-    var eventData = [
-        {"date":"2014-10-01","badge":false,"title":"Example 1"},
-        {"date":"2014-10-02","badge":true,"body":"test", "footer":"At Paisley Park", "classname":"purple-event"}
-    ];
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i=0; i<@Model.Events.Count; i++)
+        {
+            <tr id="@(string.Format("eventid{0}",i))">
+                <td>@Model.Events[i].Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+<script type="text/javascript">
+    var eventList = @Html.Raw(Json.Encode(@Model.Events));
+    var eventData = [];
+    //var eventData = [
+    //    {"date":"2014-10-01","badge":false,"title":"Example 1", "classname":"regular", "id":"1"},
+    //    {"date":"2014-10-02","badge":false,"body":"test", "footer":"At Paisley Park", "classname":"purple", "id":"1"}
+   // ];
 
     $(document).ready(function () {
+
+        $("#eventday").hide();
+
+        for (var i=0; i<eventList.length; i++)
+        {
+            var d = eval('new' + eventList[i].UTCPlaceDate.replace(/\//g, ' '));
+            eventData.push({date: d.toISOString().substring(0, 10), badge:false, title:eventList[i].Name, classname:"evtype"+eventList[i].GeocacheTypeId, id:i});
+        }
+
         $("#my-calendar").zabuto_calendar({
-            language: "nl", 
+            language: "nl",
             data: eventData,
             legend: [
-                    {type: "text", label: "Special event", badge: "00"},
-                    {type: "block", label: "Regular event", classname: "purple"},
+                    {type: "block", label: "Event", classname: "evtype6"},
+                    {type: "block", label: "CITO event", classname: "evtype13"},
+                    {type: "block", label: "Mega event", classname: "evtype453"},
                   ],
             action: function () {
                 return myDateFunction(this.id);
@@ -33,20 +87,27 @@
         });
     });
 
-        function myDateFunction(id) {
-                $("#date-popover").hide();
-                var date = $("#" + id).data("date");
-                var hasEvent = $("#" + id).data("hasEvent");
-                if (!hasEvent) {
-                    return false;
-                }
-                $("#date-popover-content").html('You clicked on date ' + date);
-                $("#date-popover").show();
-                return true;
+    function myDateFunction(id) {
+        $("#eventday").hide();
+        $('#selectedcaches').find("tr:gt(0)").remove();
+        var date = $("#" + id).data("date");
+        var hasEvent = $("#" + id).data("hasEvent");
+        if (!hasEvent) {
+            return false;
+        }
+        for (var i=0; i<eventData.length; i++)
+        {
+            if (eventData[i].date==date)
+            {
+                $('#selectedcaches > tbody:last').append('<tr>' + $("#eventid"+eventData[i].id).html() + '</tr>');
             }
+        }
+        $("#eventday").show();
+        return true;
+    }
 
-            function myNavFunction(id) {
-                $("#date-popover").hide();
-            }
+    function myNavFunction(id) {
+        $("#eventday").hide();
+    }
 
 </script>

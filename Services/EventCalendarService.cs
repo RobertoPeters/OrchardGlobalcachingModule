@@ -22,7 +22,7 @@ namespace Globalcaching.Services
             EventCalendarModel result = new EventCalendarModel();
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
-                result.Events = db.Fetch<GeocacheEventInfo>("select GCComGeocache.ID from GCComGeocache where GCComGeocache.Archived=0 and GCComGeocache.GeocacheTypeId in (6, 13, 453) order by GCComGeocache.UTCPlaceDate desc");
+                result.Events = db.Fetch<GeocacheEventInfo>("select GCComGeocache.ID, GCComGeocache.Code, GCComGeocache.Name, GCComGeocache.UTCPlaceDate, GCComGeocache.Url, GCComGeocache.OwnerId, GCComGeocache.Latitude, GCComGeocache.Longitude, GCComGeocache.GeocacheTypeId from GCComGeocache where GCComGeocache.Archived=0 and GCComGeocache.GeocacheTypeId in (6, 13, 453) order by GCComGeocache.UTCPlaceDate desc");
             }
             return result;
         }
