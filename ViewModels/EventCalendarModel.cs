@@ -16,6 +16,16 @@ namespace Globalcaching.ViewModels
         public string Code { get; set; }
         public string Name { get; set; }
         public long GeocacheTypeId { get; set; }
+
+        //gccomuser
+        public string UserName { get; set; }
+        public Guid PublicGuid { get; set; }
+        public string AvatarUrl { get; set; }
+
+        [PetaPoco.Ignore]
+        public string DirectionIcon { get; set; }
+        [PetaPoco.Ignore]
+        public double DistanceFromHome { get; set; }
     }
 
     public class EventCalendarModel

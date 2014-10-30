@@ -7,11 +7,9 @@
     .evtype6 {
         background-color: lightgreen;
     }
-
     .evtype13 {
         background-color:  lightcyan;
     }
-
     .evtype453 {
         background-color:  aqua;
     }
@@ -21,9 +19,13 @@
 <div id="my-calendar"></div>
 
 <div id="eventday">
+    <h2>Events op de geselecteerde datum</h2>
     <table class="table table-striped table-hover" id="selectedcaches">
         <thead>
             <tr>
+                <th>Datum</th>
+                <th></th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -33,9 +35,13 @@
     
 </div>
 
+<h2>Alle events die nog niet gearchiveerd zijn</h2>
 <table class="table table-striped table-hover">
     <thead>
         <tr>
+            <th>Datum</th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -43,7 +49,22 @@
         @for (int i=0; i<@Model.Events.Count; i++)
         {
             <tr id="@(string.Format("eventid{0}",i))">
-                <td>@Model.Events[i].Name</td>
+                <td>@Model.Events[i].UTCPlaceDate.ToString("d")</td>
+                <td>
+@if (!string.IsNullOrEmpty(Model.Events[i].DirectionIcon))
+{
+    <img src="@(Href(string.Format("~/Modules/Globalcaching/Media/compass/{0}.gif", Model.Events[i].DirectionIcon)))" /><br />
+    @(string.Format("{0:0.0} km", Model.Events[i].DistanceFromHome))
+}
+                </td>
+                <td>
+                    <img src="@(Href(string.Format("~/Modules/Globalcaching/Media/WptTypes/{0}.gif", Model.Events[i].GeocacheTypeId)))" />
+                </td>
+                <td>
+                    <a href="@(Href(string.Format("~/Geocache/{0}", Model.Events[i].Code)))" >@Model.Events[i].Name</a>
+                    (<a href="@Model.Events[i].Url" target="_blank">@Model.Events[i].Code</a>)<br />
+                    door <a href="@string.Format("http://www.geocaching.com/profile/?guid={0}", Model.Events[i].PublicGuid)" target="_blank">@Model.Events[i].UserName</a>
+                </td>
             </tr>
         }
     </tbody>
