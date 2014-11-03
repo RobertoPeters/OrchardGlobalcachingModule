@@ -207,6 +207,7 @@
     <Content Include="Views\DisplayTemplates\Parts.LogImageStats.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheSeries.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.EventCalendar.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.LiveAPIDownload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -264,6 +265,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
+    <Compile Include="Drivers\LiveAPIDownloadPartDriver.cs" />
     <Compile Include="Drivers\EventCalendarPartDriver.cs" />
     <Compile Include="Drivers\GeocacheSeriesPartDriver.cs" />
     <Compile Include="Drivers\FavoriteGeocachersPartDriver.cs" />
@@ -305,6 +307,7 @@
     <Compile Include="Models\GCComUser.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
     <Compile Include="Models\GCEuGeocache.cs" />
+    <Compile Include="Models\GCEuLiveAPIDownloadStatus.cs" />
     <Compile Include="Models\GCEuUserSettings.cs" />
     <Compile Include="Models\GCEuGeocacheFilterMacro.cs" />
     <Compile Include="Models\GeocacheSearchFilter.cs" />
@@ -319,6 +322,7 @@
     <Compile Include="Services\FavoriteGeocachersService.cs" />
     <Compile Include="Services\EventCalendarService.cs" />
     <Compile Include="Services\GeocacheSeriesService.cs" />
+    <Compile Include="Services\LiveAPIDownloadService.cs" />
     <Compile Include="Services\LogImageStatsService.cs" />
     <Compile Include="Services\FavoriteGeocachesService.cs" />
     <Compile Include="Services\GCComSearchGeocacheLogsService.cs" />

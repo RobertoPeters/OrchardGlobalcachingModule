@@ -313,5 +313,18 @@ namespace Globalcaching
             return 22;
         }
 
+        public int UpdateFrom22()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("LiveAPIDownloadWidget",
+                cfg => cfg
+                    .DisplayedAs("Live API Download")
+                    .WithPart("LiveAPIDownloadPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 23;
+        }
     }
 }
