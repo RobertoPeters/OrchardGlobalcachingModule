@@ -32,26 +32,11 @@ namespace Globalcaching.Drivers
 
         protected override DriverResult Display(LiveAPIDownloadPart part, string displayType, dynamic shapeHelper)
         {
-            /*
-            CheckCCCResult m;
-            string wp = HttpContext.Request.QueryString["wp"];
-            if (!string.IsNullOrEmpty(wp))
-            {
-                m = _cccSettingsService.GetCCCUsersForGeocache(1, 50, wp, true);
-            }
-            else
-            {
-                m = new CheckCCCResult();
-                m.GeocacheCode = "";
-                m.TotalCount = 0;
-                m.PageCount = 1;
-                m.CurrentPage = 1;
-            }
-             * */
+            var m = _liveAPIDownloadService.DownloadStatus;
             return ContentShape("Parts_LiveAPIDownload",
                     () => shapeHelper.DisplayTemplate(
                             TemplateName: "Parts.LiveAPIDownload",
-                            Model: null,
+                            Model: m,
                             Prefix: Prefix));
         }
     }

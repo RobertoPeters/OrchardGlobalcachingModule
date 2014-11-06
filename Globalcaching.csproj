@@ -164,6 +164,7 @@
     <None Include="Media\stars\stars5.gif" />
     <None Include="Media\gmap\dragzoom_btn.png" />
     <None Include="Media\gmap\reqpoints.png" />
+    <None Include="Media\wait28.gif" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.nl.js" />
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
@@ -230,6 +231,7 @@
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
     <Compile Include="Controllers\GeocacheSeriesController.cs" />
     <Compile Include="Controllers\FavoriteGeocachersController.cs" />
+    <Compile Include="Controllers\LiveAPIDownloadController.cs" />
     <Compile Include="Controllers\LogImageStatsController.cs" />
     <Compile Include="Controllers\FavoriteGeocachesController.cs" />
     <Compile Include="Controllers\GCComSearchLogImagesController.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Core\SHP\ShapeFile.cs" />
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
+    <Compile Include="Core\TemporaryFile.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
     <Compile Include="Drivers\LiveAPIDownloadPartDriver.cs" />
     <Compile Include="Drivers\EventCalendarPartDriver.cs" />
@@ -366,6 +369,7 @@
     <Content Include="Views\DisplayTemplates\Yaf.MostRecentShout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GeneratedFiles\" />
     <Folder Include="Handlers\" />
   </ItemGroup>
   <ItemGroup>

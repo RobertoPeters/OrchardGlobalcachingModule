@@ -21,6 +21,7 @@ namespace Globalcaching.Controllers
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
 
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
+        private readonly ILiveAPIDownloadService _liveAPIDownloadService;
         public IOrchardServices Services { get; set; }
         public Localizer T { get; set; }
 
@@ -31,8 +32,10 @@ namespace Globalcaching.Controllers
         }
 
         public CacheListController(IGCEuUserSettingsService gcEuUserSettingsService,
+            ILiveAPIDownloadService liveAPIDownloadService,
             IOrchardServices services)
         {
+            _liveAPIDownloadService = liveAPIDownloadService;
             _gcEuUserSettingsService = gcEuUserSettingsService;
             Services = services;
             T = NullLocalizer.Instance;
@@ -142,6 +145,54 @@ namespace Globalcaching.Controllers
             return View("Search", GetGeocaches(filter));
         }
 
+        [Themed]
+        public ActionResult CopyListToDownload(GeocacheSearchFilter filter)
+        {
+            bool result = false;
+            if (filter.MacroResult == true)
+            {
+                result = _liveAPIDownloadService.SetMacroResultForDownload();
+            }
+            else
+            {
+                var setting = _gcEuUserSettingsService.GetSettings();
+                if (setting != null && setting.YafUserID > 0)
+                {
+                    var sql = PetaPoco.Sql.Builder
+                        .Append(string.Format("insert into GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo (Code) select GCComGeocache.Code", setting.YafUserID));
+                    sql = addWhereClause(sql, filter);
+                    result = _liveAPIDownloadService.SetQueryResultForDownload(sql);
+                }
+            }
+            if (result)
+            {
+                var m = _liveAPIDownloadService.DownloadStatus;
+                if (m == null)
+                {
+                    return HttpNotFound("Fout bij het ophalen van de download status");
+                }
+                else
+                {
+                    Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, T("De geocaches kunnen worden gedownload."));
+                    return View("../DisplayTemplates/Parts.LiveAPIDownload", m);
+                }
+            }
+            else
+            {
+                var m = _liveAPIDownloadService.DownloadStatus;
+                if (m == null)
+                {
+                    return HttpNotFound("Fout bij het ophalen van de download status");
+                }
+                else
+                {
+                    Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Error, T("Er is een fout opgetreden. Controlleer of er al geocaches gedownload worden."));
+                    //return View("~/Views/DisplayTemplates/Parts.LiveAPIDownload", m);
+                    return View("../DisplayTemplates/Parts.LiveAPIDownload", m);
+                }
+            }
+        }
+
         [HttpPost]
         public ActionResult SearchGeocaches(GeocacheSearchFilter filter)
         {
@@ -171,69 +222,31 @@ namespace Globalcaching.Controllers
                 {
                     sql.Append(",DistanceFromHome=NULL", filter.HomeLat, filter.HomeLon);
                 }
-                sql = sql.From("GCComGeocache")
-                    .InnerJoin(string.Format("[{0}].[dbo].[GCEuGeocache]", euDatabase)).On("GCComGeocache.ID = GCEuGeocache.ID")
-                    .InnerJoin(string.Format("GCComUser", euDatabase)).On("GCComGeocache.OwnerId = GCComUser.ID");
-
-                if (filter.MacroResult != null)
+                sql = addWhereClause(sql, filter);
+                if (filter.MaxResult > 0 && filter.OrderBy != null && filter.OrderByDirection != null)
                 {
-                    sql = sql.InnerJoin(string.Format("GCEuMacroData.dbo.macro_{0}_Resultaat", settings.YafUserID)).On(string.Format("GCComGeocache.ID = GCEuMacroData.dbo.macro_{0}_Resultaat.ID", settings.YafUserID));
+                    //order statement already added
                 }
                 else
                 {
-                    //add filters
-                    sql = sql.Where("Archived=@0", false);
-                    if (filter.OwnerID != null)
+                    int orderby = filter.OrderBy ?? (int)OrderOnItem.DistanceFromHome;
+                    int orderbydir = filter.OrderByDirection ?? 1;
+                    if (orderby == (int)OrderOnItem.DistanceFromHome && (filter.HomeLat == null || filter.HomeLon == null))
                     {
-                        sql = sql.Append("and GCComUser.ID=@0", filter.OwnerID);
+                        orderby = (int)OrderOnItem.HiddenDate;
+                        orderbydir = -1;
                     }
-                    if (filter.CountryID != null)
+                    string orderdir = orderbydir > 0 ? "ASC" : "DESC";
+                    switch (orderby)
                     {
-                        sql = sql.Append("and CountryID=@0", filter.CountryID);
-                    }
-                    if (!string.IsNullOrEmpty(filter.NameContainsWord))
-                    {
-                        sql = sql.Append(string.Format("and GCComGeocache.Name like '%{0}%'", filter.NameContainsWord.Replace("'", "''").Replace("@", "@@")));
-                    }
-                    if (filter.OwnerName != null)
-                    {
-                        sql = sql.Append(string.Format("and GCComUser.UserName like '%{0}%'", filter.OwnerName.Replace("'", "''").Replace("@", "@@")));
-                    }
-                    if (filter.CenterLat != null && filter.CenterLon != null && filter.Radius != null)
-                    {
-                        sql.Append("and dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, @0, @1) < @2", filter.HomeLat, filter.HomeLon, filter.Radius);
-                    }
-                    if (!string.IsNullOrEmpty(filter.NameSeriesMatch))
-                    {
-                        //sep = ...
-                        int pos = filter.NameSeriesMatch.IndexOf("---");
-                        if (pos >= 0)
-                        {
-                            string ltext = filter.NameSeriesMatch.Substring(0, pos);
-                            string rtext = filter.NameSeriesMatch.Substring(pos + 3);
-                            sql.Append(string.Format("and GCComGeocache.Name LIKE '{0}%' AND GCComGeocache.Name LIKE '%{1}'", ltext.Replace("'", "''").Replace("@", "@@"), rtext.Replace("'", "''").Replace("@", "@@")));
-                        }
+                        case (int)OrderOnItem.DistanceFromHome:
+                            sql = sql.OrderBy(string.Format("dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, {0}, {1}) {2}", filter.HomeLat.ToString().Replace(',', '.'), filter.HomeLon.ToString().Replace(',', '.'), orderdir));
+                            break;
+                        case (int)OrderOnItem.HiddenDate:
+                            sql = sql.OrderBy(string.Format("UTCPlaceDate {0}", orderdir));
+                            break;
                     }
                 }
-
-                int orderby = filter.OrderBy ?? (int)OrderOnItem.DistanceFromHome;
-                int orderbydir = filter.OrderByDirection ?? 1;
-                if (orderby == (int)OrderOnItem.DistanceFromHome && (filter.HomeLat == null || filter.HomeLon == null))
-                {
-                    orderby = (int)OrderOnItem.HiddenDate;
-                    orderbydir = -1;
-                }
-                string orderdir = orderbydir > 0 ? "ASC" : "DESC";
-                switch (orderby)
-                {
-                    case (int)OrderOnItem.DistanceFromHome:
-                        sql = sql.OrderBy(string.Format("dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, {0}, {1}) {2}", filter.HomeLat.ToString().Replace(',', '.'), filter.HomeLon.ToString().Replace(',', '.'), orderdir));
-                        break;
-                    case (int)OrderOnItem.HiddenDate:
-                        sql = sql.OrderBy(string.Format("UTCPlaceDate {0}", orderdir));
-                        break;
-                }
-
                 if (filter.MaxResult > 0)
                 {
                     filter.Page = 1;
@@ -280,5 +293,70 @@ namespace Globalcaching.Controllers
             }
             return result;
         }
+
+        private PetaPoco.Sql addWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter)
+        {
+            string euDatabase = Core.Helper.GetTableNameFromConnectionString(dbGcEuDataConnString);
+            sql = sql.From("GCComGeocache with (nolock)")
+                .InnerJoin(string.Format("[{0}].[dbo].[GCEuGeocache]", euDatabase)).On("GCComGeocache.ID = GCEuGeocache.ID")
+                .InnerJoin(string.Format("GCComUser", euDatabase)).On("GCComGeocache.OwnerId = GCComUser.ID");
+            if (filter.MacroResult != null)
+            {
+                var settings = _gcEuUserSettingsService.GetSettings();
+                sql = sql.InnerJoin(string.Format("GCEuMacroData.dbo.macro_{0}_Resultaat", settings.YafUserID)).On(string.Format("GCComGeocache.ID = GCEuMacroData.dbo.macro_{0}_Resultaat.ID", settings.YafUserID));
+            }
+            else
+            {
+                sql = sql.Where("Archived=@0", false);
+                if (filter.OwnerID != null)
+                {
+                    sql = sql.Append("and GCComUser.ID=@0", filter.OwnerID);
+                }
+                if (filter.CountryID != null)
+                {
+                    sql = sql.Append("and CountryID=@0", filter.CountryID);
+                }
+                if (!string.IsNullOrEmpty(filter.NameContainsWord))
+                {
+                    sql = sql.Append(string.Format("and GCComGeocache.Name like '%{0}%'", filter.NameContainsWord.Replace("'", "''").Replace("@", "@@")));
+                }
+                if (filter.OwnerName != null)
+                {
+                    sql = sql.Append(string.Format("and GCComUser.UserName like '%{0}%'", filter.OwnerName.Replace("'", "''").Replace("@", "@@")));
+                }
+                if (filter.CenterLat != null && filter.CenterLon != null && filter.Radius != null)
+                {
+                    sql.Append("and dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, @0, @1) < @2", filter.HomeLat, filter.HomeLon, filter.Radius);
+                }
+                if (!string.IsNullOrEmpty(filter.NameSeriesMatch))
+                {
+                    //sep = ...
+                    int pos = filter.NameSeriesMatch.IndexOf("---");
+                    if (pos >= 0)
+                    {
+                        string ltext = filter.NameSeriesMatch.Substring(0, pos);
+                        string rtext = filter.NameSeriesMatch.Substring(pos + 3);
+                        sql.Append(string.Format("and GCComGeocache.Name LIKE '{0}%' AND GCComGeocache.Name LIKE '%{1}'", ltext.Replace("'", "''").Replace("@", "@@"), rtext.Replace("'", "''").Replace("@", "@@")));
+                    }
+                }
+            }
+            if (filter.MaxResult > 0 && filter.OrderBy != null && filter.OrderByDirection != null)
+            {
+                int orderby = (int)filter.OrderBy;
+                int orderbydir = (int)filter.OrderByDirection;
+                string orderdir = orderbydir > 0 ? "ASC" : "DESC";
+                switch (orderby)
+                {
+                    case (int)CacheListController.OrderOnItem.DistanceFromHome:
+                        sql = sql.OrderBy(string.Format("dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, {0}, {1}) {2}", filter.HomeLat.ToString().Replace(',', '.'), filter.HomeLon.ToString().Replace(',', '.'), orderdir));
+                        break;
+                    case (int)CacheListController.OrderOnItem.HiddenDate:
+                        sql = sql.OrderBy(string.Format("UTCPlaceDate {0}", orderdir));
+                        break;
+                }
+            }
+            return sql;
+        }
+
     }
 }

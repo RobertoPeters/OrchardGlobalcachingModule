@@ -1,23 +1,47 @@
 ﻿@model Globalcaching.Models.GeocacheSearchResult
 
-@using (Html.BeginFormAntiForgeryPost(Url.Action("ShowMap", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
-{
-    @Html.HiddenFor(m => m.Filter.OwnerID)
-    @Html.HiddenFor(m => m.Filter.CountryID)
-    @Html.HiddenFor(m => m.Filter.HomeLat)
-    @Html.HiddenFor(m => m.Filter.HomeLon)
-    @Html.HiddenFor(m => m.Filter.CenterLat)
-    @Html.HiddenFor(m => m.Filter.CenterLon)
-    @Html.HiddenFor(m => m.Filter.Radius)
-    @Html.HiddenFor(m => m.Filter.OrderBy)
-    @Html.HiddenFor(m => m.Filter.OrderByDirection)
-    @Html.HiddenFor(m => m.Filter.NameContainsWord)
-    @Html.HiddenFor(m => m.Filter.OwnerName)
-    @Html.HiddenFor(m => m.Filter.MacroResult)
-    @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
-    <button type="submit" value="Kaart" class="btn btn-default">@T("Kaart")</button>
-}
-
+<table>
+    <tr>
+        <td>
+            @using (Html.BeginFormAntiForgeryPost(Url.Action("ShowMap", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+            {
+                @Html.HiddenFor(m => m.Filter.OwnerID)
+                @Html.HiddenFor(m => m.Filter.CountryID)
+                @Html.HiddenFor(m => m.Filter.HomeLat)
+                @Html.HiddenFor(m => m.Filter.HomeLon)
+                @Html.HiddenFor(m => m.Filter.CenterLat)
+                @Html.HiddenFor(m => m.Filter.CenterLon)
+                @Html.HiddenFor(m => m.Filter.Radius)
+                @Html.HiddenFor(m => m.Filter.OrderBy)
+                @Html.HiddenFor(m => m.Filter.OrderByDirection)
+                @Html.HiddenFor(m => m.Filter.NameContainsWord)
+                @Html.HiddenFor(m => m.Filter.OwnerName)
+                @Html.HiddenFor(m => m.Filter.MacroResult)
+                @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+    <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
+            }
+        </td>
+        <td>
+            @using (Html.BeginFormAntiForgeryPost(Url.Action("CopyListToDownload", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+            {
+                @Html.HiddenFor(m => m.Filter.OwnerID)
+                @Html.HiddenFor(m => m.Filter.CountryID)
+                @Html.HiddenFor(m => m.Filter.HomeLat)
+                @Html.HiddenFor(m => m.Filter.HomeLon)
+                @Html.HiddenFor(m => m.Filter.CenterLat)
+                @Html.HiddenFor(m => m.Filter.CenterLon)
+                @Html.HiddenFor(m => m.Filter.Radius)
+                @Html.HiddenFor(m => m.Filter.OrderBy)
+                @Html.HiddenFor(m => m.Filter.OrderByDirection)
+                @Html.HiddenFor(m => m.Filter.NameContainsWord)
+                @Html.HiddenFor(m => m.Filter.OwnerName)
+                @Html.HiddenFor(m => m.Filter.MacroResult)
+                @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+                <button type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
+            }
+        </td>
+    </tr>
+</table>
 <div id="gccomSearchGeocacheTopPager">
 </div>
 <table class="table table-striped table-hover" id="gccomSearchGeocacheResults">

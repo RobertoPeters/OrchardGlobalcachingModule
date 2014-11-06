@@ -244,6 +244,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "CopyListToDownload",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "CopyListToDownload"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "SearchLogImages",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -700,6 +715,81 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "GeocacheSeries"},
                             {"action", "GetGeocacheSeries"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetLiveAPIDownloadStatus",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LiveAPIDownload"},
+                            {"action", "GetLiveAPIDownloadStatus"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "StartLiveAPIDownload",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LiveAPIDownload"},
+                            {"action", "StartDownload"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "StopLiveAPIDownload",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LiveAPIDownload"},
+                            {"action", "StopDownload"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "CopyMacroResultToDownload",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LiveAPIDownload"},
+                            {"action", "CopyMacroResultToDownload"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "LiveAPIDownloadFile",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LiveAPIDownload"},
+                            {"action", "DownloadFile"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {

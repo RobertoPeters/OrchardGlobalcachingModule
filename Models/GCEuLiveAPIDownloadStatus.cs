@@ -15,6 +15,12 @@ namespace Globalcaching.Models
         public string StatusText { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? FinishedTime { get; set; }
+        public string FileName { get; set; }
+        public bool IsLite { get; set; }
+        public string FileFormat { get; set; }
+        public int? LiveAPICachesLeft { get; set; }
+        public int? LiveAPIMaxCacheCount { get; set; }
+        public DateTime? LiveAPILastAccessTime { get; set; }
 
         [PetaPoco.Ignore]
         public bool IsDownloading { get; set; }

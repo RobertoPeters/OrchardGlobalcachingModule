@@ -1,1 +1,197 @@
-﻿Hello
+﻿<h2>Geocache download status</h2>
+<div id="busyIndicator">
+    <center>
+        <img src="@Href("~/Modules/Globalcaching/Media/wait28.gif")" />
+        <strong>Bezig met downwloaden...</strong>
+    </center>
+</div>
+<table class="table table-striped table-hover" id="downloadStatusOverview">
+    <thead>
+        <tr>
+            <th class="col-md-3">Item</th>
+            <th>Waarde</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Aantal te downloaden</td>
+            <td id="TotalToDownload"></td>
+        </tr>
+        <tr>
+            <td>Aantal gedownload</td>
+            <td id="Downloaded"></td>
+        </tr>
+        <tr>
+            <td>Lite</td>
+            <td id="IsLite"></td>
+        </tr>
+        <tr>
+            <td>Starttijd</td>
+            <td id="StartTime"></td>
+        </tr>
+        <tr>
+            <td>Eindtijd</td>
+            <td id="FinishedTime"></td>
+        </tr>
+        <tr>
+            <td>Onderbroken</td>
+            <td id="Canceled"></td>
+        </tr>
+        <tr>
+            <td>Live API tegoed</td>
+            <td id="LiveAPILimits"></td>
+        </tr>
+        <tr>
+            <td>Bezig met downloaden</td>
+            <td id="IsDownloading"></td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td id="StatusText"></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <a id="downloadFilebutton" type="button" class="btn btn-primary" href='@Url.Action("DownloadFile", "LiveAPIDownload", new { area = "Globalcaching" })'>Download gegenereerde GPX bestand</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div id="startDownloadForm">
+    <form role="form">
+        <div class="form-group">
+            <label class="control-label">Lite versie:</label>
+            <select class="form-control" id="liteversion">
+                <option value="0">Nee (vereist Premium Membership van geocaching.com)</option>
+                <option value="1">Ja (bevat niet alle gegevens)</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" type="button" id="startDownloadButton">Start download</button>
+    </form>
+</div>
+<div id="stopDownloadForm">
+    <button class="btn btn-primary" type="button" id="stopDownloadButton">Stop download</button>
+</div>
+
+<script type="text/javascript">
+
+    function handleDownloadStatus(response) {
+        if (response != null) {
+            $("#TotalToDownload").text(response.TotalToDownload);
+            $("#Downloaded").text(response.Downloaded);
+            $("#Canceled").text(response.Canceled ? "Ja" : "Nee");
+            $("#IsDownloading").text(response.IsDownloading ? "Ja" : "Nee");
+            $("#IsLite").text(response.IsLite ? "Ja" : "Nee");
+            $("#StatusText").text(response.StatusText == null ? "" : response.StatusText);
+            if (response.StartTime != null) {
+                var d = eval('new' + response.StartTime.replace(/\//g, ' '));
+                $("#StartTime").text(d.toLocaleString());
+            }
+            else {
+                $("#StartTime").text("");
+            }
+            if (response.FinishedTime != null) {
+                var d = eval('new' + response.FinishedTime.replace(/\//g, ' '));
+                $("#FinishedTime").text(d.toLocaleString());
+            }
+            else {
+                $("#FinishedTime").text("");
+            }
+            if (response.LiveAPICachesLeft != null) {
+                var d = eval('new' + response.LiveAPILastAccessTime.replace(/\//g, ' '));
+                $("#LiveAPILimits").text(response.LiveAPICachesLeft.toString() + ' / ' + response.LiveAPIMaxCacheCount.toString() + ' (' + d.toLocaleString() + ')');
+            }
+            else {
+                $("#LiveAPILimits").text("");
+            }
+
+            $("#downloadStatusOverview").show();
+
+            if (response.IsDownloading || response.TotalToDownload == 0) {
+                $("#startDownloadForm").hide();
+            }
+            else {
+                $("#startDownloadForm").show();
+            }
+
+            if (response.IsDownloading) {
+                $("#busyIndicator").show();
+                $("#stopDownloadForm").show();
+                $("#downloadFilebutton").hide();
+            }
+            else {
+                $("#busyIndicator").hide();
+                $("#stopDownloadForm").hide();
+                if (response.FileName != null && response.FileName != '') {
+                    $("#downloadFilebutton").show();
+                }
+            }
+
+            setTimeout(function () { getDownloadStatus(); }, 5000);
+        }
+        else {
+            $("#downloadStatusOverview").hide();
+            $("#startDownloadForm").hide();
+            $("#downloadFilebutton").hide();            
+        }
+    }
+
+    function getDownloadStatus() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLiveAPIDownloadStatus", "LiveAPIDownload", new { area = "Globalcaching" })',
+            data: {
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                handleDownloadStatus(response);
+            },
+            error: function (data, errorText) {
+            }
+        });
+    }
+
+    function startDownload() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("StartDownload", "LiveAPIDownload", new { area = "Globalcaching" })',
+            data: {
+                isLite: $("#liteversion").val()==1,
+                fileFormat: "gpx",
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                handleDownloadStatus(response);
+            },
+            error: function (data, errorText) {
+            }
+        });
+    }
+
+    function stopDownload() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("StopDownload", "LiveAPIDownload", new { area = "Globalcaching" })',
+            data: {
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                handleDownloadStatus(response);
+            },
+            error: function (data, errorText) {
+            }
+        });
+    }
+
+    $("#startDownloadButton").click(function () {
+        startDownload();
+    });
+
+    $("#stopDownloadButton").click(function () {
+        stopDownload();
+    });
+
+    handleDownloadStatus(@Html.Raw(Json.Encode(@Model)));
+
+</script>
