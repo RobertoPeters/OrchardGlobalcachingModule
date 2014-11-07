@@ -156,7 +156,7 @@ namespace Globalcaching.Controllers
             else
             {
                 var setting = _gcEuUserSettingsService.GetSettings();
-                if (setting != null && setting.YafUserID > 0)
+                if (setting != null && setting.YafUserID > 1)
                 {
                     var sql = PetaPoco.Sql.Builder
                         .Append(string.Format("insert into GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo (Code) select GCComGeocache.Code", setting.YafUserID));
@@ -186,7 +186,7 @@ namespace Globalcaching.Controllers
                 }
                 else
                 {
-                    Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Error, T("Er is een fout opgetreden. Controlleer of er al geocaches gedownload worden."));
+                    Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Error, T("Er is een fout opgetreden. Je moet ingelogd zijn en controlleer of er al geocaches gedownload worden."));
                     //return View("~/Views/DisplayTemplates/Parts.LiveAPIDownload", m);
                     return View("../DisplayTemplates/Parts.LiveAPIDownload", m);
                 }

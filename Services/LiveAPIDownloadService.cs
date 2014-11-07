@@ -145,7 +145,7 @@ LiveAPILastAccessTime datetime
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
                 var settings = _gcEuUserSettingsService.GetSettings();
-                if (settings != null)
+                if (settings != null && settings.YafUserID>1)
                 {
                     var status = getOrCreateDownLoadStatus(db, settings.YafUserID);
                     if (status != null)

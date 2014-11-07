@@ -473,7 +473,7 @@ namespace Globalcaching.Services
         {
             List<GCEuGeocacheFilterMacro> result = null;
             var settings = _gcEuUserSettingsService.GetSettings();
-            if (settings != null && settings.YafUserID > 0)
+            if (settings != null && settings.YafUserID > 1)
             {
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                 {
@@ -515,7 +515,7 @@ namespace Globalcaching.Services
         {
             List<GCEuGeocacheFilterMacro> result = null;
             var settings = _gcEuUserSettingsService.GetSettings();
-            if (settings != null && settings.YafUserID > 0)
+            if (settings != null && settings.YafUserID > 1)
             {
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                 {
@@ -534,7 +534,7 @@ namespace Globalcaching.Services
         {
             List<GCEuGeocacheFilterMacro> result = SaveMacro(name, macro);
             var settings = _gcEuUserSettingsService.GetSettings();
-            if (settings != null && settings.YafUserID > 0)
+            if (settings != null && settings.YafUserID > 1)
             {
                 var m = GetMacro(settings.YafUserID, name);
                 if (m != null)

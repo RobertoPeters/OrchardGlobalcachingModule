@@ -27,7 +27,7 @@ namespace Globalcaching.Drivers
         {
             var m = new GeocacheFilterMacroModel();
             var settings = _gcEuUserSettingsService.GetSettings();
-            if (settings!=null && settings.YafUserID>0)
+            if (settings!=null && settings.YafUserID>1)
             {
                 m.Macros = _macroService.GetMacrosOfUser(settings.YafUserID);
                 m.Functions = _macroService.GetFunctions();

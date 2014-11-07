@@ -35,7 +35,7 @@ namespace Globalcaching.Controllers
         public ActionResult LogGeocache(string id)
         {
             var usrSettings = _gcEuUserSettingsService.GetSettings();
-            if (usrSettings != null && usrSettings.YafUserID>0)
+            if (usrSettings != null && usrSettings.YafUserID>1)
             {
                 if (!string.IsNullOrEmpty(usrSettings.LiveAPIToken))
                 {
@@ -94,7 +94,7 @@ namespace Globalcaching.Controllers
             string[] result = new string[3];
             result[0] = "ERROR";
             var usrSettings = _gcEuUserSettingsService.GetSettings();
-            if (usrSettings != null && usrSettings.YafUserID > 0 && !string.IsNullOrEmpty(usrSettings.LiveAPIToken))
+            if (usrSettings != null && usrSettings.YafUserID > 1 && !string.IsNullOrEmpty(usrSettings.LiveAPIToken))
             {
                 var log = LiveAPIClient.LogGeocache(usrSettings.LiveAPIToken, gcid, logText, visitDate.Date, favorite);
                 if (log != null)
@@ -113,7 +113,7 @@ namespace Globalcaching.Controllers
             string[] result = new string[3];
             result[0] = "ERROR";
             var usrSettings = _gcEuUserSettingsService.GetSettings();
-            if (usrSettings != null && usrSettings.YafUserID > 0 && !string.IsNullOrEmpty(usrSettings.LiveAPIToken))
+            if (usrSettings != null && usrSettings.YafUserID > 1 && !string.IsNullOrEmpty(usrSettings.LiveAPIToken))
             {
                 string sbToLog = tbsToLog;
                 string sbLogged = tbsLogged;
