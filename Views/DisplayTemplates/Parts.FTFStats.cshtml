@@ -86,15 +86,18 @@
         $(pagerElementName).find("li").remove();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetGeocacheSeries", "GeocacheSeries", new { area = "Globalcaching" })',
+            url: '@Url.Action("GetFTFStats", "FTFStats", new { area = "Globalcaching" })',
             data: {
                 page: page,
                 pageSize: "50",
+                UserName: $("#usrname").val(),
+                Jaar: $("#jaar").val(),
+                RankingType: $("#sorton").val(),
                 __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
             },
             success: function (response) {
                 myApp.hidePleaseWait();
-                updateFavoritesList(response);
+                updateFTFList(response);
             },
             error: function (data, errorText) {
                 myApp.hidePleaseWait();

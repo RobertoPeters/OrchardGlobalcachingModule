@@ -796,6 +796,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetFTFStats",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "GetFTFStats"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
              };
         }
