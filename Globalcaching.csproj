@@ -209,6 +209,7 @@
     <Content Include="Views\DisplayTemplates\Parts.GeocacheSeries.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.EventCalendar.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.LiveAPIDownload.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.FTFStats.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -268,6 +269,7 @@
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
+    <Compile Include="Drivers\FTFStatsPartDriver.cs" />
     <Compile Include="Drivers\LiveAPIDownloadPartDriver.cs" />
     <Compile Include="Drivers\EventCalendarPartDriver.cs" />
     <Compile Include="Drivers\GeocacheSeriesPartDriver.cs" />
@@ -309,6 +311,7 @@
     <Compile Include="Models\GCComSearchLogImagesResult.cs" />
     <Compile Include="Models\GCComUser.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
+    <Compile Include="Models\GCEuFTFStats.cs" />
     <Compile Include="Models\GCEuGeocache.cs" />
     <Compile Include="Models\GCEuLiveAPIDownloadStatus.cs" />
     <Compile Include="Models\GCEuUserSettings.cs" />
@@ -324,6 +327,7 @@
     <Compile Include="Routes.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
     <Compile Include="Services\EventCalendarService.cs" />
+    <Compile Include="Services\FTFStatsService.cs" />
     <Compile Include="Services\GeocacheSeriesService.cs" />
     <Compile Include="Services\LiveAPIDownloadService.cs" />
     <Compile Include="Services\LogImageStatsService.cs" />
@@ -345,6 +349,7 @@
     <Compile Include="ViewModels\EditCCCSettingsModel.cs" />
     <Compile Include="ViewModels\EditUserSettingsModel.cs" />
     <Compile Include="ViewModels\EventCalendarModel.cs" />
+    <Compile Include="ViewModels\FTFStatsModel.cs" />
     <Compile Include="ViewModels\GeocacheSeriesModel.cs" />
     <Compile Include="ViewModels\LogImageStatsModel.cs" />
     <Compile Include="ViewModels\FavoriteGeocachersModel.cs" />

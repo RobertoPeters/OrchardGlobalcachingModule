@@ -326,5 +326,19 @@ namespace Globalcaching
 
             return 23;
         }
+
+        public int UpdateFrom23()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("FTFStatsWidget",
+                cfg => cfg
+                    .DisplayedAs("FTF Stats")
+                    .WithPart("FTFStatsPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 24;
+        }
     }
 }
