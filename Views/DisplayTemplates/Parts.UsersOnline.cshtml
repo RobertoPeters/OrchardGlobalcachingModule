@@ -25,7 +25,7 @@
     }
     else 
     { 
-        @Html.Raw("<a href=\"http://www.globalcaching.eu/forum/yaf_profile" + @Model.Users[i].YafUserID + ".aspx\" title=\"" + @Model.Users[i].LastAccess + "\">")
+        @Html.Raw("<a href=\"/forum/yaf_profile" + @Model.Users[i].YafUserID + ".aspx\" title=\"" + @Model.Users[i].LastAccess + "\">")
         @Html.Label(@Model.Users[i].YafUserName, new { @class = classname })
         @Html.Raw("</a>")
     }

@@ -230,6 +230,7 @@
     <Compile Include="Controllers\CacheMapController.cs" />
     <Compile Include="Controllers\CheckCCCController.cs" />
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
+    <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
     <Compile Include="Controllers\GeocacheSeriesController.cs" />
     <Compile Include="Controllers\FavoriteGeocachersController.cs" />

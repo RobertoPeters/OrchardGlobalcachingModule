@@ -811,6 +811,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "forum/{*pathInfo}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Forum"},
+                            {"action", "Index"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
              };
         }
