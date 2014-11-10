@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -9,6 +10,7 @@ namespace Globalcaching.Core
 {
     public class SmileySupport
     {
+        private static string ForumBaseUrl = ConfigurationManager.AppSettings["forumBaseUrl"].ToString();
         private static SmileySupport _uniqueInstance = null;
         private static object _lockObject = new object();
 
@@ -68,7 +70,7 @@ namespace Globalcaching.Core
             string result = s;
             foreach (string code in _smileys.Keys)
             {
-                result = result.Replace(code, string.Format("<img src=\"http://www.globalcaching.eu/forum/images/emoticons/{0}\" />", _smileys[code]));
+                result = result.Replace(code, string.Format("<img src=\"{0}images/emoticons/{1}\" />", ForumBaseUrl, _smileys[code]));
             }
             return result;
         }
@@ -78,7 +80,7 @@ namespace Globalcaching.Core
             string result = s;
             foreach (string code in _htmlEncodedSmileys.Keys)
             {
-                result = result.Replace(code, string.Format("<img src=\"http://www.globalcaching.eu/forum/images/emoticons/{0}\" />", _htmlEncodedSmileys[code]));
+                result = result.Replace(code, string.Format("<img src=\"{0}images/emoticons/{1}\" />", ForumBaseUrl, _htmlEncodedSmileys[code]));
             }
             return result;
         }

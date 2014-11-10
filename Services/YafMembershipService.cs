@@ -12,6 +12,7 @@ using Orchard.Users.Events;
 using Orchard.Users.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
@@ -24,6 +25,8 @@ namespace Globalcaching.Services
     [OrchardSuppressDependency("Orchard.Users.Services.MembershipService")]
     public class YafMembershipService : IMembershipService
     {
+        private static string ForumBaseUrl = ConfigurationManager.AppSettings["forumBaseUrl"].ToString();
+
         private readonly IOrchardServices _orchardServices;
         private readonly IMessageService _messageService;
         private readonly IEnumerable<IUserEventHandler> _userEventHandlers;
@@ -228,7 +231,8 @@ namespace Globalcaching.Services
             {
                 try
                 {
-                    System.Net.HttpWebRequest webRequest = System.Net.WebRequest.Create(string.Format("http://www.globalcaching.eu/Layar/ccc.aspx?usr={0}&pwd={1}", HttpUtility.UrlEncode(userPart.UserName), HttpUtility.UrlEncode(password))) as System.Net.HttpWebRequest;
+                    string url = ForumBaseUrl.Replace("/forum/","");
+                    System.Net.HttpWebRequest webRequest = System.Net.WebRequest.Create(string.Format("{0}/Layar/ccc.aspx?usr={1}&pwd={2}", url, HttpUtility.UrlEncode(userPart.UserName), HttpUtility.UrlEncode(password))) as System.Net.HttpWebRequest;
                     webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.17 Safari/533.4";
                     using (System.IO.StreamReader responseReader = new System.IO.StreamReader(webRequest.GetResponse().GetResponseStream()))
                     {
