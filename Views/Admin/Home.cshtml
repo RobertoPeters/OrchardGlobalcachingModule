@@ -1,0 +1,4 @@
+﻿@using (Html.BeginFormAntiForgeryPost(Url.Action("Restart", "Admin", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <button type="submit" value="Kaart" class="btn btn-primary">@T("Restart")</button>
+}

@@ -826,6 +826,36 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "globalcaching/admin",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Admin"},
+                            {"action", "Index"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "globalcaching/admin/restart",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Admin"},
+                            {"action", "Restart"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
              };
         }

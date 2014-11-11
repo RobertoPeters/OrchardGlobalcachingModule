@@ -210,6 +210,7 @@
     <Content Include="Views\DisplayTemplates\Parts.EventCalendar.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.LiveAPIDownload.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FTFStats.cshtml" />
+    <Content Include="Views\Admin\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -226,6 +227,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CacheListController.cs" />
     <Compile Include="Controllers\CacheMapController.cs" />
     <Compile Include="Controllers\CheckCCCController.cs" />
