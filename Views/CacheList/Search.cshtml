@@ -18,6 +18,7 @@
                 @Html.HiddenFor(m => m.Filter.OwnerName)
                 @Html.HiddenFor(m => m.Filter.MacroResult)
                 @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+                @Html.HiddenFor(m => m.Filter.Parel)
     <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
             }
         </td>
@@ -37,6 +38,7 @@
                 @Html.HiddenFor(m => m.Filter.OwnerName)
                 @Html.HiddenFor(m => m.Filter.MacroResult)
                 @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+                @Html.HiddenFor(m => m.Filter.Parel)
                 <button type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
             }
         </td>
@@ -78,6 +80,7 @@
         NameContainsWord = Model.Filter.NameContainsWord ?? null,
         OwnerName = Model.Filter.OwnerName ?? null,
         NameSeriesMatch = Model.Filter.NameSeriesMatch ?? null,
+        Parel = Model.Filter.Parel ?? null,
         MacroResult = Model.Filter.MacroResult ?? null
             }));
 

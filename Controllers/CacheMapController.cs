@@ -296,6 +296,10 @@ namespace Globalcaching.Controllers
             }
             else
             {
+                if (filter.Parel == true)
+                {
+                    sql = sql.InnerJoin(string.Format("[{0}].[dbo].[GCEuParel]", euDatabase)).On("GCComGeocache.ID = GCEuParel.GeocacheID");
+                }
                 sql = sql.Where("Archived=@0", false);
                 if (filter.OwnerID != null)
                 {

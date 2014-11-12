@@ -434,6 +434,14 @@ namespace Globalcaching.Services
                     Examples = "NietAantalKeerGevondenMeerDan(100)",
                     PMOnly = false
                 }
+                , new MacroFunctionInfo
+                {
+                    Name = "IsParel",
+                    ProtoType = "IsParel()",
+                    Description = "Caches Parel van de Maand zijn",
+                    Examples = "IsParel()",
+                    PMOnly = false
+                }
             };
 
             return result.OrderBy(x => x.Name).ToArray();
@@ -933,6 +941,9 @@ namespace Globalcaching.Services
                 case "nietaantalkeergevondenmeerdan":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
                     whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.FoundCount <= {0} ", int.Parse(parameters[0])));
+                    break;
+                case "isparel":
+                    addInnerJoin(" inner join GcEuData.dbo.GCEuParel with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuParel.GeocacheID ", innerJoins);
                     break;
                 default:
                     return false;

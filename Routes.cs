@@ -154,6 +154,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "Parels",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "Parels"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "SearchGeocaches",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -850,6 +865,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "Admin"},
                             {"action", "Restart"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "globalcaching/admin/AddParel",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Admin"},
+                            {"action", "AddParel"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {

@@ -1,4 +1,9 @@
 ﻿@using (Html.BeginFormAntiForgeryPost(Url.Action("Restart", "Admin", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
 {
-    <button type="submit" value="Kaart" class="btn btn-primary">@T("Restart")</button>
+    <button type="submit" value="Restart" class="btn btn-primary">@T("Restart")</button>
+}
+@using (Html.BeginFormAntiForgeryPost(Url.Action("AddParel", "Admin", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <input type="text" id="gccode" name="gccode" placeholder="GC12345">
+    <button type="submit" value="AddParel" class="btn btn-primary">@T("Voeg parel toe")</button>
 }

@@ -48,6 +48,12 @@ namespace Globalcaching.Controllers
         }
 
         [Themed]
+        public ActionResult Parels()
+        {
+            return Search(new GeocacheSearchFilter() { Parel = true, OrderBy = (int)OrderOnItem.HiddenDate, OrderByDirection = -1 });
+        }
+
+        [Themed]
         public ActionResult MostRecentCountry(int id)
         {
             return Search(new GeocacheSearchFilter() { OrderBy = (int)OrderOnItem.HiddenDate, OrderByDirection = -1, CountryID=id });
@@ -307,6 +313,10 @@ namespace Globalcaching.Controllers
             }
             else
             {
+                if (filter.Parel == true)
+                {
+                    sql = sql.InnerJoin(string.Format("[{0}].[dbo].[GCEuParel]", euDatabase)).On("GCComGeocache.ID = GCEuParel.GeocacheID");
+                }
                 sql = sql.Where("Archived=@0", false);
                 if (filter.OwnerID != null)
                 {
