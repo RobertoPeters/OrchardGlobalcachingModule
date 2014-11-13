@@ -123,8 +123,11 @@
             else {
                 $("#busyIndicator").hide();
                 $("#stopDownloadForm").hide();
-                if (response.FileName != null && response.FileName != '') {
+                if (response.FileName != null && response.FileName != '' && response.Downloaded > 0) {
                     $("#downloadFilebutton").show();
+                }
+                else {
+                    $("#downloadFilebutton").hide();
                 }
             }
 
