@@ -14,28 +14,32 @@
         </div>
         <div class="col-md-8">
             <div class="row">
-                <div class="col-md-2"><strong>Coordinaat:</strong></div>
-                <div class="col-md-10">@Helper.GetCoordinatesPresentation(@Model.GCComGeocacheData.Latitude, @Model.GCComGeocacheData.Longitude)</div>
+                <div class="col-md-3"><strong>Url:</strong></div>
+                <div class="col-md-9"><a href="@Model.GCComGeocacheData.Url" target="_blank">@Model.GCComGeocacheData.Url</a></div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Land:</strong></div>
-                <div class="col-md-10">@String.Format("{0}", @Model.GCComGeocacheData.Country ?? "")</div>
+                <div class="col-md-3"><strong>Coordinaat:</strong></div>
+                <div class="col-md-9">@Helper.GetCoordinatesPresentation(@Model.GCComGeocacheData.Latitude, @Model.GCComGeocacheData.Longitude)</div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Provincie:</strong></div>
-                <div class="col-md-10">@String.Format("{0}", @Model.GCComGeocacheData.State ?? "")</div>
+                <div class="col-md-3"><strong>Land:</strong></div>
+                <div class="col-md-9">@String.Format("{0}", @Model.GCComGeocacheData.Country ?? "")</div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Plaats:</strong></div>
-                <div class="col-md-10">@String.Format("{0}", @Model.GCEuGeocacheData.City ?? "")</div>
+                <div class="col-md-3"><strong>Provincie:</strong></div>
+                <div class="col-md-9">@String.Format("{0}", @Model.GCComGeocacheData.State ?? "")</div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Eigenaar:</strong></div>
-                <div class="col-md-10"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.Owner.UserName</a></div>
+                <div class="col-md-3"><strong>Plaats:</strong></div>
+                <div class="col-md-9">@String.Format("{0}", @Model.GCEuGeocacheData.City ?? "")</div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Gepubliceerd:</strong></div>
-                <div class="col-md-10">
+                <div class="col-md-3"><strong>Eigenaar:</strong></div>
+                <div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.Owner.UserName</a></div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"><strong>Gepubliceerd:</strong></div>
+                <div class="col-md-9">
                     @if (@Model.GCEuGeocacheData.PublishedAtDate != null)
                     {
                         @String.Format("{0:d}", @Model.GCEuGeocacheData.PublishedAtDate)
@@ -47,8 +51,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Favorites:</strong></div>
-                <div class="col-md-10">
+                <div class="col-md-3"><strong>Favorites:</strong></div>
+                <div class="col-md-9">
                     @if (@Model.GCComGeocacheData.FavoritePoints != null)
                     {
                         @String.Format("{0}", @Model.GCComGeocacheData.FavoritePoints)
@@ -60,24 +64,24 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Aangepast:</strong></div>
-                <div class="col-md-10">@String.Format("{0:d}", @Model.GCComGeocacheData.DateLastUpdate)</div>
+                <div class="col-md-3"><strong>Aangepast:</strong></div>
+                <div class="col-md-9">@String.Format("{0:d}", @Model.GCComGeocacheData.DateLastUpdate)</div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Container:</strong></div>
-                <div class="col-md-10"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/container/{0}.gif", @Model.GCComGeocacheData.ContainerTypeId)) /></div>
+                <div class="col-md-3"><strong>Container:</strong></div>
+                <div class="col-md-9"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/container/{0}.gif", @Model.GCComGeocacheData.ContainerTypeId)) /></div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Moeilijkheid:</strong></div>
-                <div class="col-md-10"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/stars/stars{0}.gif", @Model.GCComGeocacheData.Difficulty.ToString("0.#").Replace(',', '_').Replace('.', '_'))) /></div>
+                <div class="col-md-3"><strong>Moeilijkheid:</strong></div>
+                <div class="col-md-9"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/stars/stars{0}.gif", @Model.GCComGeocacheData.Difficulty.ToString("0.#").Replace(',', '_').Replace('.', '_'))) /></div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Terrein:</strong></div>
-                <div class="col-md-10"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/stars/stars{0}.gif", @Model.GCComGeocacheData.Terrain.ToString("0.#").Replace(',', '_').Replace('.', '_'))) /></div>
+                <div class="col-md-3"><strong>Terrein:</strong></div>
+                <div class="col-md-9"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/stars/stars{0}.gif", @Model.GCComGeocacheData.Terrain.ToString("0.#").Replace(',', '_').Replace('.', '_'))) /></div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Afstand:</strong></div>
-                <div class="col-md-10">
+                <div class="col-md-3"><strong>Afstand:</strong></div>
+                <div class="col-md-9">
                     @if (@Model.GCEuGeocacheData.Distance != null)
                     {
                         @String.Format("{0:0.#} km", @Model.GCEuGeocacheData.Distance)
@@ -89,8 +93,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Premium:</strong></div>
-                <div class="col-md-10">
+                <div class="col-md-3"><strong>Premium:</strong></div>
+                <div class="col-md-9">
                     @if (@Model.GCComGeocacheData.IsPremium != null)
                     {
                         @String.Format("{0}", @Model.GCComGeocacheData.IsPremium == true ? "Ja" : "Nee")
@@ -102,20 +106,20 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>Gevonden:</strong></div>
-                <div class="col-md-10">@String.Format("{0}", @Model.GCEuGeocacheData.FoundCount)</div>
+                <div class="col-md-3"><strong>Gevonden:</strong></div>
+                <div class="col-md-9">@String.Format("{0}", @Model.GCEuGeocacheData.FoundCount)</div>
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>FTF:</strong></div>
+                <div class="col-md-3"><strong>FTF:</strong></div>
                 @if (Model.FTF == null)
                 {
-                    <div class="col-md-10">-</div>
+                    <div class="col-md-9">-</div>
                 }
                 else
                 {
                     <table>
                         <tr>
-                            <td><div class="col-md-10"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.FTF.UserName</a></div></td>
+                            <td><div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.FTF.UserName</a></div></td>
                             <td>
                                 @if (Model.IsFTFAdmin==true)
                                 {
@@ -127,16 +131,16 @@
                 }
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>STF:</strong></div>
+                <div class="col-md-3"><strong>STF:</strong></div>
                 @if (Model.STF == null)
                 {
-                    <div class="col-md-10">-</div>
+                    <div class="col-md-9">-</div>
                 }
                 else
                 {
                     <table>
                         <tr>
-                            <td><div class="col-md-10"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.STF.UserName</a></div></td>
+                            <td><div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.STF.UserName</a></div></td>
                             <td>
                                 @if (Model.IsFTFAdmin == true)
                                 {
@@ -148,16 +152,16 @@
                 }
             </div>
             <div class="row">
-                <div class="col-md-2"><strong>TTF:</strong></div>
+                <div class="col-md-3"><strong>TTF:</strong></div>
                 @if (Model.TTF == null)
                 {
-                    <div class="col-md-10">-</div>
+                    <div class="col-md-9">-</div>
                 }
                 else
                 {
                     <table>
                         <tr>
-                            <td><div class="col-md-10"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.TTF.UserName</a></div></td>
+                            <td><div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.TTF.UserName</a></div></td>
                             <td>
                                 @if (Model.IsFTFAdmin)
                                 {
@@ -223,6 +227,62 @@
         Logs
     </div>
     <div class="panel-body">
+        @{
+            var words1 = new List<string>();
+            int BM1Index = 0;
+            if (!string.IsNullOrEmpty(Model.UserSettings.MarkLogTextColor1))
+            {
+                string[] parts = Model.UserSettings.MarkLogTextColor1.Split(new char[] { '\n', '\r' });
+                foreach (string s in parts)
+                {
+                    if (s.Length > 0)
+                    {
+                        words1.Add(s);
+                    }
+                }
+            }
+
+            var words2 = new List<string>();
+            int BM2Index = 0;
+            if (!string.IsNullOrEmpty(Model.UserSettings.MarkLogTextColor2))
+            {
+                string[] parts = Model.UserSettings.MarkLogTextColor2.Split(new char[] { '\n', '\r' });
+                foreach (string s in parts)
+                {
+                    if (s.Length > 0)
+                    {
+                        words2.Add(s);
+                    }
+                }
+            }
+
+            var words3 = new List<string>();
+            int BM3Index = 0;
+            if (!string.IsNullOrEmpty(Model.UserSettings.MarkLogTextColor3))
+            {
+                string[] parts = Model.UserSettings.MarkLogTextColor3.Split(new char[] { '\n', '\r' });
+                foreach (string s in parts)
+                {
+                    if (s.Length > 0)
+                    {
+                        words3.Add(s);
+                    }
+                }
+            }
+
+        }
+        @if (words1.Count>0)
+        { 
+            <a href="#m1m0" style="background-color: #ffff00">Eerste markering</a>
+        }
+        @if (words2.Count > 0)
+        {
+            <a href="#m2m0" style="background-color: #CCCCCC">Eerste markering</a>
+        }
+        @if (words3.Count > 0)
+        {
+            <a href="#m3m0" style="background-color: #FF9900">Eerste markering</a>
+        }
         <table id="logs" class="table table-hover table-striped">
             <tbody>
 @foreach (var gcl in Model.GCComGeocacheLogs)
@@ -263,7 +323,44 @@
                             }
                         }
                         <span class="pull-right"> @gcl.Log.VisitDate.ToString("d")</span><br />
-                        @Html.Raw(@HttpUtility.HtmlEncode(gcl.Log.LogText).Replace("\r", "<br />"))
+@{
+                    var logText = HttpUtility.HtmlEncode(gcl.Log.LogText).Replace("\r", "<br />");
+                    foreach (string s in words1)
+                    {
+                        int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
+                        while (pos >= 0)
+                        {
+                            string replaceStr = string.Format("<a href=\"#m1m{2}\" id=m1m{0} style=\"background-color: #FFFF00\">{1}</a>", BM1Index, s, BM1Index + 1);
+                            logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
+                            BM1Index++;
+                            pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
+                        }
+                    }
+                    foreach (string s in words2)
+                    {
+                        int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
+                        while (pos >= 0)
+                        {
+                            string replaceStr = string.Format("<a href=\"#m2m{2}\" id=m2m{0} style=\"background-color: #CCCCCC\">{1}</a>", BM2Index, s, BM2Index + 1);
+                            logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
+                            BM2Index++;
+                            pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
+                        }
+                    }
+                    foreach (string s in words3)
+                    {
+                        int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
+                        while (pos >= 0)
+                        {
+                            string replaceStr = string.Format("<a href=\"#m3m{2}\" id=m3m{0} style=\"background-color: #FF9900\">{1}</a>", BM3Index, s, BM3Index + 1);
+                            logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
+                            BM3Index++;
+                            pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
+                        }
+                    }
+
+}
+                        @Html.Raw(logText)
                     </td>
                 </tr>
 }

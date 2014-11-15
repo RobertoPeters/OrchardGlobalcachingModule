@@ -38,6 +38,9 @@ namespace Globalcaching.Drivers
             {
                 settings.DefaultCountryCode = curSettings.DefaultCountryCode ?? 141;
                 settings.ShowGeocachesOnGlobal = curSettings.ShowGeocachesOnGlobal ?? true;
+                settings.MarkLogTextColor1 = curSettings.MarkLogTextColor1 ?? "";
+                settings.MarkLogTextColor2 = curSettings.MarkLogTextColor2 ?? "";
+                settings.MarkLogTextColor3 = curSettings.MarkLogTextColor3 ?? "";
                 if (curSettings.HomelocationLat != null && curSettings.HomelocationLon != null)
                 {
                     settings.Homelocation = Core.Helper.GetCoordinatesPresentation((double)curSettings.HomelocationLat, (double)curSettings.HomelocationLon);

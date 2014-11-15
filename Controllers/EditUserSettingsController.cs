@@ -43,6 +43,9 @@ namespace Globalcaching.Controllers
                 {
                     set.DefaultCountryCode = settings.DefaultCountryCode;
                     set.ShowGeocachesOnGlobal = settings.ShowGeocachesOnGlobal;
+                    set.MarkLogTextColor1 = settings.MarkLogTextColor1;
+                    set.MarkLogTextColor2 = settings.MarkLogTextColor2;
+                    set.MarkLogTextColor3 = settings.MarkLogTextColor3;
                     Core.LatLon ll = Core.LatLon.FromString(settings.Homelocation);
                     if (ll == null)
                     {

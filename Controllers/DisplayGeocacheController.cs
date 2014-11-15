@@ -41,7 +41,7 @@ namespace Globalcaching.Controllers
             {
                 if (!string.IsNullOrEmpty(usrSettings.LiveAPIToken))
                 {
-                    GeocacheDataModel data = GetGeocacheData(id, _workContextAccessor.GetContext().HttpContext.Request.QueryString["al"]==null? 5: 30000);
+                    GeocacheDataModel data = GetGeocacheData(id, _workContextAccessor.GetContext().HttpContext.Request.QueryString["al"] == null ? 5 : 30000, usrSettings);
                     if (data != null)
                     {
                         return View("Home", data);
@@ -75,7 +75,7 @@ namespace Globalcaching.Controllers
             return Json(result);
         }
 
-        public GeocacheDataModel GetGeocacheData(string geocacheCode, int maxLogs)
+        public GeocacheDataModel GetGeocacheData(string geocacheCode, int maxLogs, GCEuUserSettings settings)
         {
             GeocacheDataModel result = null;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
@@ -86,6 +86,7 @@ namespace Globalcaching.Controllers
                     string gcEuDatabase = Core.Helper.GetTableNameFromConnectionString(dbGcEuDataConnString);
 
                     result = new GeocacheDataModel();
+                    result.UserSettings = settings;
                     result.IsDistanceAdmin = Services.Authorizer.Authorize(Permissions.DistanceAdmin);
                     result.IsFTFAdmin = Services.Authorizer.Authorize(Permissions.FTFAdmin);
                     result.GCComGeocacheData = comGcData;

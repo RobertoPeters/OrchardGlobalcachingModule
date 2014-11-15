@@ -325,6 +325,7 @@
     <Compile Include="Models\GeocacheSearchFilter.cs" />
     <Compile Include="Models\GeocacheSearchResult.cs" />
     <Compile Include="Models\Parts.cs" />
+    <Compile Include="Models\ScheduledWaypoint.cs" />
     <Compile Include="Models\StatisticsModels.cs" />
     <Compile Include="Models\UsersOnline.cs" />
     <Compile Include="Models\YafPost.cs" />
@@ -348,6 +349,7 @@
     <Compile Include="Services\LiveAPISettingsService.cs" />
     <Compile Include="Services\MacroService.cs" />
     <Compile Include="Services\StatisticsService.cs" />
+    <Compile Include="Services\TaskSchedulerService.cs" />
     <Compile Include="Services\UsersOnlineService.cs" />
     <Compile Include="Services\YafMembershipService.cs" />
     <Compile Include="Services\YafMostRecentShoutService.cs" />

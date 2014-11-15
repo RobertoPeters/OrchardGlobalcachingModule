@@ -13,13 +13,16 @@ namespace Globalcaching.Controllers
     public class FTFStatsController: Controller
     {
         private readonly IFTFStatsService _ftfStatsService;
+        private readonly ITaskSchedulerService _taskSchedulerService;
         public IOrchardServices Services { get; set; }
 
         public FTFStatsController(IFTFStatsService ftfStatsService,
+            ITaskSchedulerService taskSchedulerService,
             IOrchardServices services)
         {
             Services = services;
             _ftfStatsService = ftfStatsService;
+            _taskSchedulerService = taskSchedulerService;
         }
 
         public ActionResult GetFTFStats(int page, int pageSize, string UserName, int Jaar, int RankingType)
@@ -32,7 +35,9 @@ namespace Globalcaching.Controllers
         {
             if (Services.Authorizer.Authorize(Permissions.FTFAdmin))
             {
-                return View("Home", _ftfStatsService.GetUnassignedFTF(1, 50));
+                var m = _ftfStatsService.GetUnassignedFTF(1, 50);
+                m.QueueLength = _taskSchedulerService.GetScheduledGeocaches().Count();
+                return View("Home", m);
             }
             else
             {
@@ -130,6 +135,23 @@ namespace Globalcaching.Controllers
             if (Services.Authorizer.Authorize(Permissions.FTFAdmin))
             {
                 _ftfStatsService.ResetFTFCounter(id);
+                return Content("OK");
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public ActionResult AddAllGeocachesToQueue()
+        {
+            if (Services.Authorizer.Authorize(Permissions.FTFAdmin))
+            {
+                var list = _ftfStatsService.GetUnassignedFTF(1, 1000); //max 1000 to add to queue
+                if (list.Geocaches.Count>0)
+                {
+                    _taskSchedulerService.AddScheduledWaypoint((from a in list.Geocaches select a.Code).ToList(), false);
+                }
                 return Content("OK");
             }
             else

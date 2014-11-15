@@ -1,4 +1,5 @@
-﻿<button class="btn btn-primary" onclick="resetCounter(0)">Reset tellers</button>
+﻿<button class="btn btn-primary" onclick="resetCounter(0)">Reset tellers</button><br />
+<button class="btn btn-primary" onclick="addAllToQueue()">Werk all geocaches bij</button> (Aantal in de wachtrij: @Model.QueueLength)
 
 <div id="unassignedFTFTopPager">
 </div>
@@ -79,6 +80,22 @@
             url: '@Url.Action("ResetFTFCounter", "FTFStats", new { area = "Globalcaching" })',
             data: {
                 id: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                requestFTFPage(currentPage);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    }
+
+    function addAllToQueue() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddAllGeocachesToQueue", "FTFStats", new { area = "Globalcaching" })',
+            data: {
                 __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
             },
             success: function (response) {

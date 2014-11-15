@@ -32,5 +32,6 @@ namespace Globalcaching.ViewModels
         public long CurrentPage { get; set; }
         public long PageCount { get; set; }
         public long TotalCount { get; set; }
+        public int QueueLength { get; set; }
     }
 }

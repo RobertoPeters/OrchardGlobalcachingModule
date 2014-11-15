@@ -14,5 +14,8 @@ namespace Globalcaching.ViewModels
         public string Homelocation { get; set; }
         public int DefaultCountryCode { get; set; }
         public string ReturnUrl { get; set; }
+        public string MarkLogTextColor1 { get; set; }
+        public string MarkLogTextColor2 { get; set; }
+        public string MarkLogTextColor3 { get; set; }
     }
 }

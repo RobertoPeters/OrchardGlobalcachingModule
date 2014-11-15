@@ -24,6 +24,7 @@ namespace Globalcaching.ViewModels
         public bool IsDistanceAdmin { get; set; }
         public GCComGeocache GCComGeocacheData { get; set; }
         public GCEuGeocache GCEuGeocacheData { get; set; }
+        public GCEuUserSettings UserSettings { get; set; }
         public GCComUser Owner { get; set; }
         public GCComUser FTF { get; set; }
         public GCComUser STF { get; set; }
