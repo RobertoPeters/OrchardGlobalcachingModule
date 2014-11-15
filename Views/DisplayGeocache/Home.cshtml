@@ -103,8 +103,72 @@
             </div>
             <div class="row">
                 <div class="col-md-2"><strong>Gevonden:</strong></div>
-                <div class="col-md-10">@String.Format("{0}", @Model.GCEuGeocacheData.FoundCount ?? "")</div>
+                <div class="col-md-10">@String.Format("{0}", @Model.GCEuGeocacheData.FoundCount)</div>
             </div>
+            <div class="row">
+                <div class="col-md-2"><strong>FTF:</strong></div>
+                @if (Model.FTF == null)
+                {
+                    <div class="col-md-10">-</div>
+                }
+                else
+                {
+                    <table>
+                        <tr>
+                            <td><div class="col-md-10"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.FTF.UserName</a></div></td>
+                            <td>
+                                @if (Model.IsFTFAdmin==true)
+                                {
+                                <button class="btn btn-primary btn-xs" onclick="@string.Format("clearFTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-2"><strong>STF:</strong></div>
+                @if (Model.STF == null)
+                {
+                    <div class="col-md-10">-</div>
+                }
+                else
+                {
+                    <table>
+                        <tr>
+                            <td><div class="col-md-10"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.STF.UserName</a></div></td>
+                            <td>
+                                @if (Model.IsFTFAdmin == true)
+                                {
+                                    <button class="btn btn-primary  btn-xs" onclick="@string.Format("clearSTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-2"><strong>TTF:</strong></div>
+                @if (Model.TTF == null)
+                {
+                    <div class="col-md-10">-</div>
+                }
+                else
+                {
+                    <table>
+                        <tr>
+                            <td><div class="col-md-10"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.TTF.UserName</a></div></td>
+                            <td>
+                                @if (Model.IsFTFAdmin)
+                                {
+                                    <button class="btn btn-primary  btn-xs" onclick="@string.Format("clearTTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+
         </div>
         <div class="col-md-4">
             <img src="http://staticmap.openstreetmap.de/staticmap.php?center=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.')&zoom=14&size=200x200&maptype=mapnik&markers=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.'),lightblue1" />
@@ -179,6 +243,16 @@
                         <img src="@Href("~/Modules/Globalcaching/Media/logtypes/")2.gif" />&nbsp; @gcl.Writer.FindCount
                     </td>
                     <td class="col-md-10">
+                        @if (Model.IsFTFAdmin)
+                        {
+                            <table>
+                                <tr>
+                                    <td><button class="btn btn-primary btn-xs" onclick="@string.Format("setFTF({0})", gcl.Log.ID)">FTF</button></td>
+                                    <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setSTF({0})", gcl.Log.ID)">STF</button></td>
+                                    <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setTTF({0})", gcl.Log.ID)">TTF</button></td>
+                                </tr>
+                            </table>
+                        }
                         <img src="@Href(string.Format("~/Modules/Globalcaching/Media/logtypes/{0}.gif",@gcl.Log.WptLogTypeId))" />&nbsp;
                         @foreach (var g in @Model.LogTypes)
                         {
@@ -203,6 +277,104 @@
 <script type="text/javascript">
 
     var geocacheCode = '@Model.GCComGeocacheData.Code';
+    var geocacheID = @Model.GCComGeocacheData.ID;
+
+    function setFTF(id)
+    {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetFTFAssignment", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                geocacheId: geocacheID,
+                logId: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response=="OK")
+                {
+                }
+                else{
+                    alert('Er is een fout opgetreden!');
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+    function setSTF(id)
+    {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetSTFAssignment", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                geocacheId: geocacheID,
+                logId: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response=="OK")
+                {
+                }
+                else{
+                    alert('Er is een fout opgetreden!');
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+    function setTTF(id)
+    {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetTTFAssignment", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                geocacheId: geocacheID,
+                logId: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response=="OK")
+                {
+                }
+                else{
+                    alert('Er is een fout opgetreden!');
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function clearFTF() {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ClearFTFAssignment", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                window.location.reload(true);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    }
 
     function getAllLogs()
     {

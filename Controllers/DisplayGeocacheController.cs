@@ -86,6 +86,8 @@ namespace Globalcaching.Controllers
                     string gcEuDatabase = Core.Helper.GetTableNameFromConnectionString(dbGcEuDataConnString);
 
                     result = new GeocacheDataModel();
+                    result.IsDistanceAdmin = Services.Authorizer.Authorize(Permissions.DistanceAdmin);
+                    result.IsFTFAdmin = Services.Authorizer.Authorize(Permissions.FTFAdmin);
                     result.GCComGeocacheData = comGcData;
                     result.GCEuGeocacheData = db.FirstOrDefault<GCEuGeocache>(string.Format("select * from [{0}].[dbo].[GCEuGeocache] where ID=@0", gcEuDatabase), comGcData.ID);
                     result.Owner = db.FirstOrDefault<GCComUser>("where ID=@0", result.GCComGeocacheData.OwnerId);

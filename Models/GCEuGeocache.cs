@@ -26,6 +26,7 @@ namespace Globalcaching.Models
         public double? FavPer100Found { get; set; }
         public int? LogImageCount { get; set; }
         public double? LogImagePer100Found { get; set; }
+        public int FTFFoundCount { get; set; }        
 
         public static GCEuGeocache From(Geocache src)
         {

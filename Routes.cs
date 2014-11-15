@@ -830,6 +830,156 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "FTFToekenning",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "Index"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetUnassignedFTF",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "GetUnassignedFTF"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ClearFTFAssignment",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "ClearFTFAssignment"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ClearSTFAssignment",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "ClearSTFAssignment"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ClearTTFAssignment",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "ClearTTFAssignment"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SetFTFAssignment",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "SetFTFAssignment"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SetSTFAssignment",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "SetSTFAssignment"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SetTTFAssignment",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "SetTTFAssignment"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SetFTFCompleted",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "SetFTFCompleted"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ResetFTFCounter",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "ResetFTFCounter"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "forum/{*pathInfo}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

@@ -1,0 +1,122 @@
+﻿<button class="btn btn-primary" onclick="resetCounter(0)">Reset tellers</button>
+
+<div id="unassignedFTFTopPager">
+</div>
+<table class="table table-striped table-hover" id="searchFTFResults">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Type</th>
+            <th>Datum</th>
+            <th>Nieuw</th>
+            <th>FTF</th>
+            <th>STF</th>
+            <th>TTF</th>
+            <th>Gevonden</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div id="unassignedFTFBottomPager">
+</div>
+
+<script type="text/javascript">
+    var currentPage = 1;
+
+    initGlobalcachingPager("unassignedFTFTopPager", "ftfPager");
+    initGlobalcachingPager("unassignedFTFBottomPager", "ftfPager");
+
+    function updateFTFList(response) {
+        var resultElementName = "#searchFTFResults";
+        var pagerElementName = ".ftfPager";
+
+        currentPage = response.CurrentPage;
+
+        for (var i = 0; i < response.Geocaches.length; i++) {
+            var line = response.Geocaches[i];
+            // insert after last row!
+            var td1 = '<a href="@Href("~/Geocache/")' + line.Code + '?al=1" target="_blank">' + line.Code + '</a>';
+            var td2 = line.GeocacheTypeName;
+
+            var d = eval('new' + line.PublishedAtDate.replace(/\//g, ' '));
+            var td3 = d.toLocaleDateString();
+
+            var td4 = (line.FoundCount - line.FTFFoundCount).toString() + ' <button class="btn btn-primary btn-xs" onclick="resetCounter(' + line.ID + ')">reset</button>';
+            var td5 = line.FTFUserID == null ? "" : "X";
+            var td6 = line.STFUserID == null ? "" : "X";
+            var td7 = line.TTFUserID == null ? "" : "X";
+            var td8 = line.FoundCount;
+            var td9 = '<button class="btn btn-primary" onclick="setFTFCompleted(' + line.ID + ')">Afgehandeld</button>';
+
+
+            $(resultElementName + ' > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td><td>' + td6 + '</td><td>' + td7 + '</td><td>' + td8 + '</td><td>' + td9 + '</td></tr>');
+        }
+
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestFTFPage");
+    }
+
+    function setFTFCompleted(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetFTFCompleted", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                requestFTFPage(currentPage);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    }
+
+    function resetCounter(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ResetFTFCounter", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                requestFTFPage(currentPage);
+            },
+            error: function (data, errorText) {
+                alert(errorText);
+            }
+        });
+    }
+
+    function requestFTFPage(page) {
+        var resultElementName = "#searchFTFResults";
+        var pagerElementName = ".ftfPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetUnassignedFTF", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                page: page,
+                pageSize: "50",
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateFTFList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    updateFTFList(@Html.Raw(Json.Encode(@Model)));
+
+</script>

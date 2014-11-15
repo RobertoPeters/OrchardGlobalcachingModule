@@ -211,6 +211,7 @@
     <Content Include="Views\DisplayTemplates\Parts.LiveAPIDownload.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FTFStats.cshtml" />
     <Content Include="Views\Admin\Home.cshtml" />
+    <Content Include="Views\FTFStats\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -328,6 +329,7 @@
     <Compile Include="Models\UsersOnline.cs" />
     <Compile Include="Models\YafPost.cs" />
     <Compile Include="Models\YafShout.cs" />
+    <Compile Include="Permissions.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
@@ -354,6 +356,7 @@
     <Compile Include="ViewModels\EditCCCSettingsModel.cs" />
     <Compile Include="ViewModels\EditUserSettingsModel.cs" />
     <Compile Include="ViewModels\EventCalendarModel.cs" />
+    <Compile Include="ViewModels\FTFAdminModel.cs" />
     <Compile Include="ViewModels\FTFStatsModel.cs" />
     <Compile Include="ViewModels\GeocacheSeriesModel.cs" />
     <Compile Include="ViewModels\LogImageStatsModel.cs" />

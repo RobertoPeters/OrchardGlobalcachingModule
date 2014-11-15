@@ -20,6 +20,8 @@ namespace Globalcaching.ViewModels
 
     public class GeocacheDataModel
     {
+        public bool IsFTFAdmin { get; set; }
+        public bool IsDistanceAdmin { get; set; }
         public GCComGeocache GCComGeocacheData { get; set; }
         public GCEuGeocache GCEuGeocacheData { get; set; }
         public GCComUser Owner { get; set; }
