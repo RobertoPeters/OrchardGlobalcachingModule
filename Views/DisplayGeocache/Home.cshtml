@@ -69,15 +69,15 @@
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Container:</strong></div>
-                <div class="col-md-9"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/container/{0}.gif", @Model.GCComGeocacheData.ContainerTypeId)) /></div>
+                <div class="col-md-9"><img src="@Href(string.Format("~/Modules/Globalcaching/Media/container/{0}.gif", @Model.GCComGeocacheData.ContainerTypeId))" /></div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Moeilijkheid:</strong></div>
-                <div class="col-md-9"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/stars/stars{0}.gif", @Model.GCComGeocacheData.Difficulty.ToString("0.#").Replace(',', '_').Replace('.', '_'))) /></div>
+                <div class="col-md-9"><img src="@Href(string.Format("~/Modules/Globalcaching/Media/stars/stars{0}.gif", @Model.GCComGeocacheData.Difficulty.ToString("0.#").Replace(',', '_').Replace('.', '_')))" /></div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Terrein:</strong></div>
-                <div class="col-md-9"><img src=@Href(string.Format("~/Modules/Globalcaching/Media/stars/stars{0}.gif", @Model.GCComGeocacheData.Terrain.ToString("0.#").Replace(',', '_').Replace('.', '_'))) /></div>
+                <div class="col-md-9"><img src="@Href(string.Format("~/Modules/Globalcaching/Media/stars/stars{0}.gif", @Model.GCComGeocacheData.Terrain.ToString("0.#").Replace(',', '_').Replace('.', '_')))" /></div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Afstand:</strong></div>
@@ -184,7 +184,15 @@
                     </table>
                 }
             </div>
-
+            <div class="row">
+                <div class="col-md-3"><strong>Attributen:</strong></div>
+                <div class="col-md-9">
+                    @foreach (var attr in Model.Attributes)
+{
+    <img src="@Href(string.Format("~/Modules/Globalcaching/Media/attributes/{1}{0}.gif", attr.AttributeType.ID, attr.Attribute.IsOn?"":"_"))" title="@attr.AttributeType.Name" />
+}
+                </div>
+            </div>
         </div>
         <div class="col-md-4">
             <img src="http://staticmap.openstreetmap.de/staticmap.php?center=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.')&zoom=14&size=200x200&maptype=mapnik&markers=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.'),lightblue1" />

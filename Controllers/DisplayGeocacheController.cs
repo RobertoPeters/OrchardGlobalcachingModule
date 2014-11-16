@@ -108,6 +108,7 @@ namespace Globalcaching.Controllers
                         }
                     }
                     result.LogTypes = db.Fetch<GCComLogType>("");
+                    result.Attributes = db.Fetch<GCComGeocacheAttribute, GCComAttributeType, GeocacheAttributeInfo>((a, t) => { return new GeocacheAttributeInfo(a, t); }, "select GCComGeocacheAttribute.*, GCComAttributeType.* from GCComGeocacheAttribute inner join GCComAttributeType on GCComGeocacheAttribute.AttributeTypeID=GCComAttributeType.ID where GCComGeocacheAttribute.GeocacheID=@0", comGcData.ID);
                     result.GCComGeocacheLogs = GetLogsOfGeocache(db, comGcData.ID, maxLogs);
                 }
             }

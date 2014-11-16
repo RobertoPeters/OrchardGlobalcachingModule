@@ -18,6 +18,22 @@ namespace Globalcaching.ViewModels
         public GCComUser Writer { get; set; }
     }
 
+    public class GeocacheAttributeInfo
+    {
+        public GeocacheAttributeInfo()
+        {
+        }
+
+        public GeocacheAttributeInfo(GCComGeocacheAttribute attr, GCComAttributeType attrType)
+        {
+            AttributeType = attrType;
+            Attribute = attr;
+        }
+
+        public GCComAttributeType AttributeType { get; set; }
+        public GCComGeocacheAttribute Attribute { get; set; }
+    }
+
     public class GeocacheDataModel
     {
         public bool IsFTFAdmin { get; set; }
@@ -31,5 +47,6 @@ namespace Globalcaching.ViewModels
         public GCComUser TTF { get; set; }
         public List<GeocacheLogInfo> GCComGeocacheLogs { get; set; }
         public List<GCComLogType> LogTypes { get; set; }
+        public List<GeocacheAttributeInfo> Attributes { get; set; }
     }
 }
