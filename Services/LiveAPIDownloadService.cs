@@ -33,6 +33,14 @@ namespace Globalcaching.Services
         public readonly IGCEuUserSettingsService _gcEuUserSettingsService;
         private readonly IWorkContextAccessor _workContextAccessor;
 
+        public class viewport
+        {
+            public double minLat { get; set; }
+            public double maxLat { get; set; }
+            public double minLon { get; set; }
+            public double maxLon { get; set; }
+        }
+
         public LiveAPIDownloadService(IGCEuUserSettingsService gcEuUserSettingsService,
             IWorkContextAccessor workContextAccessor)
         {
@@ -330,11 +338,8 @@ LiveAPILastAccessTime datetime
             {
                 try
                 {
-                    double minLat = 1.0;
-                    double minLon = 1.0;
-                    double maxLat = 1.0;
-                    double maxLon = 1.0;
-                    //todo!
+                    var AttributeTypes = db.Fetch<GCComAttributeType>("");
+
                     if (string.IsNullOrEmpty(status.FileName))
                     {
                         status.FileName = string.Format("{0}.gpx", Guid.NewGuid().ToString("N"));
@@ -355,7 +360,8 @@ LiveAPILastAccessTime datetime
 
                     if (!System.IO.File.Exists(gpxFile))
                     {
-                        System.IO.File.AppendAllText(gpxFile, GPXStart(minLat, minLon, maxLat, maxLon), Encoding.UTF8);
+                        var viewPort = db.Fetch<viewport>(string.Format("select Min(Latitude) as minLat, Max(Latitude) as maxLat, Min(Longitude) as minLon, Max(Longitude) as maxLon from GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo inner join GCComGeocache on GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo.Code = GCComGeocache.Code", YafUserID)).FirstOrDefault();
+                        System.IO.File.AppendAllText(gpxFile, GPXStart(viewPort.minLat, viewPort.minLon, viewPort.maxLat, viewPort.maxLon), Encoding.UTF8);
                     }
 
                     using (var api = LiveAPIClient.GetLiveClient())
@@ -376,7 +382,7 @@ LiveAPILastAccessTime datetime
                                 //add to GPX
                                 foreach (var gc in resp.Geocaches)
                                 {
-                                    System.IO.File.AppendAllText(gpxFile, GPXForGeocache(gc), Encoding.UTF8);
+                                    System.IO.File.AppendAllText(gpxFile, GPXForGeocache(gc, AttributeTypes), Encoding.UTF8);
 
                                     if (gc.AdditionalWaypoints != null)
                                     {
@@ -549,7 +555,7 @@ LiveAPILastAccessTime datetime
             return validateXml(result);
         }
 
-        private string GPXForGeocache(Geocache gc)
+        private string GPXForGeocache(Geocache gc, List<GCComAttributeType> attributeTypes)
         {
             string result = "";
             XmlDocument doc = new XmlDocument();
@@ -671,7 +677,15 @@ LiveAPILastAccessTime datetime
                     int id = gcattr.AttributeTypeID;
 
                     el = doc.CreateElement("groundspeak_attribute");
-                    txt = doc.CreateTextNode(gcattr.AttributeTypeID.ToString()); //todo
+                    var a = attributeTypes.Where(x => x.ID == gcattr.AttributeTypeID).FirstOrDefault();
+                    if (a == null)
+                    {
+                        txt = doc.CreateTextNode(gcattr.AttributeTypeID.ToString());
+                    }
+                    else
+                    {
+                        txt = doc.CreateTextNode(a.Name);
+                    }
                     el.AppendChild(txt);
                     attrs.AppendChild(el);
                     attr = doc.CreateAttribute("id");
