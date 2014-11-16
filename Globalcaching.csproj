@@ -212,6 +212,7 @@
     <Content Include="Views\DisplayTemplates\Parts.FTFStats.cshtml" />
     <Content Include="Views\Admin\Home.cshtml" />
     <Content Include="Views\FTFStats\Home.cshtml" />
+    <Content Include="Views\GeocacheDistance\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -235,6 +236,7 @@
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
+    <Compile Include="Controllers\GeocacheDistanceController.cs" />
     <Compile Include="Controllers\GeocacheSeriesController.cs" />
     <Compile Include="Controllers\FavoriteGeocachersController.cs" />
     <Compile Include="Controllers\LiveAPIDownloadController.cs" />
@@ -336,6 +338,7 @@
     <Compile Include="Services\FavoriteGeocachersService.cs" />
     <Compile Include="Services\EventCalendarService.cs" />
     <Compile Include="Services\FTFStatsService.cs" />
+    <Compile Include="Services\GeocacheDistanceService.cs" />
     <Compile Include="Services\GeocacheSeriesService.cs" />
     <Compile Include="Services\LiveAPIDownloadService.cs" />
     <Compile Include="Services\LogImageStatsService.cs" />
@@ -358,6 +361,7 @@
     <Compile Include="ViewModels\EditCCCSettingsModel.cs" />
     <Compile Include="ViewModels\EditUserSettingsModel.cs" />
     <Compile Include="ViewModels\EventCalendarModel.cs" />
+    <Compile Include="ViewModels\GeocacheDistanceAdminModel.cs" />
     <Compile Include="ViewModels\FTFAdminModel.cs" />
     <Compile Include="ViewModels\FTFStatsModel.cs" />
     <Compile Include="ViewModels\GeocacheSeriesModel.cs" />

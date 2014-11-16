@@ -1051,8 +1051,83 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
-                }
-             };
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "AfstandToekenning",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheDistance"},
+                            {"action", "Index"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SetDistanceChecked",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheDistance"},
+                            {"action", "SetDistanceChecked"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetUnassignedDistance",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheDistance"},
+                            {"action", "GetUnassignedDistance"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SetDistance",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheDistance"},
+                            {"action", "SetDistance"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ClearDistance",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheDistance"},
+                            {"action", "ClearDistance"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                 }
+            };
         }
     }
 }

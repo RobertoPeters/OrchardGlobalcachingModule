@@ -26,7 +26,6 @@ namespace Globalcaching.Services
     public class FTFStatsService : IFTFStatsService
     {
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
-        public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
 
         public FTFStatsService()
         {

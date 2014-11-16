@@ -82,14 +82,26 @@
             <div class="row">
                 <div class="col-md-3"><strong>Afstand:</strong></div>
                 <div class="col-md-9">
-                    @if (@Model.GCEuGeocacheData.Distance != null)
-                    {
-                        @String.Format("{0:0.#} km", @Model.GCEuGeocacheData.Distance)
-                    }
-                    else
-                    {
-                        @Html.Raw("Onbekend")
-                    }
+                    <table>
+                        <tr>
+                            <td>
+                                @if (@Model.GCEuGeocacheData.Distance != null)
+                                {
+                                    @String.Format("{0:0.#} km", @Model.GCEuGeocacheData.Distance)
+                                }
+                                else
+                                {
+                                    @Html.Raw("Onbekend")
+                                }
+                            </td>
+@if (Model.IsDistanceAdmin == true)
+{
+    <td><input type="text" id="distance" width="10" height="12" /></td>
+    <td><button class="btn btn-primary btn-xs" onclick="setDistance()">opslaan</button></td>
+    <td><button class="btn btn-primary btn-xs" onclick="clearDistance()">verwijder</button></td>
+}
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div class="row">
@@ -468,6 +480,48 @@
                 window.location.reload(true);
             },
             error: function (data, errorText) {
+                myApp.showPleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function setDistance()
+    {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetDistance", "GeocacheDistance", new { area = "Globalcaching" })',
+            data: {
+                id: geocacheID,
+                distance: $("#distance").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                window.location.reload(true);
+            },
+            error: function (data, errorText) {
+                myApp.showPleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function clearDistance()
+    {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ClearDistance", "GeocacheDistance", new { area = "Globalcaching" })',
+            data: {
+                id: geocacheID,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                window.location.reload(true);
+            },
+            error: function (data, errorText) {
+                myApp.showPleaseWait();
                 alert(errorText);
             }
         });
