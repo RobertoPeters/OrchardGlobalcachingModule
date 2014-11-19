@@ -1,4 +1,6 @@
-﻿using Globalcaching.Models;
+﻿using Globalcaching.Core;
+using Globalcaching.Models;
+using Globalcaching.ViewModels;
 using Orchard;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace Globalcaching.Services
     {
         List<ScheduledWaypoint> GetScheduledGeocaches();
         void AddScheduledWaypoint(List<string> gcIds, bool fullRefresh);
+        SchedulerInfoModel GetSchedulerInfoModel();
     }
 
     public class TaskSchedulerService : ITaskSchedulerService
@@ -21,6 +24,38 @@ namespace Globalcaching.Services
         public TaskSchedulerService()
         { 
         }
+
+        public SchedulerInfoModel GetSchedulerInfoModel()
+        {
+            SchedulerInfoModel result = new SchedulerInfoModel();
+            using (PetaPoco.Database db = new PetaPoco.Database(dbTaskSchedulerConnString, "System.Data.SqlClient"))
+            {
+                result.Scheduler = db.Fetch<SchedulerStatus>("").FirstOrDefault();
+                result.Services = db.Fetch<ServiceInfo>("");
+                result.ServiceAccounts = db.Fetch<GcComAccounts>("");
+
+                foreach (var sa in result.ServiceAccounts)
+                {
+                    sa.PM = false;
+                    if (sa.Enabled && !string.IsNullOrEmpty(sa.Token))
+                    {
+                        try
+                        {
+                            var profile = LiveAPIClient.GetMemberProfile(sa.Token);
+                            if (profile != null)
+                            {
+                                sa.PM = (profile.User.MemberType.MemberTypeId > 1);
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
 
         public List<ScheduledWaypoint> GetScheduledGeocaches()
         {

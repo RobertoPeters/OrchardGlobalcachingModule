@@ -1,4 +1,6 @@
 ﻿using Globalcaching.Models;
+using Globalcaching.Services;
+using Globalcaching.ViewModels;
 using Orchard;
 using Orchard.Environment;
 using Orchard.Localization;
@@ -20,20 +22,23 @@ namespace Globalcaching.Controllers
         public IOrchardServices Services { get; set; }
         private IHostEnvironment _hostEnvironment;
         public Localizer T { get; set; }
+        private ITaskSchedulerService _taskSchedulerService;
 
         public AdminController(IOrchardServices services,
+            ITaskSchedulerService taskSchedulerService,
             IHostEnvironment hostEnvironment)
         {
             Services = services;
             _hostEnvironment = hostEnvironment;
             T = NullLocalizer.Instance;
+            _taskSchedulerService = taskSchedulerService;
         }
 
         public ActionResult Index()
         {
             if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
             {
-                return View("Home");
+                return View("Home", _taskSchedulerService.GetSchedulerInfoModel());
             }
             else
             {
@@ -74,7 +79,8 @@ namespace Globalcaching.Controllers
                     Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Error, T("Kan geocache code niet vinden"));
                 }
             }
-            return View("Home");
+            return View("Home", _taskSchedulerService.GetSchedulerInfoModel());
         }
+
     }
 }

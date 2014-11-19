@@ -440,6 +440,7 @@
     <Compile Include="Gavaghan.Geodesy\GlobalPosition.cs" />
     <Compile Include="Migrations.cs" />
     <Compile Include="Models\CheckCCCResult.cs" />
+    <Compile Include="Models\GcComAccounts.cs" />
     <Compile Include="Models\GCComAttributeType.cs" />
     <Compile Include="Models\GCComGeocache.cs" />
     <Compile Include="Models\GCComGeocacheAttribute.cs" />
@@ -462,6 +463,8 @@
     <Compile Include="Models\GeocacheSearchResult.cs" />
     <Compile Include="Models\Parts.cs" />
     <Compile Include="Models\ScheduledWaypoint.cs" />
+    <Compile Include="Models\SchedulerStatus.cs" />
+    <Compile Include="Models\ServiceInfo.cs" />
     <Compile Include="Models\StatisticsModels.cs" />
     <Compile Include="Models\UsersOnline.cs" />
     <Compile Include="Models\YafPost.cs" />
@@ -491,6 +494,7 @@
     <Compile Include="Services\YafMembershipService.cs" />
     <Compile Include="Services\YafMostRecentShoutService.cs" />
     <Compile Include="Services\YafMostRecentPostsService.cs" />
+    <Compile Include="ViewModels\SchedulerInfoModel.cs" />
     <Compile Include="ViewModels\CacheMapSettings.cs" />
     <Compile Include="ViewModels\EditCCCSettingsModel.cs" />
     <Compile Include="ViewModels\EditUserSettingsModel.cs" />
