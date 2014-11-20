@@ -345,6 +345,7 @@
     <Content Include="Views\Admin\Home.cshtml" />
     <Content Include="Views\FTFStats\Home.cshtml" />
     <Content Include="Views\GeocacheDistance\Home.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.GlobalcachingMessages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -409,6 +410,7 @@
     <Compile Include="Core\TemporaryFile.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
     <Compile Include="Drivers\FTFStatsPartDriver.cs" />
+    <Compile Include="Drivers\GlobalcachingMessagesDriver.cs" />
     <Compile Include="Drivers\LiveAPIDownloadPartDriver.cs" />
     <Compile Include="Drivers\EventCalendarPartDriver.cs" />
     <Compile Include="Drivers\GeocacheSeriesPartDriver.cs" />
@@ -477,6 +479,7 @@
     <Compile Include="Services\FTFStatsService.cs" />
     <Compile Include="Services\GeocacheDistanceService.cs" />
     <Compile Include="Services\GeocacheSeriesService.cs" />
+    <Compile Include="Services\GlobalcachingMessagesService.cs" />
     <Compile Include="Services\LiveAPIDownloadService.cs" />
     <Compile Include="Services\LogImageStatsService.cs" />
     <Compile Include="Services\FavoriteGeocachesService.cs" />
@@ -494,6 +497,7 @@
     <Compile Include="Services\YafMembershipService.cs" />
     <Compile Include="Services\YafMostRecentShoutService.cs" />
     <Compile Include="Services\YafMostRecentPostsService.cs" />
+    <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\SchedulerInfoModel.cs" />
     <Compile Include="ViewModels\CacheMapSettings.cs" />
     <Compile Include="ViewModels\EditCCCSettingsModel.cs" />

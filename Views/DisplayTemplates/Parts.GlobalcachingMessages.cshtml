@@ -1,0 +1,29 @@
+﻿@if (Model.ErrorMessages != null && Model.ErrorMessages.Count > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        @foreach (var s in Model.ErrorMessages)
+        {
+            <strong>Foutmelding!</strong> @s <br />
+        }
+    </div>
+}
+
+@if (Model.WarningMessages != null && Model.WarningMessages.Count > 0)
+{
+    <div class="alert alert-warning" role="alert">
+        @foreach (var s in Model.WarningMessages)
+        {
+            <strong>Waarschuwing!</strong> @s <br />
+        }
+    </div>
+}
+
+@if (Model.InformationMessages != null && Model.InformationMessages.Count > 0)
+{
+    <div class="alert alert-info" role="alert">
+        @foreach (var s in Model.InformationMessages)
+        {
+            <strong>Informatie!</strong> @s <br />
+        }
+    </div>
+}

@@ -340,5 +340,19 @@ namespace Globalcaching
 
             return 24;
         }
+
+        public int UpdateFrom24()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("GlobalcachingMessagesWidget",
+                cfg => cfg
+                    .DisplayedAs("Globalcaching Messages")
+                    .WithPart("GlobalcachingMessagesPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 25;
+        }
     }
 }
