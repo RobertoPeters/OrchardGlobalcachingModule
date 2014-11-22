@@ -26,7 +26,9 @@ namespace Globalcaching.Models
         public double? FavPer100Found { get; set; }
         public int? LogImageCount { get; set; }
         public double? LogImagePer100Found { get; set; }
-        public int FTFFoundCount { get; set; }        
+        public int FTFFoundCount { get; set; }
+        public DateTime? MostRecentFoundDate { get; set; }
+        public DateTime? MostRecentArchivedDate { get; set; }
 
         public static GCEuGeocache From(Geocache src)
         {
@@ -49,6 +51,8 @@ namespace Globalcaching.Models
             result.PublishedAtDate = null;
             result.FavPer100Found = null;
             result.LogImagePer100Found = null;
+            result.MostRecentFoundDate = null;
+            result.MostRecentArchivedDate = null;
             return result;
         }
     }
