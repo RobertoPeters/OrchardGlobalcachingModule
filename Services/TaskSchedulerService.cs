@@ -31,7 +31,7 @@ namespace Globalcaching.Services
             using (PetaPoco.Database db = new PetaPoco.Database(dbTaskSchedulerConnString, "System.Data.SqlClient"))
             {
                 result.Scheduler = db.Fetch<SchedulerStatus>("").FirstOrDefault();
-                result.Services = db.Fetch<ServiceInfo>("");
+                result.Services = db.Fetch<ServiceInfo>("").OrderByDescending(x => x.LastRun).ToList();
                 result.ServiceAccounts = db.Fetch<GcComAccounts>("");
 
                 foreach (var sa in result.ServiceAccounts)
