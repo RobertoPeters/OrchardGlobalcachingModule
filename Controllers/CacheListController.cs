@@ -219,7 +219,7 @@ namespace Globalcaching.Controllers
             {
                 string euDatabase = Core.Helper.GetTableNameFromConnectionString(dbGcEuDataConnString);
                 var sql = PetaPoco.Sql.Builder
-                    .Select("GCComGeocache.ID", "GCComGeocache.Code", "GCComGeocache.Latitude", "GCComGeocache.Longitude", "GeocacheTypeId", "Difficulty", "Terrain", "ContainerTypeId", "Municipality", "OwnerId", "UTCPlaceDate", "Country", "Name", "Url", "GCEuGeocache.City", "GCComUser.PublicGuid", "GCComUser.UserName", "FavoritePoints", "GCEuGeocache.FoundCount");
+                    .Select("GCComGeocache.ID", "GCComGeocache.Code", "GCComGeocache.Archived", "GCComGeocache.Available", "GCComGeocache.Latitude", "GCComGeocache.Longitude", "GeocacheTypeId", "Difficulty", "Terrain", "ContainerTypeId", "Municipality", "OwnerId", "UTCPlaceDate", "Country", "Name", "Url", "GCEuGeocache.City", "GCComUser.PublicGuid", "GCComUser.UserName", "FavoritePoints", "GCEuGeocache.FoundCount", "GCEuGeocache.MostRecentFoundDate", "GCEuGeocache.PublishedAtDate");
                 if (filter.HomeLat!=null && filter.HomeLon!=null)
                 {
                     sql.Append(",dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, @0, @1) AS DistanceFromHome", filter.HomeLat, filter.HomeLon);

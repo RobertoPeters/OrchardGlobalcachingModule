@@ -46,7 +46,7 @@
 </table>
 <div id="gccomSearchGeocacheTopPager">
 </div>
-<table class="table table-striped table-hover" id="gccomSearchGeocacheResults">
+<table class="table table-condensed table-striped table-hover" id="gccomSearchGeocacheResults">
     <thead>
         <tr>
             <th></th>
@@ -136,8 +136,26 @@
                 specialIcon = '<img src="@Href("~/Modules/Globalcaching/Media/specialicons/check.gif")'+'"/>';
             }
             var cacheIcon = '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId +'.gif"/>'
-            var dtInfo = '('+ Number(line.Terrain).toFixed(1) + '/' + Number(line.Difficulty).toFixed(1) + ')<br /><img src="@Href("~/Modules/Globalcaching/Media/container/")' + line.ContainerTypeId +'.gif"/>'
-            var description = '<a href="@Href("~/Geocache/")'+ line.Code +'">' + line.Name + '</a>';
+            var dtInfo = 'T: '+ Number(line.Terrain).toFixed(1) + '<br />M: ' + Number(line.Difficulty).toFixed(1) + '<br /><img src="@Href("~/Modules/Globalcaching/Media/container/")' + line.ContainerTypeId +'.gif"/>'
+            var description = '<a href="@Href("~/Geocache/")'+ line.Code +'">';
+            if (line.Archived)
+            {
+                description += '<s><font style="color: red;">';
+            }
+            else if (!line.Available)
+            {
+                description += '<s>';
+            }
+            description += line.Name;
+            if (line.Archived)
+            {
+                description += '</s></font>';
+            }
+            else if (!line.Available)
+            {
+                description += '</s>';
+            }
+            description += '</a>';
             description += ' (<a href="'+ line.Url +'" target="_blank">' + line.Code + '</a>)<br />';
             description += line.Country;
             if (line.City!=null)
@@ -147,9 +165,9 @@
             description += ' | <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="_blank">' + line.UserName + '</a>';
             if (line.FavoritePoints!=null)
             {
-                description += ' | Favorites: <strong>' + line.FavoritePoints + '</strong>';
+                description += ' | Fav.: <strong>' + line.FavoritePoints + '</strong>';
             }
-            description += ' | #Gevonden: <strong>' + line.FoundCount + '</strong>';
+            description += ' | <img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" />: <strong>' + line.FoundCount + '</strong>';
             description += '<br />Acties:';
             description += ' <a href="@Href("~/LogGeocache/")'+ line.ID +'">Log</a>';
             description += ' | <a href="@Href("~/CCCHulp?wp=")'+ line.Code +'">CCC</a>';
@@ -162,8 +180,18 @@
             }
             var dateInfo = "";
             var d = eval('new' + line.UTCPlaceDate.replace(/\//g, ' '));
-            dateInfo = d.toLocaleDateString();
-            $(resultElementName + ' > tbody:last').append('<tr><td>'+ direction +'</td><td>'+ specialIcon +'</td><td>'+ cacheIcon +'</td><td>'+ dtInfo +'</td><td>' + description + '</td><td>' + distance + '</td><td>' + dateInfo + '</td></tr>');
+            dateInfo = '<strong>' + d.toLocaleDateString() + '</strong><br />';
+            if (line.PublishedAtDate!=null)
+            {
+                d = eval('new' + line.PublishedAtDate.replace(/\//g, ' '));
+                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/24.gif")" /> ' + d.toLocaleDateString() + '<br />';
+            }
+            if (line.MostRecentFoundDate!=null)
+            {
+                d = eval('new' + line.MostRecentFoundDate.replace(/\//g, ' '));
+                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" /> ' + d.toLocaleDateString() + '<br />';
+            }
+            $(resultElementName + ' > tbody:last').append('<tr><td>'+ direction +'</td><td>'+ specialIcon +'</td><td>'+ cacheIcon +'</td><td>'+ dtInfo +'</td><td>' + description + '</td><td>' + distance + '</td><td width="110">' + dateInfo + '</td></tr>');
         }
         setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestgccomSearchGeocachePage");
     }

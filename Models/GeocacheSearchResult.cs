@@ -9,6 +9,8 @@ namespace Globalcaching.Models
     {
         public long ID { get; set; }
         public string Code { get; set; }
+        public bool? Archived { get; set; }
+        public bool? Available { get; set; }
         public long GeocacheTypeId { get; set; }
         public double Difficulty { get; set; }
         public double Terrain { get; set; }
@@ -28,6 +30,8 @@ namespace Globalcaching.Models
         public Guid PublicGuid { get; set; }
         public int? FavoritePoints { get; set; }
         public int FoundCount { get; set; }
+        public DateTime? PublishedAtDate { get; set; }
+        public DateTime? MostRecentFoundDate { get; set; }
         
         [PetaPoco.Ignore]
         public string DirectionIcon { get; set; }
