@@ -101,6 +101,11 @@ namespace Globalcaching.Controllers
                                         db.Update("GCComUser", "ID", GCComUser.From(profile.User));
                                     }
                                 }
+                                if (settings.HomelocationLat == null && profile.User.HomeCoordinates != null)
+                                {
+                                    settings.HomelocationLat = profile.User.HomeCoordinates.Latitude;
+                                    settings.HomelocationLon = profile.User.HomeCoordinates.Longitude;
+                                }
                                 _gcEuUserSettingsService.UpdateSettings(settings);
                             }
                             Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, T("Geocaching.com autorisatie is geslaagd."));

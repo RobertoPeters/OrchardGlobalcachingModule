@@ -1,5 +1,8 @@
 ﻿@using Globalcaching.Models
 @model Globalcaching.ViewModels.SearchByAttributesModel
+@{
+    Style.Require("datetimepicker.Style");
+}
 
 <!-- Location -->
 <div class="panel panel-primary">
@@ -14,6 +17,19 @@
         <div class="form-group">
             <input id="radius" type="text" class="form-control" placeholder="Radius in km">
         </div>
+    </div>
+</div>
+
+<!-- Country -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkcountry" type="checkbox" data-toggle="collapse" data-target="#pnlcountry" />
+        &nbsp;&nbsp;Land
+    </div>
+    <div id="pnlcountry" class="panel-body collapse in">
+        <div class="col-md-2"><input type="checkbox" id="country141" />Nederland</div>
+        <div class="col-md-2"><input type="checkbox" id="country4" />Belgie</div>
+        <div class="col-md-2"><input type="checkbox" id="country8" />Luxemburg</div>
     </div>
 </div>
 
@@ -45,6 +61,109 @@
     </div>
 </div>
 
+<!-- Geocache status -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkstatus" type="checkbox" data-toggle="collapse" data-target="#pnlstatus" />
+        &nbsp;&nbsp;Status
+    </div>
+    <div id="pnlstatus" class="panel-body collapse in">
+        <div class="col-md-3">
+            <input type="radio" name="gcstatus" value="Archived">Gearchiveerd
+        </div>
+        <div class="col-md-3">
+            <input type="radio" name="gcstatus" value="Disabled">Niet beschikbaar
+        </div>
+        <div class="col-md-3">
+            <input type="radio" name="gcstatus" value="Beschikbaar" checked="checked">Beschikbaar
+        </div>
+    </div>
+</div>
+
+<!-- Hidden date -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkhiddendate" type="checkbox" data-toggle="collapse" data-target="#pnlhiddendate" />
+        &nbsp;&nbsp;Aanmaak datum (Hidden date)
+    </div>
+    <div id="pnlhiddendate" class="panel-body collapse in">
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="hiddenfromdate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                Tot:
+            </div>
+            <div id="hiddentodate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Publication date -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkpublisheddate" type="checkbox" data-toggle="collapse" data-target="#pnlpublisheddate" />
+        &nbsp;&nbsp;Publicatie datum (Publish date)
+    </div>
+    <div id="pnlpublisheddate" class="panel-body collapse in">
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="publishedfromdate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                Tot:
+            </div>
+            <div id="publishedtodate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Changed date -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkchangeddate" type="checkbox" data-toggle="collapse" data-target="#pnlchangeddate" />
+        &nbsp;&nbsp;Aangepast datum (Geocache bewerkt)
+    </div>
+    <div id="pnlchangeddate" class="panel-body collapse in">
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="changedfromdate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                Tot:
+            </div>
+            <div id="changedtodate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <button class="btn btn-primary" id="runmacrox">Uitvoeren</button>
 
     <!-- Modal -->
@@ -71,6 +190,11 @@
     $('#pnllocation').collapse();
     $('#pnlgeocachetype').collapse();
     $('#pnlcontainertype').collapse();
+    $('#pnlstatus').collapse();
+    $('#pnlcountry').collapse();
+    $('#pnlhiddendate').collapse();
+    $('#pnlpublisheddate').collapse();
+    $('#pnlchangeddate').collapse();
 
     var activeMacrox;
     var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
@@ -92,6 +216,27 @@
         {
             result = addMacroFunction(result, 'BinnenStraal("' + $('#location').val().replace(/\"/g, "\\\"") + '", ' + $('#radius').val() + ')');
         }
+        if ($('#chkhiddendate').prop('checked'))
+        {
+            var fromd = $("#hiddenfromdate").data("DateTimePicker").getDate();
+            var tod = $("#hiddentodate").data("DateTimePicker").getDate();
+            result = addMacroFunction(result,'AanmaakDatumVoor(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
+            result = addMacroFunction(result,'AanmaakDatumNa(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+        }
+        if ($('#chkpublisheddate').prop('checked'))
+        {
+            var fromd = $("#publishedfromdate").data("DateTimePicker").getDate();
+            var tod = $("#publishedtodate").data("DateTimePicker").getDate();
+            result = addMacroFunction(result,'NietGepubliceerdNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
+            result = addMacroFunction(result,'GepubliceerdNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+        }
+        if ($('#chkchangeddate').prop('checked'))
+        {
+            var fromd = $("#changedfromdate").data("DateTimePicker").getDate();
+            var tod = $("#changedtodate").data("DateTimePicker").getDate();
+            result = addMacroFunction(result,'NietAangepastNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
+            result = addMacroFunction(result,'AangepastNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+        }
         if ($('#chkgeocachetype').prop('checked'))
         {
             var lst = "";
@@ -109,6 +254,41 @@
                 }
             }
             result = addMacroFunction(result, "CacheType("+lst+")");
+        }
+        if ($('#chkcountry').prop('checked'))
+        {
+            var lst = "";
+            if ($('#country141').prop('checked'))
+            {
+                if (lst=="")
+                {
+                    lst = lst + '141';
+                }
+                else{
+                    lst = lst + ", " + '141';
+                }
+            }
+            if ($('#country4').prop('checked'))
+            {
+                if (lst=="")
+                {
+                    lst = lst + '4';
+                }
+                else{
+                    lst = lst + ", " + '4';
+                }
+            }
+            if ($('#country8').prop('checked'))
+            {
+                if (lst=="")
+                {
+                    lst = lst + '8';
+                }
+                else{
+                    lst = lst + ", " + '8';
+                }
+            }
+            result = addMacroFunction(result, "LandCode("+lst+")");
         }
         if ($('#chkcontainertype').prop('checked'))
         {
@@ -128,6 +308,23 @@
             }
             result = addMacroFunction(result, "Container("+lst+")");
         }
+        if ($('#chkstatus').prop('checked'))
+        {
+            var lst = "";
+            var chkst = $('input[name=gcstatus]:checked').val();
+            if (chkst=='Archived')
+            {
+                result = addMacroFunction(result, "Gearchiveerd()");
+            }
+            else if (chkst=='Available')
+            {
+                result = addMacroFunction(result, "Beschikbaar()");
+            }
+            else
+            {
+                result = addMacroFunction(result, "NietBeschikbaar()");
+            }
+    }
         return result;
     }
 
@@ -206,6 +403,29 @@
 
     $("#runmacrox").click(function () {
         runSba();
+    });
+
+    $(function () {
+        var d = moment('1/1/2001');
+        $('#hiddenfromdate').datetimepicker({
+            defaultDate: d
+        });
+        $('#publishedfromdate').datetimepicker({
+            defaultDate: d
+        });
+        $('#changedfromdate').datetimepicker({
+            defaultDate: d
+        });
+        var e = moment();
+        $('#hiddentodate').datetimepicker({
+            defaultDate: e
+        });
+        $('#publishedtodate').datetimepicker({
+            defaultDate: e
+        });
+        $('#changedtodate').datetimepicker({
+            defaultDate: e
+        });
     });
 
 </script>
