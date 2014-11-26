@@ -59,8 +59,12 @@ function zoomChanged() {
 }
 
 function loadPoints() {
+    var bnds = map.getBounds();
+    $('#minLat').val(bnds.getSouthWest().lat());
+    $('#minLon').val(bnds.getSouthWest().lng());
+    $('#maxLat').val(bnds.getNorthEast().lat());
+    $('#maxLon').val(bnds.getNorthEast().lng());
     if (markersAreVisible) {
-        var bnds = map.getBounds();
         getPoints(bnds.getSouthWest().lat(), bnds.getSouthWest().lng(), bnds.getNorthEast().lat(), bnds.getNorthEast().lng(), map.getZoom());
     }
 }
@@ -94,18 +98,38 @@ function showMarkerInfo(index, showinfowindow) {
     }
 }
 
+function htmlEncode(value) {
+    return $('<div/>').text(value).html();
+}
+
 function getWaypointInfo(index, showinfowindow) {
     $.ajax({
         type: "POST",
         url: getWPInfoUrl,
         data: {code : markers[index].getTitle()},
         success: function (response) {
-            var wpinf = '' + response.Code;
+            var wpinf = '<img src="' + rootPath + 'Modules/Globalcaching/Media/WptTypes/' + response.GeocacheTypeId + '.gif" /> ';
+            wpinf += '<a href="' + rootPath + 'Geocache/' + response.Code + '" target="_blank" >' + response.Code + '</a><br />';
+            wpinf += '<a href="' + response.Url + '" target="_blank" >' + htmlEncode(response.Url) + '</a><br />';
+            wpinf += htmlEncode(response.Name) + '<br />';
+            wpinf += 'Door: <a href="http://www.geocaching.com/profile/?guid=' + response.PublicGuid + '" target="_blank" >' + htmlEncode(response.UserName) + '</a><br />';
+            var d = eval('new' + response.UTCPlaceDate.replace(/\//g, ' '));
+            wpinf += 'Datum: ' + d.toLocaleDateString() + '<br />';
+            wpinf += 'Container: <img src="' + rootPath + 'Modules/Globalcaching/Media/container/' + response.ContainerTypeId + '.gif" /> <br />';
+            wpinf += 'Moelijkheid: ' + response.Difficulty + '<br />';
+            wpinf += 'Terrein:' + response.Terrain + '<br />';
+            if (response.Distance != null) {
+                wpinf += 'Afstand: ' + response.Distance + '<br />';
+            }
+            if (response.Municipality != null) {
+                wpinf += 'Gemeente: ' + htmlEncode(response.Municipality) + '<br />';
+            }
+            wpinf += 'Favorites: ' + response.FavoritePoints + '<br />';
             infowindow[index].setContent(wpinf);
             showMarkerInfo(index, showinfowindow);
         },
         error: function (data, errorText) {
-            alert(errorText);
+            //alert(errorText);
         }
     });
 }
@@ -155,12 +179,24 @@ function getPoints(minLat, minLon, maxLat, maxLon, zooml) {
         },
         error: function (data, errorText) {
             prevCall = null;
-            alert(errorText);
+            //alert(errorText);
         }
     });
 }
 
-
+function showAddress(address) {
+    geocoder.geocode({ 'address': address },
+        function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                map.setZoom(13);
+            }
+            else {
+                alert("Kan locatie van het adres niet bepalen.");
+            }
+        }
+    );
+}
 function addMarker(wp) {
     markerIds.push(wp.c);
     var latlng = new google.maps.LatLng(wp.a, wp.o);
@@ -204,8 +240,8 @@ function initializeMap(centerLat, centerLon, zoom, rPath, gcFilter, getgcUrl, ge
     iconTable['o'] = new google.maps.MarkerImage(rootPath + "Modules/Globalcaching/Media/WptTypes/map/myown.png");
 
 
-    document.getElementById('map_canvas').style.height = '700px';
-    document.getElementById('map_canvas').style.width = '700px';
+    document.getElementById('map_canvas').style.height = '800px';
+    document.getElementById('map_canvas').style.width = '800px';
 
     var mapTypeIds = [];
     for (var type in google.maps.MapTypeId) {

@@ -171,12 +171,12 @@
             description += '<br />Acties:';
             description += ' <a href="@Href("~/LogGeocache/")'+ line.ID +'">Log</a>';
             description += ' | <a href="@Href("~/CCCHulp?wp=")'+ line.Code +'">CCC</a>';
-            description += ' | Kaart';
+            description += ' | <a href="@Href("~/GeocacheKaart?wp=")'+ line.Code +'">Kaart</a>';
             description += ' | <a href="@Href("~/Geocache/")'+ line.Code +'">Beschrijving</a>';
             var distance = "";
             if (line.Distance!=null)
             {
-                distance = Number(line.Distance).toFixed(0);
+                distance = Number(line.Distance).toFixed(1) + ' km';
             }
             var dateInfo = "";
             var d = eval('new' + line.UTCPlaceDate.replace(/\//g, ' '));

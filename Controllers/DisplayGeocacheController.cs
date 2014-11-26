@@ -42,8 +42,20 @@ namespace Globalcaching.Controllers
                 if (!string.IsNullOrEmpty(usrSettings.LiveAPIToken))
                 {
                     GeocacheDataModel data = GetGeocacheData(id, _workContextAccessor.GetContext().HttpContext.Request.QueryString["al"] == null ? 5 : 30000, usrSettings);
-                    if (data != null)
+                    if (data != null || (data.GCComGeocacheData.IsPremium == true && (data.UserSettings != null || !data.UserSettings.IsPM)))
                     {
+                        if (data.GCComGeocacheData.Archived==true)
+                        {
+                            Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is gearchiveerd"));
+                        }
+                        else if (data.GCComGeocacheData.Available == false)
+                        {
+                            Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is niet beschikbaar"));
+                        }
+                        if (data.GCComGeocacheData.IsLocked == true)
+                        {
+                            Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is geblokkeerd"));
+                        }
                         return View("Home", data);
                     }
                     else
@@ -110,6 +122,7 @@ namespace Globalcaching.Controllers
                     result.LogTypes = db.Fetch<GCComLogType>("");
                     result.Attributes = db.Fetch<GCComGeocacheAttribute, GCComAttributeType, GeocacheAttributeInfo>((a, t) => { return new GeocacheAttributeInfo(a, t); }, "select GCComGeocacheAttribute.*, GCComAttributeType.* from GCComGeocacheAttribute inner join GCComAttributeType on GCComGeocacheAttribute.AttributeTypeID=GCComAttributeType.ID where GCComGeocacheAttribute.GeocacheID=@0", comGcData.ID);
                     result.GCComGeocacheLogs = GetLogsOfGeocache(db, comGcData.ID, maxLogs);
+                    result.LogCounts = db.Fetch<LogCountInfo>("select GCComGeocacheLog.WptLogTypeId, Count(1) as LogCount from GCComGeocacheLog with (nolock)  where GCComGeocacheLog.GeocacheID=@0 group by GCComGeocacheLog.WptLogTypeId order by LogCount desc", result.GCComGeocacheData.ID);
                 }
             }
             return result;

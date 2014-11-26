@@ -164,6 +164,257 @@
     </div>
 </div>
 
+<!-- Difficulty -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+               @if (Model.UserSettings.IsPM)
+               {
+        <input id="chkdifficulty" type="checkbox" data-toggle="collapse" data-target="#pnldifficulty" />
+               }
+               else
+               {
+        <input id="chkdifficulty" type="checkbox" data-toggle="collapse" data-target="#pnldifficulty" disabled="disabled" />
+               }
+                   
+        &nbsp;&nbsp;Moeilijkheid
+    </div>
+    <div id="pnldifficulty" class="panel-body collapse in">
+        Van
+        <select id="difficultyfrom">
+            <option value="1" selected="selected">1</option>
+            <option value="1.5">1.5</option>
+            <option value="2">2</option>
+            <option value="2.5">2.5</option>
+            <option value="3">3</option>
+            <option value="3.5">3.5</option>
+            <option value="4">4</option>
+            <option value="4.5">4.5</option>
+            <option value="5">5</option>
+        </select>
+        t/m
+        <select id="difficultyto">
+            <option value="1">1</option>
+            <option value="1.5">1.5</option>
+            <option value="2">2</option>
+            <option value="2.5">2.5</option>
+            <option value="3">3</option>
+            <option value="3.5">3.5</option>
+            <option value="4">4</option>
+            <option value="4.5">4.5</option>
+            <option value="5" selected="selected">5</option>
+        </select>
+    </div>
+</div>
+
+<!-- Terrain -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+@if (Model.UserSettings.IsPM)
+{ 
+        <input id="chkterrain" type="checkbox" data-toggle="collapse" data-target="#pnlterrain" />
+}
+else
+{
+        <input id="chkterrain" type="checkbox" data-toggle="collapse" data-target="#pnlterrain" disabled="disabled" />
+}
+        &nbsp;&nbsp;Terrein
+    </div>
+    <div id="pnlterrain" class="panel-body collapse in">
+        Van
+        <select id="terrainfrom">
+            <option value="1" selected="selected">1</option>
+            <option value="1.5">1.5</option>
+            <option value="2">2</option>
+            <option value="2.5">2.5</option>
+            <option value="3">3</option>
+            <option value="3.5">3.5</option>
+            <option value="4">4</option>
+            <option value="4.5">4.5</option>
+            <option value="5">5</option>
+        </select>
+        t/m
+        <select id="terrainto">
+            <option value="1">1</option>
+            <option value="1.5">1.5</option>
+            <option value="2">2</option>
+            <option value="2.5">2.5</option>
+            <option value="3">3</option>
+            <option value="3.5">3.5</option>
+            <option value="4">4</option>
+            <option value="4.5">4.5</option>
+            <option value="5" selected="selected">5</option>
+        </select>
+    </div>
+</div>
+
+<!-- Geocache Distance -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkdistance" type="checkbox" data-toggle="collapse" data-target="#pnldistance" />
+        &nbsp;&nbsp;Geocache afstand (parkeerplaats-cache-parkeerplaats)
+    </div>
+    <div id="pnldistance" class="panel-body collapse in">
+        Van
+        <input type="text" id="distancefrom" width="80" value="0" />
+        t/m
+        <input type="text" id="distanceto" width="80" value="10" />
+        (in km)
+    </div>
+</div>
+
+<!-- Geocache pictures -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkgcpictures" type="checkbox" data-toggle="collapse" data-target="#pnlgcpictures" />
+        &nbsp;&nbsp;Aantal plaatjes in beschrijving (geupload naar geocaching.com)
+    </div>
+    <div id="pnlgcpictures" class="panel-body collapse in">
+        Van
+        <input type="text" id="gcpicturesfrom" width="80" value="0" />
+        t/m
+        <input type="text" id="gcpicturesto" width="80" value="10" />
+    </div>
+</div>
+
+<!-- Hints contains text -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkhintscontains" type="checkbox" data-toggle="collapse" data-target="#pnlhintscontains" />
+        &nbsp;&nbsp;Hints bevat tekst
+    </div>
+    <div id="pnlhintscontains" class="panel-body collapse in">
+        <div class="form-group">
+            <input id="hintscontains" type="text" class="form-control" placeholder="woord of zin">
+        </div>
+    </div>
+</div>
+
+<!-- Name contains text -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chknamecontains" type="checkbox" data-toggle="collapse" data-target="#pnlnamecontains" />
+        &nbsp;&nbsp;Naam bevat tekst
+    </div>
+    <div id="pnlnamecontains" class="panel-body collapse in">
+        <div class="form-group">
+            <input id="namecontains" type="text" class="form-control" placeholder="de tekst">
+        </div>
+    </div>
+</div>
+
+<!-- Favorites -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+@if (Model.UserSettings.IsPM)
+{ 
+        <input id="chkfavorites" type="checkbox" data-toggle="collapse" data-target="#pnlfavorites" />
+}
+else
+{
+        <input id="chkfavorites" type="checkbox" data-toggle="collapse" data-target="#pnlfavorites" disabled="disabled" />
+}
+        &nbsp;&nbsp;Favorites
+    </div>
+    <div id="pnlfavorites" class="panel-body collapse in">
+        Van
+        <input type="text" id="favoritesfrom" width="80" value="0" />
+        t/m
+        <input type="text" id="favoritesto" width="80" value="10" />
+    </div>
+</div>
+
+<!-- Found -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkfoundcount" type="checkbox" data-toggle="collapse" data-target="#pnlfoundcount" />
+        &nbsp;&nbsp;Aantal keer gevonden
+    </div>
+    <div id="pnlfoundcount" class="panel-body collapse in">
+        Van
+        <input type="text" id="foundcountfrom" width="80" value="0" />
+        t/m
+        <input type="text" id="foundcountto" width="80" value="10" />
+    </div>
+</div>
+
+<!-- Locked -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chklocked" type="checkbox" data-toggle="collapse" data-target="#pnllocked" />
+        &nbsp;&nbsp;Geblokkeerd (locked)
+    </div>
+    <div id="pnllocked" class="panel-body collapse in">
+        <input type="checkbox" id="islocked" />
+        Geblokkeerd
+    </div>
+</div>
+
+<!-- PM Only -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkpm" type="checkbox" data-toggle="collapse" data-target="#pnlpm" />
+        &nbsp;&nbsp;Alleen voor Premuim Members (PMO op geocaching.com)
+    </div>
+    <div id="pnlpm" class="panel-body collapse in">
+        <input type="checkbox" id="ispm" />
+        Alleen voor Premuim Members
+    </div>
+</div>
+
+<!-- Parel -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkparel" type="checkbox" data-toggle="collapse" data-target="#pnlparel" />
+        &nbsp;&nbsp;Parel van de Maand
+    </div>
+    <div id="pnlparel" class="panel-body collapse in">
+        <input type="checkbox" id="isparel" disabled="disabled" checked="checked" />
+        Parel van de Maand
+    </div>
+</div>
+
+<!-- Latitude -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chklatitude" type="checkbox" data-toggle="collapse" data-target="#pnllatitude" />
+        &nbsp;&nbsp;Breedtegraad
+    </div>
+    <div id="pnllatitude" class="panel-body collapse in">
+        Tussen
+        <input type="text" id="latitudefrom" width="80" value="52.1" />
+        en
+        <input type="text" id="latitudeto" width="80" value="56.2" />
+    </div>
+</div>
+
+<!-- Longitude -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chklongitude" type="checkbox" data-toggle="collapse" data-target="#pnllongitude" />
+        &nbsp;&nbsp;Lengtegraad
+    </div>
+    <div id="pnllongitude" class="panel-body collapse in">
+        Tussen
+        <input type="text" id="longitudefrom" width="80" value="5.1" />
+        en
+        <input type="text" id="longitudeto" width="80" value="6.2" />
+    </div>
+</div>
+
+<!-- Owners -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkowners" type="checkbox" data-toggle="collapse" data-target="#pnlowners" />
+        &nbsp;&nbsp;Caches van eigenaar
+    </div>
+    <div id="pnlowners" class="panel-body collapse in">
+        <input type="checkbox" id="excludeowners" />Uitsluiten van selectie <br />
+        <div class="form-group">
+            <input id="owners" type="text" class="form-control" placeholder="naam van eigenaren met komma gescheiden zonder spatie bv pietje,pukje">
+        </div>
+    </div>
+</div>
+
 <button class="btn btn-primary" id="runmacrox">Uitvoeren</button>
 
     <!-- Modal -->
@@ -195,6 +446,20 @@
     $('#pnlhiddendate').collapse();
     $('#pnlpublisheddate').collapse();
     $('#pnlchangeddate').collapse();
+    $('#pnldifficulty').collapse();
+    $('#pnlterrain').collapse();
+    $('#pnldistance').collapse();
+    $('#pnlgcpictures').collapse();
+    $('#pnlhintscontains').collapse();
+    $('#pnlnamecontains').collapse();
+    $('#pnlfavorites').collapse();
+    $('#pnllocked').collapse();
+    $('#pnlpm').collapse();
+    $('#pnllatitude').collapse();
+    $('#pnllongitude').collapse();
+    $('#pnlowners').collapse();
+    $('#pnlfoundcount').collapse();
+    $('#pnlparel').collapse();
 
     var activeMacrox;
     var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
@@ -215,6 +480,116 @@
         if ($('#chklocation').prop('checked'))
         {
             result = addMacroFunction(result, 'BinnenStraal("' + $('#location').val().replace(/\"/g, "\\\"") + '", ' + $('#radius').val() + ')');
+        }
+        if ($('#chkowners').prop('checked'))
+        {
+            if ($('#excludeowners').prop('checked'))
+            {
+                result = addMacroFunction(result, 'NietVanEigenaar("' + $('#owners').val().replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")');
+            }
+            else
+            {
+                result = addMacroFunction(result, 'VanEigenaar("' + $('#owners').val().replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")');
+            }
+        }
+        if ($('#chklatitude').prop('checked'))
+        {
+            result = addMacroFunction(result, 'LatitudeTussen(' + $('#latitudefrom').val() + ', '+ $('#latitudeto').val() + ')');
+        }
+        if ($('#chklongitude').prop('checked'))
+        {
+            result = addMacroFunction(result, 'LongitudeTussen(' + $('#longitudefrom').val() + ', '+ $('#longitudeto').val() + ')');
+        }
+        if ($('#chklocked').prop('checked'))
+        {
+            if ($('#islocked').prop('checked'))
+            {
+                result = addMacroFunction(result, 'IsGeblokkeerd()');
+            }
+            else
+            {
+                result = addMacroFunction(result, 'NietIsGeblokkeerd()');
+            }
+        }
+        if ($('#chkpm').prop('checked'))
+        {
+            if ($('#ispm').prop('checked'))
+            {
+                result = addMacroFunction(result, 'IsPremiumCache()');
+            }
+            else
+            {
+                result = addMacroFunction(result, 'NietIsPremiumCache()');
+            }
+        }
+        if ($('#chkparel').prop('checked'))
+        {
+            if ($('#isparel').prop('checked'))
+            {
+                result = addMacroFunction(result, 'IsParel()');
+            }
+        }
+        if ($('#chkhintscontains').prop('checked'))
+        {
+            result = addMacroFunction(result, 'HintsBevatTekst("' + $('#hintscontains').val().replace(/\"/g, "\\\"") + '")');
+        }
+        if ($('#chknamecontains').prop('checked'))
+        {
+            result = addMacroFunction(result, 'NaamBevatTekst("' + $('#namecontains').val().replace(/\"/g, "\\\"") + '")');
+        }
+        if ($('#chkfavorites').prop('checked'))
+        {
+            if ($('#favoritesfrom').val()!='0')
+            {
+                result = addMacroFunction(result, 'FavorietenMeerDan(' + (parseInt($('#favoritesfrom').val())-1).toString() + ')');
+            }
+            result = addMacroFunction(result, 'NietFavorietenMeerDan(' + $('#favoritesto').val() + ')');
+        }
+        if ($('#chkfoundcount').prop('checked'))
+        {
+            if ($('#foundcountfrom').val()!='0')
+            {
+                result = addMacroFunction(result, 'AantalKeerGevondenMeerDan(' + (parseInt($('#foundcountfrom').val())-1).toString() + ')');
+            }
+            result = addMacroFunction(result, 'NietAantalKeerGevondenMeerDan(' + $('#foundcountto').val() + ')');
+        }
+        if ($('#chkgcpictures').prop('checked'))
+        {
+            if ($('#gcpicturesfrom').val()!='0')
+            {
+                result = addMacroFunction(result, 'AantalPlaatjesGroterDan(' + (parseInt($('#gcpicturesfrom').val())-1).toString() + ')');
+            }
+            result = addMacroFunction(result, 'NietAantalPlaatjesGroterDan(' + $('#gcpicturesto').val() + ')');
+        }
+        if ($('#chkdistance').prop('checked'))
+        {
+            if ($('#distancefrom').val()!='0')
+            {
+                result = addMacroFunction(result, 'CacheAfstandGroterDan(' + (parseFloat($('#distancefrom').val())-0.1).toString() + ')');
+            }
+            result = addMacroFunction(result, 'NietCacheAfstandGroterDan(' + $('#distanceto').val() + ')');
+        }
+        if ($('#chkdifficulty').prop('checked'))
+        {
+            if ($('#difficultyfrom').val()!='1')
+            {
+                result = addMacroFunction(result, 'MoeilijkheidGroterDan(' + (parseFloat($('#difficultyfrom').val())-0.1).toString() + ')');
+            }
+            if ($('#difficultyto').val()!='5')
+            {
+                result = addMacroFunction(result, 'NietMoeilijkheidGroterDan(' + $('#difficultyto').val() + ')');
+            }
+        }
+        if ($('#chkterrain').prop('checked'))
+        {
+            if ($('#terrainfrom').val()!='1')
+            {
+                result = addMacroFunction(result, 'TerreinGroterDan(' + (parseFloat($('#terrainfrom').val())-0.1).toString() + ')');
+            }
+            if ($('#terrainto').val()!='5')
+            {
+                result = addMacroFunction(result, 'NietTerreinGroterDan(' + $('#terrainto').val() + ')');
+            }
         }
         if ($('#chkhiddendate').prop('checked'))
         {
@@ -323,6 +698,7 @@
             else
             {
                 result = addMacroFunction(result, "NietBeschikbaar()");
+                result = addMacroFunction(result, "NietGearchiveerd()");
             }
     }
         return result;

@@ -18,19 +18,28 @@ namespace Globalcaching.Controllers
 {
     public class CacheMapController: Controller
     {
+        public class GCLocation
+        {
+            public double? Latitude { get; set; }
+            public double? Longitude { get; set; }
+        }
+
         public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
 
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
+        private readonly ILiveAPIDownloadService _liveAPIDownloadService;
         private readonly IWorkContextAccessor _workContextAccessor;
         public IOrchardServices Services { get; set; }
         public Localizer T { get; set; }
 
         public CacheMapController(IGCEuUserSettingsService gcEuUserSettingsService,
             IOrchardServices services,
+            ILiveAPIDownloadService liveAPIDownloadService,
             IWorkContextAccessor workContextAccessor)
         {
             _gcEuUserSettingsService = gcEuUserSettingsService;
+            _liveAPIDownloadService = liveAPIDownloadService;
             _workContextAccessor = workContextAccessor;
             Services = services;
             T = NullLocalizer.Instance;
@@ -44,17 +53,18 @@ namespace Globalcaching.Controllers
         [Themed]
         public ActionResult Index()
         {
-            return ShowMap(new GeocacheSearchFilter());
+            string gccode = HttpContext.Request.QueryString["wp"] as string;
+            return ShowMap(new GeocacheSearchFilter(), gccode);
         }
 
         [Themed]
         public ActionResult MacroResult()
         {
-            return ShowMap(new GeocacheSearchFilter() { MacroResult = true });
+            return ShowMap(new GeocacheSearchFilter() { MacroResult = true }, null);
         }
 
         [Themed]
-        public ActionResult ShowMap(GeocacheSearchFilter filter)
+        public ActionResult ShowMap(GeocacheSearchFilter filter, string geocacheCode)
         {
             CacheMapSettings mapSettings = new CacheMapSettings();
             mapSettings.CenterLat = 50.5;
@@ -64,7 +74,17 @@ namespace Globalcaching.Controllers
 
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
-                if (filter.CenterLat != null && filter.CenterLon != null)
+                if (!string.IsNullOrEmpty(geocacheCode))
+                {
+                    var gc = db.FirstOrDefault<GCLocation>("select Latitude, Longitude from GCComGeocache where Code=@0", geocacheCode);
+                    if (gc != null)
+                    {
+                        mapSettings.CenterLat = (double)gc.Latitude;
+                        mapSettings.CenterLon = (double)gc.Longitude;
+                        mapSettings.InitialZoomLevel = 20;
+                    }
+                }
+                else if (filter.CenterLat != null && filter.CenterLon != null)
                 {
                     mapSettings.CenterLat = (double)filter.CenterLat;
                     mapSettings.CenterLon = (double)filter.CenterLon;
@@ -127,7 +147,19 @@ namespace Globalcaching.Controllers
         {
             public string Code { get; set; }
             public int GeocacheTypeId { get; set; }
+            public string Url { get; set; }
+            public string Name { get; set; }
+            public DateTime UTCPlaceDate { get; set; }
+            public long ContainerTypeId { get; set; }
+            public double Difficulty { get; set; }
+            public double Terrain { get; set; }
+            public int? FavoritePoints { get; set; }
 
+            public string Municipality { get; set; }
+            public double? Distance { get; set; }
+
+            public string UserName { get; set; }
+            public Guid PublicGuid { get; set; }
         }
 
         [HttpPost]
@@ -261,13 +293,70 @@ namespace Globalcaching.Controllers
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
                 var sql = PetaPoco.Sql.Builder
-                    .Select("GCComGeocache.Code", "GCComGeocache.GeocacheTypeId")
-                    .From("GCComGeocache with (nolock)")
+                    .Select("GCComGeocache.Code"
+                    , "GCComGeocache.GeocacheTypeId"
+                    , "GCComGeocache.Url"
+                    , "GCComGeocache.Name"
+                    , "GCComGeocache.UTCPlaceDate"
+                    , "GCComGeocache.ContainerTypeId"
+                    , "GCComGeocache.Difficulty"
+                    , "GCComGeocache.Terrain"
+                    , "GCComGeocache.FavoritePoints"
+                    , "GCEuGeocache.Municipality"
+                    , "GCEuGeocache.Distance"
+                    , "GCComUser.UserName"
+                    , "GCComUser.PublicGuid"
+                    )
+                    .From("GCComGeocache")
+                    .InnerJoin("GCEuData.dbo.GCEuGeocache").On("GCComGeocache.ID=GCEuGeocache.ID")
+                    .InnerJoin("GCComUser").On("GCComGeocache.OwnerId=GCComUser.ID")
                     .Where("GCComGeocache.Code=@0", code);
 
                 wpi = db.FirstOrDefault<WaypointInfo>(sql);
             }
             return Json(wpi);
+        }
+
+        [Themed]
+        public ActionResult CopyViewToDownload(GeocacheSearchFilter filter, string minLat, string minLon, string maxLat, string maxLon)
+        {
+            bool result = false;
+
+            var setting = _gcEuUserSettingsService.GetSettings();
+            if (setting != null && setting.YafUserID > 1)
+            {
+                var sql = PetaPoco.Sql.Builder
+                    .Append(string.Format("insert into GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo (Code) select GCComGeocache.Code", setting.YafUserID));
+                sql = addWhereClause(sql, filter, Core.Helper.ConvertToDouble(minLat), Core.Helper.ConvertToDouble(minLon), Core.Helper.ConvertToDouble(maxLat), Core.Helper.ConvertToDouble(maxLon));
+                result = _liveAPIDownloadService.SetQueryResultForDownload(sql);
+            }
+            if (result)
+            {
+                var m = _liveAPIDownloadService.DownloadStatus;
+                if (m == null)
+                {
+                    return HttpNotFound("Fout bij het ophalen van de download status");
+                }
+                else
+                {
+                    Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, T("De geocaches kunnen worden gedownload."));
+                    return View("../DisplayTemplates/Parts.LiveAPIDownload", m);
+                }
+            }
+            else
+            {
+                var m = _liveAPIDownloadService.DownloadStatus;
+                if (m == null)
+                {
+                    return HttpNotFound("Fout bij het ophalen van de download status");
+                }
+                else
+                {
+                    Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Error, T("Er is een fout opgetreden. Je moet ingelogd zijn en controlleer of er al geocaches gedownload worden."));
+                    //return View("~/Views/DisplayTemplates/Parts.LiveAPIDownload", m);
+                    return View("../DisplayTemplates/Parts.LiveAPIDownload", m);
+                }
+            }
         }
 
         [HttpPost]

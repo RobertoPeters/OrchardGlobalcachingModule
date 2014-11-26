@@ -17,6 +17,7 @@ namespace Globalcaching.Services
     public class GCEuUserSettingsService : IGCEuUserSettingsService
     {
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
+        public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
         public static string dbYafForumConnString = ConfigurationManager.ConnectionStrings["yafnet"].ToString();
 
         private readonly IWorkContextAccessor _workContextAccessor;
@@ -83,6 +84,7 @@ namespace Globalcaching.Services
                         HttpContext.Session["GCEuUserSettings"] = result;
                         HttpContext.Session["GCEuUserSettingsForUser"] = _orchardServices.WorkContext.CurrentUser.UserName;
                     }
+                    setPM(result);
                 }
             }
             else
@@ -107,6 +109,25 @@ namespace Globalcaching.Services
             return result;
         }
 
+        private void setPM(GCEuUserSettings settings)
+        {
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+            {
+                if (settings != null)
+                {
+                    settings.IsPM = false;
+                    if (settings.GCComUserID != null)
+                    {
+                        var gcComUsr = db.FirstOrDefault<GCComUser>("where ID=@0", settings.GCComUserID);
+                        if (gcComUsr != null)
+                        {
+                            settings.IsPM = gcComUsr.MemberTypeId > 1;
+                        }
+                    }
+                }
+            }
+        }
+
         public void UpdateSettings(GCEuUserSettings settings)
         {
             if (_orchardServices.WorkContext.CurrentUser != null)
@@ -119,6 +140,7 @@ namespace Globalcaching.Services
                         db.Update("GCEuUserSettings", "YafUserID", settings);
                     }
                 }
+                setPM(currentSettings);
             }
        }
     }

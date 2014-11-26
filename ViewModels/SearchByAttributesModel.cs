@@ -10,5 +10,6 @@ namespace Globalcaching.ViewModels
     {
         public List<GCComGeocacheType> GeocacheTypes { get; set; }
         public List<int> Containers { get; set; }
+        public GCEuUserSettings UserSettings { get; set; }
     }
 }

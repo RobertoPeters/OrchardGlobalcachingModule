@@ -31,6 +31,10 @@ namespace Globalcaching.Controllers
             int.TryParse(Request["CountryID"] ?? "0", out CountryID);
             DateTime.TryParse(Request["StartDate"] ?? DateTime.Now.ToString(), out StartDate);
             DateTime.TryParse(Request["EndDate"] ?? DateTime.Now.ToString(), out EndDate);
+            if ((EndDate - StartDate).TotalDays > 7)
+            {
+                EndDate = StartDate.AddDays(7);
+            }
             filter.CountryID = CountryID;
             filter.StartDate = StartDate;
             filter.EndDate = EndDate;

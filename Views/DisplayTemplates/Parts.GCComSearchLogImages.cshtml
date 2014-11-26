@@ -4,29 +4,32 @@
 @{
     Style.Require("datetimepicker.Style");
 }
-
-<div class="form-group">
-    <label for="startdate1" class="col-sm-2 control-label">@T("Vanaf datum")</label>
-    <div class='col-sm-10 input-group date' id='startdate1'>
-        <input type='text' class="form-control" />
-        <span class="input-group-addon">
-            <span class="fa fa-calendar"></span>
-        </span>
+<form role="form">
+    <div class="form-group">
+        <label for="startdate1" class="col-sm-2 control-label">@T("Vanaf datum")</label>
+        <div class='col-sm-10 input-group date' id='startdate1'>
+            <input type='text' class="form-control" />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar"></span>
+            </span>
+        </div>
     </div>
-</div>
-<div class="form-group">
-    <label for="enddate1" class="col-sm-2 control-label">@T("Tot en met datum")</label>
-    <div class='col-sm-10 input-group date' id='enddate1'>
-        <input type='text' class="form-control" />
-        <span class="input-group-addon">
-            <span class="fa fa-calendar"></span>
-        </span>
+    <div class="form-group">
+        <label for="enddate1" class="col-sm-2 control-label">@T("Tot en met datum")</label>
+        <div class='col-sm-10 input-group date' id='enddate1'>
+            <input type='text' class="form-control" />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar"></span>
+            </span>
+        </div>
     </div>
-</div>
-<div class="form-group">
-    <label for="CountryCode" class="col-sm-2 control-label">@T("Land")</label>
-    <div class="col-sm-10">
-        @Html.DropDownListFor(
+    <div class="row">
+        <span class="col-sm-10 col-sm-offset-2">Maximum periode is een week.</span>
+    </div>
+    <div class="form-group">
+        <label for="CountryCode" class="col-sm-2 control-label">@T("Land")</label>
+        <div class="col-sm-10 input-group">
+            @Html.DropDownListFor(
                         m => m.Filter.CountryID,
                        new SelectList(
                               new List<Object>{
@@ -38,11 +41,15 @@
                               "value",
                               "text",
                            Model.Filter.CountryID
-           )
+                    ),
+                                             new { @class = "form-control" }
         )
+        </div>
     </div>
-</div>
-<button class="btn btn-default" type="button" id="gccomSearchLogImagesButton">Zoek!</button>
+    <div class="row">
+        <button class="btn btn-primary col-sm-1 col-sm-offset-2" type="button" id="gccomSearchLogImagesButton">Zoek!</button>
+    </div>
+</form>
 
 <div id="gccomSearchLogImagesTopPager">
 </div>
@@ -139,6 +146,11 @@
         var e = moment('@Model.Filter.EndDate.Month' + '/' + '@Model.Filter.EndDate.Day' + '/' + '@Model.Filter.EndDate.Year');
         $('#enddate1').datetimepicker({
             defaultDate: e
+        });
+        $("#startdate1").on("dp.change", function (e) {
+            $('#enddate1').data("DateTimePicker").setMinDate(e.date);
+            $('#enddate1').data("DateTimePicker").setMaxDate(e.date.add(7, 'days'));
+            $('#enddate1').data("DateTimePicker").setDate(e.date)
         });
     });
 </script>

@@ -38,5 +38,8 @@ GO
         public string MarkLogTextColor1 { get; set; }
         public string MarkLogTextColor2 { get; set; }
         public string MarkLogTextColor3 { get; set; }
+
+        [PetaPoco.Ignore]
+        public bool IsPM { get; set; }
     }
 }

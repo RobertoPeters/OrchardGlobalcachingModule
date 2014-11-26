@@ -18,6 +18,12 @@ namespace Globalcaching.ViewModels
         public GCComUser Writer { get; set; }
     }
 
+    public class LogCountInfo
+    {
+        public int WptLogTypeId { get; set; }
+        public int logCount { get; set; }
+    }
+
     public class GeocacheAttributeInfo
     {
         public GeocacheAttributeInfo()
@@ -48,5 +54,6 @@ namespace Globalcaching.ViewModels
         public List<GeocacheLogInfo> GCComGeocacheLogs { get; set; }
         public List<GCComLogType> LogTypes { get; set; }
         public List<GeocacheAttributeInfo> Attributes { get; set; }
+        public List<LogCountInfo> LogCounts { get; set; }
     }
 }

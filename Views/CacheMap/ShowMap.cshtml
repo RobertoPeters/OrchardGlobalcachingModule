@@ -1,4 +1,37 @@
-﻿@using Orchard.Mvc.Html
+﻿@model Globalcaching.ViewModels.CacheMapSettings
+@using Orchard.Mvc.Html
+
+<div class="row">
+    <div class="col-md-6">
+        <input id="gotolocation" type="text" placeholder="vul plaats/adres in" width="200" />
+        <button class="btn btn-primary" id="gotolocationbutton">Ga naar locatie</button>
+    </div>
+    <div class="col-md-5">
+@using (Html.BeginFormAntiForgeryPost(Url.Action("CopyViewToDownload", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    @Html.HiddenFor(m => m.Filter.OwnerID)
+    @Html.HiddenFor(m => m.Filter.CountryID)
+    @Html.HiddenFor(m => m.Filter.HomeLat)
+    @Html.HiddenFor(m => m.Filter.HomeLon)
+    @Html.HiddenFor(m => m.Filter.CenterLat)
+    @Html.HiddenFor(m => m.Filter.CenterLon)
+    @Html.HiddenFor(m => m.Filter.Radius)
+    @Html.HiddenFor(m => m.Filter.OrderBy)
+    @Html.HiddenFor(m => m.Filter.OrderByDirection)
+    @Html.HiddenFor(m => m.Filter.NameContainsWord)
+    @Html.HiddenFor(m => m.Filter.OwnerName)
+    @Html.HiddenFor(m => m.Filter.MacroResult)
+    @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+    @Html.HiddenFor(m => m.Filter.Parel)
+    <input id="minLat" name="minLat" type="hidden" />
+    <input id="minLon" name="minLon" type="hidden" />
+    <input id="maxLat" name="maxLat" type="hidden" />
+    <input id="maxLon" name="maxLon" type="hidden" />
+    <button type="submit" value="DownloadView" class="btn btn-primary pull-right">@T("Download")</button>
+}
+
+    </div>
+</div>
 
 <table>
     <tr><td><div id="map_canvas"></div></td><td valign="top"><div id="WPInfo"></div></td></tr>
@@ -40,6 +73,16 @@
         }));
 
     $(function () {
+        $('#gotolocation').keypress(function (e) {
+            if (e.which == '13') {
+                showAddress($("#gotolocation").val());
+            }
+        });
+
+        $("#gotolocationbutton").click(function () {
+            showAddress($("#gotolocation").val());
+        });
+
         initializeMap(initMapSettings.centerLat, initMapSettings.centerLon, initMapSettings.initialZoomLevel, '@Href("~/")', filter, getGeocachesUrl, getwpUrl);
     });
 </script>
