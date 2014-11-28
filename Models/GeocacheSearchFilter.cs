@@ -5,6 +5,13 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public enum GeocacheSearchFilterOrderOnItem : int
+    {
+        DistanceFromHome = 0,
+        HiddenDate = 1,
+        PublicationDate = 2,
+    }
+
     public class GeocacheSearchFilter
     {
         public long Page { get; set; }

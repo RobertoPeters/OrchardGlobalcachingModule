@@ -78,6 +78,8 @@ namespace Globalcaching.Services
                                 result = new GCEuUserSettings();
                                 result.YafUserID = (int)YafUserID;
                                 result.DefaultCountryCode = 141;
+                                result.SortGeocachesBy = (int)GeocacheSearchFilterOrderOnItem.PublicationDate;
+                                result.SortGeocachesDirection = -1;
                                 db.Insert(result);
                             }
                         }

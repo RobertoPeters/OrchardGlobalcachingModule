@@ -154,6 +154,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "UpdateSortingGeocaches",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "UpdateSortingGeocaches"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "Parels",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

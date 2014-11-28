@@ -479,6 +479,7 @@
     <Compile Include="Services\EventCalendarService.cs" />
     <Compile Include="Services\FTFStatsService.cs" />
     <Compile Include="Services\GeocacheDistanceService.cs" />
+    <Compile Include="Services\GeocacheSearchFilterService.cs" />
     <Compile Include="Services\GeocacheSeriesService.cs" />
     <Compile Include="Services\GlobalcachingMessagesService.cs" />
     <Compile Include="Services\LiveAPIDownloadService.cs" />

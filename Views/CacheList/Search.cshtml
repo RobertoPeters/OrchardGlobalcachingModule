@@ -2,7 +2,10 @@
 
 <table>
     <tr>
-        <td>
+        <td width="20">
+
+        </td>
+        <td align="left" width="100">
             @using (Html.BeginFormAntiForgeryPost(Url.Action("ShowMap", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
             {
                 @Html.HiddenFor(m => m.Filter.OwnerID)
@@ -19,12 +22,12 @@
                 @Html.HiddenFor(m => m.Filter.MacroResult)
                 @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
                 @Html.HiddenFor(m => m.Filter.Parel)
-    <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
+                <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
             }
         </td>
-        <td>
+        <td align="left">
             @using (Html.BeginFormAntiForgeryPost(Url.Action("CopyListToDownload", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
-            {
+{
                 @Html.HiddenFor(m => m.Filter.OwnerID)
                 @Html.HiddenFor(m => m.Filter.CountryID)
                 @Html.HiddenFor(m => m.Filter.HomeLat)
@@ -43,7 +46,48 @@
             }
         </td>
     </tr>
+    <tr>
+        <td colspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>
+
+        </td>
+        <td colspan="2" align="left">
+@using (Html.BeginFormAntiForgeryPost(Url.Action("UpdateSortingGeocaches", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+                @Html.HiddenFor(m => m.Filter.OwnerID)
+                @Html.HiddenFor(m => m.Filter.CountryID)
+                @Html.HiddenFor(m => m.Filter.HomeLat)
+                @Html.HiddenFor(m => m.Filter.HomeLon)
+                @Html.HiddenFor(m => m.Filter.CenterLat)
+                @Html.HiddenFor(m => m.Filter.CenterLon)
+                @Html.HiddenFor(m => m.Filter.Radius)
+                @Html.HiddenFor(m => m.Filter.OrderBy)
+                @Html.HiddenFor(m => m.Filter.OrderByDirection)
+                @Html.HiddenFor(m => m.Filter.NameContainsWord)
+                @Html.HiddenFor(m => m.Filter.OwnerName)
+                @Html.HiddenFor(m => m.Filter.MacroResult)
+                @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+                @Html.HiddenFor(m => m.Filter.Parel)
+    <div class="row">
+        <span>Sorteer op:</span>
+        <select id="newSortBy" name="newSortBy">
+            <option value="0">Afstand van thuislocatie</option>
+            <option value="1">Plaatsingsdatum</option>
+            <option value="2">Publicatiedatum</option>
+        </select>
+        <select id="newSortDir" name="newSortDir">
+            <option value="1">oplopend</option>
+            <option value="-1">aflopend</option>
+        </select>
+        <button type="submit" value="NewSort" class="btn btn-primary">@T("Sorteer lijst")</button>
+    </div>
+}
+        </td>
+    </tr>
 </table>
+
 <div id="gccomSearchGeocacheTopPager">
 </div>
 <table class="table table-condensed table-striped table-hover" id="gccomSearchGeocacheResults">
@@ -195,6 +239,9 @@
         }
         setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestgccomSearchGeocachePage");
     }
+
+    $('#newSortBy').val(@Model.Filter.OrderBy);
+    $('#newSortDir').val(@Model.Filter.OrderByDirection);
 
     updateList(@Html.Raw(Json.Encode(@Model)));
 </script>

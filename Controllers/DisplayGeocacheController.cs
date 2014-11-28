@@ -42,21 +42,29 @@ namespace Globalcaching.Controllers
                 if (!string.IsNullOrEmpty(usrSettings.LiveAPIToken))
                 {
                     GeocacheDataModel data = GetGeocacheData(id, _workContextAccessor.GetContext().HttpContext.Request.QueryString["al"] == null ? 5 : 30000, usrSettings);
-                    if (data != null || (data.GCComGeocacheData.IsPremium == true && (data.UserSettings != null || !data.UserSettings.IsPM)))
+                    if (data != null)
                     {
-                        if (data.GCComGeocacheData.Archived==true)
+                        if (data.GCComGeocacheData.IsPremium == true && (data.UserSettings != null || !data.UserSettings.IsPM))
                         {
-                            Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is gearchiveerd"));
+                            //pmo geocache and user is not pm
+                            return new RedirectResult(string.Format("http://coord.info/{0}", id));
                         }
-                        else if (data.GCComGeocacheData.Available == false)
+                        else
                         {
-                            Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is niet beschikbaar"));
+                            if (data.GCComGeocacheData.Archived == true)
+                            {
+                                Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is gearchiveerd"));
+                            }
+                            else if (data.GCComGeocacheData.Available == false)
+                            {
+                                Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is niet beschikbaar"));
+                            }
+                            if (data.GCComGeocacheData.IsLocked == true)
+                            {
+                                Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is geblokkeerd"));
+                            }
+                            return View("Home", data);
                         }
-                        if (data.GCComGeocacheData.IsLocked == true)
-                        {
-                            Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Warning, T("De geocache is geblokkeerd"));
-                        }
-                        return View("Home", data);
                     }
                     else
                     {

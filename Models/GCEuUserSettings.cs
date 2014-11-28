@@ -5,26 +5,6 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
-    /*
-create table GCEuUserSettings
-(
-YafUserID int not null,
-GCComUserID bigint,
-LiveAPIToken nvarchar(255),
-ShowGeocachesOnGlobal bit,
-HomelocationLat float,
-HomelocationLon float,
-DefaultCountryCode int
-)
-GO
-
-CREATE UNIQUE NONCLUSTERED INDEX [GCEuUserSettings_YafUserID] ON [dbo].[GCEuUserSettings] 
-(
-	[YafUserID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-GO
-
-     */
     [PetaPoco.TableName("GCEuUserSettings")]
     public class GCEuUserSettings
     {
@@ -38,6 +18,8 @@ GO
         public string MarkLogTextColor1 { get; set; }
         public string MarkLogTextColor2 { get; set; }
         public string MarkLogTextColor3 { get; set; }
+        public int? SortGeocachesBy { get; set; }
+        public int? SortGeocachesDirection { get; set; }
 
         [PetaPoco.Ignore]
         public bool IsPM { get; set; }
