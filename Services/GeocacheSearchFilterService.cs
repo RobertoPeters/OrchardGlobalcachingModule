@@ -11,7 +11,9 @@ namespace Globalcaching.Services
     public interface IGeocacheSearchFilterService: IDependency
     {
         PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter);
+        PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, bool addOrderByClause);
         PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, double? minLat, double? minLon, double? maxLat, double? maxLon);
+        PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, double? minLat, double? minLon, double? maxLat, double? maxLon, bool addOrderByClause);
     }
 
     public class GeocacheSearchFilterService : IGeocacheSearchFilterService
@@ -28,9 +30,17 @@ namespace Globalcaching.Services
 
         public PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter)
         {
-            return AddWhereClause(sql, filter, null, null, null, null);
+            return AddWhereClause(sql, filter, null, null, null, null, false);
+        }
+        public PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, bool addOrderByClause)
+        {
+            return AddWhereClause(sql, filter, null, null, null, null, addOrderByClause);
         }
         public PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, double? minLat, double? minLon, double? maxLat, double? maxLon)
+        {
+            return AddWhereClause(sql, filter, minLat, minLon, maxLat, maxLon, false);
+        }
+        public PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, double? minLat, double? minLon, double? maxLat, double? maxLon, bool addOrderByClause)
         {
             string euDatabase = Core.Helper.GetTableNameFromConnectionString(dbGcEuDataConnString);
             sql = sql.From("GCComGeocache with (nolock)")
@@ -99,18 +109,68 @@ namespace Globalcaching.Services
                 int orderby = (int)filter.OrderBy;
                 int orderbydir = (int)filter.OrderByDirection;
                 string orderdir = orderbydir > 0 ? "ASC" : "DESC";
-                switch (orderby)
+                sql = addOrderByState(sql, orderby, orderdir, filter);
+            }
+            else if (addOrderByClause)
+            {
+                int orderby = filter.OrderBy ?? (int)GeocacheSearchFilterOrderOnItem.DistanceFromHome;
+                int orderbydir = filter.OrderByDirection ?? 1;
+                if (orderby == (int)GeocacheSearchFilterOrderOnItem.DistanceFromHome && (filter.HomeLat == null || filter.HomeLon == null))
                 {
-                    case (int)GeocacheSearchFilterOrderOnItem.DistanceFromHome:
-                        sql = sql.OrderBy(string.Format("dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, {0}, {1}) {2}", filter.HomeLat.ToString().Replace(',', '.'), filter.HomeLon.ToString().Replace(',', '.'), orderdir));
-                        break;
-                    case (int)GeocacheSearchFilterOrderOnItem.HiddenDate:
-                        sql = sql.OrderBy(string.Format("UTCPlaceDate {0}", orderdir));
-                        break;
-                    case (int)GeocacheSearchFilterOrderOnItem.PublicationDate:
-                        sql = sql.OrderBy(string.Format("PublishedAtDate {0}", orderdir));
-                        break;
+                    orderby = (int)GeocacheSearchFilterOrderOnItem.PublicationDate;
+                    orderbydir = -1;
                 }
+                string orderdir = orderbydir > 0 ? "ASC" : "DESC";
+                sql = addOrderByState(sql, orderby, orderdir, filter);
+                filter.OrderBy = orderby;
+                filter.OrderByDirection = orderbydir;
+            }
+            return sql;
+        }
+
+        private PetaPoco.Sql addOrderByState(PetaPoco.Sql sql, int orderby, string orderdir, GeocacheSearchFilter filter)
+        {
+            switch (orderby)
+            {
+                case (int)GeocacheSearchFilterOrderOnItem.DistanceFromHome:
+                    sql = sql.OrderBy(string.Format("dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, {0}, {1}) {2}", filter.HomeLat.ToString().Replace(',', '.'), filter.HomeLon.ToString().Replace(',', '.'), orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.HiddenDate:
+                    sql = sql.OrderBy(string.Format("UTCPlaceDate {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.PublicationDate:
+                    sql = sql.OrderBy(string.Format("PublishedAtDate {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.Code:
+                    sql = sql.OrderBy(string.Format("Code {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.Difficulty:
+                    sql = sql.OrderBy(string.Format("Difficulty {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.Distance:
+                    sql = sql.OrderBy(string.Format("Distance {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.Favorites:
+                    sql = sql.OrderBy(string.Format("FavoritePoints {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.FavoritesPercentage:
+                    sql = sql.OrderBy(string.Format("FavPer100Found {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.Founds:
+                    sql = sql.OrderBy(string.Format("FoundCount {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.GeocacheType:
+                    sql = sql.OrderBy(string.Format("GeocacheTypeId {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.MostRecentFoundDate:
+                    sql = sql.OrderBy(string.Format("MostRecentFoundDate {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.Name:
+                    sql = sql.OrderBy(string.Format("Name {0}", orderdir));
+                    break;
+                case (int)GeocacheSearchFilterOrderOnItem.Terrain:
+                    sql = sql.OrderBy(string.Format("Terrain {0}", orderdir));
+                    break;
             }
             return sql;
         }

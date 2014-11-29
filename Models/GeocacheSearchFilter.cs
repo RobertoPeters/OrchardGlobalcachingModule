@@ -10,6 +10,16 @@ namespace Globalcaching.Models
         DistanceFromHome = 0,
         HiddenDate = 1,
         PublicationDate = 2,
+        Distance = 3,
+        MostRecentFoundDate = 4,
+        Favorites = 5,
+        FavoritesPercentage = 6,
+        Founds = 7,
+        GeocacheType = 8,
+        Code = 9,
+        Difficulty = 10,
+        Terrain = 11,
+        Name = 12,
     }
 
     public class GeocacheSearchFilter

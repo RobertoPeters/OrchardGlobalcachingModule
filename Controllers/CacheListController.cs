@@ -247,36 +247,7 @@ namespace Globalcaching.Controllers
                 {
                     sql.Append(",DistanceFromHome=NULL", filter.HomeLat, filter.HomeLon);
                 }
-                sql = _geocacheSearchFilterService.AddWhereClause(sql, filter);
-                if (filter.MaxResult > 0 && filter.OrderBy != null && filter.OrderByDirection != null)
-                {
-                    //order statement already added
-                }
-                else
-                {
-                    int orderby = filter.OrderBy ?? (int)GeocacheSearchFilterOrderOnItem.DistanceFromHome;
-                    int orderbydir = filter.OrderByDirection ?? 1;
-                    if (orderby == (int)GeocacheSearchFilterOrderOnItem.DistanceFromHome && (filter.HomeLat == null || filter.HomeLon == null))
-                    {
-                        orderby = (int)GeocacheSearchFilterOrderOnItem.PublicationDate;
-                        orderbydir = -1;
-                    }
-                    string orderdir = orderbydir > 0 ? "ASC" : "DESC";
-                    switch (orderby)
-                    {
-                        case (int)GeocacheSearchFilterOrderOnItem.DistanceFromHome:
-                            sql = sql.OrderBy(string.Format("dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, {0}, {1}) {2}", filter.HomeLat.ToString().Replace(',', '.'), filter.HomeLon.ToString().Replace(',', '.'), orderdir));
-                            break;
-                        case (int)GeocacheSearchFilterOrderOnItem.HiddenDate:
-                            sql = sql.OrderBy(string.Format("UTCPlaceDate {0}", orderdir));
-                            break;
-                        case (int)GeocacheSearchFilterOrderOnItem.PublicationDate:
-                            sql = sql.OrderBy(string.Format("PublishedAtDate {0}", orderdir));
-                            break;
-                    }
-                    filter.OrderBy = orderby;
-                    filter.OrderByDirection = orderbydir;
-                }
+                sql = _geocacheSearchFilterService.AddWhereClause(sql, filter, true);
                 if (filter.MaxResult > 0)
                 {
                     filter.Page = 1;
