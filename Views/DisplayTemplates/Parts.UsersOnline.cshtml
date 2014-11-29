@@ -1,32 +1,33 @@
 ﻿@using Orchard.Utility.Extensions
 @using Globalcaching.Models
 @model Globalcaching.Models.OnlineUserInfo
-
-@Html.Label("Bezoekers afgelopen uur (" + @Model.Count + "): ", new { @class = "infotext" });
-@for (int i = 0; i < @Model.Users.Count; i++)
-{
-    if (i>0)
+<center>
+    @Html.Label("Bezoekers afgelopen uur (" + @Model.Count + "): ", new { @class = "infotext" });
+    @for (int i = 0; i < @Model.Users.Count; i++)
     {
-        @Html.Label(",")
+        if (i > 0)
+        {
+            @Html.Label(",")
+        }
+        @Html.Raw("&nbsp;")
+        string classname = "normaluser";
+        if (@Model.Users[i].IsPosting)
+        {
+            classname = "postinguser";
+        }
+        else if (@Model.Users[i].Donator)
+        {
+            classname = "donatoruser";
+        }
+        if (@Model.Users[i].YafUserName == "Guest")
+        {
+            @Html.Label("Gasten (" + @Model.Users[i].Count + ")", new { @class = classname })
+        }
+        else
+        {
+            @Html.Raw("<a href=\"/forum/yaf_profile" + @Model.Users[i].YafUserID + ".aspx\" title=\"" + @Model.Users[i].LastAccess + "\">")
+            @Html.Label(@Model.Users[i].YafUserName, new { @class = classname })
+            @Html.Raw("</a>")
+        }
     }
-    @Html.Raw("&nbsp;")
-    string classname = "normaluser";
-    if (@Model.Users[i].IsPosting)
-    {
-        classname = "postinguser";
-    }
-    else if (@Model.Users[i].Donator)
-    {
-        classname = "donatoruser";
-    }
-    if (@Model.Users[i].YafUserName=="Guest")
-    {
-        @Html.Label("Gasten (" + @Model.Users[i].Count + ")", new { @class = classname })        
-    }
-    else 
-    { 
-        @Html.Raw("<a href=\"/forum/yaf_profile" + @Model.Users[i].YafUserID + ".aspx\" title=\"" + @Model.Users[i].LastAccess + "\">")
-        @Html.Label(@Model.Users[i].YafUserName, new { @class = classname })
-        @Html.Raw("</a>")
-    }
-}
+</center>

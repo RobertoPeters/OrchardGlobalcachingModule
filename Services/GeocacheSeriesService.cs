@@ -31,7 +31,7 @@ namespace Globalcaching.Services
                 result.CurrentPage = page;
                 result.TotalCount = items.Count();
                 result.PageCount = result.TotalCount / pageSize;
-                if (result.TotalCount > 0 && (result.TotalCount % pageSize) == 0)
+                if (result.TotalCount > 0 && (result.TotalCount % pageSize) != 0)
                 {
                     result.PageCount++;
                 }
