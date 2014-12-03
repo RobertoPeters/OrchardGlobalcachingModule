@@ -146,66 +146,54 @@
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>FTF:</strong></div>
-                @if (Model.FTF == null)
-                {
-                    <div class="col-md-9">-</div>
-                }
-                else
-                {
-                    <table>
-                        <tr>
-                            <td><div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.FTF.UserName</a></div></td>
-                            <td>
-                                @if (Model.IsFTFAdmin==true)
-                                {
-                                <button class="btn btn-primary btn-xs" onclick="@string.Format("clearFTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
-                                }
-                            </td>
-                        </tr>
-                    </table>
-                }
+                <div class="col-md-9">
+                    @if (Model.FTF == null)
+                    {
+                        <span>-</span>
+                    }
+                    else
+                    {
+                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.FTF.UserName</a>
+                        if (Model.IsFTFAdmin == true)
+                        {
+                            <button class="btn btn-primary btn-xs" onclick="@string.Format("clearFTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
+                        }
+                    }
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>STF:</strong></div>
-                @if (Model.STF == null)
-                {
-                    <div class="col-md-9">-</div>
-                }
-                else
-                {
-                    <table>
-                        <tr>
-                            <td><div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.STF.UserName</a></div></td>
-                            <td>
-                                @if (Model.IsFTFAdmin == true)
-                                {
-                                    <button class="btn btn-primary  btn-xs" onclick="@string.Format("clearSTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
-                                }
-                            </td>
-                        </tr>
-                    </table>
-                }
+                <div class="col-md-9">
+                    @if (Model.STF == null)
+                    {
+                        <span>-</span>
+                    }
+                    else
+                    {
+                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.STF.UserName</a>
+                        if (Model.IsFTFAdmin == true)
+                        {
+                            <button class="btn btn-primary  btn-xs" onclick="@string.Format("clearSTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
+                        }
+                    }
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>TTF:</strong></div>
-                @if (Model.TTF == null)
-                {
-                    <div class="col-md-9">-</div>
-                }
-                else
-                {
-                    <table>
-                        <tr>
-                            <td><div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.TTF.UserName</a></div></td>
-                            <td>
-                                @if (Model.IsFTFAdmin)
-                                {
-                                    <button class="btn btn-primary  btn-xs" onclick="@string.Format("clearTTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
-                                }
-                            </td>
-                        </tr>
-                    </table>
-                }
+                <div class="col-md-9">
+                    @if (Model.TTF == null)
+                    {
+                        <span>-</span>
+                    }
+                    else
+                    {
+                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.TTF.UserName</a>
+                        if (Model.IsFTFAdmin)
+                        {
+                            <button class="btn btn-primary  btn-xs" onclick="@string.Format("clearTTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
+                        }
+                    }
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Attributen:</strong></div>
@@ -221,7 +209,13 @@
             <center>
                 <a type="button" class="btn btn-primary" href='@Href("~/LogGeocache/")@Model.GCComGeocacheData.ID'>Log geocache</a><br />
                 <br />
-                <a href="@Href(string.Format("~/GeocacheKaart/?wp={0}", Model.GCComGeocacheData.Code))" /><img src="http://staticmap.openstreetmap.de/staticmap.php?center=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.')&zoom=14&size=200x200&maptype=mapnik&markers=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.'),lightblue1" /></a>
+                <a href="@Href(string.Format("~/GeocacheKaart/?wp={0}", Model.GCComGeocacheData.Code))" /><img src="http://maps.google.com/staticmap?center=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.')&zoom=14&size=200x200&markers=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',', '.')&sensor=false" /></a><br />
+                <br />
+@using (Html.BeginFormAntiForgeryPost(Url.Action("DownloadGeocache", "LiveAPIDownload", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <input name="id" type="hidden" value="@Model.GCComGeocacheData.Code" />
+    <button type="submit" value="Download" class="btn btn-primary">@T("Download")</button>
+}
             </center>
         </div>
     </div>

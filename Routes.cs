@@ -845,6 +845,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "LiveAPIDownloadGeocache",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LiveAPIDownload"},
+                            {"action", "DownloadGeocache"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "FixLogOldSite",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

@@ -21,6 +21,7 @@ namespace Globalcaching.Services
         LiveAPIDownloadStatus StartDownload(bool isLite, string fileFormat);
         LiveAPIDownloadStatus StopDownload();
         string GetDownloadFilePath();
+        string DownloadGPX(string Code);
     }
 
     public class LiveAPIDownloadService : ILiveAPIDownloadService
@@ -450,6 +451,67 @@ LiveAPILastAccessTime datetime
             {
                 _activeDownloadsForUserID.RemoveAll(x => x == YafUserID);
             }
+        }
+
+        public string DownloadGPX(string Code)
+        {
+            string result = null;
+            try
+            {
+                var settings = _gcEuUserSettingsService.GetSettings();
+                if (settings != null && settings.GCComUserID > 0 && !string.IsNullOrEmpty(settings.LiveAPIToken))
+                {
+                    string fn = getFullFilePath(string.Format("{0}_{1}.gpx", settings.YafUserID, "GC"));
+                    if (System.IO.File.Exists(fn))
+                    {
+                        System.IO.File.Delete(fn);
+                    }
+
+                    List<GCComAttributeType> AttributeTypes;
+                    using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                    {
+                        AttributeTypes = db.Fetch<GCComAttributeType>("");
+                    }
+
+                    using (var api = LiveAPIClient.GetLiveClient())
+                    {
+                        var req = new SearchForGeocachesRequest();
+                        req.AccessToken = settings.LiveAPIToken;
+                        req.CacheCode = new CacheCodeFilter();
+                        req.CacheCode.CacheCodes = new string[] { Code };
+                        req.IsLite = !settings.IsPM;
+                        req.MaxPerPage = 1;
+                        req.GeocacheLogCount = 5;
+                        var resp = api.SearchForGeocaches(req);
+                        if (resp.Status.StatusCode == 0 && resp.Geocaches != null)
+                        {
+                            //add to GPX
+                            foreach (var gc in resp.Geocaches)
+                            {
+                                System.IO.File.AppendAllText(fn, GPXStart((double)gc.Latitude, (double)gc.Longitude, (double)gc.Latitude, (double)gc.Longitude), Encoding.UTF8);
+                                System.IO.File.AppendAllText(fn, GPXForGeocache(gc, AttributeTypes), Encoding.UTF8);
+
+                                if (gc.AdditionalWaypoints != null)
+                                {
+                                    foreach (var wp in gc.AdditionalWaypoints)
+                                    {
+                                        if (wp.Latitude != null && wp.Longitude != null)
+                                        {
+                                            System.IO.File.AppendAllText(fn, GPXForWaypoint(wp), Encoding.UTF8);
+                                        }
+                                    }
+                                }
+                            }
+                            System.IO.File.AppendAllText(fn, "</gpx>", Encoding.UTF8);
+                            result = fn;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return result;
         }
 
         private string GPXStart(double minLat, double minLon, double maxLat, double maxLon)

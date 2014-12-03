@@ -1,102 +1,87 @@
 ﻿@model Globalcaching.Models.GeocacheSearchResult
 
-<table>
-    <tr>
-        <td width="20">
-
-        </td>
-        <td align="left" width="100">
-            @using (Html.BeginFormAntiForgeryPost(Url.Action("ShowMap", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
-            {
-                @Html.HiddenFor(m => m.Filter.OwnerID)
-                @Html.HiddenFor(m => m.Filter.CountryID)
-                @Html.HiddenFor(m => m.Filter.HomeLat)
-                @Html.HiddenFor(m => m.Filter.HomeLon)
-                @Html.HiddenFor(m => m.Filter.CenterLat)
-                @Html.HiddenFor(m => m.Filter.CenterLon)
-                @Html.HiddenFor(m => m.Filter.Radius)
-                @Html.HiddenFor(m => m.Filter.OrderBy)
-                @Html.HiddenFor(m => m.Filter.OrderByDirection)
-                @Html.HiddenFor(m => m.Filter.NameContainsWord)
-                @Html.HiddenFor(m => m.Filter.OwnerName)
-                @Html.HiddenFor(m => m.Filter.MacroResult)
-                @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
-                @Html.HiddenFor(m => m.Filter.Parel)
-                <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
-            }
-        </td>
-        <td align="left">
-            @using (Html.BeginFormAntiForgeryPost(Url.Action("CopyListToDownload", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
-{
-                @Html.HiddenFor(m => m.Filter.OwnerID)
-                @Html.HiddenFor(m => m.Filter.CountryID)
-                @Html.HiddenFor(m => m.Filter.HomeLat)
-                @Html.HiddenFor(m => m.Filter.HomeLon)
-                @Html.HiddenFor(m => m.Filter.CenterLat)
-                @Html.HiddenFor(m => m.Filter.CenterLon)
-                @Html.HiddenFor(m => m.Filter.Radius)
-                @Html.HiddenFor(m => m.Filter.OrderBy)
-                @Html.HiddenFor(m => m.Filter.OrderByDirection)
-                @Html.HiddenFor(m => m.Filter.NameContainsWord)
-                @Html.HiddenFor(m => m.Filter.OwnerName)
-                @Html.HiddenFor(m => m.Filter.MacroResult)
-                @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
-                @Html.HiddenFor(m => m.Filter.Parel)
-                <button type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
-            }
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">&nbsp;</td>
-    </tr>
-    <tr>
-        <td>
-
-        </td>
-        <td colspan="2" align="left">
-@using (Html.BeginFormAntiForgeryPost(Url.Action("UpdateSortingGeocaches", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
-{
-                @Html.HiddenFor(m => m.Filter.OwnerID)
-                @Html.HiddenFor(m => m.Filter.CountryID)
-                @Html.HiddenFor(m => m.Filter.HomeLat)
-                @Html.HiddenFor(m => m.Filter.HomeLon)
-                @Html.HiddenFor(m => m.Filter.CenterLat)
-                @Html.HiddenFor(m => m.Filter.CenterLon)
-                @Html.HiddenFor(m => m.Filter.Radius)
-                @Html.HiddenFor(m => m.Filter.OrderBy)
-                @Html.HiddenFor(m => m.Filter.OrderByDirection)
-                @Html.HiddenFor(m => m.Filter.NameContainsWord)
-                @Html.HiddenFor(m => m.Filter.OwnerName)
-                @Html.HiddenFor(m => m.Filter.MacroResult)
-                @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
-                @Html.HiddenFor(m => m.Filter.Parel)
-    <div class="row">
-        <span>Sorteer op:</span>
-        <select id="newSortBy" name="newSortBy">
-            <option value="0">Afstand van middelpunt of thuislocatie</option>
-            <option value="1">Plaatsingsdatum</option>
-            <option value="2">Publicatiedatum</option>
-            <option value="3">Afstand</option>
-            <option value="4">Meest recente gevonden log</option>
-            <option value="5">Favorites</option>
-            <option value="6">Favorites percentage</option>
-            <option value="7">Aantaal keer gevonden</option>
-            <option value="8">Cachetype</option>
-            <option value="9">GC Code</option>
-            <option value="10">Moeilijkheid</option>
-            <option value="11">Terrein</option>
-            <option value="12">Naam</option>
-        </select>
-        <select id="newSortDir" name="newSortDir">
-            <option value="1">oplopend</option>
-            <option value="-1">aflopend</option>
-        </select>
-        <button type="submit" value="NewSort" class="btn btn-primary">@T("Sorteer lijst")</button>
+<div class="row">
+    <div class="col-md-9">
+        @using (Html.BeginFormAntiForgeryPost(Url.Action("UpdateSortingGeocaches", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+        {
+            @Html.HiddenFor(m => m.Filter.OwnerID)
+            @Html.HiddenFor(m => m.Filter.CountryID)
+            @Html.HiddenFor(m => m.Filter.HomeLat)
+            @Html.HiddenFor(m => m.Filter.HomeLon)
+            @Html.HiddenFor(m => m.Filter.CenterLat)
+            @Html.HiddenFor(m => m.Filter.CenterLon)
+            @Html.HiddenFor(m => m.Filter.Radius)
+            @Html.HiddenFor(m => m.Filter.OrderBy)
+            @Html.HiddenFor(m => m.Filter.OrderByDirection)
+            @Html.HiddenFor(m => m.Filter.NameContainsWord)
+            @Html.HiddenFor(m => m.Filter.OwnerName)
+            @Html.HiddenFor(m => m.Filter.MacroResult)
+            @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+            @Html.HiddenFor(m => m.Filter.Parel)
+            <span>Sorteer op:</span>
+            <select id="newSortBy" name="newSortBy">
+                <option value="0">Afstand van middelpunt of thuislocatie</option>
+                <option value="1">Plaatsingsdatum</option>
+                <option value="2">Publicatiedatum</option>
+                <option value="3">Afstand</option>
+                <option value="4">Meest recente gevonden log</option>
+                <option value="5">Favorites</option>
+                <option value="6">Favorites percentage</option>
+                <option value="7">Aantaal keer gevonden</option>
+                <option value="8">Cachetype</option>
+                <option value="9">GC Code</option>
+                <option value="10">Moeilijkheid</option>
+                <option value="11">Terrein</option>
+                <option value="12">Naam</option>
+            </select>
+            <select id="newSortDir" name="newSortDir">
+                <option value="1">oplopend</option>
+                <option value="-1">aflopend</option>
+            </select>
+            <button type="submit" value="NewSort" class="btn btn-primary">@T("Sorteer lijst")</button>
+        }
     </div>
-}
-        </td>
-    </tr>
-</table>
+    <div class="col-md-1">
+        @using (Html.BeginFormAntiForgeryPost(Url.Action("ShowMap", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+        {
+            @Html.HiddenFor(m => m.Filter.OwnerID)
+            @Html.HiddenFor(m => m.Filter.CountryID)
+            @Html.HiddenFor(m => m.Filter.HomeLat)
+            @Html.HiddenFor(m => m.Filter.HomeLon)
+            @Html.HiddenFor(m => m.Filter.CenterLat)
+            @Html.HiddenFor(m => m.Filter.CenterLon)
+            @Html.HiddenFor(m => m.Filter.Radius)
+            @Html.HiddenFor(m => m.Filter.OrderBy)
+            @Html.HiddenFor(m => m.Filter.OrderByDirection)
+            @Html.HiddenFor(m => m.Filter.NameContainsWord)
+            @Html.HiddenFor(m => m.Filter.OwnerName)
+            @Html.HiddenFor(m => m.Filter.MacroResult)
+            @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+            @Html.HiddenFor(m => m.Filter.Parel)
+            <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Html.BeginFormAntiForgeryPost(Url.Action("CopyListToDownload", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+        {
+            @Html.HiddenFor(m => m.Filter.OwnerID)
+            @Html.HiddenFor(m => m.Filter.CountryID)
+            @Html.HiddenFor(m => m.Filter.HomeLat)
+            @Html.HiddenFor(m => m.Filter.HomeLon)
+            @Html.HiddenFor(m => m.Filter.CenterLat)
+            @Html.HiddenFor(m => m.Filter.CenterLon)
+            @Html.HiddenFor(m => m.Filter.Radius)
+            @Html.HiddenFor(m => m.Filter.OrderBy)
+            @Html.HiddenFor(m => m.Filter.OrderByDirection)
+            @Html.HiddenFor(m => m.Filter.NameContainsWord)
+            @Html.HiddenFor(m => m.Filter.OwnerName)
+            @Html.HiddenFor(m => m.Filter.MacroResult)
+            @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
+            @Html.HiddenFor(m => m.Filter.Parel)
+            <button type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
+        }
+    </div>
+</div>
 
 <div id="gccomSearchGeocacheTopPager">
 </div>
@@ -117,7 +102,21 @@
 <div id="gccomSearchGeocacheBottomPager">
 </div>
 
+@using (Html.BeginFormAntiForgeryPost(Url.Action("DownloadGeocache", "LiveAPIDownload", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <input id="downloadgpxId" name="id" type="hidden" value="" />
+    <button id="downloadgpxButton" type="submit" value="Download" class="btn btn-primary">@T("Download")</button>
+}
+
 <script type="text/javascript">
+
+    $('#downloadgpxButton').hide();
+
+    function downloadGpxFile(code)
+    {
+        $('#downloadgpxId').val(code);
+        $('#downloadgpxButton').trigger( "click" );
+    }
 
     var filter = @Html.Raw(Json.Encode(new {
         Page = @Model.Filter.Page,
@@ -157,15 +156,15 @@
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(filter),
             success: function (response) {
-                    myApp.hidePleaseWait();
+                myApp.hidePleaseWait();
 
-                    updateList(response);
-                },
-                error: function (data, errorText) {
-                    myApp.hidePleaseWait();
-                    alert(errorText);
-                }
-            });
+                updateList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
     }
 
     function updateList(response)
@@ -227,6 +226,7 @@
             description += ' | <a href="@Href("~/CCCHulp?wp=")'+ line.Code +'">CCC</a>';
             description += ' | <a href="@Href("~/GeocacheKaart?wp=")'+ line.Code +'">Kaart</a>';
             description += ' | <a href="@Href("~/Geocache/")'+ line.Code +'">Beschrijving</a>';
+            description += ' | <a href="javascript:void(0)" onclick="downloadGpxFile(\'' + line.Code + '\')">Download</a>';
             var distance = "";
             if (line.Distance!=null)
             {

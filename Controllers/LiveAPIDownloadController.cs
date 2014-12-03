@@ -104,5 +104,12 @@ namespace Globalcaching.Controllers
             string contentType = "application/gpx+xml";
             return File(filename, contentType, "Globalcaching.gpx");
         }
+
+        public FileResult DownloadGeocache(string id)
+        {
+            string filename = _liveAPIDownloadService.DownloadGPX(id);
+            string contentType = "application/gpx+xml";
+            return File(filename, contentType, string.Format("{0}.gpx", id));
+        }
     }
 }
