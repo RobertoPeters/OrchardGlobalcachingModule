@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class ParelVanDeMaandPart : ContentPart
+    {
+    }
+
     public class GlobalcachingMessagesPart : ContentPart
     {
     }

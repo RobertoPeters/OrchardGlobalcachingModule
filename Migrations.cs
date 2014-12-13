@@ -354,5 +354,19 @@ namespace Globalcaching
 
             return 25;
         }
+
+        public int UpdateFrom25()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("ParelVanDeMaandWidget",
+                cfg => cfg
+                    .DisplayedAs("Parel Van De Maand")
+                    .WithPart("ParelVanDeMaandPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 26;
+        }
     }
 }
