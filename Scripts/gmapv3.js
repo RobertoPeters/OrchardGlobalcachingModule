@@ -9,6 +9,7 @@
 
 var map;
 var geocoder;
+var overlay;
 
 var rootPath;
 var filter;
@@ -141,6 +142,7 @@ function getPoints(minLat, minLon, maxLat, maxLon, zooml) {
         prevCall.abort();
         prevCall = null;
     }
+    overlay.show();
     prevCall = $.ajax({
         type: "POST",
         url: getGeocachesUrl + '/' + minLat + '/' + minLon + '/' + maxLat + '/' + maxLon + '/' + zooml,
@@ -176,9 +178,11 @@ function getPoints(minLat, minLon, maxLat, maxLon, zooml) {
                 }
                 markerInfoRequested = null;
             }
+            overlay.hide();
         },
         error: function (data, errorText) {
             prevCall = null;
+            overlay.hide();
             //alert(errorText);
         }
     });
@@ -196,7 +200,8 @@ function showAddress(address) {
             }
         }
     );
-}
+}
+
 function addMarker(wp) {
     markerIds.push(wp.c);
     var latlng = new google.maps.LatLng(wp.a, wp.o);
@@ -269,7 +274,7 @@ function initializeMap(centerLat, centerLon, zoom, rPath, gcFilter, getgcUrl, ge
     }));
 
     geocoder = new google.maps.Geocoder();
-
+    overlay = new USGSOverlay(rootPath + 'Modules/Globalcaching/Media/gmap/reqpoints.png', map);
     google.maps.event.addListener(map, 'idle', function () {
         loadPoints();
     });
@@ -278,4 +283,105 @@ function initializeMap(centerLat, centerLon, zoom, rPath, gcFilter, getgcUrl, ge
     });
 
 }
+
+function USGSOverlay(image, map) {
+
+    // Now initialize all properties.
+    this.image_ = image;
+    this.map_ = map;
+    this.showRequests_ = 0;
+
+    // We define a property to hold the image's
+    // div. We'll actually create this div
+    // upon receipt of the add() method so we'll
+    // leave it null for now.
+    this.div_ = null;
+
+    // Explicitly call setMap() on this overlay
+    this.setMap(map);
+}
+
+USGSOverlay.prototype = new google.maps.OverlayView();
+
+USGSOverlay.prototype.onAdd = function () {
+
+    // Note: an overlay's receipt of onAdd() indicates that
+    // the map's panes are now available for attaching
+    // the overlay to the map via the DOM.
+
+    // Create the DIV and set some basic attributes.
+    var div = document.createElement('DIV');
+    div.style.border = "none";
+    div.style.borderWidth = "0px";
+    div.style.position = "absolute";
+    div.style.visibility = "hidden";
+
+    // Create an IMG element and attach it to the DIV.
+    var img = document.createElement("img");
+    img.src = this.image_;
+    img.style.width = "100%";
+    img.style.height = "100%";
+    div.appendChild(img);
+
+    // Set the overlay's div_ property to this DIV
+    this.div_ = div;
+
+    // We add an overlay to a map via one of the map's panes.
+    // We'll add this overlay to the overlayImage pane.
+    var panes = this.getPanes();
+    panes.overlayLayer.appendChild(div);
+}
+
+USGSOverlay.prototype.draw = function () {
+
+    var sw = this.getProjection().fromLatLngToDivPixel(this.map_.getBounds().getSouthWest());
+    var ne = this.getProjection().fromLatLngToDivPixel(this.map_.getBounds().getNorthEast());
+    sw.x += 30;
+    ne.y += 30;
+    this.div_.style.left = sw.x + 'px';
+    this.div_.style.top = ne.y + 'px';
+    this.div_.style.width = '150px';
+    this.div_.style.height = '50px';
+}
+
+USGSOverlay.prototype.hide = function () {
+    if (this.div_) {
+        this.showRequests_--;
+        if (this.showRequests_ <= 0) {
+            this.div_.style.visibility = "hidden";
+        }
+    }
+}
+
+USGSOverlay.prototype.show = function () {
+    if (this.div_) {
+        this.showRequests_++;
+        var sw = this.getProjection().fromLatLngToDivPixel(this.map_.getBounds().getSouthWest());
+        var ne = this.getProjection().fromLatLngToDivPixel(this.map_.getBounds().getNorthEast());
+        sw.x += 30;
+        ne.y += 30;
+        this.div_.style.left = sw.x + 'px';
+        this.div_.style.top = ne.y + 'px';
+        this.div_.style.visibility = "visible";
+    }
+}
+
+USGSOverlay.prototype.toggle = function () {
+    if (this.div_) {
+        if (this.div_.style.visibility == "hidden") {
+            this.show();
+        } else {
+            this.hide();
+        }
+    }
+}
+
+USGSOverlay.prototype.toggleDOM = function () {
+    if (this.getMap()) {
+        this.setMap(null);
+    } else {
+        this.setMap(this.map_);
+    }
+}
+
 

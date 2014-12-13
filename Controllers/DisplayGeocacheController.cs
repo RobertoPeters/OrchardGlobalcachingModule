@@ -44,10 +44,10 @@ namespace Globalcaching.Controllers
                     GeocacheDataModel data = GetGeocacheData(id, _workContextAccessor.GetContext().HttpContext.Request.QueryString["al"] == null ? 5 : 30000, usrSettings);
                     if (data != null)
                     {
-                        if (data.GCComGeocacheData.IsPremium == true && (data.UserSettings != null || !data.UserSettings.IsPM))
+                        if (data.GCComGeocacheData.IsPremium == true && !usrSettings.IsPM)
                         {
                             //pmo geocache and user is not pm
-                            return new RedirectResult(string.Format("http://coord.info/{0}", id));
+                            return new RedirectResult(data.GCComGeocacheData.Url);
                         }
                         else
                         {

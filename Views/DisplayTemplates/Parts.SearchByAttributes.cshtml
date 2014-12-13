@@ -12,10 +12,10 @@
     </div>
     <div id="pnllocation" class="panel-body collapse in">
         <div class="form-group">
-            <input id="location" type="text" class="form-control" placeholder="Plaats / Coordinaat">
+            <input id="location" type="text" class="form-control" placeholder="Plaats / Coordinaat" value="Utrecht">
         </div>
         <div class="form-group">
-            <input id="radius" type="text" class="form-control" placeholder="Radius in km">
+            <input id="radius" type="text" class="form-control" placeholder="Radius in km" value="10">
         </div>
     </div>
 </div>
@@ -423,7 +423,8 @@ else
         <div class="modal-content">
             <div class="modal-header">
                 <button id="dlgclosebutton1x" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabelx">Bezig met uitvoeren van macro...</h4>
+                <h4 class="modal-title" id="myModalLabel"><img src="@Href("~/Modules/Globalcaching/Media/wait28.gif")" /> Bezig met uitvoeren van macro...</h4>
+                <h4 class="modal-title" id="myModalLabelDone">Macro resultaat</h4>
             </div>
             <div class="modal-body" id="dlgmacrovoortgangx">
             </div>
@@ -722,6 +723,8 @@ else
                 if (response.ProcessedSteps < 0 || response.FinishedTime != null) {
                     $('#dlgclosebutton1x').show();
                     $('#dlgclosebutton2x').show();
+                    $('#myModalLabel').hide();
+                    $('#myModalLabelDone').show();
 
                     if (response.ProcessedSteps > 0) {
                         $('#viewlistbuttonx').show();
@@ -735,6 +738,8 @@ else
             error: function (data, errorText) {
                 $('#dlgclosebutton1x').show();
                 $('#dlgclosebutton2x').show();
+                $('#myModalLabel').hide();
+                $('#myModalLabelDone').show();
                 alert(errorText);
             }
         });
@@ -761,6 +766,8 @@ else
                     }
                 }
                 //show progress dialog
+                $('#myModalLabel').show();
+                $('#myModalLabelDone').hide();
                 $('#dlgmacrovoortgangx').text('');
                 $('#dlgclosebutton1x').hide();
                 $('#dlgclosebutton2x').hide();

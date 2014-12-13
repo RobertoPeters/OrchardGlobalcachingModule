@@ -456,6 +456,8 @@
     <Compile Include="Models\GCComSearchLogImagesResult.cs" />
     <Compile Include="Models\GCComUser.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
+    <Compile Include="Models\GCEuCoordCheckAttempt.cs" />
+    <Compile Include="Models\GCEuCoordCheckCode.cs" />
     <Compile Include="Models\GCEuFTFStats.cs" />
     <Compile Include="Models\GCEuGeocache.cs" />
     <Compile Include="Models\GCEuLiveAPIDownloadStatus.cs" />

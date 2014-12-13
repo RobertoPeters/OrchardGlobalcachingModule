@@ -20,14 +20,14 @@
             @Html.HiddenFor(m => m.Filter.Parel)
             <span>Sorteer op:</span>
             <select id="newSortBy" name="newSortBy">
-                <option value="0">Afstand van middelpunt of thuislocatie</option>
+                <option value="0">Afstand van middelpunt of thuislocatie *)</option>
                 <option value="1">Plaatsingsdatum</option>
                 <option value="2">Publicatiedatum</option>
                 <option value="3">Afstand</option>
                 <option value="4">Meest recente gevonden log</option>
                 <option value="5">Favorites</option>
                 <option value="6">Favorites percentage</option>
-                <option value="7">Aantaal keer gevonden</option>
+                <option value="7">Aantal keer gevonden</option>
                 <option value="8">Cachetype</option>
                 <option value="9">GC Code</option>
                 <option value="10">Moeilijkheid</option>
@@ -82,6 +82,7 @@
         }
     </div>
 </div>
+<small id="hintorderloc">*) werkt alleen als je ook jouw thuislocatie hebt opgegeven bij persoonlijke instellingen.</small>
 
 <div id="gccomSearchGeocacheTopPager">
 </div>
@@ -111,6 +112,7 @@
 <script type="text/javascript">
 
     $('#downloadgpxButton').hide();
+    $('#hintorderloc').hide();   
 
     function downloadGpxFile(code)
     {
@@ -253,5 +255,19 @@
     $('#newSortBy').val(@Model.Filter.OrderBy);
     $('#newSortDir').val(@Model.Filter.OrderByDirection);
 
+    if ($('#newSortBy').val()=='0')
+    {
+        $('#hintorderloc').show();   
+    }
+
+    $( "#newSortBy" ).change(function() {
+        if ($('#newSortBy').val()=='0')
+        {
+            $('#hintorderloc').show();   
+        }
+        else{
+            $('#hintorderloc').hide();   
+        }
+    });
     updateList(@Html.Raw(Json.Encode(@Model)));
 </script>
