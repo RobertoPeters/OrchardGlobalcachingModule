@@ -297,6 +297,7 @@
     <None Include="Media\Attributes\_7.gif" />
     <None Include="Media\Attributes\_8.gif" />
     <None Include="Media\Attributes\_9.gif" />
+    <None Include="Media\gcicon.ico" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.nl.js" />
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
@@ -503,6 +504,7 @@
     <Compile Include="Services\YafMembershipService.cs" />
     <Compile Include="Services\YafMostRecentShoutService.cs" />
     <Compile Include="Services\YafMostRecentPostsService.cs" />
+    <Compile Include="Shapes\FaviconShapes.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\ParelVanDeMaandModel.cs" />
     <Compile Include="ViewModels\SchedulerInfoModel.cs" />
