@@ -368,5 +368,19 @@ namespace Globalcaching
 
             return 26;
         }
+
+        public int UpdateFrom26()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("NewestCachesWidget",
+                cfg => cfg
+                    .DisplayedAs("Newest Caches")
+                    .WithPart("NewestCachesPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 27;
+        }
     }
 }

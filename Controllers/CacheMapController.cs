@@ -92,7 +92,7 @@ namespace Globalcaching.Controllers
                     var sql = PetaPoco.Sql.Builder;
                     if (filter.MaxResult > 0)
                     {
-                        sql.Append(string.Format("select top {0} GCComGeocache.Latitude as a, GCComGeocache.Longitude as o"));
+                        sql.Append(string.Format("select top {0} GCComGeocache.Latitude as a, GCComGeocache.Longitude as o", filter.MaxResult));
                         _geocacheSearchFilterService.AddWhereClause(sql, filter);
                         var items = db.Fetch<GeocacheMapInfo>(sql);
                         if (items.Count > 0)
@@ -323,8 +323,13 @@ namespace Globalcaching.Controllers
             var setting = _gcEuUserSettingsService.GetSettings();
             if (setting != null && setting.YafUserID > 1)
             {
+                string top = "";
+                if (filter.MaxResult > 0)
+                {
+                    top = string.Format("top {0}", filter.MaxResult);
+                }
                 var sql = PetaPoco.Sql.Builder
-                    .Append(string.Format("insert into GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo (Code) select GCComGeocache.Code", setting.YafUserID));
+                    .Append(string.Format("insert into GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo (Code) select {1} GCComGeocache.Code", setting.YafUserID, top));
                 sql = _geocacheSearchFilterService.AddWhereClause(sql, filter, Core.Helper.ConvertToDouble(minLat), Core.Helper.ConvertToDouble(minLon), Core.Helper.ConvertToDouble(maxLat), Core.Helper.ConvertToDouble(maxLon));
                 result = _liveAPIDownloadService.SetQueryResultForDownload(sql);
             }

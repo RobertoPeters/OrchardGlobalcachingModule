@@ -9,6 +9,7 @@
     <div class="col-md-3">
 @using (Html.BeginFormAntiForgeryPost(Url.Action("CopyViewToDownload", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
 {
+    @Html.HiddenFor(m => m.Filter.MaxResult)
     @Html.HiddenFor(m => m.Filter.OwnerID)
     @Html.HiddenFor(m => m.Filter.CountryID)
     @Html.HiddenFor(m => m.Filter.HomeLat)
@@ -45,6 +46,7 @@
 
 <script type="text/javascript">
     var filter = @Html.Raw(Json.Encode(new {
+        MaxResult = Model.Filter.MaxResult,
         Page = Model.Filter.Page,
         PageSize = Model.Filter.PageSize,
         OwnerID = Model.Filter.OwnerID ?? null,

@@ -145,7 +145,7 @@ namespace Globalcaching.Controllers
                     }
                 }
             }
-            return View("Search", GetGeocaches(filter));
+            return View("Search", _geocacheSearchFilterService.GetGeocaches(filter));
         }
 
         [HttpPost]
@@ -178,8 +178,13 @@ namespace Globalcaching.Controllers
                 var setting = _gcEuUserSettingsService.GetSettings();
                 if (setting != null && setting.YafUserID > 1)
                 {
+                    string top = "";
+                    if (filter.MaxResult > 0)
+                    {
+                        top = string.Format("top {0}", filter.MaxResult);
+                    }
                     var sql = PetaPoco.Sql.Builder
-                        .Append(string.Format("insert into GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo (Code) select GCComGeocache.Code", setting.YafUserID));
+                        .Append(string.Format("insert into GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo (Code) select {1} GCComGeocache.Code", setting.YafUserID, top));
                     sql = _geocacheSearchFilterService.AddWhereClause(sql, filter);
                     result = _liveAPIDownloadService.SetQueryResultForDownload(sql);
                 }
@@ -216,83 +221,7 @@ namespace Globalcaching.Controllers
         [HttpPost]
         public ActionResult SearchGeocaches(GeocacheSearchFilter filter)
         {
-            return Json(GetGeocaches(filter));
-        }
-
-
-        private GeocacheSearchResult GetGeocaches(GeocacheSearchFilter filter)
-        {
-            GeocacheSearchResult result = new GeocacheSearchResult();
-            result.Filter = filter;
-            result.PageCount = 1;
-            result.CurrentPage = 1;
-
-            var settings = _gcEuUserSettingsService.GetSettings();
-            if (settings != null && settings.SortGeocachesBy!=null && settings.SortGeocachesDirection!=null)
-            {
-                filter.OrderBy = settings.SortGeocachesBy;
-                filter.OrderByDirection = settings.SortGeocachesDirection;
-            }
-
-            using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
-            {
-                string euDatabase = Core.Helper.GetTableNameFromConnectionString(dbGcEuDataConnString);
-                var sql = PetaPoco.Sql.Builder
-                    .Select("GCComGeocache.ID", "GCComGeocache.Code", "GCComGeocache.Archived", "GCComGeocache.Available", "GCComGeocache.Latitude", "GCComGeocache.Longitude", "GeocacheTypeId", "Difficulty", "Terrain", "ContainerTypeId", "Municipality", "OwnerId", "UTCPlaceDate", "Country", "Name", "Url", "GCEuGeocache.City", "GCComUser.PublicGuid", "GCComUser.UserName", "FavoritePoints", "GCEuGeocache.FoundCount", "GCEuGeocache.MostRecentFoundDate", "GCEuGeocache.PublishedAtDate", "GCEuGeocache.Distance");
-                if (filter.HomeLat!=null && filter.HomeLon!=null)
-                {
-                    sql.Append(",dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, @0, @1) AS DistanceFromHome", filter.HomeLat, filter.HomeLon);
-                }
-                else
-                {
-                    sql.Append(",DistanceFromHome=NULL", filter.HomeLat, filter.HomeLon);
-                }
-                sql = _geocacheSearchFilterService.AddWhereClause(sql, filter, true);
-                if (filter.MaxResult > 0)
-                {
-                    filter.Page = 1;
-                    filter.PageSize = filter.MaxResult;
-                }
-
-                var items = db.Page<GeocacheListItem>(filter.Page, filter.PageSize, sql);
-                result.Items = items.Items.ToArray();
-                result.CurrentPage = items.CurrentPage;
-                result.PageCount = items.TotalPages;
-                result.TotalCount = items.TotalItems;
-
-                if (filter.MaxResult > 0)
-                {
-                    result.PageCount = 1;
-                    result.TotalCount = items.TotalItems;
-                    if (result.TotalCount > filter.MaxResult)
-                    {
-                        result.TotalCount = filter.MaxResult;
-                    }
-                }
-
-                foreach(var item in result.Items)
-                {
-                    if (filter.HomeLat!=null && filter.HomeLon!=null && item.Latitude!=null && item.Longitude!=null)
-                    {
-                        GeodeticMeasurement gm = Helper.CalculateDistance((double)filter.HomeLat, (double)filter.HomeLon, (double)item.Latitude, (double)item.Longitude);
-                        item.DirectionIcon = Helper.GetWindDirection(gm.Azimuth);
-
-                    }
-                    if (settings != null && settings.GCComUserID != null)
-                    {
-                        item.Own = item.OwnerId == settings.GCComUserID;
-                        item.Found = db.Fetch<long>("select top 1 ID from GCComGeocacheLog where GeocacheID=@0 and FinderId=@1 and WptLogTypeId in (2, 10, 11)", item.ID, settings.GCComUserID).Count()>0;
-                    }
-                    else
-                    {
-                        item.Found = false;
-                        item.Own = false;
-                    }
-                }
-
-
-            }
-            return result;
+            return Json(_geocacheSearchFilterService.GetGeocaches(filter));
         }
     }
 }

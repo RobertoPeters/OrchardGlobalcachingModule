@@ -1,4 +1,6 @@
-﻿using Globalcaching.Models;
+﻿using Gavaghan.Geodesy;
+using Globalcaching.Core;
+using Globalcaching.Models;
 using Orchard;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,7 @@ namespace Globalcaching.Services
         PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, bool addOrderByClause);
         PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, double? minLat, double? minLon, double? maxLat, double? maxLon);
         PetaPoco.Sql AddWhereClause(PetaPoco.Sql sql, GeocacheSearchFilter filter, double? minLat, double? minLon, double? maxLat, double? maxLon, bool addOrderByClause);
+        GeocacheSearchResult GetGeocaches(GeocacheSearchFilter filter);
     }
 
     public class GeocacheSearchFilterService : IGeocacheSearchFilterService
@@ -173,6 +176,84 @@ namespace Globalcaching.Services
                     break;
             }
             return sql;
+        }
+
+        public GeocacheSearchResult GetGeocaches(GeocacheSearchFilter filter)
+        {
+            GeocacheSearchResult result = new GeocacheSearchResult();
+            result.Filter = filter;
+            result.PageCount = 1;
+            result.CurrentPage = 1;
+
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.SortGeocachesBy != null && settings.SortGeocachesDirection != null)
+            {
+                filter.OrderBy = settings.SortGeocachesBy;
+                filter.OrderByDirection = settings.SortGeocachesDirection;
+            }
+
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+            {
+                string euDatabase = Core.Helper.GetTableNameFromConnectionString(dbGcEuDataConnString);
+                var sql = PetaPoco.Sql.Builder;
+                if (filter.MaxResult > 0)
+                {
+                    sql.Append(string.Format("select top {0}", filter.MaxResult));
+                }
+                else
+                {
+                    sql.Append("select ");
+                }
+                sql.Append("GCComGeocache.ID, GCComGeocache.Code, GCComGeocache.Archived, GCComGeocache.Available, GCComGeocache.Latitude, GCComGeocache.Longitude, GeocacheTypeId, Difficulty, Terrain, ContainerTypeId, Municipality, OwnerId, UTCPlaceDate, Country, Name, Url, GCEuGeocache.City, GCComUser.PublicGuid, GCComUser.UserName, FavoritePoints, GCEuGeocache.FoundCount, GCEuGeocache.MostRecentFoundDate, GCEuGeocache.PublishedAtDate, GCEuGeocache.Distance");
+                if (filter.HomeLat != null && filter.HomeLon != null)
+                {
+                    sql.Append(",dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, @0, @1) AS DistanceFromHome", filter.HomeLat, filter.HomeLon);
+                }
+                else
+                {
+                    sql.Append(",DistanceFromHome=NULL", filter.HomeLat, filter.HomeLon);
+                }
+                sql = AddWhereClause(sql, filter, true);
+                if (filter.MaxResult > 0)
+                {
+                    filter.Page = 1;
+                    filter.PageSize = filter.MaxResult;
+                    result.PageCount = 1;
+                    result.Items = db.Fetch<GeocacheListItem>(sql).ToArray();
+                    result.TotalCount = result.Items.Length;
+                }
+                else
+                {
+                    var items = db.Page<GeocacheListItem>(filter.Page, filter.PageSize, sql);
+                    result.Items = items.Items.ToArray();
+                    result.CurrentPage = items.CurrentPage;
+                    result.PageCount = items.TotalPages;
+                    result.TotalCount = items.TotalItems;
+                }
+
+                foreach (var item in result.Items)
+                {
+                    if (filter.HomeLat != null && filter.HomeLon != null && item.Latitude != null && item.Longitude != null)
+                    {
+                        GeodeticMeasurement gm = Helper.CalculateDistance((double)filter.HomeLat, (double)filter.HomeLon, (double)item.Latitude, (double)item.Longitude);
+                        item.DirectionIcon = Helper.GetWindDirection(gm.Azimuth);
+
+                    }
+                    if (settings != null && settings.GCComUserID != null)
+                    {
+                        item.Own = item.OwnerId == settings.GCComUserID;
+                        item.Found = db.Fetch<long>("select top 1 ID from GCComGeocacheLog where GeocacheID=@0 and FinderId=@1 and WptLogTypeId in (2, 10, 11)", item.ID, settings.GCComUserID).Count() > 0;
+                    }
+                    else
+                    {
+                        item.Found = false;
+                        item.Own = false;
+                    }
+                }
+
+
+            }
+            return result;
         }
 
     }

@@ -348,6 +348,8 @@
     <Content Include="Views\GeocacheDistance\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GlobalcachingMessages.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.ParelVanDeMaand.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.NewestCaches.cshtml" />
+    <Content Include="Views\GenericCacheList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -429,6 +431,7 @@
     <Compile Include="Drivers\EditUserSettingsPartDriver.cs" />
     <Compile Include="Drivers\GCComSearchGeocacheLogsOfUserPartDriver.cs" />
     <Compile Include="Drivers\GCComSearchUserPartDriver.cs" />
+    <Compile Include="Drivers\NewestCachesPartDriver.cs" />
     <Compile Include="Drivers\OnlineToolsPartDriver.cs" />
     <Compile Include="Drivers\OnlineUsersPartDriver.cs" />
     <Compile Include="Drivers\ParelVanDeMaandPartDriver.cs" />
@@ -506,6 +509,7 @@
     <Compile Include="Services\YafMostRecentPostsService.cs" />
     <Compile Include="Shapes\FaviconShapes.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
+    <Compile Include="ViewModels\NewestCachesModel.cs" />
     <Compile Include="ViewModels\ParelVanDeMaandModel.cs" />
     <Compile Include="ViewModels\SchedulerInfoModel.cs" />
     <Compile Include="ViewModels\CacheMapSettings.cs" />

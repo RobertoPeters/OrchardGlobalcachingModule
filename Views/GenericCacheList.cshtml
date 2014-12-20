@@ -1,0 +1,287 @@
+﻿<div class="row">
+    <div class="col-md-9">
+        @if (Model.Filter.MaxResult<=0)
+        { 
+        using (Html.BeginFormAntiForgeryPost(Url.Action("UpdateSortingGeocaches", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+        {
+            <input type="hidden" name="Filter.MaxResult" value="@Model.Filter.MaxResult" />
+            <input type="hidden" name="Filter.OwnerID" value="@(Model.Filter.OwnerID == null ? "" : Model.Filter.OwnerID.ToString())" />
+            <input type="hidden" name="Filter.CountryID" value="@(Model.Filter.CountryID == null ? "" : Model.Filter.CountryID.ToString())" />
+            <input type="hidden" name="Filter.HomeLat" value="@(Model.Filter.HomeLat == null ? "" : Model.Filter.HomeLat.ToString())" />
+            <input type="hidden" name="Filter.HomeLon" value="@(Model.Filter.HomeLon == null ? "" : Model.Filter.HomeLon.ToString())" />
+            <input type="hidden" name="Filter.CenterLat" value="@(Model.Filter.CenterLat == null ? "" : Model.Filter.CenterLat.ToString())" />
+            <input type="hidden" name="Filter.CenterLon" value="@(Model.Filter.CenterLon == null ? "" : Model.Filter.CenterLon.ToString())" />
+            <input type="hidden" name="Filter.Radius" value="@(Model.Filter.Radius == null ? "" : Model.Filter.Radius.ToString())" />
+            <input type="hidden" name="Filter.OrderBy" value="@(Model.Filter.OrderBy == null ? "" : Model.Filter.OrderBy.ToString())" />
+            <input type="hidden" name="Filter.OrderByDirection" value="@(Model.Filter.OrderByDirection == null ? "" : Model.Filter.OrderByDirection.ToString())" />
+            <input type="hidden" name="Filter.OwnerName" value="@(Model.Filter.OwnerName == null ? "" : Model.Filter.OwnerName.ToString())" />
+            <input type="hidden" name="Filter.MacroResult" value="@(Model.Filter.MacroResult == null ? "" : Model.Filter.MacroResult.ToString())" />
+            <input type="hidden" name="Filter.NameSeriesMatch" value="@(Model.Filter.NameSeriesMatch == null ? "" : Model.Filter.NameSeriesMatch.ToString())" />
+            <input type="hidden" name="Filter.Parel" value="@(Model.Filter.Parel == null ? "" : Model.Filter.Parel.ToString())" />
+            <span>Sorteer op:</span>
+            <select id="newSortBy" name="newSortBy">
+                <option value="0">Afstand van middelpunt of thuislocatie *)</option>
+                <option value="1">Plaatsingsdatum</option>
+                <option value="2">Publicatiedatum</option>
+                <option value="3">Afstand</option>
+                <option value="4">Meest recente gevonden log</option>
+                <option value="5">Favorites</option>
+                <option value="6">Favorites percentage</option>
+                <option value="7">Aantal keer gevonden</option>
+                <option value="8">Cachetype</option>
+                <option value="9">GC Code</option>
+                <option value="10">Moeilijkheid</option>
+                <option value="11">Terrein</option>
+                <option value="12">Naam</option>
+            </select>
+            <select id="newSortDir" name="newSortDir">
+                <option value="1">oplopend</option>
+                <option value="-1">aflopend</option>
+            </select>
+            <button type="submit" value="NewSort" class="btn btn-primary">@T("Sorteer lijst")</button>
+        }
+        }
+    </div>
+    <div class="col-md-1">
+        @using (Html.BeginFormAntiForgeryPost(Url.Action("ShowMap", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+        {
+            <input type="hidden" name="Filter.MaxResult" value="@Model.Filter.MaxResult" />
+            <input type="hidden" name="Filter.OwnerID" value="@(Model.Filter.OwnerID == null ? "" : Model.Filter.OwnerID.ToString())" />
+            <input type="hidden" name="Filter.CountryID" value="@(Model.Filter.CountryID == null ? "" : Model.Filter.CountryID.ToString())" />
+            <input type="hidden" name="Filter.HomeLat" value="@(Model.Filter.HomeLat == null ? "" : Model.Filter.HomeLat.ToString())" />
+            <input type="hidden" name="Filter.HomeLon" value="@(Model.Filter.HomeLon == null ? "" : Model.Filter.HomeLon.ToString())" />
+            <input type="hidden" name="Filter.CenterLat" value="@(Model.Filter.CenterLat == null ? "" : Model.Filter.CenterLat.ToString())" />
+            <input type="hidden" name="Filter.CenterLon" value="@(Model.Filter.CenterLon == null ? "" : Model.Filter.CenterLon.ToString())" />
+            <input type="hidden" name="Filter.Radius" value="@(Model.Filter.Radius == null ? "" : Model.Filter.Radius.ToString())" />
+            <input type="hidden" name="Filter.OrderBy" value="@(Model.Filter.OrderBy == null ? "" : Model.Filter.OrderBy.ToString())" />
+            <input type="hidden" name="Filter.OrderByDirection" value="@(Model.Filter.OrderByDirection == null ? "" : Model.Filter.OrderByDirection.ToString())" />
+            <input type="hidden" name="Filter.OwnerName" value="@(Model.Filter.OwnerName == null ? "" : Model.Filter.OwnerName.ToString())" />
+            <input type="hidden" name="Filter.MacroResult" value="@(Model.Filter.MacroResult == null ? "" : Model.Filter.MacroResult.ToString())" />
+            <input type="hidden" name="Filter.NameSeriesMatch" value="@(Model.Filter.NameSeriesMatch == null ? "" : Model.Filter.NameSeriesMatch.ToString())" />
+            <input type="hidden" name="Filter.Parel" value="@(Model.Filter.Parel == null ? "" : Model.Filter.Parel.ToString())" />
+            <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
+        }
+    </div>
+    <div class="col-md-2">
+        @using (Html.BeginFormAntiForgeryPost(Url.Action("CopyListToDownload", "CacheList", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+        {
+            <input type="hidden" name="Filter.MaxResult" value="@Model.Filter.MaxResult" />
+            <input type="hidden" name="Filter.OwnerID" value="@(Model.Filter.OwnerID == null ? "" : Model.Filter.OwnerID.ToString())" />
+            <input type="hidden" name="Filter.CountryID" value="@(Model.Filter.CountryID == null ? "" : Model.Filter.CountryID.ToString())" />
+            <input type="hidden" name="Filter.HomeLat" value="@(Model.Filter.HomeLat == null ? "" : Model.Filter.HomeLat.ToString())" />
+            <input type="hidden" name="Filter.HomeLon" value="@(Model.Filter.HomeLon == null ? "" : Model.Filter.HomeLon.ToString())" />
+            <input type="hidden" name="Filter.CenterLat" value="@(Model.Filter.CenterLat == null ? "" : Model.Filter.CenterLat.ToString())" />
+            <input type="hidden" name="Filter.CenterLon" value="@(Model.Filter.CenterLon == null ? "" : Model.Filter.CenterLon.ToString())" />
+            <input type="hidden" name="Filter.Radius" value="@(Model.Filter.Radius == null ? "" : Model.Filter.Radius.ToString())" />
+            <input type="hidden" name="Filter.OrderBy" value="@(Model.Filter.OrderBy == null ? "" : Model.Filter.OrderBy.ToString())" />
+            <input type="hidden" name="Filter.OrderByDirection" value="@(Model.Filter.OrderByDirection == null ? "" : Model.Filter.OrderByDirection.ToString())" />
+            <input type="hidden" name="Filter.OwnerName" value="@(Model.Filter.OwnerName == null ? "" : Model.Filter.OwnerName.ToString())" />
+            <input type="hidden" name="Filter.MacroResult" value="@(Model.Filter.MacroResult == null ? "" : Model.Filter.MacroResult.ToString())" />
+            <input type="hidden" name="Filter.NameSeriesMatch" value="@(Model.Filter.NameSeriesMatch == null ? "" : Model.Filter.NameSeriesMatch.ToString())" />
+            <input type="hidden" name="Filter.Parel" value="@(Model.Filter.Parel == null ? "" : Model.Filter.Parel.ToString())" />
+            <button type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
+        }
+    </div>
+</div>
+<small id="hintorderloc">*) werkt alleen als je ook jouw thuislocatie hebt opgegeven bij persoonlijke instellingen.</small>
+
+<div id="gccomSearchGeocacheTopPager">
+</div>
+<table class="table table-condensed table-striped table-hover" id="gccomSearchGeocacheResults">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Icoon</th>
+            <th>M/T</th>
+            <th>Beschrijving</th>
+            <th>Afstand</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div id="gccomSearchGeocacheBottomPager">
+</div>
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("DownloadGeocache", "LiveAPIDownload", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <input id="downloadgpxId" name="id" type="hidden" value="" />
+    <button id="downloadgpxButton" type="submit" value="Download" class="btn btn-primary">@T("Download")</button>
+}
+
+<script type="text/javascript">
+
+    $('#downloadgpxButton').hide();
+    $('#hintorderloc').hide();   
+
+    function downloadGpxFile(code)
+    {
+        $('#downloadgpxId').val(code);
+        $('#downloadgpxButton').trigger( "click" );
+    }
+
+    var filter = @Html.Raw(Json.Encode(new {
+        MaxResult = Model.Filter.MaxResult,
+        Page = Model.Filter.Page,
+        PageSize = Model.Filter.PageSize,
+        OwnerID = Model.Filter.OwnerID ?? null,
+        CountryID = Model.Filter.CountryID ?? null,
+        HomeLat = Model.Filter.HomeLat ?? null,
+        HomeLon = Model.Filter.HomeLon ?? null,
+        CenterLat = Model.Filter.CenterLat ?? null,
+        CenterLon = Model.Filter.CenterLon ?? null,
+        Radius = Model.Filter.Radius ?? null,
+        OrderBy = Model.Filter.OrderBy ?? null,
+        OrderByDirection = Model.Filter.OrderByDirection ?? null,
+        NameContainsWord = Model.Filter.NameContainsWord ?? null,
+        OwnerName = Model.Filter.OwnerName ?? null,
+        NameSeriesMatch = Model.Filter.NameSeriesMatch ?? null,
+        Parel = Model.Filter.Parel ?? null,
+        MacroResult = Model.Filter.MacroResult ?? null
+            }));
+
+    initGlobalcachingPager("gccomSearchGeocacheTopPager", "gccomSearchGeocache");
+    initGlobalcachingPager("gccomSearchGeocacheBottomPager", "gccomSearchGeocache");
+
+    function requestgccomSearchGeocachePage(page) {
+        var resultElementName = "#gccomSearchGeocacheResults";
+        var pagerElementName = ".gccomSearchGeocache";
+
+        myApp.showPleaseWait();
+
+        filter.Page = page;
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SearchGeocaches", "CacheList", new { area = "Globalcaching" })',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(filter),
+            success: function (response) {
+                myApp.hidePleaseWait();
+
+                updateList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function updateList(response)
+    {
+        var resultElementName = "#gccomSearchGeocacheResults";
+        var pagerElementName = ".gccomSearchGeocache";
+        for (var i = 0; i < response.Items.length; i++) {
+            var line = response.Items[i];
+            // insert after last row!
+            var direction = "";
+            if (line.DirectionIcon!=null)
+            {
+                direction = '<img src="@Href("~/Modules/Globalcaching/Media/compass/")' + line.DirectionIcon +'.gif"/> '+ line.DirectionIcon + '<br />' + Number(line.DistanceFromHome).toFixed(1) + 'km';
+            }
+            var specialIcon = "";
+            if (line.Own)
+            {
+                specialIcon = '<img src="@Href("~/Modules/Globalcaching/Media/specialicons/mine.gif")'+'"/>';
+            }
+            else if (line.Found)
+            {
+                specialIcon = '<img src="@Href("~/Modules/Globalcaching/Media/specialicons/check.gif")'+'"/>';
+            }
+            var cacheIcon = '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId +'.gif"/>'
+            var dtInfo = 'T: '+ Number(line.Terrain).toFixed(1) + '<br />M: ' + Number(line.Difficulty).toFixed(1) + '<br /><img src="@Href("~/Modules/Globalcaching/Media/container/")' + line.ContainerTypeId +'.gif"/>'
+            var description = '<a href="@Href("~/Geocache/")'+ line.Code +'">';
+            if (line.Archived)
+            {
+                description += '<s><font style="color: red;">';
+            }
+            else if (!line.Available)
+            {
+                description += '<s>';
+            }
+            description += line.Name;
+            if (line.Archived)
+            {
+                description += '</s></font>';
+            }
+            else if (!line.Available)
+            {
+                description += '</s>';
+            }
+            description += '</a>';
+            description += ' (<a href="'+ line.Url +'" target="_blank">' + line.Code + '</a>)<br />';
+            description += line.Country;
+            if (line.City!=null)
+            {
+                description += ', <strong>' + line.City + '</strong>';
+            }
+            description += ' | <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="_blank">' + line.UserName + '</a>';
+            if (line.FavoritePoints!=null)
+            {
+                description += ' | Fav.: <strong>' + line.FavoritePoints + '</strong>';
+            }
+            description += ' | <img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" />: <strong>' + line.FoundCount + '</strong>';
+            description += '<br />Acties:';
+            description += ' <a href="@Href("~/LogGeocache/")'+ line.ID +'">Log</a>';
+            description += ' | <a href="@Href("~/CCCHulp?wp=")'+ line.Code +'">CCC</a>';
+            description += ' | <a href="@Href("~/GeocacheKaart?wp=")'+ line.Code +'">Kaart</a>';
+            description += ' | <a href="@Href("~/Geocache/")'+ line.Code +'">Beschrijving</a>';
+            description += ' | <a href="javascript:void(0)" onclick="downloadGpxFile(\'' + line.Code + '\')">Download</a>';
+            var distance = "";
+            if (line.Distance!=null)
+            {
+                distance = Number(line.Distance).toFixed(1) + ' km';
+            }
+            var dateInfo = "";
+            var d = eval('new' + line.UTCPlaceDate.replace(/\//g, ' '));
+            dateInfo = '<strong>' + d.toLocaleDateString() + '</strong><br />';
+            if (line.PublishedAtDate!=null)
+            {
+                d = eval('new' + line.PublishedAtDate.replace(/\//g, ' '));
+                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/24.gif")" /> ' + d.toLocaleDateString() + '<br />';
+            }
+            if (line.MostRecentFoundDate!=null)
+            {
+                d = eval('new' + line.MostRecentFoundDate.replace(/\//g, ' '));
+                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" /> ' + d.toLocaleDateString() + '<br />';
+            }
+            $(resultElementName + ' > tbody:last').append('<tr><td>'+ direction +'</td><td>'+ specialIcon +'</td><td>'+ cacheIcon +'</td><td>'+ dtInfo +'</td><td>' + description + '</td><td>' + distance + '</td><td width="110">' + dateInfo + '</td></tr>');
+        }
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestgccomSearchGeocachePage");
+    }
+
+    $('#newSortBy').val(@Model.Filter.OrderBy);
+    $('#newSortDir').val(@Model.Filter.OrderByDirection);
+
+    if ($('#newSortBy').val()=='0')
+    {
+        $('#hintorderloc').show();   
+    }
+
+    $( "#newSortBy" ).change(function() {
+        if ($('#newSortBy').val()=='0')
+        {
+            $('#hintorderloc').show();   
+        }
+        else{
+            $('#hintorderloc').hide();   
+        }
+    });
+    @{
+        var m = new Globalcaching.Models.GeocacheSearchResult();
+        m.CurrentPage = Model.CurrentPage;
+        m.Filter = Model.Filter;
+        m.Items = new Globalcaching.Models.GeocacheListItem[Model.Items.Count];
+        for (int i = 0; i < Model.Items.Count; i++)
+        {
+            m.Items[i] = (Globalcaching.Models.GeocacheListItem)Model.Items[i];
+        }
+        m.PageCount = Model.PageCount;
+        m.TotalCount = Model.TotalCount;
+    }
+    updateList(@Html.Raw(Json.Encode(m)));
+</script>
