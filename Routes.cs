@@ -995,6 +995,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "images/ftfimg.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FTFStats"},
+                            {"action", "Banner"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "FixLogOldSite",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

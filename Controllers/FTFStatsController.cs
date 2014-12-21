@@ -56,6 +56,16 @@ namespace Globalcaching.Controllers
             }
         }
 
+        public ActionResult Banner()
+        {
+            string sid = Request.QueryString["id"];
+            string syear = Request.QueryString["year"];
+            string stype = Request.QueryString["type"];
+
+            _ftfStatsService.CreateFTFBanner(Response, sid, syear, stype);
+            return null;
+        }
+
         [Themed]
         public ActionResult Index()
         {

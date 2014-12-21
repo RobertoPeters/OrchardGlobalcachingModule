@@ -4,6 +4,10 @@ using Orchard;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -21,6 +25,7 @@ namespace Globalcaching.Services
         bool SetSTFAssignment(long geocacheId, long logId);
         bool SetTTFAssignment(long geocacheId, long logId);
         void ResetFTFCounter(long id);
+        void CreateFTFBanner(HttpResponseBase response, string id, string year, string type);
     }
 
     public class FTFStatsService : IFTFStatsService
@@ -193,6 +198,133 @@ namespace Globalcaching.Services
                 result.TotalCount = items.TotalItems;
             }
             return result;
+        }
+
+        public class FTFBannerPoco
+        {
+            public long? GCComUserID { get; set; }
+            public string UserName { get; set; }
+        }
+        public void CreateFTFBanner(HttpResponseBase response, string id, string year, string type)
+        {
+            string line1 = "";
+            string line2 = "";
+
+            if (type == null)
+            {
+                type = "1";
+            }
+            if (year == null)
+            {
+                year = "1";
+            }
+
+            if (id != null && id.Length > 0)
+            {
+                using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                {
+                    var poco = db.Fetch<FTFBannerPoco>("select GCEuUserSettings.GCComUserID, GCComUser.UserName from GCEuUserSettings inner join GCComData.dbo.GCComUser on GCEuUserSettings.GCComUserID=GCComUser.ID where YafUserID=@0 and GCComUserID is not null", int.Parse(id)).FirstOrDefault();
+                    if (poco != null)
+                    {
+                        line1 = string.Format("FTF van {0}", poco.UserName);
+                        string yearClause;
+                        if (year!="" && int.Parse(year) >= 2000)
+                        {
+                            yearClause = string.Format("Jaar = {0}", int.Parse(year));
+                            year = string.Format("{0} ", year);
+                        }
+                        else
+                        {
+                            year = "";
+                            yearClause = "Jaar is null";
+                        }
+                        var ftfstat = db.Fetch<FTFStatsInfo>(string.Format("select GCEuFTFStats.*, GCComUser.AvatarUrl, GCComUser.FindCount, GCComUser.PublicGuid, GCComUser.UserName from GCEuFTFStats inner join GCComData.dbo.GCComUser on GCEuFTFStats.UserID = GCComData.dbo.GCComUser.ID where {0} and UserID=@0", yearClause), poco.GCComUserID).FirstOrDefault();
+                        if (ftfstat != null)
+                        {
+                            if (type == "2")
+                            {
+                                line2 = string.Format("{0}Plaats: {1} ({2} punten)", year, ftfstat.PositionPoints, ftfstat.FTFCount * 5 + ftfstat.STFCount * 3 + ftfstat.TTFCount);
+                            }
+                            else
+                            {
+                                line2 = string.Format("{0}Plaats: {1} ({2}/{3}/{4})", year, ftfstat.Position, ftfstat.FTFCount, ftfstat.STFCount, ftfstat.TTFCount);
+                            }
+                        }
+                        else
+                        {
+                            if (type == "2")
+                            {
+                                line2 = string.Format("{0}Plaats: - (0 punten)", year);
+                            }
+                            else
+                            {
+                                line2 = string.Format("{0}Plaats: - (0/0/0)", year);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        line1 = "Onbekend";
+                    }
+                }
+
+            }
+            CreateBanner(response, line1, line2);
+        }
+
+        private void CreateBanner(HttpResponseBase response, string line1, string line2)
+        {
+            using (Bitmap bitmap = new Bitmap(HttpContext.Current.Server.MapPath("/Modules/Globalcaching/Media/bannerv2.png"), true))
+            using (MemoryStream memStream = new MemoryStream())
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                float l1startXPos = 5F;
+                float l2startXPos = 25F;
+                float l3startXPos = 25F;
+                float defaultStartSize = 12f;
+
+                float startSize = defaultStartSize;
+                using (SolidBrush sb = new SolidBrush(Color.Black))
+                {
+                    Font font = new Font(FontFamily.GenericSansSerif, startSize, FontStyle.Bold);
+                    SizeF sf = g.MeasureString(line1, font);
+                    while (sf.Width > bitmap.Width - l1startXPos)
+                    {
+                        font.Dispose();
+                        startSize -= 0.5F;
+                        font = new Font(FontFamily.GenericSansSerif, startSize, FontStyle.Bold);
+                        sf = g.MeasureString(line1, font);
+                    }
+                    g.DrawString(line1, font, sb, l1startXPos, 2F);
+                    font.Dispose();
+
+
+                    startSize = defaultStartSize;
+                    font = new Font(FontFamily.GenericSansSerif, startSize, FontStyle.Regular);
+                    sf = g.MeasureString(line2, font);
+                    while (sf.Width > bitmap.Width - l2startXPos)
+                    {
+                        font.Dispose();
+                        startSize -= 0.5F;
+                        font = new Font(FontFamily.GenericSansSerif, startSize, FontStyle.Regular);
+                        sf = g.MeasureString(line2, font);
+                    }
+                    g.DrawString(line2, font, sb, l2startXPos, 16F);
+                    font.Dispose();
+
+                    font = new Font(FontFamily.GenericSansSerif, defaultStartSize, FontStyle.Italic);
+                    g.DrawString("Provided by Globalcaching.eu", font, sb, l3startXPos, 30F);
+                    font.Dispose();
+
+
+                    response.Clear();
+                    response.ContentType = "image/png";
+                    bitmap.Save(memStream, ImageFormat.Png);
+                    memStream.WriteTo(response.OutputStream);
+
+                }
+            }
         }
 
     }
