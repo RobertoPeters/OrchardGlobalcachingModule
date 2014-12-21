@@ -38,3 +38,7 @@ function initGlobalcachingPager(container, pagerElementName)
 {
     $('#'+container).html('<table width="100%"><tr><td><ul class="pagination ' + pagerElementName + '"></ul></td><td align="right"><span class="label label-default ' + pagerElementName + 'Count">0</span></td></tr></table>');
 }
+
+function formatDateToShortDate(d) {
+    return result = d.getDate().toString() + '-' + (d.getMonth() + 1).toString() + '-' + d.getFullYear().toString();
+}

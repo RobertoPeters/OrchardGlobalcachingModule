@@ -115,7 +115,7 @@ function getWaypointInfo(index, showinfowindow) {
             wpinf += htmlEncode(response.Name) + '<br />';
             wpinf += 'Door: <a href="http://www.geocaching.com/profile/?guid=' + response.PublicGuid + '" target="_blank" >' + htmlEncode(response.UserName) + '</a><br />';
             var d = eval('new' + response.UTCPlaceDate.replace(/\//g, ' '));
-            wpinf += 'Datum: ' + d.toLocaleDateString() + '<br />';
+            wpinf += 'Datum: ' + formatDateToShortDate(d) + '<br />';
             wpinf += 'Container: <img src="' + rootPath + 'Modules/Globalcaching/Media/container/' + response.ContainerTypeId + '.gif" /> <br />';
             wpinf += 'Moelijkheid: ' + response.Difficulty + '<br />';
             wpinf += 'Terrein:' + response.Terrain + '<br />';

@@ -238,16 +238,16 @@
             }
             var dateInfo = "";
             var d = eval('new' + line.UTCPlaceDate.replace(/\//g, ' '));
-            dateInfo = '<strong>' + d.toLocaleDateString() + '</strong><br />';
+            dateInfo = '<strong>' + formatDateToShortDate(d) + '</strong><br />';
             if (line.PublishedAtDate!=null)
             {
                 d = eval('new' + line.PublishedAtDate.replace(/\//g, ' '));
-                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/24.gif")" /> ' + d.toLocaleDateString() + '<br />';
+                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/24.gif")" /> ' + formatDateToShortDate(d) + '<br />';
             }
             if (line.MostRecentFoundDate!=null)
             {
                 d = eval('new' + line.MostRecentFoundDate.replace(/\//g, ' '));
-                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" /> ' + d.toLocaleDateString() + '<br />';
+                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" /> ' + formatDateToShortDate(d) + '<br />';
             }
             $(resultElementName + ' > tbody:last').append('<tr><td>'+ direction +'</td><td>'+ specialIcon +'</td><td>'+ cacheIcon +'</td><td>'+ dtInfo +'</td><td>' + description + '</td><td>' + distance + '</td><td width="110">' + dateInfo + '</td></tr>');
         }

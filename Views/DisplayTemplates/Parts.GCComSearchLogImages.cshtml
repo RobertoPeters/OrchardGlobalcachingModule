@@ -111,7 +111,7 @@
             html += '<td><table width="100%">';
             html += '<tr><td colspan="2"><center><a href="' + line.ImageUrl + '" target="_blank"><img src="' + line.ThumbUrl + '"/></a><br /><a href="' + line.LogUrl + '" target="_blank">Log</a></center></td></tr>';
             html += '<tr><td>Naam:</td><td>' + line.Name + '</td></tr>';
-            html += '<tr><td>Datum:</td><td>' + d.toLocaleDateString() + '</td></tr>';
+            html += '<tr><td>Datum:</td><td>' + formatDateToShortDate(d) + '</td></tr>';
             html += '<tr><td>Door:</td><td><a href="http://www.geocaching.com/profile/?guid=' + line.UserNameGuid + '" target="_blank">' + line.UserName + '</a></td></tr>';
             html += '<tr><td>Cache:</td><td><a href="@Href("~/Geocache/")' + line.GeocacheCode + '">' + line.GeocacheName + '</a></td></tr>';
             html += '</table></td>';

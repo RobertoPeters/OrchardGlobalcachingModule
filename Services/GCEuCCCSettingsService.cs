@@ -1,18 +1,23 @@
 ﻿using Globalcaching.Models;
 using Orchard;
+using Orchard.Security;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Web;
+using System.Web.Security;
 
 namespace Globalcaching.Services
 {
     public interface IGCEuCCCSettingsService : IDependency
     {
         GCEuCCCUser GetSettings();
+        GCEuCCCUser GetSettings(string username);
         void UpdateSettings(GCEuCCCUser settings);
         CheckCCCResult GetCCCUsersForGeocache(int page, int pageSize, string GCCode, bool removeEmailAddress);
+        string GetCCCServiceResult(string gccode, string username, string password);
     }
 
     public class GCEuCCCSettingsService : IGCEuCCCSettingsService
@@ -23,14 +28,17 @@ namespace Globalcaching.Services
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IOrchardServices _orchardServices;
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
+        private readonly IMembershipService _membershipService;
 
         public GCEuCCCSettingsService(IWorkContextAccessor workContextAccessor,
             IOrchardServices orchardServices,
-            IGCEuUserSettingsService gcEuUserSettingsService)
+            IGCEuUserSettingsService gcEuUserSettingsService,
+            IMembershipService membershipService)
         {
             _workContextAccessor = workContextAccessor;
             _orchardServices = orchardServices;
             _gcEuUserSettingsService = gcEuUserSettingsService;
+            _membershipService = membershipService;
         }
 
 
@@ -38,6 +46,20 @@ namespace Globalcaching.Services
         {
             GCEuCCCUser result = null;
             var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.YafUserID > 1)
+            {
+                using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                {
+                    result = db.FirstOrDefault<GCEuCCCUser>("where UserID = @0", settings.YafUserID);
+                }
+            }
+            return result;
+        }
+
+        public GCEuCCCUser GetSettings(string username)
+        {
+            GCEuCCCUser result = null;
+            var settings = _gcEuUserSettingsService.GetSettings(username);
             if (settings != null && settings.YafUserID > 1)
             {
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
@@ -133,6 +155,90 @@ namespace Globalcaching.Services
             }
             return result;
         }
+
+        public string GetCCCServiceResult(string gccode, string username, string password)
+        {
+            StringBuilder result = new StringBuilder();
+            try
+            {
+                if (username != null && password != null)
+                {
+                    if (_membershipService.ValidateUser(username, password)!=null)
+                    {
+                        if (gccode == null)
+                        {
+                            result.Append("OK");
+                        }
+                        else
+                        {
+                            var settings = GetSettings(username);
+                            if (settings != null && settings.Active)
+                            {
+                                var cccResult = GetCCCUsersForGeocache(1, 200, gccode, false);
+                                if (cccResult != null)
+                                {
+                                    if (cccResult.Owner != null)
+                                    {
+                                        result.AppendLine("BeginRecord");
+                                        result.AppendLine(string.Format("Name:{0} (CO)", cccResult.Owner.UserName??""));
+                                        result.AppendLine(string.Format("Tel:{0}", cccResult.Owner.Telnr??""));
+                                        result.AppendLine(string.Format("SMS:{0}", (cccResult.Owner.SMS) ? "1" : "0"));
+                                        result.AppendLine(string.Format("SMS-Pref:{0}", (cccResult.Owner.PreferSMS) ? "1" : "0"));
+                                        result.AppendLine(string.Format("Twitternaam:{0}", cccResult.Owner.TwitterUsername??""));
+                                        result.AppendLine(string.Format("Remarks:{0}", cccResult.Owner.Comment??""));
+                                        result.AppendLine(string.Format("LogDate:{0}", "2100-01-01"));
+                                        if (!cccResult.Owner.HideEmailAddress)
+                                        {
+                                            result.AppendLine(string.Format("email:{0}", cccResult.Owner.EMail??""));
+                                        }
+                                        else
+                                        {
+                                            result.AppendLine("email:");
+                                        }
+                                        result.AppendLine("EndRecord");
+                                    }
+                                    foreach (var c in cccResult.Items)
+                                    {
+                                        result.AppendLine("BeginRecord");
+                                        result.AppendLine(string.Format("Name:{0}", c.UserName ?? ""));
+                                        result.AppendLine(string.Format("Tel:{0}", c.Telnr ?? ""));
+                                        result.AppendLine(string.Format("SMS:{0}", (c.SMS) ? "1" : "0"));
+                                        result.AppendLine(string.Format("SMS-Pref:{0}", (c.PreferSMS) ? "1" : "0"));
+                                        result.AppendLine(string.Format("Twitternaam:{0}", c.TwitterUsername ?? ""));
+                                        result.AppendLine(string.Format("Remarks:{0}", c.Comment ?? ""));
+                                        result.AppendLine(string.Format("LogDate:{0}", c.VisitDate.ToString("yyyy-MM-dd")));
+                                        if (!c.HideEmailAddress)
+                                        {
+                                            result.AppendLine(string.Format("email:{0}", c.EMail ?? ""));
+                                        }
+                                        else
+                                        {
+                                            result.AppendLine("email:");
+                                        }
+                                        result.AppendLine("EndRecord");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                result.Append("1");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result.Append("2");
+                    }
+                }
+            }
+            catch
+            {
+                result.Length = 0;
+                result.Append("ERROR");
+            }
+            return result.ToString();
+        }
+
 
     }
 }

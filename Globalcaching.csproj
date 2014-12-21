@@ -301,7 +301,7 @@
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.nl.js" />
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
-    <Content Include="Scripts\GlobalcachingPager.js" />
+    <Content Include="Scripts\GlobalcachingPager-2.js" />
     <Content Include="packages.config" />
     <Content Include="Scripts\gmapv3.js" />
     <Content Include="Scripts\keydragzoom_packed.js" />
@@ -350,6 +350,7 @@
     <Content Include="Views\DisplayTemplates\Parts.ParelVanDeMaand.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.NewestCaches.cshtml" />
     <Content Include="Views\GenericCacheList.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.FeatureTiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -413,6 +414,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\FeatureTilesPartDriver.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
     <Compile Include="Drivers\FTFStatsPartDriver.cs" />
     <Compile Include="Drivers\GlobalcachingMessagesDriver.cs" />

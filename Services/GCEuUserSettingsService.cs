@@ -11,6 +11,7 @@ namespace Globalcaching.Services
     public interface IGCEuUserSettingsService : IDependency
     {
         GCEuUserSettings GetSettings();
+        GCEuUserSettings GetSettings(string userName);
         void UpdateSettings(GCEuUserSettings settings);
     }
 
@@ -33,6 +34,28 @@ namespace Globalcaching.Services
         private HttpContextBase HttpContext
         {
             get { return _workContextAccessor.GetContext().HttpContext; }
+        }
+
+        public GCEuUserSettings GetSettings(string userName)
+        {
+            GCEuUserSettings result = null;
+            int? YafUserID = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbYafForumConnString, "System.Data.SqlClient"))
+            {
+                var idl = db.Fetch<int?>("select UserID from Yaf_User where Name=@0", userName);
+                if (idl != null && idl.Count > 0)
+                {
+                    YafUserID = (int)idl[0];
+                }
+            }
+            if (YafUserID != null)
+            {
+                using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                {
+                    result = db.FirstOrDefault<GCEuUserSettings>("where YafUserID = @0", YafUserID);
+                }
+            }
+            return result;
         }
 
         public GCEuUserSettings GetSettings()

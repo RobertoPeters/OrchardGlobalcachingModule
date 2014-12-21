@@ -11,10 +11,13 @@ namespace Globalcaching.Drivers
 {
     public class NewestCachesPartDriver : ContentPartDriver<NewestCachesPart>
     {
-        private IGeocacheSearchFilterService _geocacheSearchFilterService;
+        private readonly IGCEuUserSettingsService _userSettingsService;
+        private readonly IGeocacheSearchFilterService _geocacheSearchFilterService;
 
-        public NewestCachesPartDriver(IGeocacheSearchFilterService geocacheSearchFilterService)
+        public NewestCachesPartDriver(IGCEuUserSettingsService userSettingsService, 
+            IGeocacheSearchFilterService geocacheSearchFilterService)
         {
+            _userSettingsService = userSettingsService;
             _geocacheSearchFilterService = geocacheSearchFilterService;
         }
 
@@ -25,7 +28,12 @@ namespace Globalcaching.Drivers
             filter.OrderBy = (int)GeocacheSearchFilterOrderOnItem.PublicationDate;
             filter.OrderByDirection = -1;
             filter.MaxResult = 10;
-            filter.Parel = true;
+            filter.CountryID = 141;
+            var settings = _userSettingsService.GetSettings();
+            if (settings != null)
+            {
+                filter.CountryID = settings.DefaultCountryCode ?? 141;
+            }
             m.Geocaches = _geocacheSearchFilterService.GetGeocaches(filter);
             return ContentShape("Parts_NewestCaches",
                     () => shapeHelper.DisplayTemplate(

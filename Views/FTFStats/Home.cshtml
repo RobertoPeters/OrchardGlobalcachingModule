@@ -51,7 +51,7 @@ Tijdelijke log fix voor huidige website
             var td2 = line.GeocacheTypeName;
 
             var d = eval('new' + line.PublishedAtDate.replace(/\//g, ' '));
-            var td3 = d.toLocaleDateString();
+            var td3 = formatDateToShortDate(d);
 
             var td4 = (line.FoundCount - line.FTFFoundCount).toString() + ' <button class="btn btn-primary btn-xs" onclick="resetCounter(' + line.ID + ')">reset</button>';
             var td5 = line.FTFUserID == null ? "" : "X";

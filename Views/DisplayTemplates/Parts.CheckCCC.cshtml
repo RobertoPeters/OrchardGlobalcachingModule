@@ -3,7 +3,7 @@
 <div class="input-group">
     <input type="text" class="form-control" id="cccSearchFor" placeholder="GC12345">
     <span class="input-group-btn">
-        <button class="btn btn-default" type="button" id="cccSearchForButton">Zoek!</button>
+        <button class="btn btn-primary" type="button" id="cccSearchForButton">Zoek!</button>
     </span>
 </div><!-- /input-group -->
 
@@ -87,7 +87,7 @@
                 s += '<div class="row"><div class="col-md-3">Voorkeur SMS</div><div class="col-md-9">' + presms + '</div></div>';
                 s += '<div class="row"><div class="col-md-3">Twitternaam (optioneel)</div><div class="col-md-9">' + item.TwitterUsername + '</div></div>';
                 s += '<div class="row"><div class="col-md-3">Opmerking</div><div class="col-md-9">' + item.Comment + '</div></div>';
-                s += '<div class="row"><div class="col-md-3">Logdatum</div><div class="col-md-9">' + d.toLocaleDateString() + '</div></div>';
+                s += '<div class="row"><div class="col-md-3">Logdatum</div><div class="col-md-9">' + formatDateToShortDate(d) + '</div></div>';
                 s += '</td></tr>';
             }
         }

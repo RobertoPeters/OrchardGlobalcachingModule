@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class FeatureTilesPart : ContentPart
+    {
+    }
+
     public class NewestCachesPart : ContentPart
     {
     }

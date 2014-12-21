@@ -484,6 +484,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "Layar/ccc.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CheckCCC"},
+                            {"action", "CCCCheck"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "SaveMacro",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

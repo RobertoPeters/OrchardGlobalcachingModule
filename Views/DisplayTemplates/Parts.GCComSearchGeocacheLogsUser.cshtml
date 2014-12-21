@@ -55,7 +55,7 @@
                         var line = response.Logs[i];
                         // insert after last row!
                         var d = eval('new' + line.VisitDate.replace(/\//g, ' '));
-                        $(resultElementName + ' > tbody:last').append('<tr><td><a href="@Href("~/Geocache/")' + line.CacheCode + '">' + line.CacheCode + '</a></td><td>' + '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId + '.gif" height="32" width="32"/>' + '</td><td>' + line.Name + '</td><td>' + '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/")' + line.WptLogTypeId + '.gif" />' + line.LogText.replace(/\r/g, "<br />").replace(/\n/g, "") + '</td><td>' + d.toLocaleDateString() + '</td><td><a href="'+ line.Url + '" target="_blank">Bekijk log</a></td></tr>');
+                        $(resultElementName + ' > tbody:last').append('<tr><td><a href="@Href("~/Geocache/")' + line.CacheCode + '">' + line.CacheCode + '</a></td><td>' + '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId + '.gif" height="32" width="32"/>' + '</td><td>' + line.Name + '</td><td>' + '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/")' + line.WptLogTypeId + '.gif" />' + line.LogText.replace(/\r/g, "<br />").replace(/\n/g, "") + '</td><td>' + formatDateToShortDate(d) + '</td><td><a href="' + line.Url + '" target="_blank">Bekijk log</a></td></tr>');
                     }
 
                     //=================

@@ -382,5 +382,19 @@ namespace Globalcaching
 
             return 27;
         }
+
+        public int UpdateFrom27()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("FeatureTilesWidget",
+                cfg => cfg
+                    .DisplayedAs("Feature Tiles")
+                    .WithPart("FeatureTilesPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 28;
+        }
     }
 }

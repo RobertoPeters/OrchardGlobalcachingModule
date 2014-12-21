@@ -188,8 +188,14 @@ namespace Globalcaching.Services
             var settings = _gcEuUserSettingsService.GetSettings();
             if (settings != null && settings.SortGeocachesBy != null && settings.SortGeocachesDirection != null)
             {
-                filter.OrderBy = settings.SortGeocachesBy;
-                filter.OrderByDirection = settings.SortGeocachesDirection;
+                if (filter.OrderBy == null)
+                {
+                    filter.OrderBy = settings.SortGeocachesBy;
+                }
+                if (filter.OrderByDirection == null)
+                {
+                    filter.OrderByDirection = settings.SortGeocachesDirection;
+                }
             }
 
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))

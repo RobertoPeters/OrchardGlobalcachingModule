@@ -38,7 +38,7 @@
             var td2 = line.GeocacheTypeName;
             var td3 = htmlEncode(line.Name);
             var d = eval('new' + line.PublishedAtDate.replace(/\//g, ' '));
-            var td4 = d.toLocaleDateString();
+            var td4 = formatDateToShortDate(d);
 
             var td5 = '<button class="btn btn-primary" onclick="setDistanceCompleted(' + line.ID + ')">Afgehandeld</button>';
 

@@ -12,7 +12,7 @@ namespace Globalcaching
         {
             var manifest = builder.Add();
 
-            manifest.DefineScript("GlobalcachingPager.Script").SetUrl("GlobalcachingPager.js").SetDependencies("jQuery");
+            manifest.DefineScript("GlobalcachingPager.Script").SetUrl("GlobalcachingPager-2.js").SetDependencies("jQuery");
             manifest.DefineScript("GlobalcachingBusyWaitDlg.Script").SetUrl("GlobalcachingBusyWaitDlg.js").SetDependencies("jQuery");
             manifest.DefineScript("moment.Script").SetUrl("moment.js").SetDependencies("jQuery");
             manifest.DefineScript("bootstrap-datetimepicker.Script").SetUrl("bootstrap-datetimepicker.js").SetDependencies("jQuery");
