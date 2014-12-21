@@ -46,7 +46,7 @@ namespace Globalcaching.Controllers
                     set.MarkLogTextColor1 = settings.MarkLogTextColor1;
                     set.MarkLogTextColor2 = settings.MarkLogTextColor2;
                     set.MarkLogTextColor3 = settings.MarkLogTextColor3;
-                    Core.LatLon ll = Core.LatLon.FromString(settings.Homelocation);
+                    Core.LatLon ll = Core.Helper.GetLocation(settings.Homelocation);
                     if (ll == null)
                     {
                         set.HomelocationLat = null;

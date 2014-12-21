@@ -34,6 +34,126 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "Services/GeoRSS.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "GeoRSS"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "Services/GeocacheCodes.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "GeocacheCodes"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "Services/CacheFavorites.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "CacheFavorites"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "Services/CacheDistance.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "CacheDistance"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "Services/Archived.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "Archived"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "gcpqgen/pqset.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "PQSetNL"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "gcpqgen/pqsetbe.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "PQSetBE"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "gcpqgen/pqsetlu.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "PQSetLU"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "EditUserSettings/{id}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

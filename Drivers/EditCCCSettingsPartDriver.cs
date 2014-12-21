@@ -43,7 +43,7 @@ namespace Globalcaching.Drivers
                 if (settings.CCCSettings == null)
                 {
                     settings.CCCSettings = new GCEuCCCUser();
-                    settings.CCCSettings.Active = true;
+                    settings.CCCSettings.Active = false;
                     settings.CCCSettings.Comment = "";
                     settings.CCCSettings.GCComUserID = settings.UserSettings.GCComUserID ?? 0;
                     settings.CCCSettings.HideEmailAddress = false;
