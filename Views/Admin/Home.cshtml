@@ -7,62 +7,63 @@
     <input type="text" id="gccode" name="gccode" placeholder="GC12345">
     <button type="submit" value="AddParel" class="btn btn-primary">@T("Voeg parel toe")</button>
 }
-<h2>Geocaching.com status</h2>
-LiveAPI Error:  @Model.Scheduler.LiveAPIError <br />
-WWW Error:  @Model.Scheduler.GCComWWWError <br />
 
-<h2>Service accounts</h2>
-<table width="100%">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Enabled</th>
-            <th>PM</th>
-            <th>CachesLeft</th>
-            <th>CurrentCacheCount</th>
-            <th>LimitsUpdatedAt</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var item in Model.ServiceAccounts)
-    {
-        <tr>
-            <td>@item.Name</td>
-            <td>@item.Enabled</td>
-            <td>@item.PM</td>
-            <td>@item.CachesLeft</td>
-            <td>@item.CurrentCacheCount</td>
-            <td>@item.LimitsUpdatedAt</td>
-    </tr>
-    }
-}
-    </tbody>
-</table>
+    <h2>Geocaching.com status</h2>
+    LiveAPI Error:  @Model.Scheduler.LiveAPIError <br />
+    WWW Error:  @Model.Scheduler.GCComWWWError <br />
 
-<h2>Services status</h2>
-<table width="100%">
-    <thead>
-        <tr>
-            <th>ClassName</th>
-            <th>Enabled</th>
-            <th>Error</th>
-            <th>LastRun</th>
-            <th>InfoMessage</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var item in Model.Services)
-            {
-                <tr>
-                    <td>@item.ClassName</td>
-                    <td>@item.Enabled</td>
-                    <td>@item.ErrorInLastRun</td>
-                    <td>@item.LastRun</td>
-                    <td>@item.InfoMessage</td>
-                </tr>
+    <h2>Service accounts</h2>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Enabled</th>
+                <th>PM</th>
+                <th>CachesLeft</th>
+                <th>CurrentCacheCount</th>
+                <th>LimitsUpdatedAt</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model.ServiceAccounts)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Enabled</td>
+                        <td>@item.PM</td>
+                        <td>@item.CachesLeft</td>
+                        <td>@item.CurrentCacheCount</td>
+                        <td>@item.LimitsUpdatedAt</td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    <h2>Services status</h2>
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>ClassName</th>
+                <th>Enabled</th>
+                <th>Error</th>
+                <th>LastRun</th>
+                <th>InfoMessage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model.Services)
+                {
+                    <tr>
+                        <td>@item.ClassName</td>
+                        <td>@item.Enabled</td>
+                        <td>@item.ErrorInLastRun</td>
+                        <td>@item.LastRun</td>
+                        <td>@item.InfoMessage</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
