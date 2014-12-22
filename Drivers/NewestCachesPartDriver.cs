@@ -33,6 +33,12 @@ namespace Globalcaching.Drivers
             if (settings != null)
             {
                 filter.CountryID = settings.DefaultCountryCode ?? 141;
+                if (settings.HomelocationLat != null && settings.HomelocationLon != null)
+                {
+                    filter.HomeLat = settings.HomelocationLat;
+                    filter.HomeLon = settings.HomelocationLon;
+                }
+
             }
             m.Geocaches = _geocacheSearchFilterService.GetGeocaches(filter);
             return ContentShape("Parts_NewestCaches",

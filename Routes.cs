@@ -34,6 +34,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "cache/large/{code}/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Images"},
+                            {"action", "GeocachingComCacheLargeImage"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "Services/GeoRSS.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

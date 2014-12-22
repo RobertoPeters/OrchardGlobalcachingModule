@@ -384,6 +384,7 @@
     <Compile Include="Controllers\GeocacheSeriesController.cs" />
     <Compile Include="Controllers\FavoriteGeocachersController.cs" />
     <Compile Include="Controllers\GlobalcachingServicesController.cs" />
+    <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\LiveAPIDownloadController.cs" />
     <Compile Include="Controllers\LogImageStatsController.cs" />
     <Compile Include="Controllers\FavoriteGeocachesController.cs" />
