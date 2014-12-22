@@ -355,6 +355,7 @@
     <Content Include="Views\DisplayTemplates\Parts.NewestCaches.cshtml" />
     <Content Include="Views\GenericCacheList.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FeatureTiles.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.FTFBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -421,6 +422,7 @@
     <Compile Include="Core\TemporaryFile.cs" />
     <Compile Include="Drivers\FeatureTilesPartDriver.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
+    <Compile Include="Drivers\FTFBannerPartDriver.cs" />
     <Compile Include="Drivers\FTFStatsPartDriver.cs" />
     <Compile Include="Drivers\GlobalcachingMessagesDriver.cs" />
     <Compile Include="Drivers\LiveAPIDownloadPartDriver.cs" />
