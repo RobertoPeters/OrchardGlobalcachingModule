@@ -442,6 +442,22 @@ namespace Globalcaching.Services
                     Examples = "IsParel()",
                     PMOnly = false
                 }
+                , new MacroFunctionInfo
+                {
+                    Name = "GevondenDoor",
+                    ProtoType = "GevondenDoor(naam1, naam2,...naamx)",
+                    Description = "Caches gevonden zijn door 1 van de cachers\r\nRestrictie: Niet op 1 regel samen met NietGevondenDoor",
+                    Examples = "GevondenDoor(\"pietje\")\r\nNaamBegintMetTekst(\"pietje \\\"puk\\\"\")\r\nVanEigenaar(\"pietje\",\"puk\")",
+                    PMOnly = false
+                }
+                , new MacroFunctionInfo
+                {
+                    Name = "NietGevondenDoor",
+                    ProtoType = "NietGevondenDoor(naam1, naam2,...naamx)",
+                    Description = "Caches die door geen van cachers gevonden is\r\nRestrictie: mag maar 1 keer op een regel voorkomen en niet gelijk met GevondenDoor",
+                    Examples = "NietGevondenDoor(\"pietje\")\r\nNaamBegintMetTekst(\"pietje \\\"puk\\\"\")\r\nVanEigenaar(\"pietje\",\"puk\")",
+                    PMOnly = false
+                }
             };
 
             return result.OrderBy(x => x.Name).ToArray();
@@ -944,6 +960,14 @@ namespace Globalcaching.Services
                     break;
                 case "isparel":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuParel with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuParel.GeocacheID ", innerJoins);
+                    break;
+                case "gevondendoor":
+                    addInnerJoin(" inner join GcComData.dbo.GCComGeocacheLog with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheLog.GeocacheID ", innerJoins);
+                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocacheLog.FinderId in ({0}) and GcComData.dbo.GCComGeocacheLog.WptLogTypeId in (2, 10, 11)", getGCComIDArray(db, parameters)));
+                    break;
+                case "nietgevondendoor":
+                    addInnerJoin(string.Format(" left join GcComData.dbo.GCComGeocacheLog with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheLog.GeocacheID and GcComData.dbo.GCComGeocacheLog.FinderId in ({0}) and GcComData.dbo.GCComGeocacheLog.WptLogTypeId in (2, 10, 11)", getGCComIDArray(db, parameters)), innerJoins);
+                    whereClauses.Add(" GcComData.dbo.GCComGeocacheLog.GeocacheID is NULL");
                     break;
                 default:
                     return false;
