@@ -117,12 +117,12 @@
                                     @Html.Raw("Onbekend")
                                 }
                             </td>
-@if (Model.IsDistanceAdmin == true)
-{
-    <td><input type="text" id="distance" width="10" height="12" /></td>
-    <td><button class="btn btn-primary btn-xs" onclick="setDistance()">opslaan</button></td>
-    <td><button class="btn btn-primary btn-xs" onclick="clearDistance()">verwijder</button></td>
-}
+                            @if (Model.IsDistanceAdmin == true)
+                            {
+                                <td><input type="text" id="distance" width="10" height="12" /></td>
+                                <td><button class="btn btn-primary btn-xs" onclick="setDistance()">opslaan</button></td>
+                                <td><button class="btn btn-primary btn-xs" onclick="clearDistance()">verwijder</button></td>
+                            }
                         </tr>
                     </table>
                 </div>
@@ -199,9 +199,9 @@
                 <div class="col-md-3"><strong>Attributen:</strong></div>
                 <div class="col-md-9">
                     @foreach (var attr in Model.Attributes)
-{
-    <img src="@Href(string.Format("~/Modules/Globalcaching/Media/attributes/{1}{0}.gif", attr.AttributeType.ID, attr.Attribute.IsOn?"":"_"))" title="@attr.AttributeType.Name" />
-}
+                    {
+                        <img src="@Href(string.Format("~/Modules/Globalcaching/Media/attributes/{1}{0}.gif", attr.AttributeType.ID, attr.Attribute.IsOn?"":"_"))" title="@attr.AttributeType.Name" />
+                    }
                 </div>
             </div>
         </div>
@@ -211,11 +211,11 @@
                 <br />
                 <a href="@Href(string.Format("~/GeocacheKaart/?wp={0}", Model.GCComGeocacheData.Code))" /><img src="http://maps.google.com/staticmap?center=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.')&zoom=14&size=200x200&markers=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',', '.')&sensor=false&key=ABQIAAAA-nQeFBL402x2iqXj-luWHRRZ7lFWuhE4D67K-pLeOMx4c6kO7BQqsKyCl9XQiys9GSNtLRbR_Hotog" /></a><br />
                 <br />
-@using (Html.BeginFormAntiForgeryPost(Url.Action("DownloadGeocache", "LiveAPIDownload", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
-{
-    <input name="id" type="hidden" value="@Model.GCComGeocacheData.Code" />
-    <button type="submit" value="Download" class="btn btn-primary">@T("Download")</button>
-}
+                @using (Html.BeginFormAntiForgeryPost(Url.Action("DownloadGeocache", "LiveAPIDownload", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+                {
+                    <input name="id" type="hidden" value="@Model.GCComGeocacheData.Code" />
+                    <button type="submit" value="Download" class="btn btn-primary">@T("Download")</button>
+                }
             </center>
         </div>
     </div>
@@ -226,30 +226,49 @@
         Beschrijving
     </div>
     <div class="panel-body">
-@if (@Model.GCComGeocacheData.ShortDescription!=null)
-{
-    if (@Model.GCComGeocacheData.ShortDescriptionIsHtml)
-    {
-        @Html.Raw(@Model.GCComGeocacheData.ShortDescription.Replace("http://imgcdn.geocaching.com/cache/large/", string.Format("/cache/large/{0}/", Model.GCComGeocacheData.Code)))
-    }
-    else
-    {
-        @Model.GCComGeocacheData.ShortDescription.Replace("\r", "<br />")
-    }
-}
-@if (@Model.GCComGeocacheData.LongDescription != null)
-{
-    if (@Model.GCComGeocacheData.LongDescriptionIsHtml)
-    {
-        @Html.Raw(@Model.GCComGeocacheData.LongDescription.Replace("http://imgcdn.geocaching.com/cache/large/", string.Format("/cache/large/{0}/", Model.GCComGeocacheData.Code)))
-    }
-    else
-    {
-        @Model.GCComGeocacheData.LongDescription.Replace("\r", "<br />")
-    }
-}
+        @if (@Model.GCComGeocacheData.ShortDescription != null)
+        {
+            if (@Model.GCComGeocacheData.ShortDescriptionIsHtml)
+            {
+                @Html.Raw(@Model.GCComGeocacheData.ShortDescription.Replace("http://imgcdn.geocaching.com/cache/large/", string.Format("/cache/large/{0}/", Model.GCComGeocacheData.Code)))
+            }
+            else
+            {
+                @Model.GCComGeocacheData.ShortDescription.Replace("\r", "<br />")
+            }
+        }
+        @if (@Model.GCComGeocacheData.LongDescription != null)
+        {
+            if (@Model.GCComGeocacheData.LongDescriptionIsHtml)
+            {
+                @Html.Raw(@Model.GCComGeocacheData.LongDescription.Replace("http://imgcdn.geocaching.com/cache/large/", string.Format("/cache/large/{0}/", Model.GCComGeocacheData.Code)))
+            }
+            else
+            {
+                @Model.GCComGeocacheData.LongDescription.Replace("\r", "<br />")
+            }
+        }
     </div>
 </div>
+
+@if (Model.GeocacheImages != null && Model.GeocacheImages.Count > 0)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Plaatjes
+        </div>
+        <div class="panel-body">
+            @foreach (var p in Model.GeocacheImages)
+            {
+                if (!p.Url.StartsWith("http://img-api.geocaching.com"))
+                {
+                    <img src='@Href("~/Modules/Globalcaching/Media/images.gif")' /> <a href="@p.Url.Replace("http://imgcdn.geocaching.com/cache/", string.Format("/cache/large/{0}/", Model.GCComGeocacheData.Code))" target="_blank">@p.Name</a><br />
+                    <span>&nbsp;&nbsp;&nbsp;</span>@p.Description<br />
+                }
+            }
+        </div>
+    </div>
+}
 
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -270,10 +289,10 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">
-@foreach (var lt in Model.LogCounts)
-{
-                  <img src="@Href(string.Format("~/Modules/Globalcaching/Media/logtypes/{0}.gif", lt.WptLogTypeId))" /> @lt.logCount <span>&nbsp;&nbsp;</span>
-}
+                @foreach (var lt in Model.LogCounts)
+                {
+                    <img src="@Href(string.Format("~/Modules/Globalcaching/Media/logtypes/{0}.gif", lt.WptLogTypeId))" /> @lt.logCount <span>&nbsp;&nbsp;</span>
+                }
             </div>
             <br />
         </div>
@@ -321,8 +340,8 @@
             }
 
         }
-        @if (words1.Count>0)
-        { 
+        @if (words1.Count > 0)
+        {
             <a href="#m1m0" style="background-color: #ffff00">Eerste markering</a>
         }
         @if (words2.Count > 0)
@@ -335,85 +354,86 @@
         }
         <table id="logs" class="table table-hover table-striped">
             <tbody>
-@foreach (var gcl in Model.GCComGeocacheLogs)
-{
-                <tr>
-                    <td class="col-md-2">
-                        <a href="http://www.geocaching.com/profile/?guid=@gcl.Writer.PublicGuid" target="blank">@gcl.Writer.UserName</a><br />
-                        <small>
-                            @if(gcl.Writer.MemberTypeId > 1)
+                @foreach (var gcl in Model.GCComGeocacheLogs)
+                {
+                    <tr>
+                        <td class="col-md-2">
+                            <a href="http://www.geocaching.com/profile/?guid=@gcl.Writer.PublicGuid" target="blank">@gcl.Writer.UserName</a><br />
+                            <small>
+                                @if (gcl.Writer.MemberTypeId > 1)
+                                {
+                                    @Html.Raw("Premium Member")
+                                }
+                                else
+                                {
+                                    @Html.Raw("Member")
+                                }
+                            </small><br />
+                            <img src="@gcl.Writer.AvatarUrl" height="48" width="48" /><br />
+                            <img src="@Href("~/Modules/Globalcaching/Media/logtypes/")2.gif" />&nbsp; @gcl.Writer.FindCount
+                        </td>
+                        <td class="col-md-10">
+                            @if (Model.IsFTFAdmin)
                             {
-                                @Html.Raw("Premium Member")
-                            }else
-                            {
-                                @Html.Raw("Member")
+                                <table>
+                                    <tr>
+                                        <td><button class="btn btn-primary btn-xs" onclick="@string.Format("setFTF({0})", gcl.Log.ID)">FTF</button></td>
+                                        <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setSTF({0})", gcl.Log.ID)">STF</button></td>
+                                        <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setTTF({0})", gcl.Log.ID)">TTF</button></td>
+                                    </tr>
+                                </table>
                             }
-                        </small><br />
-                        <img src="@gcl.Writer.AvatarUrl" height="48" width="48" /><br />
-                        <img src="@Href("~/Modules/Globalcaching/Media/logtypes/")2.gif" />&nbsp; @gcl.Writer.FindCount
-                    </td>
-                    <td class="col-md-10">
-                        @if (Model.IsFTFAdmin)
-                        {
-                            <table>
-                                <tr>
-                                    <td><button class="btn btn-primary btn-xs" onclick="@string.Format("setFTF({0})", gcl.Log.ID)">FTF</button></td>
-                                    <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setSTF({0})", gcl.Log.ID)">STF</button></td>
-                                    <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setTTF({0})", gcl.Log.ID)">TTF</button></td>
-                                </tr>
-                            </table>
-                        }
-                        <img src="@Href(string.Format("~/Modules/Globalcaching/Media/logtypes/{0}.gif",@gcl.Log.WptLogTypeId))" />&nbsp;
-                        @foreach (var g in @Model.LogTypes)
-                        {
-                            if (g.ID == @gcl.Log.WptLogTypeId)
+                            <img src="@Href(string.Format("~/Modules/Globalcaching/Media/logtypes/{0}.gif",@gcl.Log.WptLogTypeId))" />&nbsp;
+                            @foreach (var g in @Model.LogTypes)
                             {
-                                @g.WptLogTypeName
-                                break;
+                                if (g.ID == @gcl.Log.WptLogTypeId)
+                                {
+                                    @g.WptLogTypeName
+                                    break;
+                                }
                             }
-                        }
-                        <span class="pull-right"> @gcl.Log.VisitDate.ToString("d")</span><br />
-@{
-                    var logText = HttpUtility.HtmlEncode(gcl.Log.LogText).Replace("\r", "<br />");
-                    foreach (string s in words1)
-                    {
-                        int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
-                        while (pos >= 0)
-                        {
-                            string replaceStr = string.Format("<a href=\"#m1m{2}\" id=m1m{0} style=\"background-color: #FFFF00\">{1}</a>", BM1Index, s, BM1Index + 1);
-                            logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
-                            BM1Index++;
-                            pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
-                        }
-                    }
-                    foreach (string s in words2)
-                    {
-                        int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
-                        while (pos >= 0)
-                        {
-                            string replaceStr = string.Format("<a href=\"#m2m{2}\" id=m2m{0} style=\"background-color: #CCCCCC\">{1}</a>", BM2Index, s, BM2Index + 1);
-                            logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
-                            BM2Index++;
-                            pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
-                        }
-                    }
-                    foreach (string s in words3)
-                    {
-                        int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
-                        while (pos >= 0)
-                        {
-                            string replaceStr = string.Format("<a href=\"#m3m{2}\" id=m3m{0} style=\"background-color: #FF9900\">{1}</a>", BM3Index, s, BM3Index + 1);
-                            logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
-                            BM3Index++;
-                            pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
-                        }
-                    }
+                            <span class="pull-right"> @gcl.Log.VisitDate.ToString("d")</span><br />
+                            @{
+                            var logText = HttpUtility.HtmlEncode(gcl.Log.LogText).Replace("\r", "<br />");
+                            foreach (string s in words1)
+                            {
+                                int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
+                                while (pos >= 0)
+                                {
+                                    string replaceStr = string.Format("<a href=\"#m1m{2}\" id=m1m{0} style=\"background-color: #FFFF00\">{1}</a>", BM1Index, s, BM1Index + 1);
+                                    logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
+                                    BM1Index++;
+                                    pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
+                                }
+                            }
+                            foreach (string s in words2)
+                            {
+                                int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
+                                while (pos >= 0)
+                                {
+                                    string replaceStr = string.Format("<a href=\"#m2m{2}\" id=m2m{0} style=\"background-color: #CCCCCC\">{1}</a>", BM2Index, s, BM2Index + 1);
+                                    logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
+                                    BM2Index++;
+                                    pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
+                                }
+                            }
+                            foreach (string s in words3)
+                            {
+                                int pos = logText.IndexOf(s, StringComparison.OrdinalIgnoreCase);
+                                while (pos >= 0)
+                                {
+                                    string replaceStr = string.Format("<a href=\"#m3m{2}\" id=m3m{0} style=\"background-color: #FF9900\">{1}</a>", BM3Index, s, BM3Index + 1);
+                                    logText = string.Concat(logText.Substring(0, pos), replaceStr, logText.Substring(pos + s.Length));
+                                    BM3Index++;
+                                    pos = logText.IndexOf(s, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
+                                }
+                            }
 
-}
-                        @Html.Raw(logText)
-                    </td>
-                </tr>
-}
+                            }
+                            @Html.Raw(logText)
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
         <button class="btn btn-primary" id="getalllogs">Laat alle logs zien</button>

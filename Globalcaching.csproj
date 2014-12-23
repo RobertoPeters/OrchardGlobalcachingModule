@@ -463,6 +463,7 @@
     <Compile Include="Models\GCComAttributeType.cs" />
     <Compile Include="Models\GCComGeocache.cs" />
     <Compile Include="Models\GCComGeocacheAttribute.cs" />
+    <Compile Include="Models\GCComGeocacheImage.cs" />
     <Compile Include="Models\GCComGeocacheLog.cs" />
     <Compile Include="Models\GCComGeocacheLogImage.cs" />
     <Compile Include="Models\GCComGeocacheType.cs" />

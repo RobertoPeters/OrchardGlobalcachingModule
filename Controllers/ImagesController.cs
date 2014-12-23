@@ -53,7 +53,8 @@ namespace Globalcaching.Controllers
 
         private string GetFolder(string gcCode, bool create)
         {
-            string result = HttpContext.Server.MapPath("/Modules/Globalcaching/GeocacheImages");
+            //string result = HttpContext.Server.MapPath("/Modules/Globalcaching/GeocacheImages");
+            string result = "c:\\GeocacheImages";
             if (create && !System.IO.Directory.Exists(result))
             {
                 System.IO.Directory.CreateDirectory(result);

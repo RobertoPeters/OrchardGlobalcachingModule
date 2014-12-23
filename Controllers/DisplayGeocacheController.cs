@@ -131,6 +131,7 @@ namespace Globalcaching.Controllers
                     result.Attributes = db.Fetch<GCComGeocacheAttribute, GCComAttributeType, GeocacheAttributeInfo>((a, t) => { return new GeocacheAttributeInfo(a, t); }, "select GCComGeocacheAttribute.*, GCComAttributeType.* from GCComGeocacheAttribute inner join GCComAttributeType on GCComGeocacheAttribute.AttributeTypeID=GCComAttributeType.ID where GCComGeocacheAttribute.GeocacheID=@0", comGcData.ID);
                     result.GCComGeocacheLogs = GetLogsOfGeocache(db, comGcData.ID, maxLogs);
                     result.LogCounts = db.Fetch<LogCountInfo>("select GCComGeocacheLog.WptLogTypeId, Count(1) as LogCount from GCComGeocacheLog with (nolock)  where GCComGeocacheLog.GeocacheID=@0 group by GCComGeocacheLog.WptLogTypeId order by LogCount desc", result.GCComGeocacheData.ID);
+                    result.GeocacheImages = db.Fetch<GCComGeocacheImage>("select * from GCComGeocacheImage where GeocacheID=@0", comGcData.ID);
                 }
             }
             return result;

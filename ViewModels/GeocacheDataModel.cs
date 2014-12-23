@@ -55,5 +55,6 @@ namespace Globalcaching.ViewModels
         public List<GCComLogType> LogTypes { get; set; }
         public List<GeocacheAttributeInfo> Attributes { get; set; }
         public List<LogCountInfo> LogCounts { get; set; }
+        public List<GCComGeocacheImage> GeocacheImages { get; set; }
     }
 }
