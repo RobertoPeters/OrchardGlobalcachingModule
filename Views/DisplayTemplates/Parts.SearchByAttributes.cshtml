@@ -100,6 +100,22 @@
     </div>
 </div>
 
+<!-- Attributes -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkattributes" type="checkbox" data-toggle="collapse" data-target="#pnlattributes" />
+        &nbsp;&nbsp;Attributen (bevat minstens 1 van de geselecteerde)
+    </div>
+    <div id="pnlattributes" class="panel-body collapse in">
+        @foreach (var attr in Model.AttributeTypes)
+        {
+            <div class="col-md-1">
+                <img src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}.gif",@attr.ID))' Width="30" Height="30" />
+            </div>
+        }
+    </div>
+</div>
+
 <!-- Latitude -->
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -493,6 +509,7 @@ else
     $('#pnlparel').collapse();
     $('#pnlfoundby').collapse();
     $('#pnlnotfoundby').collapse();
+    $('#pnlattributes').collapse();
 
     var activeMacrox;
     var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
@@ -513,6 +530,10 @@ else
         {
             result = 'A = NietGevondenDoor("' + $('#notfoundby').val().replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")\r\n';
             result += 'Resultaat = A';
+        }
+        if ($('#chkattrinutes').prop('checked'))
+        {
+            //todo
         }
         if ($('#chklocation').prop('checked'))
         {

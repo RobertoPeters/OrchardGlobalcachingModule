@@ -31,6 +31,9 @@ namespace Globalcaching.Services
         public readonly IGCEuUserSettingsService _gcEuUserSettingsService;
         private readonly IWorkContextAccessor _workContextAccessor;
 
+        private static MacroFunctionInfo[] _macroFunctionInfo = null;
+        private static object _lockObject = new object();
+
         public MacroService(IGCEuUserSettingsService gcEuUserSettingsService,
             IWorkContextAccessor workContextAccessor)
         {
@@ -40,427 +43,453 @@ namespace Globalcaching.Services
 
         public MacroFunctionInfo[] GetFunctions()
         {
-            MacroFunctionInfo[] result = new MacroFunctionInfo[]
+            if (_macroFunctionInfo == null)
             {
-                new MacroFunctionInfo
+                lock (_lockObject)
                 {
-                    Name = "Beschikbaar",
-                    ProtoType = "Beschikbaar()",
-                    Description = "Caches die beschikbaar zijn",
-                    Examples = "Beschikbaar()",
-                    PMOnly = false
+                    if (_macroFunctionInfo == null)
+                    {
+                        _macroFunctionInfo = new MacroFunctionInfo[]
+                        {
+                            new MacroFunctionInfo
+                            {
+                                Name = "Beschikbaar",
+                                ProtoType = "Beschikbaar()",
+                                Description = "Caches die beschikbaar zijn",
+                                Examples = "Beschikbaar()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietBeschikbaar",
+                                ProtoType = "NietBeschikbaar()",
+                                Description = "Caches die niet beschikbaar zijn",
+                                Examples = "NietBeschikbaar()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "Gearchiveerd",
+                                ProtoType = "Gearchiveerd()",
+                                Description = "Caches die gearchiveerd zijn",
+                                Examples = "Gearchiveerd()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietGearchiveerd",
+                                ProtoType = "NietGearchiveerd()",
+                                Description = "Caches die niet gearchiveerd zijn",
+                                Examples = "NietGearchiveerd()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "CacheType",
+                                ProtoType = "CacheType(type1, type2, ...typen)",
+                                Description = "Caches van de types die zijn opgegeven\r\nTraditional Cache = 2\r\nMulti-cache = 3\r\nVirtual Cache = 4\r\nLetterbox Hybrid = 5\r\nEvent Cache = 6\r\nUnknown (Mystery) Cache = 8\r\nProject APE Cache = 9\r\nWebcam Cache = 11\r\nLocationless (Reverse) Cache = 12\r\nCache In Trash Out Event = 13\r\nEarthcache = 137\r\nMega-Event Cache = 453\r\nWherigo Cache = 1858\r\nLost and Found Event Cache = 3653",
+                                Examples = "CacheType(2)\r\nCacheType(2,4,6)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietCacheType",
+                                ProtoType = "NietCacheType(type1, type2, ...typen)",
+                                Description = "Caches die niet van de opgegeven types zijn\r\nTraditional Cache = 2\r\nMulti-cache = 3\r\nVirtual Cache = 4\r\nLetterbox Hybrid = 5\r\nEvent Cache = 6\r\nUnknown (Mystery) Cache = 8\r\nProject APE Cache = 9\r\nWebcam Cache = 11\r\nLocationless (Reverse) Cache = 12\r\nCache In Trash Out Event = 13\r\nEarthcache = 137\r\nMega-Event Cache = 453\r\nWherigo Cache = 1858\r\nLost and Found Event Cache = 3653",
+                                Examples = "NietCacheType(2)\r\nNietCacheType(2,4,6)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "Container",
+                                ProtoType = "Container(type1, type2, ...typen)",
+                                Description = "Caches waarvan de container van de opgegeven types zijn\r\nNot chosen = 1\r\nMicro = 2\r\nRegular = 3\r\nLarge = 4\r\nVirtual = 5\r\nOther = 6\r\nSmall = 8",
+                                Examples = "Container(2)\r\nContainer(2,4,6)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietContainer",
+                                ProtoType = "NietContainer(type1, type2, ...typen)",
+                                Description = "Caches waarvan de container niet van de opgegeven types zijn\r\nNot chosen = 1\r\nMicro = 2\r\nRegular = 3\r\nLarge = 4\r\nVirtual = 5\r\nOther = 6\r\nSmall = 8",
+                                Examples = "NietContainer(2)\r\nNietContainer(2,4,6)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "LandCode",
+                                ProtoType = "LandCode(code1, code2, ...coden)",
+                                Description = "Caches die in 1 van de opgegeven landen liggen\r\nBelgie = 4, Luxemburg = 8, Nederland = 141",
+                                Examples = "LandCode(141)\r\nLandCode(4,8)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietLandCode",
+                                ProtoType = "NietLandCode(code1, code2, ...coden)",
+                                Description = "Caches die in geen van de opgegeven landen liggen\r\nBelgie = 4, Luxemburg = 8, Nederland = 141",
+                                Examples = "NietLandCode(141)\r\nNietLandCode(4,8)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "AanmaakDatumVoor",
+                                ProtoType = "AanmaakDatumVoor(dag,maand,jaar)",
+                                Description = "Caches die aangemaakt zijn voor de opgegeven datum",
+                                Examples = "AanmaakDatumVoor(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietAanmaakDatumVoor",
+                                ProtoType = "NietAanmaakDatumVoor(dag,maand,jaar)",
+                                Description = "Caches die niet aangemaakt zijn voor de opgegeven datum",
+                                Examples = "NietAanmaakDatumVoor(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "AanmaakDatumNa",
+                                ProtoType = "AanmaakDatumNa(dag,maand,jaar)",
+                                Description = "Caches die aangemaakt zijn na de opgegeven datum",
+                                Examples = "AanmaakDatumNa(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietAanmaakDatumNa",
+                                ProtoType = "NietAanmaakDatumNa(dag,maand,jaar)",
+                                Description = "Caches die niet aangemaakt zijn na de opgegeven datum",
+                                Examples = "NietAanmaakDatumNa(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "AangepastNaDatum",
+                                ProtoType = "AangepastNaDatum(dag,maand,jaar)",
+                                Description = "Caches die aangepast zijn na de opgegeven datum",
+                                Examples = "AangepastNaDatum(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietAangepastNaDatum",
+                                ProtoType = "NietAangepastNaDatum(dag,maand,jaar)",
+                                Description = "Caches die niet aangepast zijn na de opgegeven datum",
+                                Examples = "NietAangepastNaDatum(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "GepubliceerdNaDatum",
+                                ProtoType = "GepubliceerdNaDatum(dag,maand,jaar)",
+                                Description = "Caches die gepubliceerd zijn na de opgegeven datum",
+                                Examples = "GepubliceerdNaDatum(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietGepubliceerdNaDatum",
+                                ProtoType = "NietGepubliceerdNaDatum(dag,maand,jaar)",
+                                Description = "Caches die niet gepubliceerd zijn na de opgegeven datum",
+                                Examples = "NietGepubliceerdNaDatum(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "MoeilijkheidGroterDan",
+                                ProtoType = "MoeilijkheidGroterDan(waarde)",
+                                Description = "Caches met een moeilijkheid groter dan de opgegeven waarde",
+                                Examples = "MoeilijkheidGroterDan(2)\r\nMoeilijkheidGroterDan(1.5)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietMoeilijkheidGroterDan",
+                                ProtoType = "NietMoeilijkheidGroterDan(waarde)",
+                                Description = "Caches met een moeilijkheid kleiner of gelijk aan de opgegeven waarde",
+                                Examples = "NietMoeilijkheidGroterDan(2)\r\nMoeilijkheidGroterDan(1.5)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "TerreinGroterDan",
+                                ProtoType = "TerreinGroterDan(waarde)",
+                                Description = "Caches met een terrein groter dan de opgegeven waarde",
+                                Examples = "TerreinGroterDan(2)\r\nTerreinGroterDan(1.5)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietTerreinGroterDan",
+                                ProtoType = "NietTerreinGroterDan(waarde)",
+                                Description = "Caches met een terrein kleiner of gelijk aan de opgegeven waarde",
+                                Examples = "NietTerreinGroterDan(2)\r\nNietTerreinGroterDan(1.5)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "CacheAfstandGroterDan",
+                                ProtoType = "CacheAfstandGroterDan(waarde)",
+                                Description = "Caches met een afstand groter dan de opgegeven waarde in kilometers",
+                                Examples = "CacheAfstandGroterDan(2)\r\nCacheAfstandGroterDan(1.5)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietCacheAfstandGroterDan",
+                                ProtoType = "NietCacheAfstandGroterDan(waarde)",
+                                Description = "Caches met een afstand kleiner of gelijk aan de opgegeven waarde in kilometers",
+                                Examples = "NietCacheAfstandGroterDan(2)\r\nNietCacheAfstandGroterDan(1.5)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "AantalPlaatjesGroterDan",
+                                ProtoType = "AantalPlaatjesGroterDan(waarde)",
+                                Description = "Caches met meer plaatjes in de cachebeschrijving dan de opgegeven waarde",
+                                Examples = "AantalPlaatjesGroterDan(2)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietAantalPlaatjesGroterDan",
+                                ProtoType = "NietAantalPlaatjesGroterDan(waarde)",
+                                Description = "Caches met minder of gelijk aantal plaatjes in de cachebeschrijving dan de opgegeven waarde",
+                                Examples = "NietAantalPlaatjesGroterDan(2)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "HintsBevatTekst",
+                                ProtoType = "HintsBevatTekst(tekst)",
+                                Description = "Caches waarvan de hint de opgegeven tekst bevat",
+                                Examples = "HintsBevatTekst(\"boom\")\r\nHintsBevatTekst(\"zeg eens \\\"hallo\\\"\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "FavorietenMeerDan",
+                                ProtoType = "FavorietenMeerDan(waarde)",
+                                Description = "Caches met meer dan het opgegeven aantal Favorites",
+                                Examples = "FavorietenMeerDan(2)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietFavorietenMeerDan",
+                                ProtoType = "NietFavorietenMeerDan(waarde)",
+                                Description = "Caches met niet meer dan het opgegeven aantal Favorites",
+                                Examples = "NietFavorietenMeerDan(2)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "IsGeblokkeerd",
+                                ProtoType = "IsGeblokkeerd()",
+                                Description = "Caches die geblokkeerd zijn",
+                                Examples = "IsGeblokkeerd()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietIsGeblokkeerd",
+                                ProtoType = "NietIsGeblokkeerd()",
+                                Description = "Caches die niet geblokkeerd zijn",
+                                Examples = "NietIsGeblokkeerd()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "IsPremiumCache",
+                                ProtoType = "IsPremiumCache()",
+                                Description = "Caches die alleen voor Premium Mebers zijn",
+                                Examples = "IsPremiumCache()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietIsPremiumCache",
+                                ProtoType = "NietIsPremiumCache()",
+                                Description = "Caches die niet alleen voor Premium Mebers zijn",
+                                Examples = "NietIsPremiumCache()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "LatitudeTussen",
+                                ProtoType = "LatitudeTussen(min, max)",
+                                Description = "Caches met een lengtegraad tussen min en max",
+                                Examples = "LatitudeTussen(55.5, 56.0)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietLatitudeTussen",
+                                ProtoType = "NietLatitudeTussen(min, max)",
+                                Description = "Caches met een lengtegraad die niet tussen min en max ligt",
+                                Examples = "NietLatitudeTussen(55.5, 56.0)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "LongitudeTussen",
+                                ProtoType = "LongitudeTussen(min, max)",
+                                Description = "Caches met een breedtegraad tussen min en max",
+                                Examples = "LongitudeTussen(5.5, 6.0)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietLongitudeTussen",
+                                ProtoType = "NietLongitudeTussen(min, max)",
+                                Description = "Caches met een breedtegraad die niet tussen min en max ligt",
+                                Examples = "NietLongitudeTussen(5.5, 6.0)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NaamBevatTekst",
+                                ProtoType = "NaamBevatTekst(tekst)",
+                                Description = "Caches waarvan de naam de opgegeven tekst bevat",
+                                Examples = "NaamBevatTekst(\"boom\")\r\nNaamBevatTekst(\"zeg eens \\\"hallo\\\"\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietNaamBevatTekst",
+                                ProtoType = "NietNaamBevatTekst(tekst)",
+                                Description = "Caches waarvan de naam niet de opgegeven tekst bevat",
+                                Examples = "NietNaamBevatTekst(\"boom\")\r\nNaamBevatTekst(\"zeg eens \\\"hallo\\\"\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NaamBegintMetTekst",
+                                ProtoType = "NaamBegintMetTekst(tekst)",
+                                Description = "Caches waarvan de naam begint met de opgegeven tekst",
+                                Examples = "NaamBegintMetTekst(\"boom\")\r\nNaamBegintMetTekst(\"zeg eens \\\"hallo\\\"\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietNaamBegintMetTekst",
+                                ProtoType = "NietNaamBegintMetTekst(tekst)",
+                                Description = "Caches waarvan de naam niet begint met de opgegeven tekst",
+                                Examples = "NietNaamBegintMetTekst(\"boom\")\r\nNietNaamBegintMetTekst(\"zeg eens \\\"hallo\\\"\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NaamEindigtMetTekst",
+                                ProtoType = "NaamEindigtMetTekst(tekst)",
+                                Description = "Caches waarvan de naam eindigt met de opgegeven tekst",
+                                Examples = "NaamEindigtMetTekst(\"boom\")\r\nNaamBegintMetTekst(\"zeg eens \\\"hallo\\\"\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietNaamEindigtMetTekst",
+                                ProtoType = "NietNaamEindigtMetTekst(tekst)",
+                                Description = "Caches waarvan de naam niet eindigt met de opgegeven tekst",
+                                Examples = "NietNaamEindigtMetTekst(\"boom\")\r\nNietNaamEindigtMetTekst(\"zeg eens \\\"hallo\\\"\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "VanEigenaar",
+                                ProtoType = "VanEigenaar(naam1, naam2,...naamx)",
+                                Description = "Caches van de opgegeven eigenaren",
+                                Examples = "VanEigenaar(\"pietje\")\r\nNaamBegintMetTekst(\"pietje \\\"puk\\\"\")\r\nVanEigenaar(\"pietje\",\"puk\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietVanEigenaar",
+                                ProtoType = "NietVanEigenaar(naam1, naam2,...naamx)",
+                                Description = "Caches niet van de opgegeven eigenaren",
+                                Examples = "NietVanEigenaar(\"pietje\")\r\nNietVanEigenaar(\"pietje \\\"puk\\\"\")\r\nNietVanEigenaar(\"pietje\",\"puk\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "BinnenStraal",
+                                ProtoType = "BinnenStraal(coordinaat, straal)",
+                                Description = "Caches die binnen de opgegeven cirkel liggen. De straal is in kilometers",
+                                Examples = "BinnenStraal(\"N 53° 08.065 E 6° 26.096\", 5)\r\nBinnenStraal(\"N53 08.065 E6 26.096\", 2.5)\r\nBinnenStraal(\"53.12345, 6.154343\", 7.5)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietBinnenStraal",
+                                ProtoType = "NietBinnenStraal(coordinaat, straal)",
+                                Description = "Caches die buiten de opgegeven cirkel liggen. De straal is in kilometers",
+                                Examples = "NietBinnenStraal(\"N 53° 08.065 E 6° 26.096\", 5)\r\nBinnenStraal(\"N53 08.065 E6 26.096\", 2.5)\r\nBinnenStraal(\"53.12345, 6.154343\", 7.5)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "AantalKeerGevondenMeerDan",
+                                ProtoType = "AantalKeerGevondenMeerDan(waarde)",
+                                Description = "Caches welke al meer dan opgegeven waarde gevonden zijn",
+                                Examples = "AantalKeerGevondenMeerDan(100)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietAantalKeerGevondenMeerDan",
+                                ProtoType = "NietAantalKeerGevondenMeerDan(waarde)",
+                                Description = "Caches welke niet meer dan opgegeven waarde gevonden zijn",
+                                Examples = "NietAantalKeerGevondenMeerDan(100)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "IsParel",
+                                ProtoType = "IsParel()",
+                                Description = "Caches Parel van de Maand zijn",
+                                Examples = "IsParel()",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "GevondenDoor",
+                                ProtoType = "GevondenDoor(naam1, naam2,...naamx)",
+                                Description = "Caches gevonden zijn door 1 van de cachers\r\nRestrictie: Niet op 1 regel samen met NietGevondenDoor",
+                                Examples = "GevondenDoor(\"pietje\")\r\nNaamBegintMetTekst(\"pietje \\\"puk\\\"\")\r\nVanEigenaar(\"pietje\",\"puk\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietGevondenDoor",
+                                ProtoType = "NietGevondenDoor(naam1, naam2,...naamx)",
+                                Description = "Caches die door geen van cachers gevonden is\r\nRestrictie: mag maar 1 keer op een regel voorkomen en niet gelijk met GevondenDoor",
+                                Examples = "NietGevondenDoor(\"pietje\")\r\nNaamBegintMetTekst(\"pietje \\\"puk\\\"\")\r\nVanEigenaar(\"pietje\",\"puk\")",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "BevatAttribuut",
+                                ProtoType = "BevatAttribuut(attr1, attr2,...attrx)",
+                                Description = "De geocache bevat minstens 1 van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Niet op 1 regel samen met NietBevatAttribuut",
+                                Examples = "BevatAttribuut(10,-11)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietBevatAttribuut",
+                                ProtoType = "NietBevatAttribuut(attr1, attr2,...attrx)",
+                                Description = "De geocache bevat geen van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Niet op 1 regel samen met NietBevatAttribuut",
+                                Examples = "NietBevatAttribuut(10,-11)",
+                                PMOnly = false
+                            }
+                        };
+                        _macroFunctionInfo = _macroFunctionInfo.OrderBy(x => x.Name).ToArray();
+                    }
                 }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietBeschikbaar",
-                    ProtoType = "NietBeschikbaar()",
-                    Description = "Caches die niet beschikbaar zijn",
-                    Examples = "NietBeschikbaar()",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "Gearchiveerd",
-                    ProtoType = "Gearchiveerd()",
-                    Description = "Caches die gearchiveerd zijn",
-                    Examples = "Gearchiveerd()",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietGearchiveerd",
-                    ProtoType = "NietGearchiveerd()",
-                    Description = "Caches die niet gearchiveerd zijn",
-                    Examples = "NietGearchiveerd()",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "CacheType",
-                    ProtoType = "CacheType(type1, type2, ...typen)",
-                    Description = "Caches van de types die zijn opgegeven\r\nTraditional Cache = 2\r\nMulti-cache = 3\r\nVirtual Cache = 4\r\nLetterbox Hybrid = 5\r\nEvent Cache = 6\r\nUnknown (Mystery) Cache = 8\r\nProject APE Cache = 9\r\nWebcam Cache = 11\r\nLocationless (Reverse) Cache = 12\r\nCache In Trash Out Event = 13\r\nEarthcache = 137\r\nMega-Event Cache = 453\r\nWherigo Cache = 1858\r\nLost and Found Event Cache = 3653",
-                    Examples = "CacheType(2)\r\nCacheType(2,4,6)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietCacheType",
-                    ProtoType = "NietCacheType(type1, type2, ...typen)",
-                    Description = "Caches die niet van de opgegeven types zijn\r\nTraditional Cache = 2\r\nMulti-cache = 3\r\nVirtual Cache = 4\r\nLetterbox Hybrid = 5\r\nEvent Cache = 6\r\nUnknown (Mystery) Cache = 8\r\nProject APE Cache = 9\r\nWebcam Cache = 11\r\nLocationless (Reverse) Cache = 12\r\nCache In Trash Out Event = 13\r\nEarthcache = 137\r\nMega-Event Cache = 453\r\nWherigo Cache = 1858\r\nLost and Found Event Cache = 3653",
-                    Examples = "NietCacheType(2)\r\nNietCacheType(2,4,6)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "Container",
-                    ProtoType = "Container(type1, type2, ...typen)",
-                    Description = "Caches waarvan de container van de opgegeven types zijn\r\nNot chosen = 1\r\nMicro = 2\r\nRegular = 3\r\nLarge = 4\r\nVirtual = 5\r\nOther = 6\r\nSmall = 8",
-                    Examples = "Container(2)\r\nContainer(2,4,6)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietContainer",
-                    ProtoType = "NietContainer(type1, type2, ...typen)",
-                    Description = "Caches waarvan de container niet van de opgegeven types zijn\r\nNot chosen = 1\r\nMicro = 2\r\nRegular = 3\r\nLarge = 4\r\nVirtual = 5\r\nOther = 6\r\nSmall = 8",
-                    Examples = "NietContainer(2)\r\nNietContainer(2,4,6)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "LandCode",
-                    ProtoType = "LandCode(code1, code2, ...coden)",
-                    Description = "Caches die in 1 van de opgegeven landen liggen\r\nBelgie = 4, Luxemburg = 8, Nederland = 141",
-                    Examples = "LandCode(141)\r\nLandCode(4,8)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietLandCode",
-                    ProtoType = "NietLandCode(code1, code2, ...coden)",
-                    Description = "Caches die in geen van de opgegeven landen liggen\r\nBelgie = 4, Luxemburg = 8, Nederland = 141",
-                    Examples = "NietLandCode(141)\r\nNietLandCode(4,8)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "AanmaakDatumVoor",
-                    ProtoType = "AanmaakDatumVoor(dag,maand,jaar)",
-                    Description = "Caches die aangemaakt zijn voor de opgegeven datum",
-                    Examples = "AanmaakDatumVoor(22,4,2014)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietAanmaakDatumVoor",
-                    ProtoType = "NietAanmaakDatumVoor(dag,maand,jaar)",
-                    Description = "Caches die niet aangemaakt zijn voor de opgegeven datum",
-                    Examples = "NietAanmaakDatumVoor(22,4,2014)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "AanmaakDatumNa",
-                    ProtoType = "AanmaakDatumNa(dag,maand,jaar)",
-                    Description = "Caches die aangemaakt zijn na de opgegeven datum",
-                    Examples = "AanmaakDatumNa(22,4,2014)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietAanmaakDatumNa",
-                    ProtoType = "NietAanmaakDatumNa(dag,maand,jaar)",
-                    Description = "Caches die niet aangemaakt zijn na de opgegeven datum",
-                    Examples = "NietAanmaakDatumNa(22,4,2014)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "AangepastNaDatum",
-                    ProtoType = "AangepastNaDatum(dag,maand,jaar)",
-                    Description = "Caches die aangepast zijn na de opgegeven datum",
-                    Examples = "AangepastNaDatum(22,4,2014)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietAangepastNaDatum",
-                    ProtoType = "NietAangepastNaDatum(dag,maand,jaar)",
-                    Description = "Caches die niet aangepast zijn na de opgegeven datum",
-                    Examples = "NietAangepastNaDatum(22,4,2014)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "GepubliceerdNaDatum",
-                    ProtoType = "GepubliceerdNaDatum(dag,maand,jaar)",
-                    Description = "Caches die gepubliceerd zijn na de opgegeven datum",
-                    Examples = "GepubliceerdNaDatum(22,4,2014)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietGepubliceerdNaDatum",
-                    ProtoType = "NietGepubliceerdNaDatum(dag,maand,jaar)",
-                    Description = "Caches die niet gepubliceerd zijn na de opgegeven datum",
-                    Examples = "NietGepubliceerdNaDatum(22,4,2014)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "MoeilijkheidGroterDan",
-                    ProtoType = "MoeilijkheidGroterDan(waarde)",
-                    Description = "Caches met een moeilijkheid groter dan de opgegeven waarde",
-                    Examples = "MoeilijkheidGroterDan(2)\r\nMoeilijkheidGroterDan(1.5)",
-                    PMOnly = true
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietMoeilijkheidGroterDan",
-                    ProtoType = "NietMoeilijkheidGroterDan(waarde)",
-                    Description = "Caches met een moeilijkheid kleiner of gelijk aan de opgegeven waarde",
-                    Examples = "NietMoeilijkheidGroterDan(2)\r\nMoeilijkheidGroterDan(1.5)",
-                    PMOnly = true
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "TerreinGroterDan",
-                    ProtoType = "TerreinGroterDan(waarde)",
-                    Description = "Caches met een terrein groter dan de opgegeven waarde",
-                    Examples = "TerreinGroterDan(2)\r\nTerreinGroterDan(1.5)",
-                    PMOnly = true
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietTerreinGroterDan",
-                    ProtoType = "NietTerreinGroterDan(waarde)",
-                    Description = "Caches met een terrein kleiner of gelijk aan de opgegeven waarde",
-                    Examples = "NietTerreinGroterDan(2)\r\nNietTerreinGroterDan(1.5)",
-                    PMOnly = true
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "CacheAfstandGroterDan",
-                    ProtoType = "CacheAfstandGroterDan(waarde)",
-                    Description = "Caches met een afstand groter dan de opgegeven waarde in kilometers",
-                    Examples = "CacheAfstandGroterDan(2)\r\nCacheAfstandGroterDan(1.5)",
-                    PMOnly = true
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietCacheAfstandGroterDan",
-                    ProtoType = "NietCacheAfstandGroterDan(waarde)",
-                    Description = "Caches met een afstand kleiner of gelijk aan de opgegeven waarde in kilometers",
-                    Examples = "NietCacheAfstandGroterDan(2)\r\nNietCacheAfstandGroterDan(1.5)",
-                    PMOnly = true
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "AantalPlaatjesGroterDan",
-                    ProtoType = "AantalPlaatjesGroterDan(waarde)",
-                    Description = "Caches met meer plaatjes in de cachebeschrijving dan de opgegeven waarde",
-                    Examples = "AantalPlaatjesGroterDan(2)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietAantalPlaatjesGroterDan",
-                    ProtoType = "NietAantalPlaatjesGroterDan(waarde)",
-                    Description = "Caches met minder of gelijk aantal plaatjes in de cachebeschrijving dan de opgegeven waarde",
-                    Examples = "NietAantalPlaatjesGroterDan(2)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "HintsBevatTekst",
-                    ProtoType = "HintsBevatTekst(tekst)",
-                    Description = "Caches waarvan de hint de opgegeven tekst bevat",
-                    Examples = "HintsBevatTekst(\"boom\")\r\nHintsBevatTekst(\"zeg eens \\\"hallo\\\"\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "FavorietenMeerDan",
-                    ProtoType = "FavorietenMeerDan(waarde)",
-                    Description = "Caches met meer dan het opgegeven aantal Favorites",
-                    Examples = "FavorietenMeerDan(2)",
-                    PMOnly = true
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietFavorietenMeerDan",
-                    ProtoType = "NietFavorietenMeerDan(waarde)",
-                    Description = "Caches met niet meer dan het opgegeven aantal Favorites",
-                    Examples = "NietFavorietenMeerDan(2)",
-                    PMOnly = true
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "IsGeblokkeerd",
-                    ProtoType = "IsGeblokkeerd()",
-                    Description = "Caches die geblokkeerd zijn",
-                    Examples = "IsGeblokkeerd()",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietIsGeblokkeerd",
-                    ProtoType = "NietIsGeblokkeerd()",
-                    Description = "Caches die niet geblokkeerd zijn",
-                    Examples = "NietIsGeblokkeerd()",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "IsPremiumCache",
-                    ProtoType = "IsPremiumCache()",
-                    Description = "Caches die alleen voor Premium Mebers zijn",
-                    Examples = "IsPremiumCache()",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietIsPremiumCache",
-                    ProtoType = "NietIsPremiumCache()",
-                    Description = "Caches die niet alleen voor Premium Mebers zijn",
-                    Examples = "NietIsPremiumCache()",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "LatitudeTussen",
-                    ProtoType = "LatitudeTussen(min, max)",
-                    Description = "Caches met een lengtegraad tussen min en max",
-                    Examples = "LatitudeTussen(55.5, 56.0)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietLatitudeTussen",
-                    ProtoType = "NietLatitudeTussen(min, max)",
-                    Description = "Caches met een lengtegraad die niet tussen min en max ligt",
-                    Examples = "NietLatitudeTussen(55.5, 56.0)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "LongitudeTussen",
-                    ProtoType = "LongitudeTussen(min, max)",
-                    Description = "Caches met een breedtegraad tussen min en max",
-                    Examples = "LongitudeTussen(5.5, 6.0)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietLongitudeTussen",
-                    ProtoType = "NietLongitudeTussen(min, max)",
-                    Description = "Caches met een breedtegraad die niet tussen min en max ligt",
-                    Examples = "NietLongitudeTussen(5.5, 6.0)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NaamBevatTekst",
-                    ProtoType = "NaamBevatTekst(tekst)",
-                    Description = "Caches waarvan de naam de opgegeven tekst bevat",
-                    Examples = "NaamBevatTekst(\"boom\")\r\nNaamBevatTekst(\"zeg eens \\\"hallo\\\"\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietNaamBevatTekst",
-                    ProtoType = "NietNaamBevatTekst(tekst)",
-                    Description = "Caches waarvan de naam niet de opgegeven tekst bevat",
-                    Examples = "NietNaamBevatTekst(\"boom\")\r\nNaamBevatTekst(\"zeg eens \\\"hallo\\\"\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NaamBegintMetTekst",
-                    ProtoType = "NaamBegintMetTekst(tekst)",
-                    Description = "Caches waarvan de naam begint met de opgegeven tekst",
-                    Examples = "NaamBegintMetTekst(\"boom\")\r\nNaamBegintMetTekst(\"zeg eens \\\"hallo\\\"\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietNaamBegintMetTekst",
-                    ProtoType = "NietNaamBegintMetTekst(tekst)",
-                    Description = "Caches waarvan de naam niet begint met de opgegeven tekst",
-                    Examples = "NietNaamBegintMetTekst(\"boom\")\r\nNietNaamBegintMetTekst(\"zeg eens \\\"hallo\\\"\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NaamEindigtMetTekst",
-                    ProtoType = "NaamEindigtMetTekst(tekst)",
-                    Description = "Caches waarvan de naam eindigt met de opgegeven tekst",
-                    Examples = "NaamEindigtMetTekst(\"boom\")\r\nNaamBegintMetTekst(\"zeg eens \\\"hallo\\\"\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietNaamEindigtMetTekst",
-                    ProtoType = "NietNaamEindigtMetTekst(tekst)",
-                    Description = "Caches waarvan de naam niet eindigt met de opgegeven tekst",
-                    Examples = "NietNaamEindigtMetTekst(\"boom\")\r\nNietNaamEindigtMetTekst(\"zeg eens \\\"hallo\\\"\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "VanEigenaar",
-                    ProtoType = "VanEigenaar(naam1, naam2,...naamx)",
-                    Description = "Caches van de opgegeven eigenaren",
-                    Examples = "VanEigenaar(\"pietje\")\r\nNaamBegintMetTekst(\"pietje \\\"puk\\\"\")\r\nVanEigenaar(\"pietje\",\"puk\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietVanEigenaar",
-                    ProtoType = "NietVanEigenaar(naam1, naam2,...naamx)",
-                    Description = "Caches niet van de opgegeven eigenaren",
-                    Examples = "NietVanEigenaar(\"pietje\")\r\nNietVanEigenaar(\"pietje \\\"puk\\\"\")\r\nNietVanEigenaar(\"pietje\",\"puk\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "BinnenStraal",
-                    ProtoType = "BinnenStraal(coordinaat, straal)",
-                    Description = "Caches die binnen de opgegeven cirkel liggen. De straal is in kilometers",
-                    Examples = "BinnenStraal(\"N 53° 08.065 E 6° 26.096\", 5)\r\nBinnenStraal(\"N53 08.065 E6 26.096\", 2.5)\r\nBinnenStraal(\"53.12345, 6.154343\", 7.5)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietBinnenStraal",
-                    ProtoType = "NietBinnenStraal(coordinaat, straal)",
-                    Description = "Caches die buiten de opgegeven cirkel liggen. De straal is in kilometers",
-                    Examples = "NietBinnenStraal(\"N 53° 08.065 E 6° 26.096\", 5)\r\nBinnenStraal(\"N53 08.065 E6 26.096\", 2.5)\r\nBinnenStraal(\"53.12345, 6.154343\", 7.5)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "AantalKeerGevondenMeerDan",
-                    ProtoType = "AantalKeerGevondenMeerDan(waarde)",
-                    Description = "Caches welke al meer dan opgegeven waarde gevonden zijn",
-                    Examples = "AantalKeerGevondenMeerDan(100)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietAantalKeerGevondenMeerDan",
-                    ProtoType = "NietAantalKeerGevondenMeerDan(waarde)",
-                    Description = "Caches welke niet meer dan opgegeven waarde gevonden zijn",
-                    Examples = "NietAantalKeerGevondenMeerDan(100)",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "IsParel",
-                    ProtoType = "IsParel()",
-                    Description = "Caches Parel van de Maand zijn",
-                    Examples = "IsParel()",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "GevondenDoor",
-                    ProtoType = "GevondenDoor(naam1, naam2,...naamx)",
-                    Description = "Caches gevonden zijn door 1 van de cachers\r\nRestrictie: Niet op 1 regel samen met NietGevondenDoor",
-                    Examples = "GevondenDoor(\"pietje\")\r\nNaamBegintMetTekst(\"pietje \\\"puk\\\"\")\r\nVanEigenaar(\"pietje\",\"puk\")",
-                    PMOnly = false
-                }
-                , new MacroFunctionInfo
-                {
-                    Name = "NietGevondenDoor",
-                    ProtoType = "NietGevondenDoor(naam1, naam2,...naamx)",
-                    Description = "Caches die door geen van cachers gevonden is\r\nRestrictie: mag maar 1 keer op een regel voorkomen en niet gelijk met GevondenDoor",
-                    Examples = "NietGevondenDoor(\"pietje\")\r\nNaamBegintMetTekst(\"pietje \\\"puk\\\"\")\r\nVanEigenaar(\"pietje\",\"puk\")",
-                    PMOnly = false
-                }
-            };
+            }
 
-            return result.OrderBy(x => x.Name).ToArray();
+            return _macroFunctionInfo;
         }
 
         public List<GCEuGeocacheFilterMacro> GetMacrosOfUser(int UserID)
@@ -969,6 +998,23 @@ namespace Globalcaching.Services
                     addInnerJoin(string.Format(" left join GcComData.dbo.GCComGeocacheLog with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheLog.GeocacheID and GcComData.dbo.GCComGeocacheLog.FinderId in ({0}) and GcComData.dbo.GCComGeocacheLog.WptLogTypeId in (2, 10, 11)", getGCComIDArray(db, parameters)), innerJoins);
                     whereClauses.Add(" GcComData.dbo.GCComGeocacheLog.GeocacheID is NULL");
                     break;
+                case "bevatattribuut":
+                    addInnerJoin(" inner join GcComData.dbo.GCComGeocacheAttribute with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheAttribute.GeocacheID ", innerJoins);
+                    var s = getPosIntArray(parameters);
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocacheAttribute.AttributeTypeID in ({0}) and GcComData.dbo.GCComGeocacheAttribute.IsOn=1 ", s));
+                    }
+                    s = getNegIntArray(parameters);
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocacheAttribute.AttributeTypeID in ({0}) and GcComData.dbo.GCComGeocacheAttribute.IsOn=0 ", s));
+                    }
+                    break;
+                case "nietbevatattribuut":
+                    //addInnerJoin(string.Format(" left join GcComData.dbo.GCComGeocacheAttribute with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheLog.GeocacheID and GcComData.dbo.GCComGeocacheLog.FinderId in ({0}) and GcComData.dbo.GCComGeocacheLog.WptLogTypeId in (2, 10, 11)", getGCComIDArray(db, parameters)), innerJoins);
+                    //whereClauses.Add(" GcComData.dbo.GCComGeocacheLog.GeocacheID is NULL");
+                    break;
                 default:
                     return false;
             }
@@ -1102,6 +1148,34 @@ namespace Globalcaching.Services
         private string getGCComIDArray(PetaPoco.Database db, List<string> names)
         {
             return string.Join(", ", getGCComIDs(db, names));
+        }
+
+        private string getPosIntArray(List<string> names)
+        {
+            List<string> result = new List<string>();
+            foreach (string s in names)
+            {
+                int i = int.Parse(s);
+                if (i > 0)
+                {
+                    result.Add(i.ToString());
+                }
+            }
+            return string.Join(", ", result);
+        }
+
+        private string getNegIntArray(List<string> names)
+        {
+            List<string> result = new List<string>();
+            foreach (string s in names)
+            {
+                int i = int.Parse(s);
+                if (i < 0)
+                {
+                    result.Add(i.ToString());
+                }
+            }
+            return string.Join(", ", result);
         }
 
         private List<long> getGCComIDs(PetaPoco.Database db, List<string> names)
