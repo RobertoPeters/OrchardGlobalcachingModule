@@ -471,7 +471,7 @@ namespace Globalcaching.Services
                             {
                                 Name = "BevatAttribuut",
                                 ProtoType = "BevatAttribuut(attr1, attr2,...attrx)",
-                                Description = "De geocache bevat minstens 1 van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Niet op 1 regel samen met NietBevatAttribuut",
+                                Description = "De geocache bevat minstens 1 van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Maximaal 1 per regel en niet op 1 regel samen met NietBevatAttribuut",
                                 Examples = "BevatAttribuut(10,-11)",
                                 PMOnly = false
                             }
@@ -479,7 +479,7 @@ namespace Globalcaching.Services
                             {
                                 Name = "NietBevatAttribuut",
                                 ProtoType = "NietBevatAttribuut(attr1, attr2,...attrx)",
-                                Description = "De geocache bevat geen van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Niet op 1 regel samen met NietBevatAttribuut",
+                                Description = "De geocache bevat geen van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Maximaal 1 per regel en niet op 1 regel samen met NietBevatAttribuut",
                                 Examples = "NietBevatAttribuut(10,-11)",
                                 PMOnly = false
                             }
@@ -999,21 +999,42 @@ namespace Globalcaching.Services
                     whereClauses.Add(" GcComData.dbo.GCComGeocacheLog.GeocacheID is NULL");
                     break;
                 case "bevatattribuut":
-                    addInnerJoin(" inner join GcComData.dbo.GCComGeocacheAttribute with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheAttribute.GeocacheID ", innerJoins);
-                    var s = getPosIntArray(parameters);
-                    if (!string.IsNullOrEmpty(s))
                     {
-                        whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocacheAttribute.AttributeTypeID in ({0}) and GcComData.dbo.GCComGeocacheAttribute.IsOn=1 ", s));
-                    }
-                    s = getNegIntArray(parameters);
-                    if (!string.IsNullOrEmpty(s))
-                    {
-                        whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocacheAttribute.AttributeTypeID in ({0}) and GcComData.dbo.GCComGeocacheAttribute.IsOn=0 ", s));
+                        addInnerJoin(" inner join GcComData.dbo.GCComGeocacheAttribute with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheAttribute.GeocacheID ", innerJoins);
+                        var s = getPosIntArray(parameters);
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocacheAttribute.AttributeTypeID in ({0}) and GcComData.dbo.GCComGeocacheAttribute.IsOn=1 ", s));
+                        }
+                        s = getNegIntArray(parameters);
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocacheAttribute.AttributeTypeID in ({0}) and GcComData.dbo.GCComGeocacheAttribute.IsOn=0 ", s));
+                        }
                     }
                     break;
                 case "nietbevatattribuut":
-                    //addInnerJoin(string.Format(" left join GcComData.dbo.GCComGeocacheAttribute with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheLog.GeocacheID and GcComData.dbo.GCComGeocacheLog.FinderId in ({0}) and GcComData.dbo.GCComGeocacheLog.WptLogTypeId in (2, 10, 11)", getGCComIDArray(db, parameters)), innerJoins);
-                    //whereClauses.Add(" GcComData.dbo.GCComGeocacheLog.GeocacheID is NULL");
+                    {
+                        var s = getPosIntArray(parameters);
+                        var ps = "";
+                        var ns = "";
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            ps = string.Format(" GcComData.dbo.GCComGeocacheAttribute.AttributeTypeID in ({0}) and GcComData.dbo.GCComGeocacheAttribute.IsOn=1 ", s);
+                        }
+                        s = getNegIntArray(parameters);
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            ns = string.Format(" GcComData.dbo.GCComGeocacheAttribute.AttributeTypeID in ({0}) and GcComData.dbo.GCComGeocacheAttribute.IsOn=0 ", s);
+                        }
+                        if (!string.IsNullOrEmpty(ps) && !string.IsNullOrEmpty(ns))
+                        {
+                            ps = string.Format("({0} or {1})", ps, ns);
+                            ns = "";
+                        }
+                        addInnerJoin(string.Format(" left join GcComData.dbo.GCComGeocacheAttribute with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheAttribute.GeocacheID and {0} {1}", ps, ns), innerJoins);
+                        whereClauses.Add(" GcComData.dbo.GCComGeocacheAttribute.GeocacheID is NULL");
+                    }
                     break;
                 default:
                     return false;
@@ -1172,7 +1193,7 @@ namespace Globalcaching.Services
                 int i = int.Parse(s);
                 if (i < 0)
                 {
-                    result.Add(i.ToString());
+                    result.Add((-1*i).ToString());
                 }
             }
             return string.Join(", ", result);

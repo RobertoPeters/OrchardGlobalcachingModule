@@ -100,17 +100,83 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    function togglePosAttributeButton(id){
+        var v = $('#attrposvalue'+id).val();
+        var s = $("#attrposimg"+id).attr("src");
+        if (v=='0')
+        {
+            v = '1';
+            s = s.replace(id+"_", id);
+            $("#attrposimg"+id).attr("src", s);
+        }
+        else if (v=='1')
+        {
+            v = '2';
+            s = s.replace(id, "_"+id);
+            $("#attrposimg"+id).attr("src", s);
+        }
+        else{
+            v = '0';
+            s = s.replace("_"+id, id+"_");
+            $("#attrposimg"+id).attr("src", s);
+        }
+        $('#attrposvalue'+id).val(v);
+    }
+    function toggleNegAttributeButton(id){
+        var v = $('#attrnegvalue'+id).val();
+        var s = $("#attrnegimg"+id).attr("src");
+        if (v=='0')
+        {
+            v = '1';
+            s = s.replace(id+"_", id);
+            $("#attrnegimg"+id).attr("src", s);
+        }
+        else if (v=='1')
+        {
+            v = '2';
+            s = s.replace(id, "_"+id);
+            $("#attrnegimg"+id).attr("src", s);
+        }
+        else{
+            v = '0';
+            s = s.replace("_"+id, id+"_");
+            $("#attrnegimg"+id).attr("src", s);
+        }
+        $('#attrnegvalue'+id).val(v);
+    }
+</script>
 <!-- Attributes -->
 <div class="panel panel-primary">
     <div class="panel-heading">
         <input id="chkattributes" type="checkbox" data-toggle="collapse" data-target="#pnlattributes" />
-        &nbsp;&nbsp;Attributen (bevat minstens 1 van de geselecteerde)
+        &nbsp;&nbsp;Bevat attributen
     </div>
     <div id="pnlattributes" class="panel-body collapse in">
+        <div>
+            <input type="checkbox" id="attributescontainsall" checked="checked" /> Bevat alle geselecteerde attributen (anders minstens 1 van de geselecteerde)
+        </div>
         @foreach (var attr in Model.AttributeTypes)
         {
             <div class="col-md-1">
-                <img src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}.gif",@attr.ID))' Width="30" Height="30" />
+                <img style="margin: 5px 5px 5px 5px" id="@string.Format("attrposimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif",@attr.ID))' Width="30" Height="30" onclick="togglePosAttributeButton('@attr.ID')" title="@attr.Name" />
+                <input id="@string.Format("attrposvalue{0}", attr.ID)" type="hidden" value="0" />
+            </div>
+        }
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chknotattributes" type="checkbox" data-toggle="collapse" data-target="#pnlnotattributes" />
+        &nbsp;&nbsp;Bevat niet de attributen
+    </div>
+    <div id="pnlnotattributes" class="panel-body collapse in">
+        @foreach (var attr in Model.AttributeTypes)
+        {
+            <div class="col-md-1">
+                <img style="margin: 5px 5px 5px 5px" id="@string.Format("attrnegimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif",@attr.ID))' width="30" height="30" onclick="toggleNegAttributeButton('@attr.ID')" title="@attr.Name" />
+                <input id="@string.Format("attrnegvalue{0}", attr.ID)" type="hidden" value="0" />
             </div>
         }
     </div>
@@ -510,10 +576,12 @@ else
     $('#pnlfoundby').collapse();
     $('#pnlnotfoundby').collapse();
     $('#pnlattributes').collapse();
+    $('#pnlnotattributes').collapse();
 
     var activeMacrox;
     var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
     var containerTypes = @Html.Raw(Json.Encode(@Model.Containers));
+    var attributeTypes = @Html.Raw(Json.Encode(@Model.AttributeTypes));
 
     function addMacroFunction(r, f) {
         if (r == "") {
@@ -526,15 +594,74 @@ else
 
     function createMacroFromSelection() {
         var result = "";
+        var preresult = "";
         if ($('#chknotfoundby').prop('checked'))
         {
-            result = 'A = NietGevondenDoor("' + $('#notfoundby').val().replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")\r\n';
-            result += 'Resultaat = A';
+            preresult += 'A = NietGevondenDoor("' + $('#notfoundby').val().replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")\r\n';
+            result = addMacroFunction(result, 'A');
         }
-        if ($('#chkattrinutes').prop('checked'))
+        if ($('#chknotattributes').prop('checked'))
         {
-            //todo
+            var s = "";
+            for(var i=0; i<attributeTypes.length; i++)
+            {
+                var v = $('#attrnegvalue'+attributeTypes[i].ID.toString()).val();
+                if (v=='1')
+                {
+                    if (s.length>0) s += ',';
+                    s += attributeTypes[i].ID.toString();
+                }
+                else if (v=='2')
+                {
+                    if (s.length>0) s += ',';
+                    s += '-' + attributeTypes[i].ID.toString();
+                }
+            }
+            preresult += 'ATTR = NietBevatAttribuut(' + s + ')\r\n';
+            result = addMacroFunction(result, 'ATTR');
         }
+        if ($('#chkattributes').prop('checked'))
+        {
+            if ($('#attributescontainsall').prop('checked'))
+            {
+                var n = "a";
+                for(var i=0; i<attributeTypes.length; i++)
+                {
+                    var v = $('#attrposvalue'+attributeTypes[i].ID.toString()).val();
+                    if (v=='1')
+                    {
+                        preresult += 'ATTR'+ n + ' = BevatAttribuut(' + attributeTypes[i].ID.toString() + ')\r\n';
+                        result = addMacroFunction(result, 'ATTR'+ n);
+                    }
+                    else if (v=='2')
+                    {
+                        preresult += 'ATTR'+ n + ' = BevatAttribuut(-' + attributeTypes[i].ID.toString() + ')\r\n';
+                        result = addMacroFunction(result, 'ATTR'+ n);
+                    }
+                    n = n + 'a';
+                }
+            }
+            else{
+                var s = "";
+                for(var i=0; i<attributeTypes.length; i++)
+                {
+                    var v = $('#attrposvalue'+attributeTypes[i].ID.toString()).val();
+                    if (v=='1')
+                    {
+                        if (s.length>0) s += ',';
+                        s += attributeTypes[i].ID.toString();
+                    }
+                    else if (v=='2')
+                    {
+                        if (s.length>0) s += ',';
+                        s += '-' + attributeTypes[i].ID.toString();
+                    }
+                }
+                preresult += 'ATTR = BevatAttribuut(' + s + ')\r\n';
+                result = addMacroFunction(result, 'ATTR');
+            }
+        }
+
         if ($('#chklocation').prop('checked'))
         {
             result = addMacroFunction(result, 'BinnenStraal("' + $('#location').val().replace(/\"/g, "\\\"") + '", ' + $('#radius').val() + ')');
@@ -766,6 +893,10 @@ else
                 result = addMacroFunction(result, "NietBeschikbaar()");
                 result = addMacroFunction(result, "NietGearchiveerd()");
             }
+        }
+        if (preresult.length>0)
+        {
+            result = preresult + result;
         }
         return result;
     }
