@@ -4,62 +4,6 @@
     Style.Require("datetimepicker.Style");
 }
 
-<!-- Changed date -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chkchangeddate" type="checkbox" data-toggle="collapse" data-target="#pnlchangeddate" />
-        &nbsp;&nbsp;Aangepast datum (Geocache bewerkt)
-    </div>
-    <div id="pnlchangeddate" class="panel-body collapse in">
-        <div class="row">
-            <div class="col-md-1">
-                Vanaf:
-            </div>
-            <div id="changedfromdate" class="col-md-11 date">
-                <input type='text' width="100" />
-                <span class="fa fa-calendar"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-1">
-                Tot:
-            </div>
-            <div id="changedtodate" class="col-md-11 date">
-                <input type='text' width="100" />
-                <span class="fa fa-calendar"></span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Hidden date -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chkhiddendate" type="checkbox" data-toggle="collapse" data-target="#pnlhiddendate" />
-        &nbsp;&nbsp;Aanmaak datum (Hidden date)
-    </div>
-    <div id="pnlhiddendate" class="panel-body collapse in">
-        <div class="row">
-            <div class="col-md-1">
-                Vanaf:
-            </div>
-            <div id="hiddenfromdate" class="col-md-11 date">
-                <input type='text' width="100" />
-                <span class="fa fa-calendar"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-1">
-                Tot:
-            </div>
-            <div id="hiddentodate" class="col-md-11 date">
-                <input type='text' width="100" />
-                <span class="fa fa-calendar"></span>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Found -->
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -150,7 +94,7 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
         <input id="chkattributes" type="checkbox" data-toggle="collapse" data-target="#pnlattributes" />
-        &nbsp;&nbsp;Bevat attributen
+        &nbsp;&nbsp;Attributen: Bevat attributen
     </div>
     <div id="pnlattributes" class="panel-body collapse in">
         <div>
@@ -169,7 +113,7 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
         <input id="chknotattributes" type="checkbox" data-toggle="collapse" data-target="#pnlnotattributes" />
-        &nbsp;&nbsp;Bevat niet de attributen
+        &nbsp;&nbsp;Attributen: Bevat niet de attributen
     </div>
     <div id="pnlnotattributes" class="panel-body collapse in">
         @foreach (var attr in Model.AttributeTypes)
@@ -186,13 +130,27 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
         <input id="chklatitude" type="checkbox" data-toggle="collapse" data-target="#pnllatitude" />
-        &nbsp;&nbsp;Breedtegraad
+        &nbsp;&nbsp;Coordinaat: Breedtegraad
     </div>
     <div id="pnllatitude" class="panel-body collapse in">
         Tussen
         <input type="text" id="latitudefrom" width="80" value="52.1" />
         en
         <input type="text" id="latitudeto" width="80" value="56.2" />
+    </div>
+</div>
+
+<!-- Longitude -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chklongitude" type="checkbox" data-toggle="collapse" data-target="#pnllongitude" />
+        &nbsp;&nbsp;Coordinaat: Lengtegraad
+    </div>
+    <div id="pnllongitude" class="panel-body collapse in">
+        Tussen
+        <input type="text" id="longitudefrom" width="80" value="5.1" />
+        en
+        <input type="text" id="longitudeto" width="80" value="6.2" />
     </div>
 </div>
 
@@ -207,6 +165,90 @@
         {
             <div class="col-md-1"><center><img src="@Href(string.Format("~/Modules/Globalcaching/Media/container/{0}.gif", gt))" /><br /><input type="checkbox" id="@string.Format("contype{0}", @gt)" /></center></div>
         }
+    </div>
+</div>
+
+<!-- Changed date -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkchangeddate" type="checkbox" data-toggle="collapse" data-target="#pnlchangeddate" />
+        &nbsp;&nbsp;Datum: Aangepast datum (Geocache bewerkt)
+    </div>
+    <div id="pnlchangeddate" class="panel-body collapse in">
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="changedfromdate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                Tot:
+            </div>
+            <div id="changedtodate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden date -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkhiddendate" type="checkbox" data-toggle="collapse" data-target="#pnlhiddendate" />
+        &nbsp;&nbsp;Datum: Aanmaak datum (Hidden date)
+    </div>
+    <div id="pnlhiddendate" class="panel-body collapse in">
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="hiddenfromdate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                Tot:
+            </div>
+            <div id="hiddentodate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Publication date -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkpublisheddate" type="checkbox" data-toggle="collapse" data-target="#pnlpublisheddate" />
+        &nbsp;&nbsp;Datum: Publicatie datum (Publish date)
+    </div>
+    <div id="pnlpublisheddate" class="panel-body collapse in">
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="publishedfromdate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                Tot:
+            </div>
+            <div id="publishedtodate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -290,7 +332,7 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
         <input id="chkfoundby" type="checkbox" data-toggle="collapse" data-target="#pnlfoundby" />
-        &nbsp;&nbsp;Gevonden door geocachers
+        &nbsp;&nbsp;Gevonden door: Gevonden door geocachers
     </div>
     <div id="pnlfoundby" class="panel-body collapse in">
         <div class="form-group">
@@ -299,15 +341,15 @@
     </div>
 </div>
 
-<!-- Hints contains text -->
+<!-- Niet gevonden door -->
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <input id="chkhintscontains" type="checkbox" data-toggle="collapse" data-target="#pnlhintscontains" />
-        &nbsp;&nbsp;Hints bevat tekst
+        <input id="chknotfoundby" type="checkbox" data-toggle="collapse" data-target="#pnlnotfoundby" />
+        &nbsp;&nbsp;Gevonden door: Niet gevonden door geocachers
     </div>
-    <div id="pnlhintscontains" class="panel-body collapse in">
+    <div id="pnlnotfoundby" class="panel-body collapse in">
         <div class="form-group">
-            <input id="hintscontains" type="text" class="form-control" placeholder="woord of zin">
+            <input id="notfoundby" type="text" class="form-control" placeholder="naam van cachers met komma gescheiden zonder spatie bv pietje,pukje">
         </div>
     </div>
 </div>
@@ -322,20 +364,6 @@
         <div class="col-md-2"><input type="checkbox" id="country141" />Nederland</div>
         <div class="col-md-2"><input type="checkbox" id="country4" />Belgie</div>
         <div class="col-md-2"><input type="checkbox" id="country8" />Luxemburg</div>
-    </div>
-</div>
-
-<!-- Longitude -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chklongitude" type="checkbox" data-toggle="collapse" data-target="#pnllongitude" />
-        &nbsp;&nbsp;Lengtegraad
-    </div>
-    <div id="pnllongitude" class="panel-body collapse in">
-        Tussen
-        <input type="text" id="longitudefrom" width="80" value="5.1" />
-        en
-        <input type="text" id="longitudeto" width="80" value="6.2" />
     </div>
 </div>
 
@@ -367,7 +395,7 @@
             <input id="chkdifficulty" type="checkbox" data-toggle="collapse" data-target="#pnldifficulty" disabled="disabled" />
         }
 
-        &nbsp;&nbsp;Moeilijkheid
+        &nbsp;&nbsp;M/T: Moeilijkheid
     </div>
     <div id="pnldifficulty" class="panel-body collapse in">
         Van
@@ -397,106 +425,18 @@
     </div>
 </div>
 
-<!-- Name contains text -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chknamecontains" type="checkbox" data-toggle="collapse" data-target="#pnlnamecontains" />
-        &nbsp;&nbsp;Naam bevat tekst
-    </div>
-    <div id="pnlnamecontains" class="panel-body collapse in">
-        <div class="form-group">
-            <input id="namecontains" type="text" class="form-control" placeholder="de tekst">
-        </div>
-    </div>
-</div>
-
-<!-- Niet gevonden door -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chknotfoundby" type="checkbox" data-toggle="collapse" data-target="#pnlnotfoundby" />
-        &nbsp;&nbsp;Niet gevonden door geocachers
-    </div>
-    <div id="pnlnotfoundby" class="panel-body collapse in">
-        <div class="form-group">
-            <input id="notfoundby" type="text" class="form-control" placeholder="naam van cachers met komma gescheiden zonder spatie bv pietje,pukje">
-        </div>
-    </div>
-</div>
-
-<!-- Parel -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chkparel" type="checkbox" data-toggle="collapse" data-target="#pnlparel" />
-        &nbsp;&nbsp;Parel van de Maand
-    </div>
-    <div id="pnlparel" class="panel-body collapse in">
-        <input type="checkbox" id="isparel" disabled="disabled" checked="checked" />
-        Parel van de Maand
-    </div>
-</div>
-
-<!-- Publication date -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chkpublisheddate" type="checkbox" data-toggle="collapse" data-target="#pnlpublisheddate" />
-        &nbsp;&nbsp;Publicatie datum (Publish date)
-    </div>
-    <div id="pnlpublisheddate" class="panel-body collapse in">
-        <div class="row">
-            <div class="col-md-1">
-                Vanaf:
-            </div>
-            <div id="publishedfromdate" class="col-md-11 date">
-                <input type='text' width="100" />
-                <span class="fa fa-calendar"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-1">
-                Tot:
-            </div>
-            <div id="publishedtodate" class="col-md-11 date">
-                <input type='text' width="100" />
-                <span class="fa fa-calendar"></span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Geocache status -->
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <input id="chkstatus" type="checkbox" data-toggle="collapse" data-target="#pnlstatus" />
-        &nbsp;&nbsp;Status
-    </div>
-    <div id="pnlstatus" class="panel-body collapse in">
-        <div class="col-md-3">
-            <input type="radio" name="gcstatus" value="Archived">Gearchiveerd
-        </div>
-        <div class="col-md-3">
-            <input type="radio" name="gcstatus" value="NotArchived" checked="checked">Niet gearchiveerd
-        </div>
-        <div class="col-md-3">
-            <input type="radio" name="gcstatus" value="NotAvailable">Niet beschikbaar
-        </div>
-        <div class="col-md-3">
-            <input type="radio" name="gcstatus" value="Available" checked="checked">Beschikbaar
-        </div>
-    </div>
-</div>
-
 <!-- Terrain -->
 <div class="panel panel-primary">
     <div class="panel-heading">
-@if (Model.UserSettings.IsPM)
-{ 
-        <input id="chkterrain" type="checkbox" data-toggle="collapse" data-target="#pnlterrain" />
-}
-else
-{
-        <input id="chkterrain" type="checkbox" data-toggle="collapse" data-target="#pnlterrain" disabled="disabled" />
-}
-        &nbsp;&nbsp;Terrein
+        @if (Model.UserSettings.IsPM)
+        {
+            <input id="chkterrain" type="checkbox" data-toggle="collapse" data-target="#pnlterrain" />
+        }
+        else
+        {
+            <input id="chkterrain" type="checkbox" data-toggle="collapse" data-target="#pnlterrain" disabled="disabled" />
+        }
+        &nbsp;&nbsp;M/T: Terrein
     </div>
     <div id="pnlterrain" class="panel-body collapse in">
         Van
@@ -525,6 +465,67 @@ else
         </select>
     </div>
 </div>
+
+<!-- Parel -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkparel" type="checkbox" data-toggle="collapse" data-target="#pnlparel" />
+        &nbsp;&nbsp;Parel van de Maand
+    </div>
+    <div id="pnlparel" class="panel-body collapse in">
+        <input type="checkbox" id="isparel" disabled="disabled" checked="checked" />
+        Parel van de Maand
+    </div>
+</div>
+
+<!-- Geocache status -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkstatus" type="checkbox" data-toggle="collapse" data-target="#pnlstatus" />
+        &nbsp;&nbsp;Status
+    </div>
+    <div id="pnlstatus" class="panel-body collapse in">
+        <div class="col-md-3">
+            <input type="radio" name="gcstatus" value="Archived">Gearchiveerd
+        </div>
+        <div class="col-md-3">
+            <input type="radio" name="gcstatus" value="NotArchived" checked="checked">Niet gearchiveerd
+        </div>
+        <div class="col-md-3">
+            <input type="radio" name="gcstatus" value="NotAvailable">Niet beschikbaar
+        </div>
+        <div class="col-md-3">
+            <input type="radio" name="gcstatus" value="Available" checked="checked">Beschikbaar
+        </div>
+    </div>
+</div>
+
+<!-- Hints contains text -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkhintscontains" type="checkbox" data-toggle="collapse" data-target="#pnlhintscontains" />
+        &nbsp;&nbsp;Tekst: Hints bevat tekst
+    </div>
+    <div id="pnlhintscontains" class="panel-body collapse in">
+        <div class="form-group">
+            <input id="hintscontains" type="text" class="form-control" placeholder="woord of zin">
+        </div>
+    </div>
+</div>
+
+<!-- Name contains text -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chknamecontains" type="checkbox" data-toggle="collapse" data-target="#pnlnamecontains" />
+        &nbsp;&nbsp;Tekst: Naam bevat tekst
+    </div>
+    <div id="pnlnamecontains" class="panel-body collapse in">
+        <div class="form-group">
+            <input id="namecontains" type="text" class="form-control" placeholder="de tekst">
+        </div>
+    </div>
+</div>
+
 
 
 <button class="btn btn-primary" id="runmacrox">Uitvoeren</button>
