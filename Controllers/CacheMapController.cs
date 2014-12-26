@@ -70,6 +70,16 @@ namespace Globalcaching.Controllers
             mapSettings.InitialZoomLevel = 12;
             mapSettings.Filter = filter;
 
+            if (filter.HomeLat == null)
+            {
+                var settings = _gcEuUserSettingsService.GetSettings();
+                if (settings != null)
+                {
+                    filter.HomeLat = settings.HomelocationLat;
+                    filter.HomeLon = settings.HomelocationLon;
+                }
+            }
+
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
                 if (!string.IsNullOrEmpty(geocacheCode))

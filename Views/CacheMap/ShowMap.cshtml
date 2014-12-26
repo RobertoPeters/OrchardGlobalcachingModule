@@ -1,12 +1,25 @@
 ﻿@model Globalcaching.ViewModels.CacheMapSettings
 @using Orchard.Mvc.Html
+@using Globalcaching.Core;
 
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-4">
         <input id="gotolocation" type="text" placeholder="vul plaats/adres in" width="200" />
         <button class="btn btn-primary" id="gotolocationbutton">Ga naar locatie</button>
     </div>
-    <div class="col-md-3">
+    @if (Model.Filter.HomeLat!=null)
+    { 
+    <div class="col-md-2">
+        <button class="btn btn-primary" onclick="showAddress('@Helper.GetCoordinatesPresentation((double)Model.Filter.HomeLat, (double)Model.Filter.HomeLon)')">Thuis/Middelpunt</button>
+    </div>
+    }
+    else if (Model.Filter.CenterLat != null)
+    {
+        <div class="col-md-2">
+            <button class="btn btn-primary" onclick="showAddress('@Helper.GetCoordinatesPresentation((double)Model.Filter.CenterLat, (double)Model.Filter.CenterLon)')">Middelpunt</button>
+        </div>
+    }
+    <div class="col-md-2">
 @using (Html.BeginFormAntiForgeryPost(Url.Action("CopyViewToDownload", "CacheMap", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
 {
     @Html.HiddenFor(m => m.Filter.MaxResult)
@@ -35,7 +48,7 @@
 </div>
 
 <table>
-    <tr><td><div id="map_canvas"></div></td><td valign="top"><div id="WPInfo"></div></td></tr>
+    <tr><td><div id="map_canvas"></div></td><td valign="top"><div id="WPInfo" style="padding-left: 10px"></div></td></tr>
 </table>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 @{
@@ -78,6 +91,7 @@
         $('#gotolocation').keypress(function (e) {
             if (e.which == '13') {
                 showAddress($("#gotolocation").val());
+                e.preventDefault();
             }
         });
 
