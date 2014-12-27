@@ -214,6 +214,96 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "FTFLogs/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCComGeocacheLogsSearch"},
+                            {"action", "FTFLogs"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "FTFLogsOfUser",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCComGeocacheLogsSearch"},
+                            {"action", "FTFLogsOfUser"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "STFLogs/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCComGeocacheLogsSearch"},
+                            {"action", "STFLogs"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "STFLogsOfUser",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCComGeocacheLogsSearch"},
+                            {"action", "STFLogsOfUser"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "TTFLogs/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCComGeocacheLogsSearch"},
+                            {"action", "TTFLogs"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "TTFLogsOfUser",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCComGeocacheLogsSearch"},
+                            {"action", "TTFLogsOfUser"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "Geocache/{id}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

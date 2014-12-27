@@ -11,6 +11,7 @@ namespace Globalcaching.Services
     public interface IGCComSearchUserService : IDependency
     {
         GCComUser GetGeocachingComUser(string name);
+        GCComUser GetGeocachingComUser(long userId);
         GCComUserSearchResult GetGeocachingComUsers(int page, int pageSize, string name);
     }
 
@@ -24,6 +25,16 @@ namespace Globalcaching.Services
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
                 result = db.FirstOrDefault<GCComUser>("where UserName=@0", name);
+            }
+            return result;
+        }
+
+        public GCComUser GetGeocachingComUser(long userId)
+        {
+            GCComUser result = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+            {
+                result = db.FirstOrDefault<GCComUser>("where ID=@0", userId);
             }
             return result;
         }

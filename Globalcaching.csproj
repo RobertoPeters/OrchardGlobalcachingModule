@@ -356,6 +356,9 @@
     <Content Include="Views\GenericCacheList.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FeatureTiles.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FTFBanner.cshtml" />
+    <Content Include="Views\GCComGeocacheLogsSearch\FTFLogs.cshtml" />
+    <Content Include="Views\GCComGeocacheLogsSearch\STFLogs.cshtml" />
+    <Content Include="Views\GCComGeocacheLogsSearch\TTFLogs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
