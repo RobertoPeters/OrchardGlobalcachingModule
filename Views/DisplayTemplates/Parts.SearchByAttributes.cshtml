@@ -224,6 +224,34 @@
     </div>
 </div>
 
+<!-- most recent archived date -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkrecentarchiveddate" type="checkbox" data-toggle="collapse" data-target="#pnlrecentarchiveddate" />
+        &nbsp;&nbsp;Datum: Meest recente Archived log
+    </div>
+    <div id="pnlrecentarchiveddate" class="panel-body collapse in">
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="recentarchivedfromdate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                Tot:
+            </div>
+            <div id="recentarchivedtodate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- most recent found date -->
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -607,6 +635,7 @@
     $('#pnlattributes').collapse();
     $('#pnlnotattributes').collapse();
     $('#pnlrecentfounddate').collapse();
+    $('#pnlrecentarchiveddate').collapse();
 
     var activeMacrox;
     var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
@@ -831,6 +860,13 @@
             result = addMacroFunction(result,'NietGevondenNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
             result = addMacroFunction(result,'GevondenNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
         }
+        if ($('#chkrecentarchiveddate').prop('checked'))
+        {
+            var fromd = $("#recentarchivedfromdate").data("DateTimePicker").getDate();
+            var tod = $("#recentarchivedtodate").data("DateTimePicker").getDate();
+            result = addMacroFunction(result,'NietArchivedLogNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
+            result = addMacroFunction(result,'ArchivedLogNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+        }
         if ($('#chkchangeddate').prop('checked'))
         {
             var fromd = $("#changedfromdate").data("DateTimePicker").getDate();
@@ -1035,6 +1071,9 @@
         $('#recentfoundfromdate').datetimepicker({
             defaultDate: d
         });
+        $('#recentarchivedfromdate').datetimepicker({
+            defaultDate: d
+        });
         var e = moment();
         $('#hiddentodate').datetimepicker({
             defaultDate: e
@@ -1046,6 +1085,9 @@
             defaultDate: e
         });
         $('#recentfoundtodate').datetimepicker({
+            defaultDate: e
+        });
+        $('#recentarchivedtodate').datetimepicker({
             defaultDate: e
         });
     });

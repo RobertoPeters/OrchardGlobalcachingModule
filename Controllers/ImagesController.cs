@@ -45,8 +45,14 @@ namespace Globalcaching.Controllers
 
             if (data != null)
             {
-                Response.ContentType = string.Format("image/{0}", System.IO.Path.GetExtension(id).Replace(".", "").ToLower());
-                Response.OutputStream.Write(data, 0, data.Length);
+                try
+                {
+                    Response.ContentType = string.Format("image/{0}", System.IO.Path.GetExtension(id).Replace(".", "").ToLower());
+                    Response.OutputStream.Write(data, 0, data.Length);
+                }
+                catch
+                {
+                }
             }
             return null;
         }
