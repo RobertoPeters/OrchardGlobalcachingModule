@@ -27,6 +27,7 @@ namespace Globalcaching.Services
     public class MacroService : IMacroService
     {
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
+        public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
 
         public readonly IGCEuUserSettingsService _gcEuUserSettingsService;
         private readonly IWorkContextAccessor _workContextAccessor;
@@ -503,7 +504,7 @@ namespace Globalcaching.Services
                             {
                                 Name = "BevatAttribuut",
                                 ProtoType = "BevatAttribuut(attr1, attr2,...attrx)",
-                                Description = "De geocache bevat minstens 1 van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Maximaal 1 per regel en niet op 1 regel samen met NietBevatAttribuut",
+                                Description = "De geocache bevat minstens 1 van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Maximaal 1 per regel en niet op 1 regel samen met NietBevatAttribuut\r\n",
                                 Examples = "BevatAttribuut(10,-11)",
                                 PMOnly = false
                             }
@@ -511,11 +512,17 @@ namespace Globalcaching.Services
                             {
                                 Name = "NietBevatAttribuut",
                                 ProtoType = "NietBevatAttribuut(attr1, attr2,...attrx)",
-                                Description = "De geocache bevat geen van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Maximaal 1 per regel en niet op 1 regel samen met NietBevatAttribuut",
+                                Description = "De geocache bevat geen van de opgegeven attributen\r\nGeef een negatieve waarde voor de Niet versie van de attribuut (bv Niet kindvriendelijk)\r\nRestrictie: Maximaal 1 per regel en niet op 1 regel samen met NietBevatAttribuut\r\n",
                                 Examples = "NietBevatAttribuut(10,-11)",
                                 PMOnly = false
                             }
                         };
+                        using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                        {
+                            List<GCComAttributeType> attr = db.Fetch<GCComAttributeType>("order by id");
+                            _macroFunctionInfo.Where(x => x.Name == "BevatAttribuut").FirstOrDefault().Description += string.Join("\r\n", (from a in attr select string.Format("{0} - {1}", a.ID, a.Name)).ToArray());
+                            _macroFunctionInfo.Where(x => x.Name == "NietBevatAttribuut").FirstOrDefault().Description += string.Join("\r\n", (from a in attr select string.Format("{0} - {1}", a.ID, a.Name)).ToArray());
+                        }
                         _macroFunctionInfo = _macroFunctionInfo.OrderBy(x => x.Name).ToArray();
                     }
                 }
