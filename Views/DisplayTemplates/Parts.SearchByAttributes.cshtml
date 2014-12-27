@@ -36,11 +36,11 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
         <input id="chkpm" type="checkbox" data-toggle="collapse" data-target="#pnlpm" />
-        &nbsp;&nbsp;Alleen voor Premuim Members (PMO op geocaching.com)
+        &nbsp;&nbsp;Alleen voor Premium Members (PMO op geocaching.com)
     </div>
     <div id="pnlpm" class="panel-body collapse in">
         <input type="checkbox" id="ispm" />
-        Alleen voor Premuim Members
+        Alleen voor Premium Members
     </div>
 </div>
 
@@ -172,7 +172,7 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
         <input id="chkchangeddate" type="checkbox" data-toggle="collapse" data-target="#pnlchangeddate" />
-        &nbsp;&nbsp;Datum: Aangepast datum (Geocache bewerkt)
+        &nbsp;&nbsp;Datum: Aangepast datum (Geocache bewerkt / gelogd)
     </div>
     <div id="pnlchangeddate" class="panel-body collapse in">
         <div class="row">
@@ -217,6 +217,34 @@
                 Tot:
             </div>
             <div id="hiddentodate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- most recent found date -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkrecentfounddate" type="checkbox" data-toggle="collapse" data-target="#pnlrecentfounddate" />
+        &nbsp;&nbsp;Datum: Meest recente found log
+    </div>
+    <div id="pnlrecentfounddate" class="panel-body collapse in">
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="recentfoundfromdate" class="col-md-11 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                Tot:
+            </div>
+            <div id="recentfoundtodate" class="col-md-11 date">
                 <input type='text' width="100" />
                 <span class="fa fa-calendar"></span>
             </div>
@@ -578,6 +606,7 @@
     $('#pnlnotfoundby').collapse();
     $('#pnlattributes').collapse();
     $('#pnlnotattributes').collapse();
+    $('#pnlrecentfounddate').collapse();
 
     var activeMacrox;
     var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
@@ -795,6 +824,13 @@
             result = addMacroFunction(result,'NietGepubliceerdNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
             result = addMacroFunction(result,'GepubliceerdNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
         }
+        if ($('#chkrecentfounddate').prop('checked'))
+        {
+            var fromd = $("#recentfoundfromdate").data("DateTimePicker").getDate();
+            var tod = $("#recentfoundtodate").data("DateTimePicker").getDate();
+            result = addMacroFunction(result,'NietGevondenNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
+            result = addMacroFunction(result,'GevondenNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+        }
         if ($('#chkchangeddate').prop('checked'))
         {
             var fromd = $("#changedfromdate").data("DateTimePicker").getDate();
@@ -996,6 +1032,9 @@
         $('#changedfromdate').datetimepicker({
             defaultDate: d
         });
+        $('#recentfoundfromdate').datetimepicker({
+            defaultDate: d
+        });
         var e = moment();
         $('#hiddentodate').datetimepicker({
             defaultDate: e
@@ -1004,6 +1043,9 @@
             defaultDate: e
         });
         $('#changedtodate').datetimepicker({
+            defaultDate: e
+        });
+        $('#recentfoundtodate').datetimepicker({
             defaultDate: e
         });
     });

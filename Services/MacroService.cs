@@ -197,6 +197,22 @@ namespace Globalcaching.Services
                             }
                             , new MacroFunctionInfo
                             {
+                                Name = "GevondenNaDatum",
+                                ProtoType = "GevondenNaDatum(dag,maand,jaar)",
+                                Description = "Caches die gevonden zijn na de opgegeven datum",
+                                Examples = "GevondenNaDatum(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietGevondenNaDatum",
+                                ProtoType = "NietGevondenNaDatum(dag,maand,jaar)",
+                                Description = "Caches die niet gevonden zijn na de opgegeven datum",
+                                Examples = "NietGevondenNaDatum(22,4,2014)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
                                 Name = "MoeilijkheidGroterDan",
                                 ProtoType = "MoeilijkheidGroterDan(waarde)",
                                 Description = "Caches met een moeilijkheid groter dan de opgegeven waarde",
@@ -883,6 +899,14 @@ namespace Globalcaching.Services
                 case "nietgepubliceerdnadatum":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
                     whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.PublishedAtDate <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    break;
+                case "gevondennadatum":
+                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.MostRecentFoundDate > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    break;
+                case "nietgevondennadatum":
+                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.MostRecentFoundDate <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "moeilijkheidgroterdan":
                     whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.Difficulty > {0} ", getDouble(parameters[0])));
