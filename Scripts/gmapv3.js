@@ -103,6 +103,11 @@ function htmlEncode(value) {
     return $('<div/>').text(value).html();
 }
 
+function downloadGpxFile(code) {
+    $('#downloadgpxId').val(code);
+    $('#downloadgpxButton').trigger("click");
+}
+
 function getWaypointInfo(index, showinfowindow) {
     $.ajax({
         type: "POST",
@@ -110,7 +115,8 @@ function getWaypointInfo(index, showinfowindow) {
         data: {code : markers[index].getTitle()},
         success: function (response) {
             var wpinf = '<img src="' + rootPath + 'Modules/Globalcaching/Media/WptTypes/' + response.GeocacheTypeId + '.gif" /> ';
-            wpinf += '<a href="' + rootPath + 'Geocache/' + response.Code + '" target="_blank" >' + response.Code + '</a><br />';
+            wpinf += '<a href="' + rootPath + 'Geocache/' + response.Code + '" target="_blank" >' + response.Code + '</a>';
+            wpinf += ' <button class="btn btn-primary btn-xs" onclick="downloadGpxFile(\'' + response.Code + '\')">Download</button><br />';
             wpinf += '<a href="' + response.Url + '" target="_blank" >' + htmlEncode(response.Url) + '</a><br />';
             wpinf += htmlEncode(response.Name) + '<br />';
             wpinf += 'Door: <a href="http://www.geocaching.com/profile/?guid=' + response.PublicGuid + '" target="_blank" >' + htmlEncode(response.UserName) + '</a><br />';

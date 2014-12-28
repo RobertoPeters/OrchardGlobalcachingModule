@@ -50,6 +50,13 @@
 <table>
     <tr><td><div id="map_canvas"></div></td><td valign="top"><div id="WPInfo" style="padding-left: 10px"></div></td></tr>
 </table>
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("DownloadGeocache", "LiveAPIDownload", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <input id="downloadgpxId" name="id" type="hidden" value="" />
+    <button id="downloadgpxButton" type="submit" value="Download" class="btn btn-primary">@T("Download")</button>
+}
+
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 @{
     Script.Require("keydragzoom_packed.Script");
@@ -88,6 +95,7 @@
         }));
 
     $(function () {
+        $('#downloadgpxButton').hide();
         $('#gotolocation').keypress(function (e) {
             if (e.which == '13') {
                 showAddress($("#gotolocation").val());
