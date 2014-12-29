@@ -100,6 +100,7 @@
     $('#cccSearchFor').keypress(function (e) {
         if (e.which == '13') {
             requestcccSearchGeocachePage('1');
+            e.preventDefault();
         }
     });
 

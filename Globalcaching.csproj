@@ -359,6 +359,10 @@
     <Content Include="Views\GCComGeocacheLogsSearch\FTFLogs.cshtml" />
     <Content Include="Views\GCComGeocacheLogsSearch\STFLogs.cshtml" />
     <Content Include="Views\GCComGeocacheLogsSearch\TTFLogs.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.ContactForm.cshtml" />
+    <Content Include="Views\ContactForm\Home.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.CoordCheckerCheck.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.CoordCheckerMaint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -380,6 +384,8 @@
     <Compile Include="Controllers\CacheListController.cs" />
     <Compile Include="Controllers\CacheMapController.cs" />
     <Compile Include="Controllers\CheckCCCController.cs" />
+    <Compile Include="Controllers\ContactFormController.cs" />
+    <Compile Include="Controllers\CoordCheckerController.cs" />
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
@@ -424,6 +430,9 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\ContactFormPartDriver.cs" />
+    <Compile Include="Drivers\CoordCheckerMaintPartDriver.cs" />
+    <Compile Include="Drivers\CoordCheckerCheckPartDriver.cs" />
     <Compile Include="Drivers\FeatureTilesPartDriver.cs" />
     <Compile Include="Drivers\AreaInformationDriver.cs" />
     <Compile Include="Drivers\FTFBannerPartDriver.cs" />
@@ -476,6 +485,7 @@
     <Compile Include="Models\GCComSearchLogImagesResult.cs" />
     <Compile Include="Models\GCComUser.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
+    <Compile Include="Models\GCEuContactForm.cs" />
     <Compile Include="Models\GCEuCoordCheckAttempt.cs" />
     <Compile Include="Models\GCEuCoordCheckCode.cs" />
     <Compile Include="Models\GCEuFTFStats.cs" />
@@ -497,6 +507,8 @@
     <Compile Include="Permissions.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
+    <Compile Include="Services\ContactFormService.cs" />
+    <Compile Include="Services\CoordCheckerService.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
     <Compile Include="Services\EventCalendarService.cs" />
     <Compile Include="Services\FTFStatsService.cs" />
@@ -522,6 +534,9 @@
     <Compile Include="Services\YafMostRecentShoutService.cs" />
     <Compile Include="Services\YafMostRecentPostsService.cs" />
     <Compile Include="Shapes\FaviconShapes.cs" />
+    <Compile Include="ViewModels\ContactFormModel.cs" />
+    <Compile Include="ViewModels\CoordCheckerCheckModel.cs" />
+    <Compile Include="ViewModels\CoordCheckerMaintModel.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\NewestCachesModel.cs" />
     <Compile Include="ViewModels\ParelVanDeMaandModel.cs" />

@@ -1,0 +1,42 @@
+﻿@model Globalcaching.Models.GCEuContactForm
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("Update", "ContactForm", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+{
+        <div class="form-group">
+            <label for="Name" class="col-sm-3 control-label">@T("Naam")</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.Name, new { placeholder = T("naam"), @class = "form-control" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="EMail" class="col-sm-3 control-label">@T("EMail")</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.EMail, new { placeholder = T("email@email.com"), @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Title" class="col-sm-3 control-label">@T("Onderwerp")</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.Title, new { placeholder = T("onderwerp"), @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Comment" class="col-sm-3 control-label">@T("Vragen of opmerkingen")</label>
+            <div class="col-sm-9">
+                @Html.TextAreaFor(m => m.Comment, new { rows="15", placeholder = T("vragen of opmerkingen"), @class = "form-control" })
+            </div>
+        </div>
+
+        <input type="hidden" value="@Request.Url.OriginalString" name="ReturnUrl" />
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" value="Update" class="btn btn-primary">@T("Verstuur")</button>
+            </div>
+        </div>
+    
+    @Html.ValidationSummary()
+}

@@ -15,5 +15,8 @@ namespace Globalcaching.Models
         public double Lon { get; set; }
         public string VisitorID { get; set; }
         public DateTime AttemptAt { get; set; }
+
+        [PetaPoco.Ignore]
+        public string Coordinates { get; set; }
     }
 }

@@ -6,6 +6,18 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class CoordCheckerMaintPart : ContentPart
+    {
+    }
+
+    public class CoordCheckerCheckPart : ContentPart
+    {
+    }
+
+    public class ContactFormPart : ContentPart
+    {
+    }
+
     public class FTFBannerPart : ContentPart
     {
     }

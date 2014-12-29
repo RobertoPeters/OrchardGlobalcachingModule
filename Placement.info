@@ -28,4 +28,7 @@
   <Place Parts_NewestCaches="Content:1"/>
   <Place Parts_FeatureTiles="Content:1"/>
   <Place Parts_FTFBanner="Content:1"/>
+  <Place Parts_ContactForm="Content:1"/>
+  <Place Parts_CoordCheckerCheck="Content:1"/>
+  <Place Parts_CoordCheckerMaint="Content:1"/>
 </Placement>

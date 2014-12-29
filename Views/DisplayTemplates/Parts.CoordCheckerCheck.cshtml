@@ -1,0 +1,71 @@
+﻿<form role="form">
+    <div class="form-group">
+        <label class="control-label">Code:</label>
+        <input class="form-control" id="code" value="@Model.Code" placeholder="GC12345" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Coordinaat:</label>
+        <input class="form-control" id="coord" value="" placeholder="N51 5.123 E6 5.321" />
+    </div>
+
+    <button class="btn btn-primary" type="button" id="checkButton">Controleer</button>
+</form>
+
+<div id="coordok" class="alert alert-success" role="alert">
+    Gefeliciteerd! Het ingegeven coordinaat is goed.
+</div>
+<div id="coordnotok" class="alert alert-danger" role="alert">
+    <span id="coordnotokcomment"></span>
+</div>
+
+<script type="text/javascript">
+
+    $('#coordok').hide();
+    $('#coordnotok').hide();
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function requestCheck() {
+        $('#coordok').hide();
+        $('#coordnotok').hide();
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckCoord", "CoordChecker", new { area = "Globalcaching" })',
+            data: {
+                wp: $('#code').val(),
+                coord: $('#coord').val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response.OK) {
+                    $('#coordok').show();
+                }
+                else {
+                    $('#coordnotokcomment').text(response.Remarks);
+                    $('#coordnotok').show();
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $("#checkButton").click(function () {
+        requestCheck();
+    });
+
+    $('#coord').keypress(function (e) {
+        if (e.which == '13') {
+            requestCheck();
+            e.preventDefault();
+        }
+    });
+
+</script>

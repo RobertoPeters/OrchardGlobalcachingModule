@@ -34,6 +34,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "CheckCoord",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CoordChecker"},
+                            {"action", "CheckCoord"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "cache/large/{code}/{id}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -189,6 +204,51 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "EditCCCSettings"},
                             {"action", "Update"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ContactForm",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "ContactForm"},
+                            {"action", "Update"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "IngediendeContactFormulieren",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "ContactForm"},
+                            {"action", "Index"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetContactForms",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "ContactForm"},
+                            {"action", "GetContactForms"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {

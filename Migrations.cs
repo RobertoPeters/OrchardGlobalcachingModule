@@ -410,5 +410,48 @@ namespace Globalcaching
 
             return 29;
         }
+
+        public int UpdateFrom29()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("ContactFormWidget",
+                cfg => cfg
+                    .DisplayedAs("Contact Form")
+                    .WithPart("ContactFormPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 30;
+        }
+
+        public int UpdateFrom30()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("CoordCheckerCheckWidget",
+                cfg => cfg
+                    .DisplayedAs("Coord Checker Check")
+                    .WithPart("CoordCheckerCheckPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 31;
+        }
+
+        public int UpdateFrom31()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("CoordCheckerMaintWidget",
+                cfg => cfg
+                    .DisplayedAs("Coord Checker Maint")
+                    .WithPart("CoordCheckerMaintPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 32;
+        }
+
     }
 }

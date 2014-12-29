@@ -13,6 +13,7 @@ namespace Globalcaching.Models
         public int UserID { get; set; }
         public double Lat { get; set; }
         public double Lon { get; set; }
+        public int Radius { get; set; }
         public bool NotifyOnSuccess { get; set; }
         public bool NotifyOnFailure { get; set; }
         public string Code { get; set; }
