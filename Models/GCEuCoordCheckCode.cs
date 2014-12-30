@@ -17,5 +17,8 @@ namespace Globalcaching.Models
         public bool NotifyOnSuccess { get; set; }
         public bool NotifyOnFailure { get; set; }
         public string Code { get; set; }
+
+        [PetaPoco.Ignore]
+        public string Coordinates { get; set; }
     }
 }

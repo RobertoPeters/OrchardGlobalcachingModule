@@ -49,6 +49,81 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GetAttempts",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CoordChecker"},
+                            {"action", "GetAttempts"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CoordChecker"},
+                            {"action", "GetCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "CreateCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CoordChecker"},
+                            {"action", "CreateCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "DeleteCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CoordChecker"},
+                            {"action", "DeleteCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "UpdateCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CoordChecker"},
+                            {"action", "UpdateCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "cache/large/{code}/{id}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

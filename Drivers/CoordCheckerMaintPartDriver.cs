@@ -30,9 +30,9 @@ namespace Globalcaching.Drivers
             if (settings != null && settings.YafUserID > 1)
             {
                 CoordCheckerMaintModel m = _coordCheckerService.CoordCheckerMaintModel(null, 1, 20);
-                return ContentShape("Parts_CoordCheckerCheck",
+                return ContentShape("Parts_CoordCheckerMaint",
                         () => shapeHelper.DisplayTemplate(
-                                TemplateName: "Parts.CoordCheckerCheck",
+                                TemplateName: "Parts.CoordCheckerMaint",
                                 Model: m,
                                 Prefix: Prefix));
             }

@@ -18,6 +18,9 @@ namespace Globalcaching.Services
         bool CheckCoord(string code, string coord, out string remarks);
         CoordCheckerMaintModel CoordCheckerMaintModel(string activeCode, int page, int pageSize);
         CoordCheckerAttempts CoordCheckerAttempts(string activeCode, int page, int pageSize);
+        CoordCheckerMaintModel CreateCode(GCEuCoordCheckCode code, int page, int pageSize);
+        CoordCheckerMaintModel DeleteCode(string code, int page, int pageSize);
+        CoordCheckerMaintModel UpdateCode(GCEuCoordCheckCode code, int page, int pageSize);
     }
 
     public class CoordCheckerService : ICoordCheckerService
@@ -37,12 +40,73 @@ namespace Globalcaching.Services
             _workContextAccessor = workContextAccessor;
         }
 
+        public CoordCheckerMaintModel CreateCode(GCEuCoordCheckCode code, int page, int pageSize)
+        {
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings.YafUserID <= 1) return null;
+            CoordCheckerMaintModel result = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                if (db.FirstOrDefault<GCEuCoordCheckCode>("where Code=@0", code.Code) == null)
+                {
+                    code.UserID = settings.YafUserID;
+                    db.Insert(code);
+                    result = CoordCheckerMaintModel(code.Code, page, pageSize);
+                }
+            }
+            return result;
+        }
+
+        public CoordCheckerMaintModel UpdateCode(GCEuCoordCheckCode code, int page, int pageSize)
+        {
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings.YafUserID <= 1) return null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                var m = db.FirstOrDefault<GCEuCoordCheckCode>("where UserID=@0 and Code=@1", settings.YafUserID, code.Code);
+                if (m != null)
+                {
+                    m.Lat = code.Lat;
+                    m.Lon = code.Lon;
+                    m.NotifyOnFailure = code.NotifyOnFailure;
+                    m.NotifyOnSuccess = code.NotifyOnSuccess;
+                    m.Radius = code.Radius;
+                    db.Save(m);
+                }
+            }
+            return CoordCheckerMaintModel(code.Code, page, pageSize);
+        }
+
+        public CoordCheckerMaintModel DeleteCode(string code, int page, int pageSize)
+        {
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings.YafUserID <= 1) return null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                var m = db.FirstOrDefault<GCEuCoordCheckCode>("where UserID=@0 and Code=@1", settings.YafUserID, code);
+                if (m != null)
+                {
+                    db.Execute("delete from GCEuCoordCheckAttempt where Waypoint=@0", code);
+                    db.Execute("delete from GCEuCoordCheckCode where UserID=@0 and Code=@1", settings.YafUserID, code);
+                }
+            }
+            return CoordCheckerMaintModel(null, page, pageSize);
+        }
+
         public CoordCheckerMaintModel CoordCheckerMaintModel(string activeCode, int page, int pageSize)
         {
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings.YafUserID <= 1) return null;
             CoordCheckerMaintModel result = new CoordCheckerMaintModel();
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
             {
-                result.Codes = db.Fetch<GCEuCoordCheckCode>("order by Code");
+                result.Codes = db.Fetch<GCEuCoordCheckCode>("where UserID=@0 order by Code", settings.YafUserID);
+                //result.Codes = db.Fetch<GCEuCoordCheckCode>("order by Code");
+                foreach (var r in result.Codes)
+                {
+                    r.Coordinates = Helper.GetCoordinatesPresentation(r.Lat, r.Lon);
+                }
+
                 if (!string.IsNullOrEmpty(activeCode))
                 {
                     result.ActiveCode = (from a in result.Codes where string.Compare(a.Code, activeCode, true) == 0 select a).FirstOrDefault();
@@ -74,14 +138,19 @@ namespace Globalcaching.Services
             result.CurrentPage = 1;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
             {
-                var items = db.Page<GCEuCoordCheckAttempt>(page, pageSize, "select * from GCEuCoordCheckAttempt where Waypoint=@0 order by AttemptAt", activeCode);
-                result.Attempts = items.Items.ToList();
-                result.CurrentPage = items.CurrentPage;
-                result.PageCount = items.TotalPages;
-                result.TotalCount = items.TotalItems;
-                foreach (var r in result.Attempts)
+                var settings = _gcEuUserSettingsService.GetSettings();
+                if (settings.YafUserID <= 1) return null;
+                if (db.FirstOrDefault<GCEuCoordCheckCode>("where UserID=@0 and Code=@1", settings.YafUserID, activeCode) != null)
                 {
-                    r.Coordinates = Helper.GetCoordinatesPresentation(r.Lat, r.Lon);
+                    var items = db.Page<GCEuCoordCheckAttempt>(page, pageSize, "select * from GCEuCoordCheckAttempt where Waypoint=@0 order by AttemptAt", activeCode);
+                    result.Attempts = items.Items.ToList();
+                    result.CurrentPage = items.CurrentPage;
+                    result.PageCount = items.TotalPages;
+                    result.TotalCount = items.TotalItems;
+                    foreach (var r in result.Attempts)
+                    {
+                        r.Coordinates = Helper.GetCoordinatesPresentation(r.Lat, r.Lon);
+                    }
                 }
             }
             return result;
