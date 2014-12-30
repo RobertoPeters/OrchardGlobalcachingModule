@@ -309,6 +309,7 @@
     <Content Include="packages.config" />
     <Content Include="Scripts\gmapv3-2.js" />
     <Content Include="Scripts\gmapv3.js" />
+    <Content Include="Scripts\GoogleAnalytics.js" />
     <Content Include="Scripts\keydragzoom_packed.js" />
     <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\moment.js" />
