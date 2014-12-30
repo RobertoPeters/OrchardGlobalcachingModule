@@ -55,6 +55,17 @@ namespace Globalcaching.Controllers
             return null;
         }
 
+        public ActionResult RefreshForParels()
+        {
+            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            {
+                Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, T("De geocaches worden bijgewerkt"));
+                _taskSchedulerService.AddScheduledWaypointForParels();
+                return View("Home", _taskSchedulerService.GetSchedulerInfoModel());
+            }
+            return null;
+        }
+
         public ActionResult AddParel(string gccode)
         {
             if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))

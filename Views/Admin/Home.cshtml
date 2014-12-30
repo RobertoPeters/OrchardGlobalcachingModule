@@ -7,6 +7,10 @@
     <input type="text" id="gccode" name="gccode" placeholder="GC12345">
     <button type="submit" value="AddParel" class="btn btn-primary">@T("Voeg parel toe")</button>
 }
+@using (Html.BeginFormAntiForgeryPost(Url.Action("RefreshForParels", "Admin", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <button type="submit" value="RefreshForParels" class="btn btn-primary">@T("Ververs geocaches van afgelopen maand")</button>
+}
 
     <h2>Geocaching.com status</h2>
     LiveAPI Error:  @Model.Scheduler.LiveAPIError <br />

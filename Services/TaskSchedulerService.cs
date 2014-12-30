@@ -14,12 +14,14 @@ namespace Globalcaching.Services
     {
         List<ScheduledWaypoint> GetScheduledGeocaches();
         void AddScheduledWaypoint(List<string> gcIds, bool fullRefresh);
+        void AddScheduledWaypointForParels();
         SchedulerInfoModel GetSchedulerInfoModel();
     }
 
     public class TaskSchedulerService : ITaskSchedulerService
     {
         public static string dbTaskSchedulerConnString = ConfigurationManager.ConnectionStrings["SchedulerConnectionString"].ToString();
+        public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
 
         public TaskSchedulerService()
         { 
@@ -65,6 +67,19 @@ namespace Globalcaching.Services
                 result = db.Fetch<ScheduledWaypoint>("");
             }
             return result;
+        }
+
+        public void AddScheduledWaypointForParels()
+        {
+            List<string> codes = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+            {
+                DateTime n = DateTime.Now;
+                DateTime dtFrom = new DateTime(n.Year, n.Month, 1).AddMonths(-1).Date;
+                DateTime dtTo = new DateTime(n.Year, n.Month, 1).Date;
+                codes = db.Fetch<string>("select GCComGeocache.Code from GCComGeocache inner join GCEuData.dbo.GCEuGeocache on GCComGeocache.ID = GCEuGeocache.ID where (GCComGeocache.CountryID=141 or GCComGeocache.CountryID=4) and GCEuGeocache.PublishedAtDate>=@0 and GCEuGeocache.PublishedAtDate<@1", dtFrom, dtTo);
+            }
+            AddScheduledWaypoint(codes, true);
         }
 
         public void AddScheduledWaypoint(List<string> gcCodes, bool fullRefresh)
