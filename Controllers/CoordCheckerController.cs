@@ -18,6 +18,12 @@ namespace Globalcaching.Controllers
             _coordCheckerService = coordCheckerService;
         }
 
+        //[Themed]
+        public ActionResult RedirectFromOldSite()
+        {
+            return Redirect(Request.Url.ToString().ToLower().Replace("caches/coordcheck.aspx", "CoordinatenChecker"));
+        }
+
         [HttpPost]
         public ActionResult CheckCoord(string wp, string coord)
         {

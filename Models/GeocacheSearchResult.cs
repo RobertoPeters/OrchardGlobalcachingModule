@@ -49,6 +49,7 @@ namespace Globalcaching.Models
         public long TotalCount { get; set; }
         public long PageCount { get; set; }
         public long CurrentPage { get; set; }
+        public bool CanDownload { get; set; }
         public GeocacheListItem[] Items { get; set; }
     }
 }

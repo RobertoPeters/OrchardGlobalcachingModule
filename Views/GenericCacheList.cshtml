@@ -79,7 +79,7 @@
             <input type="hidden" name="Filter.MacroResult" value="@(Model.Filter.MacroResult == null ? "" : Model.Filter.MacroResult.ToString())" />
             <input type="hidden" name="Filter.NameSeriesMatch" value="@(Model.Filter.NameSeriesMatch == null ? "" : Model.Filter.NameSeriesMatch.ToString())" />
             <input type="hidden" name="Filter.Parel" value="@(Model.Filter.Parel == null ? "" : Model.Filter.Parel.ToString())" />
-            <button type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
+            <button id="downloadAllButton" type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
         }
     </div>
 </div>
@@ -111,6 +111,13 @@
 }
 
 <script type="text/javascript">
+
+    var canDownload = @string.Format("{0}",Model.CanDownload?"true":"false");
+
+    if (!canDownload)
+    {
+        $('#downloadAllButton').hide();
+    }
 
     $('#downloadgpxButton').hide();
     $('#hintorderloc').hide();   
@@ -230,7 +237,10 @@
             description += ' | <a href="@Href("~/CCCHulp?wp=")'+ line.Code +'">CCC</a>';
             description += ' | <a href="@Href("~/GeocacheKaart?wp=")'+ line.Code +'">Kaart</a>';
             description += ' | <a href="@Href("~/Geocache/")'+ line.Code +'">Beschrijving</a>';
-            description += ' | <a href="javascript:void(0)" onclick="downloadGpxFile(\'' + line.Code + '\')">Download</a>';
+            if (canDownload)
+            {
+                description += ' | <a href="javascript:void(0)" onclick="downloadGpxFile(\'' + line.Code + '\')">Download</a>';
+            }
             var distance = "";
             if (line.Distance!=null)
             {

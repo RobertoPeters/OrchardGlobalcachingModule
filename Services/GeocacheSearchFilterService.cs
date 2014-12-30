@@ -186,6 +186,7 @@ namespace Globalcaching.Services
             result.CurrentPage = 1;
 
             var settings = _gcEuUserSettingsService.GetSettings();
+            result.CanDownload = (settings != null && settings.YafUserID > 1 && !string.IsNullOrEmpty(settings.LiveAPIToken));
             if (settings != null && settings.SortGeocachesBy != null && settings.SortGeocachesDirection != null)
             {
                 if (filter.OrderBy == null)

@@ -20,7 +20,7 @@ namespace Globalcaching
             manifest.DefineStyle("datetimepicker.Style").SetUrl("datetimepicker.css");
             manifest.DefineScript("keydragzoom_packed.Script").SetUrl("keydragzoom_packed.js");
             manifest.DefineScript("markerclusterer_compiled.Script").SetUrl("markerclusterer_compiled.js");
-            manifest.DefineScript("gmapv3.Script").SetUrl("gmapv3.js");
+            manifest.DefineScript("gmapv3.Script").SetUrl("gmapv3-2.js");
             manifest.DefineStyle("usersonline.Style").SetUrl("usersonline.css");
             manifest.DefineStyle("zabuto_calendar.Style").SetUrl("zabuto_calendar.min.css");
             manifest.DefineScript("zabuto_calendar.Script").SetUrl("zabuto_calendar.min.js");

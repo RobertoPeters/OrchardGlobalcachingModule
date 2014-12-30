@@ -41,7 +41,7 @@
     <input id="minLon" name="minLon" type="hidden" />
     <input id="maxLat" name="maxLat" type="hidden" />
     <input id="maxLon" name="maxLon" type="hidden" />
-    <button type="submit" value="DownloadView" class="btn btn-primary pull-right">@T("Download")</button>
+    <button type="submit" id="downloadViewButton" value="DownloadView" class="btn btn-primary pull-right">@T("Download")</button>
 }
 
     </div>
@@ -91,10 +91,15 @@
     var initMapSettings = @Html.Raw(Json.Encode(new {
                          centerLat = Model.CenterLat,
                          centerLon = Model.CenterLon,
-                         initialZoomLevel = Model.InitialZoomLevel
+                         initialZoomLevel = Model.InitialZoomLevel,
+                         canDownload = Model.CanDownload
         }));
 
     $(function () {
+        if (!initMapSettings.canDownload)
+        {
+            $('#downloadViewButton').hide();
+        }
         $('#downloadgpxButton').hide();
         $('#gotolocation').keypress(function (e) {
             if (e.which == '13') {
@@ -107,6 +112,6 @@
             showAddress($("#gotolocation").val());
         });
 
-        initializeMap(initMapSettings.centerLat, initMapSettings.centerLon, initMapSettings.initialZoomLevel, '@Href("~/")', filter, getGeocachesUrl, getwpUrl);
+        initializeMap(initMapSettings.centerLat, initMapSettings.centerLon, initMapSettings.initialZoomLevel, '@Href("~/")', filter, getGeocachesUrl, getwpUrl, initMapSettings.canDownload);
     });
 </script>

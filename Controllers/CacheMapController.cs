@@ -70,9 +70,10 @@ namespace Globalcaching.Controllers
             mapSettings.InitialZoomLevel = 12;
             mapSettings.Filter = filter;
 
+            var settings = _gcEuUserSettingsService.GetSettings();
+            mapSettings.CanDownload = (settings != null && settings.YafUserID > 1 && !string.IsNullOrEmpty(settings.LiveAPIToken));
             if (filter.HomeLat == null)
             {
-                var settings = _gcEuUserSettingsService.GetSettings();
                 if (settings != null)
                 {
                     filter.HomeLat = settings.HomelocationLat;

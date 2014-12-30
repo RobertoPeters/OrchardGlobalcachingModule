@@ -11,6 +11,7 @@ namespace Globalcaching.ViewModels
         public double CenterLat { get; set; }
         public double CenterLon { get; set; }
         public int InitialZoomLevel { get; set; }
+        public bool CanDownload { get; set; }
 
         public GeocacheSearchFilter Filter { get; set; }
     }
