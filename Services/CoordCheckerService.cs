@@ -142,7 +142,7 @@ namespace Globalcaching.Services
                 if (settings.YafUserID <= 1) return null;
                 if (db.FirstOrDefault<GCEuCoordCheckCode>("where UserID=@0 and Code=@1", settings.YafUserID, activeCode) != null)
                 {
-                    var items = db.Page<GCEuCoordCheckAttempt>(page, pageSize, "select * from GCEuCoordCheckAttempt where Waypoint=@0 order by AttemptAt", activeCode);
+                    var items = db.Page<GCEuCoordCheckAttempt>(page, pageSize, "select * from GCEuCoordCheckAttempt where Waypoint=@0 order by AttemptAt desc", activeCode);
                     result.Attempts = items.Items.ToList();
                     result.CurrentPage = items.CurrentPage;
                     result.PageCount = items.TotalPages;
