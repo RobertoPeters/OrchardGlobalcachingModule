@@ -453,5 +453,33 @@ namespace Globalcaching
             return 32;
         }
 
+        public int UpdateFrom32()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("CodeCheckerCheckWidget",
+                cfg => cfg
+                    .DisplayedAs("Code Checker Check")
+                    .WithPart("CodeCheckerCheckPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 33;
+        }
+
+        public int UpdateFrom33()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("CodeCheckerMaintWidget",
+                cfg => cfg
+                    .DisplayedAs("Code Checker Maint")
+                    .WithPart("CodeCheckerMaintPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 34;
+        }
+
     }
 }

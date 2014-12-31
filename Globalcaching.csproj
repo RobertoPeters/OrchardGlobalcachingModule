@@ -365,6 +365,8 @@
     <Content Include="Views\ContactForm\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.CoordCheckerCheck.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.CoordCheckerMaint.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.CodeCheckerCheck.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.CodeCheckerMaint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -387,6 +389,7 @@
     <Compile Include="Controllers\CacheMapController.cs" />
     <Compile Include="Controllers\CheckCCCController.cs" />
     <Compile Include="Controllers\ContactFormController.cs" />
+    <Compile Include="Controllers\CodeCheckerController.cs" />
     <Compile Include="Controllers\CoordCheckerController.cs" />
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
@@ -433,6 +436,8 @@
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
     <Compile Include="Drivers\ContactFormPartDriver.cs" />
+    <Compile Include="Drivers\CodeCheckerCheckPartDriver.cs" />
+    <Compile Include="Drivers\CodeCheckerMaintPartDriver.cs" />
     <Compile Include="Drivers\CoordCheckerMaintPartDriver.cs" />
     <Compile Include="Drivers\CoordCheckerCheckPartDriver.cs" />
     <Compile Include="Drivers\FeatureTilesPartDriver.cs" />
@@ -487,6 +492,8 @@
     <Compile Include="Models\GCComSearchLogImagesResult.cs" />
     <Compile Include="Models\GCComUser.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
+    <Compile Include="Models\GCEuCodeCheckAttempt.cs" />
+    <Compile Include="Models\GCEuCodeCheckCode.cs" />
     <Compile Include="Models\GCEuContactForm.cs" />
     <Compile Include="Models\GCEuCoordCheckAttempt.cs" />
     <Compile Include="Models\GCEuCoordCheckCode.cs" />
@@ -510,6 +517,7 @@
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="Services\ContactFormService.cs" />
+    <Compile Include="Services\CodeCheckerService.cs" />
     <Compile Include="Services\CoordCheckerService.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
     <Compile Include="Services\EventCalendarService.cs" />
@@ -537,7 +545,9 @@
     <Compile Include="Services\YafMostRecentPostsService.cs" />
     <Compile Include="Shapes\FaviconShapes.cs" />
     <Compile Include="ViewModels\ContactFormModel.cs" />
+    <Compile Include="ViewModels\CodeCheckerCheckModel.cs" />
     <Compile Include="ViewModels\CoordCheckerCheckModel.cs" />
+    <Compile Include="ViewModels\CodeCheckerMaintModel.cs" />
     <Compile Include="ViewModels\CoordCheckerMaintModel.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\NewestCachesModel.cs" />

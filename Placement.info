@@ -31,4 +31,6 @@
   <Place Parts_ContactForm="Content:1"/>
   <Place Parts_CoordCheckerCheck="Content:1"/>
   <Place Parts_CoordCheckerMaint="Content:1"/>
+  <Place Parts_CodeCheckerCheck="Content:1"/>
+  <Place Parts_CodeCheckerMaint="Content:1"/>
 </Placement>

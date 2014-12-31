@@ -34,6 +34,96 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "CodeCheck/CheckCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CodeChecker"},
+                            {"action", "CheckCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "CodeCheck/GetAttempts",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CodeChecker"},
+                            {"action", "GetAttempts"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "CodeCheck/GetCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CodeChecker"},
+                            {"action", "GetCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "CodeCheck/DeleteCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CodeChecker"},
+                            {"action", "DeleteCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "CodeCheck/CreateCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CodeChecker"},
+                            {"action", "CreateCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "CodeCheck/UpdateCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CodeChecker"},
+                            {"action", "UpdateCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "CheckCoord",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

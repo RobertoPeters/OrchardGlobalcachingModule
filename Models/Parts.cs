@@ -6,6 +6,14 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class CodeCheckerMaintPart : ContentPart
+    {
+    }
+
+    public class CodeCheckerCheckPart : ContentPart
+    {
+    }
+
     public class CoordCheckerMaintPart : ContentPart
     {
     }

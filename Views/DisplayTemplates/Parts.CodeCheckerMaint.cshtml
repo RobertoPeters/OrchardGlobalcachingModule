@@ -1,0 +1,396 @@
+﻿<form role="form">
+    <div class="form-group">
+        <label class="control-label">Code eigenaar:</label>
+        <input type="text" class="form-control" id="codeowner" value="@Model.OwnerID" readonly="readonly" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Code/Waypoint:</label>
+        <select class="form-control" id="code"></select>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Code:</label>
+        <input type="text" class="form-control" id="editcode" value="" placeholder="GC12345" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Antwoord:</label>
+        <input type="text" class="form-control" id="coord" value="" placeholder="Het antwoord op de gestelde vraag" />
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4">Hoofdletter gevoelig:</label>
+        <input type="checkbox" id="casesens" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Minimale wachttijd tussen 2 posingen:</label>
+        <input type="text" class="form-control" id="waittime" value="60" placeholder="aantal seconden" />
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4">Geocaching.com autorisatie vereist:</label>
+        <input type="checkbox" id="gcomauth" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Onthulde antwoord bij goed antwoord:</label>
+        <textarea rows="10" cols="120" class="form-control" id="revealedanswer" placeholder="De tekst bij een goed antwoord"></textarea>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4">Notificatie bij foute invoer:</label>
+        <input type="checkbox" id="notiwrong" />
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-4">Notificatie bij juiste invoer:</label>
+        <input type="checkbox" id="noticorrect" />
+    </div>
+
+    <div class="row">
+        <button class="btn btn-primary col-md-2" type="button" id="updateButton" style="margin-left: 15px">Opslaan</button>
+        <button class="btn btn-primary col-md-2" type="button" id="createButton" style="margin-left: 5px">Aanmaken</button>
+        <button class="btn btn-danger col-md-2 pull-right" type="button" id="deleteButton" style="margin-right: 15px">Verwijderen</button>
+    </div>
+</form>
+
+<h3>HTML Code voor op de geocachepagina</h3>
+<textarea id="htmlcode" cols="125" rows="2"></textarea>
+
+<h3>Pogingen</h3>
+
+<div id="searchAttemptsTopPager">
+</div>
+<table class="table table-striped table-hover" id="searchAttemptsResults">
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Bezoekers ID</th>
+            <th>Geocaching.com naam</th>
+            <th>Antwoord</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div id="searchAttemptsBottomPager">
+</div>
+
+<script type="text/javascript">
+    var ignoreSelection = false;
+
+    initGlobalcachingPager("searchAttemptsTopPager", "AttemptsPager");
+    initGlobalcachingPager("searchAttemptsBottomPager", "AttemptsPager");
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function updateAttemptsList(response) {
+        var resultElementName = "#searchAttemptsResults";
+        var pagerElementName = ".AttemptsPager";
+        
+        for (var i = 0; i < response.Attempts.length; i++) {
+            var line = response.Attempts[i];
+            // insert after last row!
+            var d = eval('new' + line.AttemptAt.replace(/\//g, ' '));
+            var td1 = d.toLocaleString();
+            var td2 = line.VisitorID;
+            var td3 = "";
+            if (line.GroundspeakUserName != null) {
+                td3 = line.GroundspeakUserName;
+            }
+            var td4 = line.Answer;
+
+            $(resultElementName + ' > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td></tr>');
+        }
+
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestAttemptsPage");
+    }
+
+    function requestAttemptsPage(page) {
+        var resultElementName = "#searchAttemptsResults";
+        var pagerElementName = ".AttemptsPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAttempts", "CodeChecker", new { area = "Globalcaching" })',
+            data: {
+                page: page,
+                pageSize: "20",
+                id: $("#code").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateAttemptsList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function requestCode() {
+        var resultElementName = "#searchAttemptsResults";
+        var pagerElementName = ".AttemptsPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCode", "CodeChecker", new { area = "Globalcaching" })',
+            data: {
+                page: 1,
+                pageSize: "20",
+                code: $("#code").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateAllPage(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function deleteCode() {
+        var resultElementName = "#searchAttemptsResults";
+        var pagerElementName = ".AttemptsPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteCode", "CodeChecker", new { area = "Globalcaching" })',
+            data: {
+                page: 1,
+                pageSize: "20",
+                code: $("#code").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateAllPage(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function createCode() {
+        var resultElementName = "#searchAttemptsResults";
+        var pagerElementName = ".AttemptsPager";
+
+        myApp.showPleaseWait();
+
+        var nw;
+        if ($('#notiwrong').prop('checked')) {
+            nw = "true";
+        }
+        else {
+            nw = "false";
+        }
+        var ns;
+        if ($('#noticorrect').prop('checked')) {
+            ns = "true";
+        }
+        else {
+            ns = "false";
+        }
+        var ar;
+        if ($('#gcomauth').prop('checked')) {
+            ar = "true";
+        }
+        else {
+            ar = "false";
+        }
+        var cs;
+        if ($('#casesens').prop('checked')) {
+            cs = "true";
+        }
+        else {
+            cs = "false";
+        }
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateCode", "CodeChecker", new { area = "Globalcaching" })',
+            data: {
+                page: 1,
+                pageSize: "20",
+                code: $("#editcode").val(),
+                answer: $("#coord").val(),
+                answertext: $("#revealedanswer").val(),
+                delaysec: $("#waittime").val(),
+                casesens: cs,
+                gccomreq: ar,
+                notiwrong: nw,
+                noticorrect: ns,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response == null || response=="") {
+                    alert('De code is al in gebruik of een invoerveld is niet correct.');
+                }
+                else {
+                    updateAllPage(response);
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function saveCode() {
+        var resultElementName = "#searchAttemptsResults";
+        var pagerElementName = ".AttemptsPager";
+
+        myApp.showPleaseWait();
+
+        var nw;
+        if ($('#notiwrong').prop('checked')) {
+            nw = "true";
+        }
+        else {
+            nw = "false";
+        }
+        var ns;
+        if ($('#noticorrect').prop('checked')) {
+            ns = "true";
+        }
+        else {
+            ns = "false";
+        }
+        var ar;
+        if ($('#gcomauth').prop('checked')) {
+            ar = "true";
+        }
+        else {
+            ar = "false";
+        }
+        var cs;
+        if ($('#casesens').prop('checked')) {
+            cs = "true";
+        }
+        else {
+            cs = "false";
+        }
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateCode", "CodeChecker", new { area = "Globalcaching" })',
+            data: {
+                page: 1,
+                pageSize: "20",
+                id: $("#code").val(),
+                code: $("#editcode").val(),
+                answer: $("#coord").val(),
+                answertext: $("#revealedanswer").val(),
+                delaysec: $("#waittime").val(),
+                casesens: cs,
+                gccomreq: ar,
+                notiwrong: nw,
+                noticorrect: ns,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response == null || response == "") {
+                    alert('Een invoerveld is niet correct.');
+                }
+                else {
+                    updateAllPage(response);
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function updateActiveCode(activecode) {
+        if (activecode != null) {
+            $('#code').val(activecode.ID);
+            $('#editcode').val(activecode.PublicCode);
+            $('#coord').val(activecode.AnswerCode);
+            $('#waittime').val(activecode.DelaySeconds);
+            $('#revealedanswer').val(activecode.AnswerText);
+            if (activecode.NotifyOnFailure) {
+                $('#notiwrong').prop('checked', true);
+            }
+            else {
+                $('#notiwrong').prop('checked', false);
+            }
+            if (activecode.NotifyOnSuccess) {
+                $('#noticorrect').prop('checked', true);
+            }
+            else {
+                $('#noticorrect').prop('checked', false);
+            }
+            if (activecode.CaseSensative) {
+                $('#casesens').prop('checked', true);
+            }
+            else {
+                $('#casesens').prop('checked', false);
+            }
+            if (activecode.GroundspeakAuthReq) {
+                $('#gcomauth').prop('checked', true);
+            }
+            else {
+                $('#gcomauth').prop('checked', false);
+            }
+            $('#htmlcode').text('Je kunt het antwoord van de puzzel controleren op <a href="http://www.globalcaching.eu/CodeChecker?id=' + activecode.UserID.toString() + '&code=' + activecode.EncodedPublicCode + '">www.globalcaching.eu</a>');
+            $("#updateButton").show();
+            $("#deleteButton").show();
+        }
+        else {
+            $('#htmlcode').text('');
+            $("#updateButton").hide();
+            $("#deleteButton").hide();
+        }
+    }
+
+    function updateAllPage(response) {
+        ignoreSelection = true;
+        $('#code').empty();
+        for (var i = 0; i < response.Codes.length; i++) {
+            $('#code')
+             .append($("<option></option>")
+             .attr("value", response.Codes[i].ID)
+             .text(response.Codes[i].PublicCode));
+        }
+        updateActiveCode(response.ActiveCode);
+        updateAttemptsList(response.AttemptInfo);
+        ignoreSelection = false;
+    }
+
+    $("#code").change(function () {
+        if (!ignoreSelection) {
+            requestCode();
+        }
+    });
+    $("#updateButton").click(function () {
+        saveCode();
+    });
+    $("#createButton").click(function () {
+        createCode();
+    });
+    $("#deleteButton").click(function () {
+        deleteCode();
+    });
+
+    updateAllPage(@Html.Raw(Json.Encode(@Model)));
+</script>

@@ -1,0 +1,84 @@
+﻿<form role="form">
+    <div class="form-group">
+        <label class="control-label">Code eigenaar:</label>
+        <input class="form-control" id="publiccode" value="@Model.ID" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Code:</label>
+        <input class="form-control" id="code" value="@Model.Code" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Antwoord:</label>
+        <input class="form-control" id="coord" value="" />
+    </div>
+
+    <button class="btn btn-primary" type="button" id="checkButton">Controleer</button>
+</form>
+
+<div id="coordok" class="alert alert-success" role="alert">
+    Gefeliciteerd! Het antwoord is goed.
+</div>
+<div id="coordnotok" class="alert alert-danger" role="alert">
+    <span id="coordnotokcomment"></span>
+</div>
+
+<form>
+    <div class="form-group">
+        <label class="control-label">Onthulde antwoord:</label>
+        <textarea class="form-control" rows="10" id="answerreply"></textarea>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $('#coordok').hide();
+    $('#coordnotok').hide();
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function requestCheck() {
+        $('#coordok').hide();
+        $('#coordnotok').hide();
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CheckCode", "CodeChecker", new { area = "Globalcaching" })',
+            data: {
+                id: $('#publiccode').val(),
+                publiccode: $('#code').val(),
+                answer: $('#coord').val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response.OK) {
+                    $('#coordok').show();
+                    $('#answerreply').text(response.Remarks);
+                }
+                else {
+                    $('#coordnotokcomment').text(response.Remarks);
+                    $('#coordnotok').show();
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $("#checkButton").click(function () {
+        requestCheck();
+    });
+
+    $('#coord').keypress(function (e) {
+        if (e.which == '13') {
+            requestCheck();
+            e.preventDefault();
+        }
+    });
+
+</script>
