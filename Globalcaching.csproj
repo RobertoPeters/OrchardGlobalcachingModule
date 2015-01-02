@@ -368,6 +368,7 @@
     <Content Include="Views\DisplayTemplates\Parts.CodeCheckerCheck.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.CodeCheckerMaint.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.LogCorrection.cshtml" />
+    <Content Include="Views\DisplayTemplates\Yaf.MostRecentContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -470,6 +471,7 @@
     <Compile Include="Drivers\SearchByAttributesPartDriver.cs" />
     <Compile Include="Drivers\StatisticsGeocachesPerYearDriver.cs" />
     <Compile Include="Drivers\TrackableBatchLogDriver.cs" />
+    <Compile Include="Drivers\YafMostRecentContentPartDriver.cs" />
     <Compile Include="Drivers\YafMostRecentShoutPartDriver.cs" />
     <Compile Include="Drivers\YafMostRecentPostsPartDriver.cs" />
     <Compile Include="Gavaghan.Geodesy\Angle.cs" />
@@ -570,6 +572,7 @@
     <Compile Include="ViewModels\GeocacheDataModel.cs" />
     <Compile Include="ViewModels\GeocacheFilterMacroModel.cs" />
     <Compile Include="ViewModels\SearchByAttributesModel.cs" />
+    <Compile Include="ViewModels\YafMostRecentContentModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\DisplayTemplates\Parts.GCComSearchUser.cshtml" />

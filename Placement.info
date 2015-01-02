@@ -34,4 +34,5 @@
   <Place Parts_CodeCheckerCheck="Content:1"/>
   <Place Parts_CodeCheckerMaint="Content:1"/>
   <Place Parts_LogCorrection="Content:1"/>
+  <Place Yaf_MostRecentContent="Content:1"/>
 </Placement>

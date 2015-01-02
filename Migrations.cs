@@ -495,5 +495,19 @@ namespace Globalcaching
             return 35;
         }
 
+        public int UpdateFrom35()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("YafMostRecentContentWidget",
+                cfg => cfg
+                    .DisplayedAs("Yaf Most Recent Content")
+                    .WithPart("YafMostRecentContentPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 36;
+        }
+
     }
 }

@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class YafMostRecentContentPart : ContentPart
+    {
+    }
+
     public class LogCorrectionPart : ContentPart
     {
     }

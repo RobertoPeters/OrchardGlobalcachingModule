@@ -1,0 +1,24 @@
+﻿<div class="row">
+    <div class="col-md-6">
+        <h3>Forum actieve onderwerpen</h3>
+        <ul>
+            @foreach (var l in Model.YafPosts)
+            {
+                <li>
+                    <strong>@l.Username</strong> op @l.PostedAt.ToString("yyyy-MM-dd HH:mm") in @Html.Raw("<a href=" + l.PostUrl + "\" />" + @l.Topic + "</a>")
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h3>Forum recente shoutboxberichten</h3>
+        <ul>
+            @foreach (var l in Model.YafShouts)
+            {
+                <li>
+                    <strong>@l.Username</strong> op @l.PostedAt.ToString("yyyy-MM-dd HH:mm") : @Html.Raw(@l.Message)
+                </li>
+            }
+        </ul>
+    </div>
+</div>
