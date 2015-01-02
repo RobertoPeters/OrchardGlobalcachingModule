@@ -19,13 +19,16 @@ namespace Globalcaching.Controllers
         public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
 
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
+        private readonly ITaskSchedulerService _taskSchedulerService;
         public IOrchardServices Services { get; set; }
         public Localizer T { get; set; }
 
         public LogGCComController(IGCEuUserSettingsService gcEuUserSettingsService,
+            ITaskSchedulerService taskSchedulerService,
             IOrchardServices services)
         {
             _gcEuUserSettingsService = gcEuUserSettingsService;
+            _taskSchedulerService = taskSchedulerService;
             Services = services;
             T = NullLocalizer.Instance;
         }
@@ -99,6 +102,10 @@ namespace Globalcaching.Controllers
                 var log = LiveAPIClient.LogGeocache(usrSettings.LiveAPIToken, gcid, logText, visitDate.Date, favorite);
                 if (log != null)
                 {
+                    List<string> l = new List<string>();
+                    l.Add(gcid);
+                    _taskSchedulerService.AddScheduledWaypoint(l, true);
+                    Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, T("De geocache is gelogd op geocaching.com en de log zal spoedig ook bij ons aanwezig zijn."));
                     result[0] = "OK";
                     result[1] = Url.Action("Index", "DisplayGeocache", new { id = gcid });
                     result[2] = log.Url;

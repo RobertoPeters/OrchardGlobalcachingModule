@@ -34,6 +34,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "LogCorrection/SubmitGeocache",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LogCorrection"},
+                            {"action", "SubmitGeocache"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "CodeCheck/CheckCode",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

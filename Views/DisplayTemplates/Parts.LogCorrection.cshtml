@@ -1,0 +1,17 @@
+﻿@using (Html.BeginFormAntiForgeryPost(Url.Action("SubmitGeocache", "LogCorrection", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+{
+    <div class="form-group">
+        <label for="gccode" class="col-sm-2 control-label">@T("Geocache code:")</label>
+        <div class="col-sm-10">
+            <input type="text" id="gccode" name="gccode" placeholder="GC12345">
+        </div>
+    </div>
+    
+    <input type="hidden" value="@Request.Url.OriginalString" name="ReturnUrl" />
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" value="SubmitGeocache" class="btn btn-primary">@T("Indienen")</button>
+        </div>
+    </div>
+   
+}

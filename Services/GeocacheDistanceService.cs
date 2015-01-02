@@ -30,7 +30,7 @@ namespace Globalcaching.Services
             result.CurrentPage = 1;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
             {
-                var items = db.Page<GeocacheDistanceAdminInfo>(page, pageSize, "select GCEuGeocache.ID, GCEuGeocache.PublishedAtDate, GCComGeocache.Code, GCComGeocache.Name, GCComGeocacheType.GeocacheTypeName from GCEuGeocache inner join GCComData.dbo.GCComGeocache on GCComGeocache.ID = GCEuGeocache.ID inner join GCComData.dbo.GCComGeocacheType on GCComGeocacheType.ID = GCComGeocache.GeocacheTypeId where Distance is null and GCEuGeocache.DistanceChecked = 0 and GCComGeocache.CountryID = 141 order by GCEuGeocache.PublishedAtDate");
+                var items = db.Page<GeocacheDistanceAdminInfo>(page, pageSize, "select GCEuGeocache.ID, GCEuGeocache.PublishedAtDate, GCComGeocache.Code, GCComGeocache.Name, GCComGeocacheType.GeocacheTypeName from GCEuGeocache inner join GCComData.dbo.GCComGeocache on GCComGeocache.ID = GCEuGeocache.ID inner join GCComData.dbo.GCComGeocacheType on GCComGeocacheType.ID = GCComGeocache.GeocacheTypeId where Archived=0 and Distance is null and GCEuGeocache.DistanceChecked = 0 and GCComGeocache.CountryID = 141 order by GCEuGeocache.PublishedAtDate");
                 result.Geocaches = items.Items;
                 result.CurrentPage = items.CurrentPage;
                 result.TotalCount = items.TotalItems;

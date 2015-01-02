@@ -481,5 +481,19 @@ namespace Globalcaching
             return 34;
         }
 
+        public int UpdateFrom34()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("LogCorrectionWidget",
+                cfg => cfg
+                    .DisplayedAs("Log Correction")
+                    .WithPart("LogCorrectionPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 35;
+        }
+
     }
 }

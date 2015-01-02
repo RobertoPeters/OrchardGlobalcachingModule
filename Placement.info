@@ -33,4 +33,5 @@
   <Place Parts_CoordCheckerMaint="Content:1"/>
   <Place Parts_CodeCheckerCheck="Content:1"/>
   <Place Parts_CodeCheckerMaint="Content:1"/>
+  <Place Parts_LogCorrection="Content:1"/>
 </Placement>

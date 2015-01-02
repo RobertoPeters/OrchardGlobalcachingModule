@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class LogCorrectionPart : ContentPart
+    {
+    }
+
     public class CodeCheckerMaintPart : ContentPart
     {
     }
