@@ -22,6 +22,7 @@ namespace Globalcaching.Services
         LiveAPIDownloadStatus StopDownload();
         string GetDownloadFilePath();
         string DownloadGPX(string Code);
+        LiveAPIDownloadStatus UpdateLiveAPILimits();
     }
 
     public class LiveAPIDownloadService : ILiveAPIDownloadService
@@ -362,7 +363,7 @@ LiveAPILastAccessTime datetime
                     if (!System.IO.File.Exists(gpxFile))
                     {
                         var viewPort = db.Fetch<viewport>(string.Format("select Min(Latitude) as minLat, Max(Latitude) as maxLat, Min(Longitude) as minLon, Max(Longitude) as maxLon from GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo inner join GCComGeocache on GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo.Code = GCComGeocache.Code", YafUserID)).FirstOrDefault();
-                        System.IO.File.AppendAllText(gpxFile, GPXStart(viewPort.minLat, viewPort.minLon, viewPort.maxLat, viewPort.maxLon), Encoding.UTF8);
+                        System.IO.File.AppendAllText(gpxFile, GPXStart(viewPort.minLat, viewPort.minLon, viewPort.maxLat, viewPort.maxLon, false), Encoding.UTF8);
                     }
 
                     using (var api = LiveAPIClient.GetLiveClient())
@@ -453,6 +454,48 @@ LiveAPILastAccessTime datetime
             }
         }
 
+        public LiveAPIDownloadStatus UpdateLiveAPILimits()
+        {
+            LiveAPIDownloadStatus result = null;
+            try
+            {
+                using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                {
+                    var settings = _gcEuUserSettingsService.GetSettings();
+                    if (settings != null && !string.IsNullOrEmpty(settings.LiveAPIToken))
+                    {
+                        result = getOrCreateDownLoadStatus(db, settings.YafUserID);
+                        if (result != null && !result.IsDownloading)
+                        {
+                            using (var api = LiveAPIClient.GetLiveClient())
+                            {
+                                var req = new SearchForGeocachesRequest();
+                                req.AccessToken = settings.LiveAPIToken;
+                                req.CacheCode = new CacheCodeFilter();
+                                req.CacheCode.CacheCodes = new string[] { "GC" };
+                                req.IsLite = result.IsLite;
+                                req.MaxPerPage = 1;
+                                req.GeocacheLogCount = 0;
+                                var resp = api.SearchForGeocaches(req);
+                                if (resp.Status.StatusCode == 0 && resp.Geocaches != null)
+                                {
+                                    result.LiveAPILastAccessTime = DateTime.Now;
+                                    result.LiveAPICachesLeft = resp.CacheLimits.CachesLeft;
+                                    result.LiveAPIMaxCacheCount = resp.CacheLimits.MaxCacheCount;
+                                    db.Update("GCEuMacroData.dbo.LiveAPIDownloadStatus", "UserID", result);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
         public string DownloadGPX(string Code)
         {
             string result = null;
@@ -488,7 +531,7 @@ LiveAPILastAccessTime datetime
                             //add to GPX
                             foreach (var gc in resp.Geocaches)
                             {
-                                System.IO.File.AppendAllText(fn, GPXStart((double)gc.Latitude, (double)gc.Longitude, (double)gc.Latitude, (double)gc.Longitude), Encoding.UTF8);
+                                System.IO.File.AppendAllText(fn, GPXStart((double)gc.Latitude, (double)gc.Longitude, (double)gc.Latitude, (double)gc.Longitude, true), Encoding.UTF8);
                                 System.IO.File.AppendAllText(fn, GPXForGeocache(gc, AttributeTypes), Encoding.UTF8);
 
                                 if (gc.AdditionalWaypoints != null)
@@ -514,13 +557,20 @@ LiveAPILastAccessTime datetime
             return result;
         }
 
-        private string GPXStart(double minLat, double minLon, double maxLat, double maxLon)
+        private string GPXStart(double minLat, double minLon, double maxLat, double maxLon, bool singleCache)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
             sb.AppendLine("<gpx xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" version=\"1.0\" creator=\"Globalcaching Pocket Query\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd\" xmlns=\"http://www.topografix.com/GPX/1/0\">");
             sb.AppendLine("  <name>Pocket Query</name>");
-            sb.AppendLine("  <desc>Geocache file generated by Globalcaching Website</desc>");
+            if (singleCache)
+            {
+                sb.AppendLine("  <desc>This is an individual cache generated from Geocaching.com</desc>");
+            }
+            else
+            {
+                sb.AppendLine("  <desc>Geocache file generated by Globalcaching Website (HasChildren)</desc>");
+            }
             sb.AppendLine("  <author>Globalcaching</author>");
             sb.AppendLine("  <email>globalcaching@gmail.com</email>");
             sb.AppendLine("  <url>http://www.globalcaching.eu</url>");

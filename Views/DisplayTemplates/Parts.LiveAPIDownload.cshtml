@@ -38,7 +38,7 @@
             <td id="Canceled"></td>
         </tr>
         <tr>
-            <td>Live API tegoed</td>
+            <td>Live API tegoed <button class="btn btn-primary btn-xs pull-right" type="button" id="updateLiveAPIButton">ververs</button></td>
             <td id="LiveAPILimits"></td>
         </tr>
         <tr>
@@ -119,8 +119,10 @@
                 $("#busyIndicator").show();
                 $("#stopDownloadForm").show();
                 $("#downloadFilebutton").hide();
+                $("#updateLiveAPIButton").hide();
             }
             else {
+                $("#updateLiveAPIButton").show();
                 $("#busyIndicator").hide();
                 $("#stopDownloadForm").hide();
                 if (response.FileName != null && response.FileName != '' && response.Downloaded > 0) {
@@ -151,6 +153,26 @@
                 handleDownloadStatus(response);
             },
             error: function (data, errorText) {
+            }
+        });
+    }
+
+    function updateLiveAPILimits() {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateLiveAPILimits", "LiveAPIDownload", new { area = "Globalcaching" })',
+            data: {
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response != null && response != "") {
+                    handleDownloadStatus(response);
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
             }
         });
     }
@@ -186,6 +208,10 @@
             }
         });
     }
+
+    $("#updateLiveAPIButton").click(function () {
+        updateLiveAPILimits();
+    });
 
     $("#startDownloadButton").click(function () {
         startDownload();

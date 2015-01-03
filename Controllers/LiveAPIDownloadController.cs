@@ -39,6 +39,20 @@ namespace Globalcaching.Controllers
         }
 
         [HttpPost]
+        public ActionResult UpdateLiveAPILimits()
+        {
+            var m = _liveAPIDownloadService.UpdateLiveAPILimits();
+            if (m == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Json(m);
+            }
+        }
+
+        [HttpPost]
         public ActionResult StartDownload(bool isLite, string fileFormat)
         {
             var m = _liveAPIDownloadService.StartDownload(isLite, fileFormat);

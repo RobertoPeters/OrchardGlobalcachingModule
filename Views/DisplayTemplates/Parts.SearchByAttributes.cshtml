@@ -397,6 +397,9 @@
         &nbsp;&nbsp;Gevonden door: Gevonden door geocachers
     </div>
     <div id="pnlfoundby" class="panel-body collapse in">
+        <div>
+            <input type="checkbox" id="foundbyall" checked="checked" /> Gevonden door alle genoemde geocachers (anders minstens door 1 van de geocachers)
+        </div>
         <div class="form-group">
             <input id="foundby" type="text" class="form-control" placeholder="naam van cachers met komma gescheiden zonder spatie bv pietje,pukje">
         </div>
@@ -734,7 +737,21 @@
         }
         if ($('#chkfoundby').prop('checked'))
         {
-            result = addMacroFunction(result, 'GevondenDoor("' + $('#foundby').val().replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")');
+            if ($('#foundbyall').prop('checked'))
+            {
+                var usrs =  $('#foundby').val().split(',');
+                var n = "";
+                for (var i=0; i<usrs.length; i++)
+                {
+                    n += "a";
+                    preresult += 'GEV'+ n + ' = GevondenDoor("' + usrs[i].replace(/\"/g, "\\\"") + '")\r\n';
+                    result = addMacroFunction(result, 'GEV'+ n);
+                }
+            }
+            else
+            {
+                result = addMacroFunction(result, 'GevondenDoor("' + $('#foundby').val().replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")');
+            }
         }
         if ($('#chkowners').prop('checked'))
         {

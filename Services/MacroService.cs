@@ -1266,7 +1266,7 @@ namespace Globalcaching.Services
                     {
                         sb.Append(", ");
                     }
-                    sb.AppendFormat("'{0}'", names[i].Replace("'", "''").Replace("@", "@@"));
+                    sb.AppendFormat("'{0}'", names[i].Trim().Replace("'", "''").Replace("@", "@@"));
                 }
             }
             result = db.Fetch<long>(string.Format("select distinct ID from GcComData.dbo.GCComUser where UserName in ({0})", sb.ToString()));
