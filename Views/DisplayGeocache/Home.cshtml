@@ -260,11 +260,8 @@
         <div class="panel-body">
             @foreach (var p in Model.GeocacheImages)
             {
-                if (!p.Url.StartsWith("http://img-api.geocaching.com"))
-                {
-                    <img src='@Href("~/Modules/Globalcaching/Media/images.gif")' /> <a href="@p.Url.Replace("http://imgcdn.geocaching.com/cache/", string.Format("/cache/large/{0}/", Model.GCComGeocacheData.Code))" target="_blank">@p.Name</a><br />
-                    <span>&nbsp;&nbsp;&nbsp;</span>@p.Description<br />
-                }
+                <img src='@Href("~/Modules/Globalcaching/Media/images.gif")' /> <a href="@p.Url.Replace("http://imgcdn.geocaching.com/cache/", string.Format("/cache/large/{0}/", Model.GCComGeocacheData.Code))" target="_blank">@p.Name</a><br />
+                <span>&nbsp;&nbsp;&nbsp;</span>@p.Description<br />
             }
         </div>
     </div>

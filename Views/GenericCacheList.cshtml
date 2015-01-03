@@ -23,7 +23,7 @@
                 <option value="0">Afstand van middelpunt of thuislocatie *)</option>
                 <option value="1">Plaatsingsdatum</option>
                 <option value="2">Publicatiedatum</option>
-                <option value="3">Afstand</option>
+                <option value="3">Lengte</option>
                 <option value="4">Meest recente gevonden log</option>
                 <option value="5">Favorites</option>
                 <option value="6">Favorites percentage</option>
@@ -90,12 +90,12 @@
 <table class="table table-condensed table-striped table-hover" id="gccomSearchGeocacheResults">
     <thead>
         <tr>
-            <th></th>
+            <th><img src="@Href("~/Modules/Globalcaching/Media/icon-home.png")" title="Afstand en richting van thuis naar geocache" /></th>
             <th></th>
             <th>Icoon</th>
-            <th>M/T</th>
+            <th><span title="Moelijkheid en Terrein">M/T</span></th>
             <th>Beschrijving</th>
-            <th>Afstand</th>
+            <th><span title="De geocache/wandel afstand">Lengte</span></th>
             <th>Data</th>
         </tr>
     </thead>
@@ -252,12 +252,12 @@
             if (line.PublishedAtDate!=null)
             {
                 d = eval('new' + line.PublishedAtDate.replace(/\//g, ' '));
-                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/24.gif")" /> ' + formatDateToShortDate(d) + '<br />';
+                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/24.gif")" title="Datum van publicatie log" /> ' + formatDateToShortDate(d) + '<br />';
             }
             if (line.MostRecentFoundDate!=null)
             {
                 d = eval('new' + line.MostRecentFoundDate.replace(/\//g, ' '));
-                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" /> ' + formatDateToShortDate(d) + '<br />';
+                dateInfo += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" title="Datum van meest recente gevonden log" /> ' + formatDateToShortDate(d) + '<br />';
             }
             $(resultElementName + ' > tbody:last').append('<tr><td>'+ direction +'</td><td>'+ specialIcon +'</td><td>'+ cacheIcon +'</td><td>'+ dtInfo +'</td><td>' + description + '</td><td>' + distance + '</td><td width="110">' + dateInfo + '</td></tr>');
         }

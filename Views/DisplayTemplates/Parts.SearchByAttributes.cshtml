@@ -102,10 +102,13 @@
         </div>
         @foreach (var attr in Model.AttributeTypes)
         {
+            if (attr.ID!=16)
+            { 
             <div class="col-md-1">
-                <img style="margin: 5px 5px 5px 5px" id="@string.Format("attrposimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif",@attr.ID))' Width="30" Height="30" onclick="togglePosAttributeButton('@attr.ID')" title="@attr.Name" />
+                <img style="margin: 5px 5px 5px 5px; cursor: pointer" id="@string.Format("attrposimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif",@attr.ID))' Width="30" Height="30" onclick="togglePosAttributeButton('@attr.ID')" title="@attr.Name" />
                 <input id="@string.Format("attrposvalue{0}", attr.ID)" type="hidden" value="0" />
             </div>
+        }
         }
     </div>
 </div>
@@ -118,10 +121,13 @@
     <div id="pnlnotattributes" class="panel-body collapse in">
         @foreach (var attr in Model.AttributeTypes)
         {
+            if (attr.ID!=16)
+            { 
             <div class="col-md-1">
-                <img style="margin: 5px 5px 5px 5px" id="@string.Format("attrnegimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif",@attr.ID))' width="30" height="30" onclick="toggleNegAttributeButton('@attr.ID')" title="@attr.Name" />
+                <img style="margin: 5px 5px 5px 5px; cursor: pointer" id="@string.Format("attrnegimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif",@attr.ID))' width="30" height="30" onclick="toggleNegAttributeButton('@attr.ID')" title="@attr.Name" />
                 <input id="@string.Format("attrnegvalue{0}", attr.ID)" type="hidden" value="0" />
             </div>
+        }
         }
     </div>
 </div>
@@ -683,21 +689,22 @@
         {
             if ($('#attributescontainsall').prop('checked'))
             {
-                var n = "a";
+                var n = "";
                 for(var i=0; i<attributeTypes.length; i++)
                 {
                     var v = $('#attrposvalue'+attributeTypes[i].ID.toString()).val();
                     if (v=='1')
                     {
+                        n = n + 'a';
                         preresult += 'ATTR'+ n + ' = BevatAttribuut(' + attributeTypes[i].ID.toString() + ')\r\n';
                         result = addMacroFunction(result, 'ATTR'+ n);
                     }
                     else if (v=='2')
                     {
+                        n = n + 'a';
                         preresult += 'ATTR'+ n + ' = BevatAttribuut(-' + attributeTypes[i].ID.toString() + ')\r\n';
                         result = addMacroFunction(result, 'ATTR'+ n);
                     }
-                    n = n + 'a';
                 }
             }
             else{
