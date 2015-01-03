@@ -17,6 +17,7 @@
             <input type="hidden" name="Filter.OwnerName" value="@(Model.Filter.OwnerName == null ? "" : Model.Filter.OwnerName.ToString())" />
             <input type="hidden" name="Filter.MacroResult" value="@(Model.Filter.MacroResult == null ? "" : Model.Filter.MacroResult.ToString())" />
             <input type="hidden" name="Filter.NameSeriesMatch" value="@(Model.Filter.NameSeriesMatch == null ? "" : Model.Filter.NameSeriesMatch.ToString())" />
+            <input type="hidden" name="Filter.NameContainsWord" value="@(Model.Filter.NameContainsWord == null ? "" : Model.Filter.NameContainsWord.ToString())" />
             <input type="hidden" name="Filter.Parel" value="@(Model.Filter.Parel == null ? "" : Model.Filter.Parel.ToString())" />
             <span>Sorteer op:</span>
             <select id="newSortBy" name="newSortBy">
@@ -58,6 +59,7 @@
             <input type="hidden" name="Filter.OwnerName" value="@(Model.Filter.OwnerName == null ? "" : Model.Filter.OwnerName.ToString())" />
             <input type="hidden" name="Filter.MacroResult" value="@(Model.Filter.MacroResult == null ? "" : Model.Filter.MacroResult.ToString())" />
             <input type="hidden" name="Filter.NameSeriesMatch" value="@(Model.Filter.NameSeriesMatch == null ? "" : Model.Filter.NameSeriesMatch.ToString())" />
+            <input type="hidden" name="Filter.NameContainsWord" value="@(Model.Filter.NameContainsWord == null ? "" : Model.Filter.NameContainsWord.ToString())" />
             <input type="hidden" name="Filter.Parel" value="@(Model.Filter.Parel == null ? "" : Model.Filter.Parel.ToString())" />
             <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
         }
@@ -78,6 +80,7 @@
             <input type="hidden" name="Filter.OwnerName" value="@(Model.Filter.OwnerName == null ? "" : Model.Filter.OwnerName.ToString())" />
             <input type="hidden" name="Filter.MacroResult" value="@(Model.Filter.MacroResult == null ? "" : Model.Filter.MacroResult.ToString())" />
             <input type="hidden" name="Filter.NameSeriesMatch" value="@(Model.Filter.NameSeriesMatch == null ? "" : Model.Filter.NameSeriesMatch.ToString())" />
+            <input type="hidden" name="Filter.NameContainsWord" value="@(Model.Filter.NameContainsWord == null ? "" : Model.Filter.NameContainsWord.ToString())" />
             <input type="hidden" name="Filter.Parel" value="@(Model.Filter.Parel == null ? "" : Model.Filter.Parel.ToString())" />
             <button id="downloadAllButton" type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
         }
