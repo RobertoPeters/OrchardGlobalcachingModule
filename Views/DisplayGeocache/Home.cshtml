@@ -57,7 +57,7 @@
             <div class="row">
                 <div class="col-md-3"><strong>Plaatsingsdatum:</strong></div>
                 <div class="col-md-9">
-                    @String.Format("{0:d}", @Model.GCComGeocacheData.UTCPlaceDate)
+                    @String.Format("{0:dd-MM-yyyy}", @Model.GCComGeocacheData.UTCPlaceDate)
                 </div>
             </div>
             <div class="row">
@@ -65,11 +65,11 @@
                 <div class="col-md-9">
                     @if (@Model.GCEuGeocacheData.PublishedAtDate != null)
                     {
-                        @String.Format("{0:d}", @Model.GCEuGeocacheData.PublishedAtDate)
+                        @String.Format("{0:dd-MM-yyyy}", @Model.GCEuGeocacheData.PublishedAtDate)
                     }
                     else
                     {
-                        @String.Format("{0:d}", @Model.GCComGeocacheData.UTCPlaceDate)
+                        @String.Format("{0:dd-MM-yyyy}", @Model.GCComGeocacheData.UTCPlaceDate)
                     }
                 </div>
             </div>
@@ -88,7 +88,7 @@
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Aangepast:</strong></div>
-                <div class="col-md-9">@String.Format("{0:d}", @Model.GCComGeocacheData.DateLastUpdate)</div>
+                <div class="col-md-9">@String.Format("{0:dd-MM-yyyy}", @Model.GCComGeocacheData.DateLastUpdate)</div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Container:</strong></div>
@@ -389,7 +389,7 @@
                                     break;
                                 }
                             }
-                            <span class="pull-right"> @gcl.Log.VisitDate.ToString("d")</span><br />
+                            <span class="pull-right"> @gcl.Log.VisitDate.ToString("dd-MM-yyyy")</span><br />
                             @{
                             var logText = HttpUtility.HtmlEncode(gcl.Log.LogText).Replace("\r", "<br />");
                             foreach (string s in words1)
