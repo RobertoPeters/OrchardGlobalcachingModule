@@ -192,7 +192,7 @@
         </div>
         <div class="row">
             <div class="col-md-1">
-                Tot:
+                t/m:
             </div>
             <div id="changedtodate" class="col-md-11 date">
                 <input type='text' width="100" />
@@ -220,7 +220,7 @@
         </div>
         <div class="row">
             <div class="col-md-1">
-                Tot:
+                t/m:
             </div>
             <div id="hiddentodate" class="col-md-11 date">
                 <input type='text' width="100" />
@@ -248,7 +248,7 @@
         </div>
         <div class="row">
             <div class="col-md-1">
-                Tot:
+                t/m:
             </div>
             <div id="recentarchivedtodate" class="col-md-11 date">
                 <input type='text' width="100" />
@@ -276,7 +276,7 @@
         </div>
         <div class="row">
             <div class="col-md-1">
-                Tot:
+                t/m:
             </div>
             <div id="recentfoundtodate" class="col-md-11 date">
                 <input type='text' width="100" />
@@ -304,7 +304,7 @@
         </div>
         <div class="row">
             <div class="col-md-1">
-                Tot:
+                t/m:
             </div>
             <div id="publishedtodate" class="col-md-11 date">
                 <input type='text' width="100" />
@@ -865,38 +865,38 @@
         }
         if ($('#chkhiddendate').prop('checked'))
         {
-            var fromd = $("#hiddenfromdate").data("DateTimePicker").getDate();
-            var tod = $("#hiddentodate").data("DateTimePicker").getDate();
-            result = addMacroFunction(result,'AanmaakDatumVoor(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
+            var fromd = $("#hiddenfromdate").data("DateTimePicker").getDate().subtract(1, 'days');
+            var tod = $("#hiddentodate").data("DateTimePicker").getDate().add(1, 'days');
             result = addMacroFunction(result,'AanmaakDatumNa(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+            result = addMacroFunction(result,'AanmaakDatumVoor(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
         }
         if ($('#chkpublisheddate').prop('checked'))
         {
-            var fromd = $("#publishedfromdate").data("DateTimePicker").getDate();
+            var fromd = $("#publishedfromdate").data("DateTimePicker").getDate().subtract(1, 'days');
             var tod = $("#publishedtodate").data("DateTimePicker").getDate();
-            result = addMacroFunction(result,'NietGepubliceerdNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
             result = addMacroFunction(result,'GepubliceerdNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+            result = addMacroFunction(result,'NietGepubliceerdNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
         }
         if ($('#chkrecentfounddate').prop('checked'))
         {
-            var fromd = $("#recentfoundfromdate").data("DateTimePicker").getDate();
+            var fromd = $("#recentfoundfromdate").data("DateTimePicker").getDate().subtract(1, 'days');
             var tod = $("#recentfoundtodate").data("DateTimePicker").getDate();
-            result = addMacroFunction(result,'NietGevondenNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
             result = addMacroFunction(result,'GevondenNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+            result = addMacroFunction(result,'NietGevondenNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
         }
         if ($('#chkrecentarchiveddate').prop('checked'))
         {
-            var fromd = $("#recentarchivedfromdate").data("DateTimePicker").getDate();
+            var fromd = $("#recentarchivedfromdate").data("DateTimePicker").getDate().subtract(1, 'days');
             var tod = $("#recentarchivedtodate").data("DateTimePicker").getDate();
-            result = addMacroFunction(result,'NietArchivedLogNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
             result = addMacroFunction(result,'ArchivedLogNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+            result = addMacroFunction(result,'NietArchivedLogNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
         }
         if ($('#chkchangeddate').prop('checked'))
         {
-            var fromd = $("#changedfromdate").data("DateTimePicker").getDate();
+            var fromd = $("#changedfromdate").data("DateTimePicker").getDate().subtract(1, 'days');
             var tod = $("#changedtodate").data("DateTimePicker").getDate();
-            result = addMacroFunction(result,'NietAangepastNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
             result = addMacroFunction(result,'AangepastNaDatum(' + fromd.date().toString() + ',' + (fromd.month()+1).toString() + ',' + fromd.year() +')');
+            result = addMacroFunction(result,'NietAangepastNaDatum(' + tod.date().toString() + ',' + (tod.month()+1).toString() + ',' + tod.year() +')');
         }
         if ($('#chkgeocachetype').prop('checked'))
         {

@@ -898,46 +898,46 @@ namespace Globalcaching.Services
                     whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.CountryID not in ({0}) ", string.Join(", ", (from a in parameters select int.Parse(a)).ToArray())));
                     break;
                 case "aanmaakdatumvoor":
-                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.DateCreated < '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcComData.dbo.GCComGeocache.DateCreated) < '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "nietaanmaakdatumvoor":
-                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.DateCreated >= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcComData.dbo.GCComGeocache.DateCreated) >= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "aanmaakdatumna":
-                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.DateCreated > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcComData.dbo.GCComGeocache.DateCreated) > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "nietaanmaakdatumna":
-                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.DateCreated <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcComData.dbo.GCComGeocache.DateCreated) <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "aangepastnadatum":
-                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.DateLastUpdate > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcComData.dbo.GCComGeocache.DateLastUpdate) > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "nietaangepastnadatum":
-                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.DateLastUpdate <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcComData.dbo.GCComGeocache.DateLastUpdate) <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "gepubliceerdnadatum":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
-                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.PublishedAtDate > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcEuData.dbo.GCEuGeocache.PublishedAtDate) > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "nietgepubliceerdnadatum":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
-                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.PublishedAtDate <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcEuData.dbo.GCEuGeocache.PublishedAtDate) <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "gevondennadatum":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
-                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.MostRecentFoundDate > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcEuData.dbo.GCEuGeocache.MostRecentFoundDate) > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "nietgevondennadatum":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
-                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.MostRecentFoundDate <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcEuData.dbo.GCEuGeocache.MostRecentFoundDate) <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "archivedlognadatum":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
-                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.MostRecentArchivedDate > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcEuData.dbo.GCEuGeocache.MostRecentArchivedDate) > '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "nietarchivedlognadatum":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
-                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.MostRecentArchivedDate <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
+                    whereClauses.Add(string.Format(" CONVERT(date, GcEuData.dbo.GCEuGeocache.MostRecentArchivedDate) <= '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));
                     break;
                 case "moeilijkheidgroterdan":
                     whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.Difficulty > {0} ", getDouble(parameters[0])));
