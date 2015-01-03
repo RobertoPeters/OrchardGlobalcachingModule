@@ -274,7 +274,7 @@
     <div class="panel-body">
         @if (@Model.GCComGeocacheData.EncodedHints != null)
         {
-            @Model.GCComGeocacheData.EncodedHints.Replace("\r", "<br />")
+            @Html.Raw(HttpUtility.HtmlEncode(Model.GCComGeocacheData.EncodedHints).Replace("\r", "<br />"));
         }
     </div>
 </div>

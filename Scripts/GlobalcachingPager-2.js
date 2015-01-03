@@ -36,7 +36,7 @@
 
 function initGlobalcachingPager(container, pagerElementName)
 {
-    $('#'+container).html('<table width="100%"><tr><td><ul class="pagination ' + pagerElementName + '"></ul></td><td align="right"><span class="label label-default ' + pagerElementName + 'Count">0</span></td></tr></table>');
+    $('#'+container).html('<table width="100%"><tr><td><ul class="pagination ' + pagerElementName + '"></ul></td><td align="right">Totaal: <span class="label label-default ' + pagerElementName + 'Count">0</span></td></tr></table>');
 }
 
 function formatDateToShortDate(d) {
