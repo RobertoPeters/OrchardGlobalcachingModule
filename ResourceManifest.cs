@@ -25,6 +25,9 @@ namespace Globalcaching
             manifest.DefineStyle("zabuto_calendar.Style").SetUrl("zabuto_calendar.min.css");
             manifest.DefineScript("zabuto_calendar.Script").SetUrl("zabuto_calendar.min.js");
             manifest.DefineScript("GoogleAnalytics.Script").SetUrl("GoogleAnalytics.js");
+            manifest.DefineScript("JointJS.Script").SetUrl("joint.nojquery.min.js");
+            manifest.DefineStyle("JointJS.Style").SetUrl("joint.nojquery.min.css");
+            manifest.DefineScript("JointJSShapes.Script").SetUrl("joint.shapes.devs.min.js");
         }
     }
 }

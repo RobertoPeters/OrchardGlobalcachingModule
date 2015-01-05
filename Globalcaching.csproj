@@ -310,6 +310,9 @@
     <Content Include="Scripts\gmapv3-2.js" />
     <Content Include="Scripts\gmapv3.js" />
     <Content Include="Scripts\GoogleAnalytics.js" />
+    <None Include="Styles\joint.nojquery.min.css" />
+    <None Include="Scripts\joint.nojquery.min.js" />
+    <None Include="Scripts\joint.shapes.devs.min.js" />
     <Content Include="Scripts\keydragzoom_packed.js" />
     <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\moment.js" />
@@ -369,6 +372,7 @@
     <Content Include="Views\DisplayTemplates\Parts.CodeCheckerMaint.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.LogCorrection.cshtml" />
     <Content Include="Views\DisplayTemplates\Yaf.MostRecentContent.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.SelectionBuilder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -438,6 +442,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\SelectionBuilderPartDriver.cs" />
     <Compile Include="Drivers\LogCorrectionPartDriver.cs" />
     <Compile Include="Drivers\ContactFormPartDriver.cs" />
     <Compile Include="Drivers\CodeCheckerCheckPartDriver.cs" />

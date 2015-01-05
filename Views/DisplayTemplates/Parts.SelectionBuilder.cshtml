@@ -1,0 +1,444 @@
+﻿@{
+    Script.Require("JointJS.Script").AtHead();
+    Script.Require("JointJSShapes.Script").AtHead();
+    Style.Require("JointJS.Style").AtHead();
+    Style.Require("datetimepicker.Style");
+}
+
+<style>
+    /* port styling */
+    .available-magnet {
+        fill: yellow;
+    }
+
+    /* element styling */
+    .available-cell rect {
+        stroke-dasharray: 5, 2;
+    }
+
+    .paper {
+        border: 1px solid lightgray;
+        display: inline-block;
+        overflow: hidden;
+    }
+
+</style>
+
+<div class="row">
+    <div class="col-md-7 col-md-offset-2">
+        <button id="zoomin" class="btn btn-default">Zoom in</button>
+        <button id="nozoom" class="btn btn-default">100%</button>
+        <button id="zoomout" class="btn btn-default">Zoom uit</button>
+        <button id="executemodel" class="btn btn-primary">Uitvoeren</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2" style="overflow: auto">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-info">Bouwblokken</li>
+            <li class="list-group-item" style="cursor: pointer" id="Publicatiedatum" draggable="true" ondragstart="drag(event)">Publicatiedatum</li>
+            <li class="list-group-item" style="cursor: pointer" id="NaamBevatTekst" draggable="true" ondragstart="drag(event)">Naam bevat tekst</li>
+        </ul>
+    </div>
+    <div class="paper col-md-7" id="paper" style="max-height: 800px; overflow: auto" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+    <div class="col-md-3">
+        <div id="propeditor">
+            <div id="modeltype"></div>
+            <button class="btn btn-primary col-md-12" id="deleteModel">Verwijder</button>
+            <div id="datumprop">
+                <div class="col-md-12">
+                    Datum:
+                </div>
+                <div id="changedate" class="col-md-12 date">
+                    <input type='text' width="100" />
+                    <span class="fa fa-calendar"></span>
+                </div>
+            </div>
+            <div id="txtvalprop">
+                <div class="col-md-12">
+                    Waarde:
+                </div>
+                <div class="col-md-12">
+                    <input id="changetxtval" type='text' width="100" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var graph;
+    var paper;
+    var activeCellView;
+    var modelFill = '#CBE2F5';
+    var inportFill = '#16A085';
+    var outportFill = '#E74C3C';
+    var paperScale = 1.0;
+    var variableArray = [
+        'Resultaat', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        'aa', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az'
+    ];
+    var curVariableIndex = 0;
+
+    joint.shapes.devs.Model = joint.shapes.basic.Generic.extend(_.extend({}, joint.shapes.basic.PortsModelInterface, {
+
+        markup: '<g class="rotatable"><g class="scalable"><rect class="body"/></g><text class="label"/><g class="inPorts"/><g class="outPorts"/></g>',
+        portMarkup: '<g class="port port<%= id %>"><circle class="port-body"/><text class="port-label"/></g>',
+
+        defaults: joint.util.deepSupplement({
+
+            type: 'devs.Model',
+            size: { width: 1, height: 1 },
+
+            inPorts: [],
+            outPorts: [],
+
+            attrs: {
+                '.': { magnet: false },
+                '.body': {
+                    width: 150, height: 250,
+                    stroke: 'black'
+                },
+                '.port-body': {
+                    r: 10,
+                    magnet: true,
+                    stroke: 'black'
+                },
+                text: {
+                    fill: 'black',
+                    'pointer-events': 'none'
+                },
+                '.label': { text: 'Model', 'ref-x': 10, 'ref-y': .2, 'ref': '.body' },
+
+                // CHANGED: find better positions for port labels 
+                '.inPorts .port-label': { dy: -30, x: 4 },
+                '.outPorts .port-label': { dy: 15, x: 4 }
+                //
+            }
+
+        }, joint.shapes.basic.Generic.prototype.defaults),
+
+        getPortAttrs: function (portName, index, total, selector, type) {
+            var attrs = {};
+
+            var portClass = 'port' + index;
+            var portSelector = selector + '>.' + portClass;
+            var portLabelSelector = portSelector + '>.port-label';
+            var portBodySelector = portSelector + '>.port-body';
+
+            attrs[portLabelSelector] = { text: portName };
+            attrs[portBodySelector] = { port: { id: portName || _.uniqueId(type), type: type } };
+
+            // CHANGED: swap x and y ports coordinates ('ref-y' => 'ref-x')
+            attrs[portSelector] = { ref: '.body', 'ref-x': (index + 0.5) * (1 / total) };
+            // ('ref-dx' => 'ref-dy')
+            if (selector === '.outPorts') { attrs[portSelector]['ref-dy'] = 0; }
+            //
+
+            return attrs;
+        }
+    }));
+
+    (function basic() {
+        graph = new joint.dia.Graph;
+        paper = new joint.dia.Paper({
+            el: $('#paper'),
+            width: 12000, height: 12000, gridSize: 1,
+            model: graph,
+            defaultLink: new joint.dia.Link({
+                attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' } }
+            }),
+            validateConnection: function (cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
+                // Prevent linking from input ports.
+                if (magnetS && magnetS.getAttribute('type') === 'input') return false;
+                // Prevent linking from output ports to input ports within one element.
+                if (cellViewS === cellViewT) return false;
+                // Prevent linking to input ports.
+                return magnetT && magnetT.getAttribute('type') === 'input';
+            },
+            // Enable marking available cells & magnets
+            markAvailable: true
+        });
+
+        createStartModel(300, 10).addTo(graph);
+        createResultaatModel(300, 500).addTo(graph);
+
+        paper.on('cell:pointerclick', function (cellView, evt, x, y) {
+            setActiveCellView(cellView);
+        });
+        paper.on('blank:pointerclick', function (evt, x, y) {
+            setActiveCellView(null);
+        });
+
+        $('#deleteModel').click(function () {
+            var ac = activeCellView;
+            setActiveCellView(null);
+            ac.remove();
+        });
+
+        setActiveCellView(null);
+    }());
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var bodyOffset = $('#BgLayer1').offset();
+        var offset = $('#v-2').offset();
+        //alert(ev.clientY.toString() + ', ' + offset.top.toString() + ', ' + bodyOffset.top.toString());
+        //alert(ev.clientX.toString() + ', ' + offset.left.toString() + ', ' + bodyOffset.left.toString());
+        var x = (bodyOffset.left + ev.clientX - offset.left) / paperScale;
+        var y = (bodyOffset.top + ev.clientY - offset.top) / paperScale;
+        var m;
+        if (data == "Publicatiedatum") {
+            m = createPublicationDateModel(x, y).addTo(graph);
+        }
+        else if (data == "NaamBevatTekst") {
+            m = createNameContainsModel(x, y).addTo(graph);
+        }
+    }
+
+    function setActiveCellView(c) {
+        if (activeCellView != null) {
+            activeCellView.unhighlight();
+            activeCellView = null;
+        }
+        if (c != null && c.model.attr('.label/text')!="Start" &&  c.model.attr('.label/text')!="Resultaat") {
+            var s = c.model.attr('.label/text').split('\r\n')[0];
+            $('#modeltype').text(s);
+            $('#datumprop').hide();
+            $('#txtvalprop').hide();
+            if (s == "Publicatiedatum") {
+                copyDateModelToProperty(c);
+                $('#datumprop').show();
+            }
+            else if (s == "Naam bevat tekst") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+        }
+        activeCellView = c;
+        if (activeCellView != null && activeCellView.model.attr('.label/text') != "Start" && c.model.attr('.label/text') != "Resultaat") {
+            activeCellView.highlight();
+            $('#propeditor').show();
+        }
+        else {
+            $('#propeditor').hide();
+        }
+    }
+
+    function createStartModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 90, height: 30 },
+            inPorts: [],
+            outPorts: ['='],
+            attrs: {
+                '.label': { text: 'Start', 'ref-x': .2, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createResultaatModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 90, height: 30 },
+            inPorts: ['In'],
+            outPorts: [],
+            attrs: {
+                '.label': { text: 'Resultaat', 'ref-x': .2, 'ref-y': .5 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createPublicationDateModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Publicatiedatum\r\n' + d.date().toString() + '-' + (d.month() + 1).toString() + '-' + d.year(), 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createNameContainsModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Naam bevat tekst\r\nde tekst', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function copyDateModelToProperty(c) {
+        var s = c.model.attr('.label/text').split('\r\n')[1];
+        var m = moment(s, "D-M-YYYY");
+        $("#changedate").data("DateTimePicker").setDate(m);
+    }
+
+    function copyDatePropertyToModel(d) {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            activeCellView.model.attr('.label/text', s + '\r\n' + d.date().toString() + '-' + (d.month() + 1).toString() + '-' + d.year());
+        }
+    }
+
+    function copyTextModelToProperty(c) {
+        var s = c.model.attr('.label/text').split('\r\n')[1];
+        $("#changetxtval").val(s);
+    }
+
+    function copyTextPropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            activeCellView.model.attr('.label/text', s + '\r\n' + $("#changetxtval").val());
+        }
+    }
+
+    function executeModel() {
+        //todo: check model for missing connections
+        var s = createMacroFromModel();
+        alert(s);
+    }
+
+    function createMacroFromModel() {
+        var result = "";
+        var allElements = graph.getElements();
+        curVariableIndex = 0;
+        for (var i = 0; i < allElements.length; i++) {
+            if (allElements[i].attr('.label/text') == "Resultaat") {
+                result = processModel(result, allElements[i], curVariableIndex);
+                break;
+            }
+        }
+        return result;
+    }
+
+    function processModel(macro, m, inputVariable) {
+        result = macro;
+        var links = graph.getConnectedLinks(m, { inbound: true });
+        //if 1 connection: variable = nextVariable en moduleFilter()
+        //if multipel connections: nextVariable = nextVariable1 + nextVariable2...nextVariablen
+        //                         variable = nextVariable en moduleFilter()
+        //
+        //connections to Start are ignored
+        //if 1 connection to Start: variable = moduleFilter()
+        //if multipel connections: nextVariable = nextVariable2...nextVariablen
+        //                         variable = nextVariable en moduleFilter()
+        //
+        //we produce:
+        //intermediateVal[] = [nextVariable1, nextVariable2,nextVariablen]
+        var intermediateVal = [];
+        for (var i = 0; i < links.length; i++) {
+            curVariableIndex++;
+            var um = getConnectedModel(links[i]);
+            if (um != null && um.attr('.label/text') != "Start") {
+                intermediateVal.push(curVariableIndex);
+                result += processModel(result, um, curVariableIndex);
+            }
+        }
+        if (intermediateVal.length > 1) {
+            //intermediate result
+            curVariableIndex++;
+            result += variableArray[curVariableIndex] + " = " + variableArray[intermediateVal[0]];
+            for (var k = 1; k < intermediateVal.length; k++) {
+                result += " + " + variableArray[intermediateVal[k]]
+            }
+            result += "\r\n";
+            result += variableArray[inputVariable] + " = " + variableArray[curVariableIndex];
+        }
+        else if (intermediateVal.length == 1) {
+            result += variableArray[inputVariable] + " = " + variableArray[intermediateVal[0]];
+        }
+        else {
+            result += variableArray[inputVariable] + " = ";
+        }
+        if (m.attr('.label/text') == "Resultaat") {
+            //only additions
+            //Variable should be Resultaat
+        }
+        else {
+            if (intermediateVal.length > 0) {
+                result += " en ";
+            }
+        }
+        if (m.attr('.label/text') == "Start") {
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Naam bevat tekst") {
+            result += " NaamBevatTekst()";
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Publicatiedatum") {
+            result += " Publicatiedatum()";
+        }
+        result += "\r\n";
+        return result;
+    }
+
+    function getConnectedModel(link) {
+        var result = null;
+        var allElements = graph.getElements();
+        for (var i = 0; i < allElements.length; i++) {
+            var links = graph.getConnectedLinks(allElements[i], { outbound: true });
+            for (var k = 0; k < links.length; k++) {
+                if (links[k].id == link.id) {
+                    result = allElements[i];
+                }
+            }
+        }
+        return result;
+    }
+
+    $(function () {
+        var e = moment();
+        $('#changedate').datetimepicker({
+            defaultDate: e
+        });
+        $("#changedate").on("dp.change", function (e) {
+            copyDatePropertyToModel(e.date);
+        });
+        $("#changetxtval").change(function () {
+            copyTextPropertyToModel();
+        });
+        $("#zoomin").click(function () {
+            paperScale += 0.1;
+            paper.scale(paperScale, paperScale);
+        });
+        $("#zoomout").click(function () {
+            paperScale -= 0.1;
+            paper.scale(paperScale, paperScale);
+        });
+        $("#nozoom").click(function () {
+            paperScale = 1.0;
+            paper.scale(paperScale, paperScale);
+        });
+        $("#executemodel").click(function () {
+            executeModel();
+        });
+    });
+
+</script>

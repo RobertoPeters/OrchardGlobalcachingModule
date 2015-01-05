@@ -509,5 +509,19 @@ namespace Globalcaching
             return 36;
         }
 
+        public int UpdateFrom36()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("SelectionBuilderWidget",
+                cfg => cfg
+                    .DisplayedAs("Selection Builder")
+                    .WithPart("SelectionBuilderPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 37;
+        }
+
     }
 }
