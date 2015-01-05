@@ -516,6 +516,14 @@ namespace Globalcaching.Services
                                 Examples = "NietBevatAttribuut(10,-11)",
                                 PMOnly = false
                             }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "Maximaal",
+                                ProtoType = "Maximaal(variabele, aantal, sorterenop, sorteerrichting) of Maximaal(aantal, sorterenop)",
+                                Description = "Beperk het aantal geocaches die geselecteerd worden na een sortering\r\nIndien je geen variabele opgeeft, dan wordt de sortering gedaan op de gehele BeNeLux database\r\nSorteerrichting:\r\n1 = oplopend\r\n-1 = Aflopend\r\nSortering:\r\n0 = Afstand van huis (alleen als thuiscoordinaten zijn ingegeven)\r\n1 = Plaatsingsdatum\r\n2 = Publicatiedatum\r\n3 = Lengte (de loop afstand van de cache)\r\n4 = Meest recente gevonden log\r\n5 = Favorites\r\n6 = Favorites percentage\r\n7 = Aantal keer gevonden\r\n8 = Cachetype\r\n9 = GC Code\r\n10 = Moeilijkheid\r\n11 = Terrein\r\n12 = Naam\r\nRestrictie: Deze functie moet als enige op een regel staan\r\n",
+                                Examples = "Maximaal(A,500,1,1)\r\nMaximaal(500,1,-1)",
+                                PMOnly = false
+                            }
                         };
                         using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                         {
@@ -758,6 +766,8 @@ namespace Globalcaching.Services
 
             List<string> innerJoins = new List<string>();
             List<string> whereClauses = new List<string>();
+            string orderClause = null;
+            int maxCaches = 0;
 
             sql.Append("select GcComData.dbo.GCComGeocache.ID from GcComData.dbo.GCComGeocache with (nolock) ");
             string textLeft = parts[1].Trim();
@@ -786,7 +796,7 @@ namespace Globalcaching.Services
                 else
                 {
                     //function
-                    if (!processFunction(db, innerJoins, whereClauses, ref textLeft))
+                    if (!processFunction(db, m.UserID, variables, innerJoins, whereClauses, ref maxCaches, ref orderClause, ref textLeft))
                     {
                         return false;
                     }
@@ -829,6 +839,15 @@ namespace Globalcaching.Services
                     }
                 }
             }
+
+            if (maxCaches > 0)
+            {
+                //this changes all
+                sql.Length = 0;
+                sql.AppendFormat("insert into GCEuMacroData.dbo.macro_{0}_{1} (ID) select distinct ID from (", m.UserID, v);
+                sql.AppendFormat("select top {0} GcComData.dbo.GCComGeocache.ID from GcComData.dbo.GCComGeocache with (nolock) ", maxCaches);
+            }
+
             foreach (string s in innerJoins)
             {
                 sql.Append(s);
@@ -843,6 +862,11 @@ namespace Globalcaching.Services
                 }
             }
             whereClauses.Clear();
+
+            if (!string.IsNullOrEmpty(orderClause))
+            {
+                sql.Append(string.Format(" {0}", orderClause));
+            }
 
             sql.Append(") as t");
 
@@ -859,7 +883,7 @@ namespace Globalcaching.Services
             return true;
         }
 
-        private bool processFunction(PetaPoco.Database db, List<string> innerJoins, List<string> whereClauses, ref string textLeft)
+        private bool processFunction(PetaPoco.Database db, int usrID, List<string> variables, List<string> innerJoins, List<string> whereClauses, ref int maxCaches, ref string orderClause, ref string textLeft)
         {
             int pos1 = textLeft.IndexOf('(');
             string f = textLeft.Substring(0, pos1).ToLower();
@@ -1089,6 +1113,100 @@ namespace Globalcaching.Services
                         }
                         addInnerJoin(string.Format(" left join GcComData.dbo.GCComGeocacheAttribute with (nolock) on GcComData.dbo.GCComGeocache.ID = GcComData.dbo.GCComGeocacheAttribute.GeocacheID and {0} {1}", ps, ns), innerJoins);
                         whereClauses.Add(" GcComData.dbo.GCComGeocacheAttribute.GeocacheID is NULL");
+                    }
+                    break;
+                case "maximaal":
+                    {
+                        int max = int.Parse(parameters[parameters.Count-3]);
+                        string onvariable = null;
+                        int sortDirection = int.Parse(parameters[parameters.Count-1]);
+                        int so = int.Parse(parameters[parameters.Count-2]);
+                        if (parameters.Count == 4)
+                        {
+                            onvariable = parameters[0].ToLower();
+                            if (!variables.Contains(onvariable))
+                            {
+                                throw new InvalidOperationException();
+                            }
+                        }
+                        if (max > 0 && (sortDirection==1 || sortDirection==-1))
+                        {
+                            string orderdir = null;
+                            if (sortDirection<0)
+                            {
+                                orderdir = "desc";
+                            }
+                            else
+                            {
+                                orderdir = "asc";
+                            }
+                            switch (so)
+                            {
+                                case (int)GeocacheSearchFilterOrderOnItem.DistanceFromHome:
+                                    {
+                                        var usrSettings = db.FirstOrDefault<GCEuUserSettings>("select * from GCEuData.dbo.GCEuUserSettings where YafUserID=@0", usrID);
+                                        if (usrSettings != null && usrSettings.HomelocationLat != null && usrSettings.HomelocationLon != null)
+                                        {
+                                            orderClause = string.Format("order by GcComData.dbo.F_GREAT_CIRCLE_DISTANCE(GcComData.dbo.GCComGeocache.Latitude, GcComData.dbo.GCComGeocache.Longitude, {0}, {1}) {2}", usrSettings.HomelocationLat.ToString().Replace(',', '.'), usrSettings.HomelocationLon.ToString().Replace(',', '.'), orderdir);
+                                        }
+                                        else
+                                        {
+                                            throw new InvalidOperationException();
+                                        }
+                                    }
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.HiddenDate:
+                                    orderClause = string.Format("order by GcComData.dbo.GCComGeocache.UTCPlaceDate {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.PublicationDate:
+                                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                                    orderClause = string.Format("order by GcEuData.dbo.GCEuGeocache.PublishedAtDate {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.Code:
+                                    orderClause = string.Format("order by GcComData.dbo.GCComGeocache.Code {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.Difficulty:
+                                    orderClause = string.Format("order by GcComData.dbo.GCComGeocache.Difficulty {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.Distance:
+                                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                                    orderClause = string.Format("order by GcEuData.dbo.GCEuGeocache.Distance {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.Favorites:
+                                    orderClause = string.Format("order by GcComData.dbo.GCComGeocache.FavoritePoints {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.FavoritesPercentage:
+                                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                                    orderClause = string.Format("order by GcEuData.dbo.GCEuGeocache.FavPer100Found {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.Founds:
+                                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                                    orderClause = string.Format("order by GcEuData.dbo.GCEuGeocache.FoundCount {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.GeocacheType:
+                                    orderClause = string.Format("order by GcComData.dbo.GCComGeocache.GeocacheTypeId {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.MostRecentFoundDate:
+                                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                                    orderClause = string.Format("order by GcEuData.dbo.GCEuGeocache.MostRecentFoundDate {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.Name:
+                                    orderClause = string.Format("order by GcComData.dbo.GCComGeocache.Name {0}", orderdir);
+                                    break;
+                                case (int)GeocacheSearchFilterOrderOnItem.Terrain:
+                                    orderClause = string.Format("order by GcComData.dbo.GCComGeocache.Terrain {0}", orderdir);
+                                    break;
+                            }
+                            maxCaches = max;
+                            if (!string.IsNullOrEmpty(onvariable))
+                            {
+                                addInnerJoin(string.Format(" inner join GCEuMacroData.dbo.macro_{0}_{1} on GcComData.dbo.GCComGeocache.ID = GCEuMacroData.dbo.macro_{0}_{1}.ID", usrID, onvariable), innerJoins);
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException();
+                        }
                     }
                     break;
                 default:
