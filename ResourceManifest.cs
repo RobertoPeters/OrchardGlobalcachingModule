@@ -28,6 +28,8 @@ namespace Globalcaching
             manifest.DefineScript("JointJS.Script").SetUrl("joint.nojquery.min.js");
             manifest.DefineStyle("JointJS.Style").SetUrl("joint.nojquery.min.css");
             manifest.DefineScript("JointJSShapes.Script").SetUrl("joint.shapes.devs.min.js");
+            manifest.DefineStyle("BootSideMenu.Style").SetUrl("BootSideMenu.css");
+            manifest.DefineScript("BootSideMenu.Script").SetUrl("BootSideMenu.js");
         }
     }
 }

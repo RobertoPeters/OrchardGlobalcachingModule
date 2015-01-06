@@ -302,6 +302,7 @@
     <None Include="Media\Attributes\_8.gif" />
     <None Include="Media\Attributes\_9.gif" />
     <None Include="Media\gcicon.ico" />
+    <None Include="Scripts\BootSideMenu.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.nl.js" />
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
@@ -318,6 +319,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\zabuto_calendar.js" />
     <Content Include="Scripts\zabuto_calendar.min.js" />
+    <None Include="Styles\BootSideMenu.css" />
     <Content Include="Styles\datetimepicker.css" />
     <Content Include="Styles\usersonline.css" />
     <Content Include="Styles\zabuto_calendar.css" />
@@ -418,6 +420,7 @@
     <Compile Include="Controllers\LogGCComController.cs" />
     <Compile Include="Controllers\MacroController.cs" />
     <Compile Include="Controllers\OnlineToolsController.cs" />
+    <Compile Include="Controllers\SelectionBuilderController.cs" />
     <Compile Include="Core\DBCon.cs" />
     <Compile Include="Core\DotNetDBF\DBFBase.cs" />
     <Compile Include="Core\DotNetDBF\DBFException.cs" />
@@ -511,6 +514,7 @@
     <Compile Include="Models\GCEuGeocache.cs" />
     <Compile Include="Models\GCEuLiveAPIDownloadStatus.cs" />
     <Compile Include="Models\GCEuParel.cs" />
+    <Compile Include="Models\GCEuSelectionBuilder.cs" />
     <Compile Include="Models\GCEuUserSettings.cs" />
     <Compile Include="Models\GCEuGeocacheFilterMacro.cs" />
     <Compile Include="Models\GeocacheSearchFilter.cs" />
@@ -547,6 +551,7 @@
     <Compile Include="Services\GlobalcachingScriptsFilter.cs" />
     <Compile Include="Services\LiveAPISettingsService.cs" />
     <Compile Include="Services\MacroService.cs" />
+    <Compile Include="Services\SelectionBuilderService.cs" />
     <Compile Include="Services\StatisticsService.cs" />
     <Compile Include="Services\TaskSchedulerService.cs" />
     <Compile Include="Services\UsersOnlineService.cs" />
@@ -577,6 +582,7 @@
     <Compile Include="ViewModels\GeocacheDataModel.cs" />
     <Compile Include="ViewModels\GeocacheFilterMacroModel.cs" />
     <Compile Include="ViewModels\SearchByAttributesModel.cs" />
+    <Compile Include="ViewModels\SelectionBuilderModel.cs" />
     <Compile Include="ViewModels\YafMostRecentContentModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -24,47 +24,101 @@
 
 </style>
 
+
+<div class="form-group">
+    <label for="name">Selecteer stroomdiagram</label>
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+            Stroomdiagram
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="graphlist"></ul>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="name">Naam</label>
+    <input type="text" class="form-control" id="graphname" placeholder="Naam">
+</div>
+
+<div class="form-group">
+    <label for="exampleInputPassword1">Opmerkingen</label>
+    <textarea class="form-control" id="commenttext" rows="4"></textarea>
+</div>
+<button class="btn btn-primary" id="savegraph">Opslaan</button>
+<button class="btn btn-primary" id="loadgraph">Laden</button>
+<button class="btn btn-primary" id="newgraph">Nieuw</button>
+<button class="btn btn-danger pull-right" id="deletegraph">Verwijderen</button>
+
+<h3>Editor <span id="activeedit"></span></h3>
+
 <div class="row">
-    <div class="col-md-7 col-md-offset-2">
+    <div id="topmarker" class="col-md-2">
+        <button class="btn btn-default" data-toggle="collapse" data-target="#buildingblocks">Bouwblokken</button>
+    </div>
+    <div class="col-md-8">
         <button id="zoomin" class="btn btn-default">Zoom in</button>
         <button id="nozoom" class="btn btn-default">100%</button>
         <button id="zoomout" class="btn btn-default">Zoom uit</button>
         <button id="executemodel" class="btn btn-primary">Uitvoeren</button>
     </div>
+    <div class="col-md-2">
+        <button class="btn btn-default pull-right" data-toggle="collapse" data-target="#editproperties">Blokinstelling</button>
+    </div>
 </div>
-<div class="row">
-    <div class="col-md-2" style="overflow: auto">
+    <div id="buildingblocks" class="collapse col-md-3" style="position: absolute; z-index: 10; top: 200px; left: 0; overflow: auto; border: solid; background-color: #DFECF7; min-height: 800px; max-height: 800px; padding: 0px">
         <ul class="list-group">
             <li class="list-group-item list-group-item-info">Bouwblokken</li>
             <li class="list-group-item" style="cursor: pointer" id="Publicatiedatum" draggable="true" ondragstart="drag(event)">Publicatiedatum</li>
             <li class="list-group-item" style="cursor: pointer" id="NaamBevatTekst" draggable="true" ondragstart="drag(event)">Naam bevat tekst</li>
         </ul>
     </div>
-    <div class="paper col-md-7" id="paper" style="max-height: 800px; overflow: auto" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
-    <div class="col-md-3">
-        <div id="propeditor">
-            <div id="modeltype"></div>
-            <button class="btn btn-primary col-md-12" id="deleteModel">Verwijder</button>
-            <div id="datumprop">
-                <div class="col-md-12">
-                    Datum:
-                </div>
-                <div id="changedate" class="col-md-12 date">
-                    <input type='text' width="100" />
-                    <span class="fa fa-calendar"></span>
-                </div>
+    <div class="paper col-md-12" id="paper" style="height: 800px; overflow: auto" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
+    <div id="editproperties" class="collapse col-md-3" style="position: absolute; z-index: 10; top: 200px; right: 30px; overflow: auto; border: solid; background-color: #DFECF7; min-height: 800px; max-height: 800px; padding: 0px; ">
+    <div id="propeditor">
+        <div id="modeltype"></div>
+        <button class="btn btn-primary col-md-12" id="deleteModel">Verwijder</button>
+        <div id="datumprop">
+            <div class="col-md-12">
+                Datum:
             </div>
-            <div id="txtvalprop">
-                <div class="col-md-12">
-                    Waarde:
-                </div>
-                <div class="col-md-12">
-                    <input id="changetxtval" type='text' width="100" />
-                </div>
+            <div id="changedate" class="col-md-12 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div id="txtvalprop">
+            <div class="col-md-12">
+                Waarde:
+            </div>
+            <div class="col-md-12">
+                <input id="changetxtval" type='text' width="100" />
             </div>
         </div>
     </div>
 </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="myModalx" tabindex="-1" role="dialog" aria-labelledby="myModalLabelx" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="dlgclosebutton1x" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><img src="@Href("~/Modules/Globalcaching/Media/wait28.gif")" /> Bezig met uitvoeren van macro...</h4>
+                <h4 class="modal-title" id="myModalLabelDone">Macro resultaat</h4>
+            </div>
+            <div class="modal-body" id="dlgmacrovoortgangx">
+            </div>
+            <div class="modal-footer">
+                <button id="dlgclosebutton2x" type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+                <a id="viewlistbuttonx" type="button" class="btn btn-primary" href='@Url.Action("MacroResult", "CacheList" , new { area="Globalcaching" })'>Bekijk lijst</a>
+                <a id="viewmapbuttonx" type="button" class="btn btn-primary" href='@Url.Action("MacroResult", "CacheMap" , new { area="Globalcaching" })'>Bekijk kaart</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
 
     var graph;
@@ -79,6 +133,11 @@
         'aa', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az'
     ];
     var curVariableIndex = 0;
+    var macro;
+    var activeMacrox;
+    var availableGraphs;
+    var activeGraph;
+    var selectedGraphIndex;
 
     joint.shapes.devs.Model = joint.shapes.basic.Generic.extend(_.extend({}, joint.shapes.basic.PortsModelInterface, {
 
@@ -157,11 +216,9 @@
                 return magnetT && magnetT.getAttribute('type') === 'input';
             },
             // Enable marking available cells & magnets
-            markAvailable: true
+            markAvailable: true//,
+            //snapLinks: { radius: 75 }
         });
-
-        createStartModel(300, 10).addTo(graph);
-        createResultaatModel(300, 500).addTo(graph);
 
         paper.on('cell:pointerclick', function (cellView, evt, x, y) {
             setActiveCellView(cellView);
@@ -173,6 +230,10 @@
         $('#deleteModel').click(function () {
             var ac = activeCellView;
             setActiveCellView(null);
+            var links = graph.getConnectedLinks(ac.model);
+            for (var k = 0; k < links.length; k++) {
+                links[k].remove();
+            }
             ac.remove();
         });
 
@@ -322,25 +383,25 @@
 
     function executeModel() {
         //todo: check model for missing connections
-        var s = createMacroFromModel();
-        alert(s);
+        macro = "";
+        createMacroFromModel();
+        //alert(JSON.stringify(graph));
+        //alert(macro);
+        runSba();
     }
 
     function createMacroFromModel() {
-        var result = "";
         var allElements = graph.getElements();
         curVariableIndex = 0;
         for (var i = 0; i < allElements.length; i++) {
             if (allElements[i].attr('.label/text') == "Resultaat") {
-                result = processModel(result, allElements[i], curVariableIndex);
+                processModel(allElements[i], curVariableIndex, null);
                 break;
             }
         }
-        return result;
     }
 
-    function processModel(macro, m, inputVariable) {
-        result = macro;
+    function processModel(m, inputVariable, outPort) {
         var links = graph.getConnectedLinks(m, { inbound: true });
         //if 1 connection: variable = nextVariable en moduleFilter()
         //if multipel connections: nextVariable = nextVariable1 + nextVariable2...nextVariablen
@@ -359,24 +420,24 @@
             var um = getConnectedModel(links[i]);
             if (um != null && um.attr('.label/text') != "Start") {
                 intermediateVal.push(curVariableIndex);
-                result += processModel(result, um, curVariableIndex);
+                processModel(um, curVariableIndex, links[i].get('source').port);
             }
         }
         if (intermediateVal.length > 1) {
             //intermediate result
             curVariableIndex++;
-            result += variableArray[curVariableIndex] + " = " + variableArray[intermediateVal[0]];
+            macro += variableArray[curVariableIndex] + " = " + variableArray[intermediateVal[0]];
             for (var k = 1; k < intermediateVal.length; k++) {
-                result += " + " + variableArray[intermediateVal[k]]
+                macro += " + " + variableArray[intermediateVal[k]]
             }
-            result += "\r\n";
-            result += variableArray[inputVariable] + " = " + variableArray[curVariableIndex];
+            macro += "\r\n";
+            macro += variableArray[inputVariable] + " = " + variableArray[curVariableIndex];
         }
         else if (intermediateVal.length == 1) {
-            result += variableArray[inputVariable] + " = " + variableArray[intermediateVal[0]];
+            macro += variableArray[inputVariable] + " = " + variableArray[intermediateVal[0]];
         }
         else {
-            result += variableArray[inputVariable] + " = ";
+            macro += variableArray[inputVariable] + " = ";
         }
         if (m.attr('.label/text') == "Resultaat") {
             //only additions
@@ -384,19 +445,44 @@
         }
         else {
             if (intermediateVal.length > 0) {
-                result += " en ";
+                macro += " en ";
             }
         }
         if (m.attr('.label/text') == "Start") {
         }
         else if (m.attr('.label/text').split('\r\n')[0] == "Naam bevat tekst") {
-            result += " NaamBevatTekst()";
+            if (outPort == '=') {
+                macro += ' NaamBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
+            }
+            else {
+                macro += ' NietNaamBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
+            }
         }
         else if (m.attr('.label/text').split('\r\n')[0] == "Publicatiedatum") {
-            result += " Publicatiedatum()";
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = moment(s, "D-M-YYYY");
+            if (outPort == '=') {
+                d.subtract(1, 'days');
+                macro += ' AanmaakDatumNa(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
+                d.add(2, 'days');
+                macro += ' AanmaakDatumVoor(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
+            }
+            else if (outPort == '<') {
+                d.subtract(1, 'days');
+                macro += ' NietAanmaakDatumNa(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '<=') {
+                macro += ' NietAanmaakDatumNa(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '=>') {
+                d.subtract(1, 'days');
+                macro += ' AanmaakDatumNa(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' AanmaakDatumNa(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
         }
-        result += "\r\n";
-        return result;
+        macro += "\r\n";
     }
 
     function getConnectedModel(link) {
@@ -411,6 +497,229 @@
             }
         }
         return result;
+    }
+
+    function htmlEncodex(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function updateMacroProgressx() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetMacro", "Macro", new { area = "Globalcaching" })',
+            data: {
+                id: activeMacrox.ID,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                $('#dlgmacrovoortgangx').html(htmlEncodex(response.ProcessInfo).replace(/\r/g, "<br />").replace(/\n/g, ""));
+
+                if (response.ProcessedSteps < 0 || response.FinishedTime != null) {
+                    $('#dlgclosebutton1x').show();
+                    $('#dlgclosebutton2x').show();
+                    $('#myModalLabel').hide();
+                    $('#myModalLabelDone').show();
+
+                    if (response.ProcessedSteps > 0) {
+                        $('#viewlistbuttonx').show();
+                        $('#viewmapbuttonx').show();
+                    }
+                }
+                else {
+                    setTimeout(function () { updateMacroProgressx(); }, 2000);
+                }
+            },
+            error: function (data, errorText) {
+                $('#dlgclosebutton1x').show();
+                $('#dlgclosebutton2x').show();
+                $('#myModalLabel').hide();
+                $('#myModalLabelDone').show();
+                alert(errorText);
+            }
+        });
+
+    }
+
+    function runSba() {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Run", "Macro", new { area = "Globalcaching" })',
+            data: {
+                id: "SelectieBewerker",
+                macro: macro,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+
+                for (var i = 0; i < response.length; i++) {
+                    if (response[i].Name == "SelectieBewerker") {
+                        activeMacrox = response[i];
+                    }
+                }
+                //show progress dialog
+                $('#myModalLabel').show();
+                $('#myModalLabelDone').hide();
+                $('#dlgmacrovoortgangx').text('');
+                $('#dlgclosebutton1x').hide();
+                $('#dlgclosebutton2x').hide();
+                $('#viewlistbuttonx').hide();
+                $('#viewmapbuttonx').hide();
+                $('#myModalx').modal({ show: true, backdrop: 'static', keyboard: false });
+
+                setTimeout(function () { updateMacroProgressx(); }, 2000);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function updateGraphList(response) {
+        availableGraphs = response.AllOwnedGraphs;
+        activeGraph = response.ActiveGraph;
+
+        var activeIndex = -1;
+        $('#graphlist').find("li").remove();
+        for (var i = 0; i < availableGraphs.length; i++) {
+            $('#graphlist').append('<li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return selectGraphIndex(' + i + ');">' + htmlEncodex(availableGraphs[i].Name) + '</a></li>');
+            if (activeGraph != null && activeGraph.ID == availableGraphs[i].ID) {
+                activeIndex = i;
+            }
+        }
+
+        if (activeGraph != null) {
+            $('#activeedit').text('(' + activeGraph.Name + ')');
+            if (activeGraph.Graph != null && activeGraph.Graph != "") {
+                graph.fromJSON(JSON.parse(activeGraph.Graph));
+            }
+            $("#deletegraph").show();
+        }
+
+        selectGraphIndex(activeIndex);
+    }
+
+    function selectGraphIndex(index) {
+        selectedGraphIndex = index;
+        if (index < 0) {
+            activeGraph = null;
+            graph.clear();
+            //build new graph
+            //add default name
+
+            createStartModel(300, 10).addTo(graph);
+            createResultaatModel(300, 500).addTo(graph);
+            $('#graphname').val('Nieuwe diagram');
+            $('#activeedit').text('(*)');
+            $('#commenttext').val("");
+            $("#loadgraph").hide();
+            $("#deletegraph").hide();
+        }
+        else {
+            $("#loadgraph").show();
+            $("#deletegraph").show();
+            $('#graphname').val(availableGraphs[selectedGraphIndex].Name);
+            $('#commenttext').val(availableGraphs[selectedGraphIndex].Comment);
+        }
+        return false;
+    }
+
+    function saveGraph() {
+        var id = -1;
+        var comment;
+        var name;
+        var ispublic = "false";
+        if (activeGraph != null) {
+            id = activeGraph.ID;
+            if (availableGraphs[selectedGraphIndex].ID == activeGraph.ID) {
+                comment = $('#commenttext').val();
+                name = $('#graphname').val();
+                availableGraphs[selectedGraphIndex].Comment = comment;
+                availableGraphs[selectedGraphIndex].Name = name;
+            }
+            else {
+                comment = activeGraph.Comment;
+                name = activeGraph.Name;
+            }
+        }
+        else {
+            //new graph
+            comment = $('#commenttext').val();
+            name = $('#graphname').val();
+        }
+
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveGraph", "SelectionBuilder", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                graph: JSON.stringify(graph),
+                comment: comment,
+                name: name,
+                ispublic: ispublic,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (id == -1) {
+                    updateGraphList(response);
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+
+    }
+
+    function loadGraph() {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LoadGraph", "SelectionBuilder", new { area = "Globalcaching" })',
+            data: {
+                id: availableGraphs[selectedGraphIndex].ID,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateGraphList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+
+    }
+
+    function deleteGraph() {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteGraph", "SelectionBuilder", new { area = "Globalcaching" })',
+            data: {
+                id: availableGraphs[selectedGraphIndex].ID,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateGraphList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+
     }
 
     $(function () {
@@ -429,8 +738,10 @@
             paper.scale(paperScale, paperScale);
         });
         $("#zoomout").click(function () {
-            paperScale -= 0.1;
-            paper.scale(paperScale, paperScale);
+            if (paperScale > 0.2) {
+                paperScale -= 0.1;
+                paper.scale(paperScale, paperScale);
+            }
         });
         $("#nozoom").click(function () {
             paperScale = 1.0;
@@ -439,6 +750,26 @@
         $("#executemodel").click(function () {
             executeModel();
         });
+        $("#newgraph").click(function () {
+            selectGraphIndex(-1);
+        });
+        $("#savegraph").click(function () {
+            saveGraph();
+        });
+        $("#loadgraph").click(function () {
+            loadGraph();
+        });
+        $("#deletegraph").click(function () {
+            deleteGraph();
+        });
+
+        var bodyOffset = $('#Content').offset();
+        var offset = $('#paper').offset();
+        var t = offset.top - bodyOffset.top;
+        $("#buildingblocks").css({ top: t });
+        $("#editproperties").css({ top: t });
+
+        updateGraphList(@Html.Raw(Json.Encode(@Model)));
     });
 
 </script>

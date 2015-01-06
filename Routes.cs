@@ -34,6 +34,51 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "SaveGraph",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "SelectionBuilder"},
+                            {"action", "SaveGraph"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "LoadGraph",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "SelectionBuilder"},
+                            {"action", "LoadGraph"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "DeleteGraph",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "SelectionBuilder"},
+                            {"action", "DeleteGraph"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "LogCorrection/SubmitGeocache",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
