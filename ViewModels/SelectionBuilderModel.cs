@@ -10,5 +10,6 @@ namespace Globalcaching.ViewModels
     {
         public GCEuSelectionBuilder ActiveGraph { get; set; }
         public List<GCEuSelectionBuilder> AllOwnedGraphs { get; set; }
+        public GCEuUserSettings UserSettings { get; set; }
     }
 }

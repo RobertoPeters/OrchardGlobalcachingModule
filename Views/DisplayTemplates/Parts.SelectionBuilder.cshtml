@@ -82,14 +82,20 @@
             <li class="list-group-item" style="cursor: pointer" id="Parel" draggable="true" ondragstart="drag(event)">Parel</li>
             <li class="list-group-item" style="cursor: pointer" id="PremiumMemberOnly" draggable="true" ondragstart="drag(event)">Premium Member Only</li>
             <li class="list-group-item" style="cursor: pointer" id="Eigenaren" draggable="true" ondragstart="drag(event)">Eigenaren</li>
+            <li class="list-group-item" style="cursor: pointer" id="Gevondendoor" draggable="true" ondragstart="drag(event)">Gevonden door</li>
+            <li class="list-group-item" style="cursor: pointer" id="Maximum" draggable="true" ondragstart="drag(event)">Maximum</li>
             <li class="list-group-item list-group-item-info">Locatie</li>
             <li class="list-group-item" style="cursor: pointer" id="Breedtegraad" draggable="true" ondragstart="drag(event)">Breedtegraad tussen</li>
             <li class="list-group-item" style="cursor: pointer" id="Lengtegraad" draggable="true" ondragstart="drag(event)">Lengtegraad tussen</li>
             <li class="list-group-item" style="cursor: pointer" id="Locatie" draggable="true" ondragstart="drag(event)">Locatie</li>
+            <li class="list-group-item" style="cursor: pointer" id="Land" draggable="true" ondragstart="drag(event)">Land</li>
             <li class="list-group-item list-group-item-info">M/T</li>
             <li class="list-group-item" style="cursor: pointer" id="Moeilijkheid" draggable="true" ondragstart="drag(event)">Moeilijkheid</li>
             <li class="list-group-item" style="cursor: pointer" id="Terrein" draggable="true" ondragstart="drag(event)">Terrein</li>
             <li class="list-group-item" style="cursor: pointer" id="Lengte" draggable="true" ondragstart="drag(event)">Lengte</li>
+            <li class="list-group-item list-group-item-info">Status</li>
+            <li class="list-group-item" style="cursor: pointer" id="Gearchiveerd" draggable="true" ondragstart="drag(event)">Gearchiveerd</li>
+            <li class="list-group-item" style="cursor: pointer" id="Beschikbaar" draggable="true" ondragstart="drag(event)">Beschikbaar</li>
             <li class="list-group-item list-group-item-info">Tekst</li>
             <li class="list-group-item" style="cursor: pointer" id="HintBevatTekst" draggable="true" ondragstart="drag(event)">Hint bevat tekst</li>
             <li class="list-group-item" style="cursor: pointer" id="NaamBevatTekst" draggable="true" ondragstart="drag(event)">Naam bevat tekst</li>
@@ -143,6 +149,54 @@
             </div>
             <div class="col-md-12">
                 <input id="loctxtval2" type='text' width="100" />
+            </div>
+        </div>
+        <div id="countryvalprop">
+            <div class="col-md-12">
+                Land:
+            </div>
+            <div class="col-md-12"><input type="checkbox" id="country141" />Nederland</div>
+            <div class="col-md-12"><input type="checkbox" id="country4" />Belgie</div>
+            <div class="col-md-12"><input type="checkbox" id="country8" />Luxemburg</div>
+        </div>
+        <div id="maximumvalprop">
+            <div class="col-md-12">
+                Aantal:
+            </div>
+            <div class="col-md-12">
+                <input id="maximumtxtval1" type='text' width="100" />
+            </div>
+            <div class="col-md-12">
+                Sorteren op:
+            </div>
+            <div class="col-md-12">
+                <select id="newSortBy" name="newSortBy">
+                    @if (Model.UserSettings != null && Model.UserSettings.HomelocationLat != null && Model.UserSettings.HomelocationLon != null)
+                    {
+                        <option value="0">Afstand van middelpunt of thuislocatie</option>
+                    }
+                    <option value="1">Plaatsingsdatum</option>
+                    <option value="2">Publicatiedatum</option>
+                    <option value="3">Lengte</option>
+                    <option value="4">Meest recente gevonden log</option>
+                    <option value="5">Favorites</option>
+                    <option value="6">Favorites percentage</option>
+                    <option value="7">Aantal keer gevonden</option>
+                    <option value="8">Cachetype</option>
+                    <option value="9">GC Code</option>
+                    <option value="10">Moeilijkheid</option>
+                    <option value="11">Terrein</option>
+                    <option value="12">Naam</option>
+                </select>
+            </div>
+            <div class="col-md-12">
+                Volgorde:
+            </div>
+            <div class="col-md-12">
+                <select id="newSortDir" name="newSortDir">
+                    <option value="1">oplopend</option>
+                    <option value="-1">aflopend</option>
+                </select>
             </div>
         </div>
     </div>
@@ -311,11 +365,26 @@
         if (data == "Publicatiedatum") {
             m = createPublicationDateModel(x, y).addTo(graph);
         }
+        else if (data == "Maximum") {
+            m = createMaximumModel(x, y).addTo(graph);
+        }
         else if (data == "NaamBevatTekst") {
             m = createNameContainsModel(x, y).addTo(graph);
         }
+        else if (data == "Land") {
+            m = createCountryModel(x, y).addTo(graph);
+        }
+        else if (data == "Gearchiveerd") {
+            m = createArchivedModel(x, y).addTo(graph);
+        }
+        else if (data == "Beschikbaar") {
+            m = createAvailableModel(x, y).addTo(graph);
+        }
         else if (data == "Eigenaren") {
             m = createOwnersModel(x, y).addTo(graph);
+        }
+        else if (data == "Gevondendoor") {
+            m = createFoundByModel(x, y).addTo(graph);
         }
         else if (data == "HintBevatTekst") {
             m = createHintContainsModel(x, y).addTo(graph);
@@ -379,6 +448,8 @@
             $('#txtvalprop').hide();
             $('#rangevalprop').hide();
             $('#locvalprop').hide();
+            $('#countryvalprop').hide();
+            $('#maximumvalprop').hide();
             if (s == "Publicatiedatum") {
                 copyDateModelToProperty(c);
                 $('#datumprop').show();
@@ -386,6 +457,10 @@
             else if (s == "Naam bevat tekst") {
                 copyTextModelToProperty(c);
                 $('#txtvalprop').show();
+            }
+            else if (s == "Maximum") {
+                copyMaximumModelToProperty(c);
+                $('#maximumvalprop').show();
             }
             else if (s == "Hint bevat tekst") {
                 copyTextModelToProperty(c);
@@ -396,6 +471,14 @@
                 $('#txtvalprop').show();
             }
             else if (s == "Eigenaren") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Land") {
+                copyCountryModelToProperty(c);
+                $('#countryvalprop').show();
+            }
+            else if (s == "Gevonden door") {
                 copyTextModelToProperty(c);
                 $('#txtvalprop').show();
             }
@@ -412,6 +495,10 @@
                 $('#txtvalprop').show();
             }
             else if (s == "Parel") {
+            }
+            else if (s == "Gearchiveerd") {
+            }
+            else if (s == "Beschikbaar") {
             }
             else if (s == "Premium Member Only") {
             }
@@ -588,6 +675,22 @@
         });
     }
 
+    function createMaximumModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['='],
+            attrs: {
+                '.label': { text: 'Maximum\r\n100\r\n1\r\n1', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
     function createGeocachePicturesModel(px, py) {
         var d = moment();
         return new joint.shapes.devs.Model({
@@ -635,6 +738,21 @@
         });
     }
 
+    function createCountryModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Land\r\nNederland', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
     function createOwnersModel(px, py) {
         return new joint.shapes.devs.Model({
             position: { x: px, y: py },
@@ -643,6 +761,21 @@
             outPorts: ['=', '<>'],
             attrs: {
                 '.label': { text: 'Eigenaren\r\npietje,pukje', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createFoundByModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Gevonden door\r\npietje,pukje', 'ref-x': .1, 'ref-y': .2 },
                 rect: { fill: modelFill },
                 '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
                 '.outPorts circle': { fill: outportFill, type: 'output' }
@@ -673,6 +806,36 @@
             outPorts: ['='],
             attrs: {
                 '.label': { text: 'Parel', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createArchivedModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Gearchiveerd', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createAvailableModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Beschikbaar', 'ref-x': .1, 'ref-y': .2 },
                 rect: { fill: modelFill },
                 '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
                 '.outPorts circle': { fill: outportFill, type: 'output' }
@@ -817,6 +980,33 @@
         $("#loctxtval2").val(s2);
     }
 
+    function copyCountryModelToProperty(c) {
+        var s = c.model.attr('.label/text').split('\r\n');
+        $('#country141').prop('checked', false);
+        $('#country4').prop('checked', false);
+        $('#country8').prop('checked', false);
+        for (var i = 1; i < s.length; i++) {
+            if (s[i] == "Nederland") {
+                $('#country141').prop('checked', true);
+            }
+            else if (s[i] == "Belgie") {
+                $('#country4').prop('checked', true);
+            }
+            if (s[i] == "Luxemburg") {
+                $('#country8').prop('checked', true);
+            }
+        }
+    }
+
+    function copyMaximumModelToProperty(c) {
+        var s1 = c.model.attr('.label/text').split('\r\n')[1];
+        var s2 = c.model.attr('.label/text').split('\r\n')[2];
+        var s3 = c.model.attr('.label/text').split('\r\n')[2];
+        $("#maximumtxtval1").val(s1);
+        $("#newSortBy").val(s2);
+        $("#newSortDir").val(s3);
+    }
+
     function copyTextPropertyToModel() {
         if (activeCellView != null) {
             var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
@@ -835,6 +1025,29 @@
         if (activeCellView != null) {
             var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
             activeCellView.model.attr('.label/text', s + '\r\n' + $("#loctxtval1").val() + '\r\n' + $("#loctxtval2").val());
+        }
+    }
+
+    function copyMaximumPropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            activeCellView.model.attr('.label/text', s + '\r\n' + $("#maximumtxtval1").val() + '\r\n' + $("#newSortBy").val() + '\r\n' + $("#newSortDir").val());
+        }
+    }
+
+    function copyCountryPropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            if ($('#country141').prop('checked')) {
+                s += "\r\nNederland";
+            }
+            if ($('#country4').prop('checked')) {
+                s += "\r\nBelgie";
+            }
+            if ($('#country8').prop('checked')) {
+                s += "\r\nLuxemburg";
+            }
+            activeCellView.model.attr('.label/text', s);
         }
     }
 
@@ -888,15 +1101,25 @@
                 macro += " + " + variableArray[intermediateVal[k]]
             }
             macro += "\r\n";
-            macro += variableArray[inputVariable] + " = " + variableArray[curVariableIndex];
+            if (m.attr('.label/text').split('\r\n')[0] == "Maximum") {
+                macro += variableArray[inputVariable] + " = ";
+            }
+            else {
+                macro += variableArray[inputVariable] + " = " + variableArray[curVariableIndex];
+            }
         }
         else if (intermediateVal.length == 1) {
-            macro += variableArray[inputVariable] + " = " + variableArray[intermediateVal[0]];
+            if (m.attr('.label/text').split('\r\n')[0] == "Maximum") {
+                macro += variableArray[inputVariable] + " = ";
+            }
+            else {
+                macro += variableArray[inputVariable] + " = " + variableArray[intermediateVal[0]];
+            }
         }
         else {
             macro += variableArray[inputVariable] + " = ";
         }
-        if (m.attr('.label/text') == "Resultaat") {
+        if (m.attr('.label/text') == "Resultaat" || m.attr('.label/text').split('\r\n')[0] == "Maximum") {
             //only additions
             //Variable should be Resultaat
         }
@@ -907,6 +1130,17 @@
         }
         if (m.attr('.label/text') == "Start") {
         }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Maximum") {
+            if (intermediateVal.length == 0) {
+                macro += ' Maximaal(' + m.attr('.label/text').split('\r\n')[1] + "," + m.attr('.label/text').split('\r\n')[2] + "," + m.attr('.label/text').split('\r\n')[3] + ')';
+            }
+            else if (intermediateVal.length == 1) {
+                macro += ' Maximaal(' + variableArray[intermediateVal[0]] + ', ' + m.attr('.label/text').split('\r\n')[1] + "," + m.attr('.label/text').split('\r\n')[2] + "," + m.attr('.label/text').split('\r\n')[3] + ')';
+            }
+            else {
+                macro += ' Maximaal(' + variableArray[curVariableIndex] + ', ' + m.attr('.label/text').split('\r\n')[1] + "," + m.attr('.label/text').split('\r\n')[2] + "," + m.attr('.label/text').split('\r\n')[3] + ')';
+            }
+        }
         else if (m.attr('.label/text').split('\r\n')[0] == "Naam bevat tekst") {
             if (outPort == '=') {
                 macro += ' NaamBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
@@ -914,6 +1148,38 @@
             else {
                 macro += ' NietNaamBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
             }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Land") {
+            if (outPort == '=') {
+                macro += ' LandCode(';
+            }
+            else {
+                macro += ' NietLandCode(';
+            }
+            var cn = m.attr('.label/text').split('\r\n');
+            if (cn.length > 1) {
+                if (cn[1] == "Nederland") {
+                    macro += '141';
+                }
+                else if (cn[1] == "Belgie") {
+                    macro += '4';
+                }
+                else if (cn[1] == "Luxemburg") {
+                    macro += '8';
+                }
+                for (var h = 2; h < cn.length; h++) {
+                    if (cn[h] == "Nederland") {
+                        macro += ',141';
+                    }
+                    else if (cn[h] == "Belgie") {
+                        macro += ',4';
+                    }
+                    else if (cn[h] == "Luxemburg") {
+                        macro += ',8';
+                    }
+                }
+            }
+            macro += ' )';
         }
         else if (m.attr('.label/text').split('\r\n')[0] == "Hint bevat tekst") {
             if (outPort == '=') {
@@ -923,12 +1189,12 @@
                 macro += ' NietHintsBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
             }
         }
-        else if (m.attr('.label/text').split('\r\n')[0] == "Eigenaren") {
+        else if (m.attr('.label/text').split('\r\n')[0] == "Gevonden door") {
             if (outPort == '=') {
-                macro += ' VanEigenaar("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
+                macro += ' GevondenDoor("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
             }
             else {
-                macro += ' NietVanEigenaar("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
+                macro += ' NietGevondenDoor("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
             }
         }
         else if (m.attr('.label/text').split('\r\n')[0] == "Parel") {
@@ -942,6 +1208,22 @@
             }
             else {
                 macro += ' NietIsPremiumCache()';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Gearchiveerd") {
+            if (outPort == '=') {
+                macro += ' Gearchiveerd()';
+            }
+            else {
+                macro += ' NietGearchiveerd()';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Beschikbaar") {
+            if (outPort == '=') {
+                macro += ' Beschikbaar()';
+            }
+            else {
+                macro += ' NietBeschikbaar()';
             }
         }
         else if (m.attr('.label/text').split('\r\n')[0] == "Locatie") {
@@ -1494,6 +1776,24 @@
         });
         $("#loctxtval2").change(function () {
             copyLocPropertyToModel();
+        });
+        $("#country141").change(function () {
+            copyCountryPropertyToModel();
+        });
+        $("#country4").change(function () {
+            copyCountryPropertyToModel();
+        });
+        $("#country8").change(function () {
+            copyCountryPropertyToModel();
+        });
+        $("#maximumtxtval1").change(function () {
+            copyMaximumPropertyToModel();
+        });
+        $("#newSortBy").change(function () {
+            copyMaximumPropertyToModel();
+        });
+        $("#newSortDir").change(function () {
+            copyMaximumPropertyToModel();
         });
         $("#zoomin").click(function () {
             paperScale += 0.1;
