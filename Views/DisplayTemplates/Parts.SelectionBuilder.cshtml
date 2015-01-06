@@ -68,8 +68,30 @@
 </div>
     <div id="buildingblocks" class="collapse col-md-3" style="position: absolute; z-index: 10; top: 200px; left: 0; overflow: auto; border: solid; background-color: #DFECF7; min-height: 800px; max-height: 800px; padding: 0px">
         <ul class="list-group">
-            <li class="list-group-item list-group-item-info">Bouwblokken</li>
+            <li class="list-group-item list-group-item-info">Aantallen</li>
+            <li class="list-group-item" style="cursor: pointer" id="GevondenLogs" draggable="true" ondragstart="drag(event)">Gevonden logs</li>
+            <li class="list-group-item" style="cursor: pointer" id="Favorites" draggable="true" ondragstart="drag(event)">Favorites</li>
+            <li class="list-group-item" style="cursor: pointer" id="Geocacheplaatjes" draggable="true" ondragstart="drag(event)">Geocacheplaatjes</li>
+            <li class="list-group-item list-group-item-info">Datum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Aanmaakdatum" draggable="true" ondragstart="drag(event)">Aanmaakdatum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Aangepastdatum" draggable="true" ondragstart="drag(event)">Aangepast datum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Archivedatum" draggable="true" ondragstart="drag(event)">Archive datum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Gevondendatum" draggable="true" ondragstart="drag(event)">Gevonden datum</li>
             <li class="list-group-item" style="cursor: pointer" id="Publicatiedatum" draggable="true" ondragstart="drag(event)">Publicatiedatum</li>
+            <li class="list-group-item list-group-item-info">Diversen</li>
+            <li class="list-group-item" style="cursor: pointer" id="Parel" draggable="true" ondragstart="drag(event)">Parel</li>
+            <li class="list-group-item" style="cursor: pointer" id="PremiumMemberOnly" draggable="true" ondragstart="drag(event)">Premium Member Only</li>
+            <li class="list-group-item" style="cursor: pointer" id="Eigenaren" draggable="true" ondragstart="drag(event)">Eigenaren</li>
+            <li class="list-group-item list-group-item-info">Locatie</li>
+            <li class="list-group-item" style="cursor: pointer" id="Breedtegraad" draggable="true" ondragstart="drag(event)">Breedtegraad tussen</li>
+            <li class="list-group-item" style="cursor: pointer" id="Lengtegraad" draggable="true" ondragstart="drag(event)">Lengtegraad tussen</li>
+            <li class="list-group-item" style="cursor: pointer" id="Locatie" draggable="true" ondragstart="drag(event)">Locatie</li>
+            <li class="list-group-item list-group-item-info">M/T</li>
+            <li class="list-group-item" style="cursor: pointer" id="Moeilijkheid" draggable="true" ondragstart="drag(event)">Moeilijkheid</li>
+            <li class="list-group-item" style="cursor: pointer" id="Terrein" draggable="true" ondragstart="drag(event)">Terrein</li>
+            <li class="list-group-item" style="cursor: pointer" id="Lengte" draggable="true" ondragstart="drag(event)">Lengte</li>
+            <li class="list-group-item list-group-item-info">Tekst</li>
+            <li class="list-group-item" style="cursor: pointer" id="HintBevatTekst" draggable="true" ondragstart="drag(event)">Hint bevat tekst</li>
             <li class="list-group-item" style="cursor: pointer" id="NaamBevatTekst" draggable="true" ondragstart="drag(event)">Naam bevat tekst</li>
         </ul>
     </div>
@@ -93,6 +115,34 @@
             </div>
             <div class="col-md-12">
                 <input id="changetxtval" type='text' width="100" />
+            </div>
+        </div>
+        <div id="rangevalprop">
+            <div class="col-md-12">
+                Van:
+            </div>
+            <div class="col-md-12">
+                <input id="rangetxtval1" type='text' width="100" />
+            </div>
+            <div class="col-md-12">
+                t/m:
+            </div>
+            <div class="col-md-12">
+                <input id="rangetxtval2" type='text' width="100" />
+            </div>
+        </div>
+        <div id="locvalprop">
+            <div class="col-md-12">
+                Coordinaat/plaats:
+            </div>
+            <div class="col-md-12">
+                <input id="loctxtval1" type='text' width="100" />
+            </div>
+            <div class="col-md-12">
+                Radius in km:
+            </div>
+            <div class="col-md-12">
+                <input id="loctxtval2" type='text' width="100" />
             </div>
         </div>
     </div>
@@ -264,18 +314,71 @@
         else if (data == "NaamBevatTekst") {
             m = createNameContainsModel(x, y).addTo(graph);
         }
-    }
+        else if (data == "Eigenaren") {
+            m = createOwnersModel(x, y).addTo(graph);
+        }
+        else if (data == "HintBevatTekst") {
+            m = createHintContainsModel(x, y).addTo(graph);
+        }
+        else if (data == "Locatie") {
+            m = createLocationModel(x, y).addTo(graph);
+        }
+        else if (data == "GevondenLogs") {
+            m = createFoundCountModel(x, y).addTo(graph);
+        }
+        else if (data == "Geocacheplaatjes") {
+            m = createGeocachePicturesModel(x, y).addTo(graph);
+        }
+        else if (data == "Favorites") {
+            m = createFavoritesModel(x, y).addTo(graph);
+        }
+        else if (data == "Aanmaakdatum") {
+            m = createHiddenDateModel(x, y).addTo(graph);
+        }
+        else if (data == "Gevondendatum") {
+            m = createFoundDateModel(x, y).addTo(graph);
+        }
+        else if (data == "Archivedatum") {
+            m = createArchiveDateModel(x, y).addTo(graph);
+        }
+        else if (data == "Aangepastdatum") {
+            m = createChangedDateModel(x, y).addTo(graph);
+        }
+        else if (data == "Lengtegraad") {
+            m = createLongitudeModel(x, y).addTo(graph);
+        }
+        else if (data == "Breedtegraad") {
+                m = createLatitudeModel(x, y).addTo(graph);
+            }
+        else if (data == "Moeilijkheid") {
+                m = createDifficultyModel(x, y).addTo(graph);
+            }
+        else if (data == "Terrein") {
+                m = createTerrainModel(x, y).addTo(graph);
+            }
+        else if (data == "Lengte") {
+            m = createLengteModel(x, y).addTo(graph);
+        }
+        else if (data == "Parel") {
+                m = createParelModel(x, y).addTo(graph);
+            }
+        else if (data == "PremiumMemberOnly") {
+                m = createPMOModel(x, y).addTo(graph);
+            }
+}
 
     function setActiveCellView(c) {
         if (activeCellView != null) {
             activeCellView.unhighlight();
             activeCellView = null;
         }
-        if (c != null && c.model.attr('.label/text')!="Start" &&  c.model.attr('.label/text')!="Resultaat") {
+        if (c != null && c.model.attr('.label/text') != "Start" && c.model.attr('.label/text') != "Resultaat") {
             var s = c.model.attr('.label/text').split('\r\n')[0];
             $('#modeltype').text(s);
             $('#datumprop').hide();
             $('#txtvalprop').hide();
+            $('#rangevalprop').hide();
+            $('#locvalprop').hide();
             if (s == "Publicatiedatum") {
                 copyDateModelToProperty(c);
                 $('#datumprop').show();
@@ -284,7 +387,71 @@
                 copyTextModelToProperty(c);
                 $('#txtvalprop').show();
             }
-        }
+            else if (s == "Hint bevat tekst") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Gevonden logs") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Eigenaren") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Locatie") {
+                copyLocModelToProperty(c);
+                $('#locvalprop').show();
+            }
+            else if (s == "Geocacheplaatjes") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Favorites") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Parel") {
+            }
+            else if (s == "Premium Member Only") {
+            }
+            else if (s == "Moeilijkheid") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Terrein") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Lengte") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Lengtegraad tussen") {
+                copyRangeModelToProperty(c);
+                $('#rangevalprop').show();
+            }
+            else if (s == "Breedtegraad tussen") {
+                copyRangeModelToProperty(c);
+                $('#rangevalprop').show();
+            }
+            else if (s == "Aanmaakdatum") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Gevonden datum") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Archive datum") {
+                    copyTextModelToProperty(c);
+                    $('#txtvalprop').show();
+                }
+            else if (s == "Aangepast datum") {
+                    copyTextModelToProperty(c);
+                    $('#txtvalprop').show();
+                }
+}
         activeCellView = c;
         if (activeCellView != null && activeCellView.model.attr('.label/text') != "Start" && c.model.attr('.label/text') != "Resultaat") {
             activeCellView.highlight();
@@ -341,6 +508,118 @@
         });
     }
 
+    function createHiddenDateModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Aanmaakdatum\r\n' + d.date().toString() + '-' + (d.month() + 1).toString() + '-' + d.year(), 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createChangedDateModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Aangepast datum\r\n' + d.date().toString() + '-' + (d.month() + 1).toString() + '-' + d.year(), 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createArchiveDateModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Archive datum\r\n' + d.date().toString() + '-' + (d.month() + 1).toString() + '-' + d.year(), 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createFoundDateModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Gevonden datum\r\n' + d.date().toString() + '-' + (d.month() + 1).toString() + '-' + d.year(), 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createFoundCountModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Gevonden logs\r\n100', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createGeocachePicturesModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Geocacheplaatjes\r\n10', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createFavoritesModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Favorites\r\n100', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
     function createNameContainsModel(px, py) {
         return new joint.shapes.devs.Model({
             position: { x: px, y: py },
@@ -349,6 +628,156 @@
             outPorts: ['=', '<>'],
             attrs: {
                 '.label': { text: 'Naam bevat tekst\r\nde tekst', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createOwnersModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Eigenaren\r\npietje,pukje', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createHintContainsModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Hint bevat tekst\r\nde tekst', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createParelModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 100, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['='],
+            attrs: {
+                '.label': { text: 'Parel', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createPMOModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Premium Member Only', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createDifficultyModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Moeilijkheid\r\n2.5', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createTerrainModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Terrein\r\n2.5', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createLengteModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Lengte\r\n2.5', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createLongitudeModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Lengtegraad tussen\r\n5.1\r\n6.3', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createLocationModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Locatie\r\nN51 5.123 E6 3.123\r\n10', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createLatitudeModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Breedtegraad tussen\r\n51.1\r\n54.3', 'ref-x': .1, 'ref-y': .2 },
                 rect: { fill: modelFill },
                 '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
                 '.outPorts circle': { fill: outportFill, type: 'output' }
@@ -374,10 +803,38 @@
         $("#changetxtval").val(s);
     }
 
+    function copyRangeModelToProperty(c) {
+        var s1 = c.model.attr('.label/text').split('\r\n')[1];
+        var s2 = c.model.attr('.label/text').split('\r\n')[2];
+        $("#rangetxtval1").val(s1);
+        $("#rangetxtval2").val(s2);
+    }
+
+    function copyLocModelToProperty(c) {
+        var s1 = c.model.attr('.label/text').split('\r\n')[1];
+        var s2 = c.model.attr('.label/text').split('\r\n')[2];
+        $("#loctxtval1").val(s1);
+        $("#loctxtval2").val(s2);
+    }
+
     function copyTextPropertyToModel() {
         if (activeCellView != null) {
             var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
             activeCellView.model.attr('.label/text', s + '\r\n' + $("#changetxtval").val());
+        }
+    }
+
+    function copyRangePropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            activeCellView.model.attr('.label/text', s + '\r\n' + $("#rangetxtval1").val() + '\r\n' + $("#rangetxtval2").val());
+        }
+    }
+
+    function copyLocPropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            activeCellView.model.attr('.label/text', s + '\r\n' + $("#loctxtval1").val() + '\r\n' + $("#loctxtval2").val());
         }
     }
 
@@ -458,7 +915,228 @@
                 macro += ' NietNaamBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
             }
         }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Hint bevat tekst") {
+            if (outPort == '=') {
+                macro += ' HintsBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
+            }
+            else {
+                macro += ' NietHintsBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Eigenaren") {
+            if (outPort == '=') {
+                macro += ' VanEigenaar("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
+            }
+            else {
+                macro += ' NietVanEigenaar("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Parel") {
+            if (outPort == '=') {
+                macro += ' IsParel()';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Premium Member Only") {
+            if (outPort == '=') {
+                macro += ' IsPremiumCache()';
+            }
+            else {
+                macro += ' NietIsPremiumCache()';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Locatie") {
+            if (outPort == '=') {
+                macro += ' BinnenStraal("' + m.attr('.label/text').split('\r\n')[1] + '", ' + m.attr('.label/text').split('\r\n')[2] + ')';
+            }
+            else {
+                macro += ' NietBinnenStraal("' + m.attr('.label/text').split('\r\n')[1] + '", ' + m.attr('.label/text').split('\r\n')[2] + ')';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Lengtegraad tussen") {
+            if (outPort == '=') {
+                macro += ' LongitudeTussen(' + m.attr('.label/text').split('\r\n')[1] + ', ' + m.attr('.label/text').split('\r\n')[2] + ')';
+            }
+            else {
+                macro += ' NietLongitudeTussen(' + m.attr('.label/text').split('\r\n')[1] + ', ' + m.attr('.label/text').split('\r\n')[2] + ')';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Breedtegraad tussen") {
+            if (outPort == '=') {
+                macro += ' LatitudeTussen(' + m.attr('.label/text').split('\r\n')[1] + ', ' + m.attr('.label/text').split('\r\n')[2] + ')';
+            }
+            else {
+                macro += ' NietLatitudeTussen(' + m.attr('.label/text').split('\r\n')[1] + ', ' + m.attr('.label/text').split('\r\n')[2] + ')';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Gevonden logs") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = parseInt(s);
+            if (outPort == '=') {
+                d -= 1;
+                macro += ' AantalKeerGevondenMeerDan(' + d.toString() + ') en ';
+                d += 2;
+                macro += ' NietAantalKeerGevondenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<') {
+                d -= 1;
+                macro += ' NietAantalKeerGevondenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<=') {
+                macro += ' NietAantalKeerGevondenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '=>') {
+                d -= 1;
+                macro += ' AantalKeerGevondenMeerDan(' + d.toString() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' AantalKeerGevondenMeerDan(' + d.toString() + ') ';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Geocacheplaatjes") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = parseInt(s);
+            if (outPort == '=') {
+                d -= 1;
+                macro += ' AantalPlaatjesGroterDan(' + d.toString() + ') en ';
+                d += 2;
+                macro += ' NietAantalPlaatjesGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<') {
+                d -= 1;
+                macro += ' NietAantalPlaatjesGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<=') {
+                macro += ' NietAantalPlaatjesGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '=>') {
+                d -= 1;
+                macro += ' AantalPlaatjesGroterDan(' + d.toString() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' AantalPlaatjesGroterDan(' + d.toString() + ') ';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Favorites") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = parseInt(s);
+            if (outPort == '=') {
+                d -= 1;
+                macro += ' FavorietenMeerDan(' + d.toString() + ') en ';
+                d += 2;
+                macro += ' NietFavorietenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<') {
+                d -= 1;
+                macro += ' NietFavorietenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<=') {
+                macro += ' NietFavorietenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '=>') {
+                d -= 1;
+                macro += ' FavorietenMeerDan(' + d.toString() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' FavorietenMeerDan(' + d.toString() + ') ';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Lengte") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = parseFloat(s);
+            if (outPort == '=') {
+                d -= 0.1;
+                macro += ' CacheAfstandGroterDan(' + d.toString() + ') en ';
+                d += 0.2;
+                macro += ' NietCacheAfstandGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<') {
+                d -= 0.1;
+                macro += ' NietCacheAfstandGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<=') {
+                macro += ' NietCacheAfstandGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '=>') {
+                d -= 0.1;
+                macro += ' CacheAfstandGroterDan(' + d.toString() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' CacheAfstandGroterDan(' + d.toString() + ') ';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Moeilijkheid") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = parseFloat(s);
+            if (outPort == '=') {
+                d -= 0.1;
+                macro += ' MoeilijkheidGroterDan(' + d.toString() + ') en ';
+                d += 0.2;
+                macro += ' NietMoeilijkheidGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<') {
+                d -= 0.1;
+                macro += ' NietMoeilijkheidGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<=') {
+                macro += ' NietMoeilijkheidGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '=>') {
+                d -= 0.1;
+                macro += ' MoeilijkheidGroterDan(' + d.toString() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' MoeilijkheidGroterDan(' + d.toString() + ') ';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Terrein") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = parseFloat(s);
+            if (outPort == '=') {
+                d -= 0.1;
+                macro += ' TerreinGroterDan(' + d.toString() + ') en ';
+                d += 0.2;
+                macro += ' NietTerreinGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<') {
+                d -= 0.1;
+                macro += ' NietTerreinGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<=') {
+                macro += ' NietTerreinGroterDan(' + d.toString() + ')'
+            }
+            else if (outPort == '=>') {
+                d -= 0.1;
+                macro += ' TerreinGroterDan(' + d.toString() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' TerreinGroterDan(' + d.toString() + ') ';
+            }
+        }
         else if (m.attr('.label/text').split('\r\n')[0] == "Publicatiedatum") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = moment(s, "D-M-YYYY");
+            if (outPort == '=') {
+                d.subtract(1, 'days');
+                macro += ' GepubliceerdNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
+                d.add(1, 'days');
+                macro += ' NietGepubliceerdNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
+            }
+            else if (outPort == '<') {
+                d.subtract(1, 'days');
+                macro += ' NietGepubliceerdNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '<=') {
+                macro += ' NietGepubliceerdNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '=>') {
+                d.subtract(1, 'days');
+                macro += ' GepubliceerdNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' GepubliceerdNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Aanmaakdatum") {
             var s = m.attr('.label/text').split('\r\n')[1];
             var d = moment(s, "D-M-YYYY");
             if (outPort == '=') {
@@ -482,7 +1160,79 @@
                 macro += ' AanmaakDatumNa(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
             }
         }
-        macro += "\r\n";
+        else if (m.attr('.label/text').split('\r\n')[0] == "Gevonden datum") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = moment(s, "D-M-YYYY");
+            if (outPort == '=') {
+                d.subtract(1, 'days');
+                macro += ' GevondenNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
+                d.add(1, 'days');
+                macro += ' NietGevondenNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
+            }
+            else if (outPort == '<') {
+                d.subtract(1, 'days');
+                macro += ' NietGevondenNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '<=') {
+                macro += ' NietGevondenNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '=>') {
+                d.subtract(1, 'days');
+                macro += ' GevondenNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' GevondenNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Archive datum") {
+                var s = m.attr('.label/text').split('\r\n')[1];
+                var d = moment(s, "D-M-YYYY");
+                if (outPort == '=') {
+                    d.subtract(1, 'days');
+                    macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
+                    d.add(1, 'days');
+                    macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
+                }
+                else if (outPort == '<') {
+                    d.subtract(1, 'days');
+                    macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+                }
+                else if (outPort == '<=') {
+                    macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+                }
+                else if (outPort == '=>') {
+                    d.subtract(1, 'days');
+                    macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+                }
+                else if (outPort == '>') {
+                    macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+                }
+            }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Aangepast datum") {
+                var s = m.attr('.label/text').split('\r\n')[1];
+                var d = moment(s, "D-M-YYYY");
+                if (outPort == '=') {
+                    d.subtract(1, 'days');
+                    macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
+                    d.add(1, 'days');
+                    macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
+                }
+                else if (outPort == '<') {
+                    d.subtract(1, 'days');
+                    macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+                }
+                else if (outPort == '<=') {
+                    macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+                }
+                else if (outPort == '=>') {
+                    d.subtract(1, 'days');
+                    macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+                }
+                else if (outPort == '>') {
+                    macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+                }
+            }
+    macro += "\r\n";
     }
 
     function getConnectedModel(link) {
@@ -732,6 +1482,18 @@
         });
         $("#changetxtval").change(function () {
             copyTextPropertyToModel();
+        });
+        $("#rangetxtval1").change(function () {
+            copyRangePropertyToModel();
+        });
+        $("#rangetxtval2").change(function () {
+            copyRangePropertyToModel();
+        });
+        $("#loctxtval1").change(function () {
+            copyLocPropertyToModel();
+        });
+        $("#loctxtval2").change(function () {
+            copyLocPropertyToModel();
         });
         $("#zoomin").click(function () {
             paperScale += 0.1;
