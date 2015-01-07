@@ -658,6 +658,7 @@ namespace Globalcaching.Services
         {
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
             {
+                db.CommandTimeout = 60;
                 var m = GetMacro(ID);
                 if (m != null)
                 {
@@ -680,7 +681,7 @@ namespace Globalcaching.Services
                         m.ProcessedSteps = 0;
                         List<string> variables = new List<string>();
 
-                        if (lines.Count <= 30)
+                        if (lines.Count <= 90)
                         {
                             for (int i = 0; i < m.TotalSteps; i++)
                             {

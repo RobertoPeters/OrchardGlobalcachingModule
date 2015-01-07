@@ -11,5 +11,8 @@ namespace Globalcaching.ViewModels
         public GCEuSelectionBuilder ActiveGraph { get; set; }
         public List<GCEuSelectionBuilder> AllOwnedGraphs { get; set; }
         public GCEuUserSettings UserSettings { get; set; }
+        public List<GCComGeocacheType> GeocacheTypes { get; set; }
+        public List<GCComAttributeType> AttributeTypes { get; set; }
+        public List<int> Containers { get; set; }
     }
 }

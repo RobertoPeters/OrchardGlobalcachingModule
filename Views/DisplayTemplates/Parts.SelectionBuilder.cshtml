@@ -66,36 +66,40 @@
         <button class="btn btn-default pull-right" data-toggle="collapse" data-target="#editproperties">Blokinstelling</button>
     </div>
 </div>
-    <div id="buildingblocks" class="collapse col-md-3" style="position: absolute; z-index: 10; top: 200px; left: 0; overflow: auto; border: solid; background-color: #DFECF7; min-height: 800px; max-height: 800px; padding: 0px">
+    <div id="buildingblocks" class="collapse col-md-2" style="position: absolute; z-index: 10; top: 200px; left: 0; overflow: auto; border: solid; background-color: #DFECF7; min-height: 800px; max-height: 800px; padding: 0px">
         <ul class="list-group">
             <li class="list-group-item list-group-item-info">Aantallen</li>
-            <li class="list-group-item" style="cursor: pointer" id="GevondenLogs" draggable="true" ondragstart="drag(event)">Gevonden logs</li>
-            <li class="list-group-item" style="cursor: pointer" id="Favorites" draggable="true" ondragstart="drag(event)">Favorites</li>
-            <li class="list-group-item" style="cursor: pointer" id="Geocacheplaatjes" draggable="true" ondragstart="drag(event)">Geocacheplaatjes</li>
+            <li class="list-group-item" style="cursor: pointer" id="Favorites" draggable="true" ondragstart="drag(event)" title="Het aantal Favorites wat de geocache gekregen heeft">Favorites</li>
+            <li class="list-group-item" style="cursor: pointer" id="Geocacheplaatjes" draggable="true" ondragstart="drag(event)" title="Het aantal plaatjes in de geocachebeschrijving dat geupload is naar geocaching.com">Geocacheplaatjes</li>
+            <li class="list-group-item" style="cursor: pointer" id="GevondenLogs" draggable="true" ondragstart="drag(event)" title="Het aantal found logs">Gevonden logs</li>
+            <li class="list-group-item" style="cursor: pointer" id="Maximum" draggable="true" ondragstart="drag(event)" title="Het maximum aantakl caches dat geselecteerd mag worden">Maximum</li>
             <li class="list-group-item list-group-item-info">Datum</li>
-            <li class="list-group-item" style="cursor: pointer" id="Aanmaakdatum" draggable="true" ondragstart="drag(event)">Aanmaakdatum</li>
-            <li class="list-group-item" style="cursor: pointer" id="Aangepastdatum" draggable="true" ondragstart="drag(event)">Aangepast datum</li>
-            <li class="list-group-item" style="cursor: pointer" id="Archivedatum" draggable="true" ondragstart="drag(event)">Archive datum</li>
-            <li class="list-group-item" style="cursor: pointer" id="Gevondendatum" draggable="true" ondragstart="drag(event)">Gevonden datum</li>
-            <li class="list-group-item" style="cursor: pointer" id="Publicatiedatum" draggable="true" ondragstart="drag(event)">Publicatiedatum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Aanmaakdatum" draggable="true" ondragstart="drag(event)" title="De zogenaamde 'Hidden date'">Aanmaakdatum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Aangepastdatum" draggable="true" ondragstart="drag(event)" title="De datum van de laatste aanpassing aan de geocache of log">Aangepast datum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Archivedatum" draggable="true" ondragstart="drag(event)" title="De meest recente archive log. De cache hoeft niet per se gearchiveerd te zijn">Archive datum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Gevondendatum" draggable="true" ondragstart="drag(event)" title="De datum van de meest recente found log">Gevonden datum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Publicatiedatum" draggable="true" ondragstart="drag(event)" title="De datum van publicatie">Publicatiedatum</li>
             <li class="list-group-item list-group-item-info">Diversen</li>
-            <li class="list-group-item" style="cursor: pointer" id="Parel" draggable="true" ondragstart="drag(event)">Parel</li>
-            <li class="list-group-item" style="cursor: pointer" id="PremiumMemberOnly" draggable="true" ondragstart="drag(event)">Premium Member Only</li>
-            <li class="list-group-item" style="cursor: pointer" id="Eigenaren" draggable="true" ondragstart="drag(event)">Eigenaren</li>
-            <li class="list-group-item" style="cursor: pointer" id="Gevondendoor" draggable="true" ondragstart="drag(event)">Gevonden door</li>
-            <li class="list-group-item" style="cursor: pointer" id="Maximum" draggable="true" ondragstart="drag(event)">Maximum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Attributen" draggable="true" ondragstart="drag(event)" title="Selecteert de caches die minimaal 1 van de geselecteerde attributen heeft">Attributen</li>
+            <li class="list-group-item" style="cursor: pointer" id="Eigenaren" draggable="true" ondragstart="drag(event)" title="Geocaches van eigenaren">Eigenaren</li>
+            <li class="list-group-item" style="cursor: pointer" id="Container" draggable="true" ondragstart="drag(event)" title="De container grootte of type">Container</li>
+            <li class="list-group-item" style="cursor: pointer" id="Geocachetype" draggable="true" ondragstart="drag(event)" title="De geocache type">Geocache type</li>
+            <li class="list-group-item" style="cursor: pointer" id="Gevondendoor" draggable="true" ondragstart="drag(event)" title="De geocaches die minimaal door 1 van de opgegeven cachers gevonden is">Gevonden door</li>
+            <li class="list-group-item" style="cursor: pointer" id="Parel" draggable="true" ondragstart="drag(event)" title="Parel van de Maand">Parel</li>
+            <li class="list-group-item" style="cursor: pointer" id="PremiumMemberOnly" draggable="true" ondragstart="drag(event)" title="Premium Member Only (PMO) geocaches">Premium Member Only</li>
             <li class="list-group-item list-group-item-info">Locatie</li>
-            <li class="list-group-item" style="cursor: pointer" id="Breedtegraad" draggable="true" ondragstart="drag(event)">Breedtegraad tussen</li>
-            <li class="list-group-item" style="cursor: pointer" id="Lengtegraad" draggable="true" ondragstart="drag(event)">Lengtegraad tussen</li>
-            <li class="list-group-item" style="cursor: pointer" id="Locatie" draggable="true" ondragstart="drag(event)">Locatie</li>
-            <li class="list-group-item" style="cursor: pointer" id="Land" draggable="true" ondragstart="drag(event)">Land</li>
+            <li class="list-group-item" style="cursor: pointer" id="Breedtegraad" draggable="true" ondragstart="drag(event)" title="De latitude tussen twee waarden">Breedtegraad tussen</li>
+            <li class="list-group-item" style="cursor: pointer" id="Land" draggable="true" ondragstart="drag(event)" title="Geocaches in bepaalde landen">Land</li>
+            <li class="list-group-item" style="cursor: pointer" id="Lengtegraad" draggable="true" ondragstart="drag(event)" title="De longitude tussen twee waarden">Lengtegraad tussen</li>
+            <li class="list-group-item" style="cursor: pointer" id="Locatie" draggable="true" ondragstart="drag(event)" title="Geef middelpunt en radius in km op">Locatie</li>
             <li class="list-group-item list-group-item-info">M/T</li>
-            <li class="list-group-item" style="cursor: pointer" id="Moeilijkheid" draggable="true" ondragstart="drag(event)">Moeilijkheid</li>
-            <li class="list-group-item" style="cursor: pointer" id="Terrein" draggable="true" ondragstart="drag(event)">Terrein</li>
-            <li class="list-group-item" style="cursor: pointer" id="Lengte" draggable="true" ondragstart="drag(event)">Lengte</li>
+            <li class="list-group-item" style="cursor: pointer" id="Lengte" draggable="true" ondragstart="drag(event)" title="De geocache/wandel afstand ik kilometers">Lengte</li>
+            <li class="list-group-item" style="cursor: pointer" id="Moeilijkheid" draggable="true" ondragstart="drag(event)" title="De moeilijkheid">Moeilijkheid</li>
+            <li class="list-group-item" style="cursor: pointer" id="Terrein" draggable="true" ondragstart="drag(event)" title="Het terrein">Terrein</li>
             <li class="list-group-item list-group-item-info">Status</li>
-            <li class="list-group-item" style="cursor: pointer" id="Gearchiveerd" draggable="true" ondragstart="drag(event)">Gearchiveerd</li>
             <li class="list-group-item" style="cursor: pointer" id="Beschikbaar" draggable="true" ondragstart="drag(event)">Beschikbaar</li>
+            <li class="list-group-item" style="cursor: pointer" id="Gearchiveerd" draggable="true" ondragstart="drag(event)">Gearchiveerd</li>
+            <li class="list-group-item" style="cursor: pointer" id="Geblokkeerd" draggable="true" ondragstart="drag(event)">Geblokkeerd</li>
             <li class="list-group-item list-group-item-info">Tekst</li>
             <li class="list-group-item" style="cursor: pointer" id="HintBevatTekst" draggable="true" ondragstart="drag(event)">Hint bevat tekst</li>
             <li class="list-group-item" style="cursor: pointer" id="NaamBevatTekst" draggable="true" ondragstart="drag(event)">Naam bevat tekst</li>
@@ -158,6 +162,39 @@
             <div class="col-md-12"><input type="checkbox" id="country141" />Nederland</div>
             <div class="col-md-12"><input type="checkbox" id="country4" />Belgie</div>
             <div class="col-md-12"><input type="checkbox" id="country8" />Luxemburg</div>
+        </div>
+        <div id="attributesvalprop">
+            <div class="col-md-12">
+                Attributen:
+            </div>
+            @foreach (var attr in Model.AttributeTypes)
+            {
+                if (attr.ID != 16)
+                {
+                    <div class="col-md-3">
+                        <img style="margin: 5px 5px 5px 5px; cursor: pointer" id="@string.Format("attrnegimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif",@attr.ID))' width="30" height="30" onclick="toggleNegAttributeButton('@attr.ID')" title="@attr.Name" />
+                        <input id="@string.Format("attrnegvalue{0}", attr.ID)" type="hidden" value="0" />
+                    </div>
+                }
+            }
+        </div>
+        <div id="containervalprop">
+            <div class="col-md-12">
+                Container:
+            </div>
+            @foreach (var gt in Model.Containers)
+            {
+                <div class="col-md-12"><input type="checkbox" id="@string.Format("contype{0}", @gt)" /> <img src="@Href(string.Format("~/Modules/Globalcaching/Media/container/{0}.gif", gt))" /></div>
+            }
+        </div>
+        <div id="gctypevalprop">
+            <div class="col-md-12">
+                Geocache type:
+            </div>
+            @foreach (var gt in Model.GeocacheTypes)
+            {
+                <div class="col-md-12"><input type="checkbox" id="@string.Format("gctype{0}", @gt.ID)" /> <img src="@Href(string.Format("~/Modules/Globalcaching/Media/WptTypes/s/{0}.gif", gt.ID))" /></div>
+            }
         </div>
         <div id="maximumvalprop">
             <div class="col-md-12">
@@ -222,6 +259,11 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
+    var containerTypes = @Html.Raw(Json.Encode(@Model.Containers));
+    var attributeTypes = @Html.Raw(Json.Encode(@Model.AttributeTypes));
+</script>
 
 <script type="text/javascript">
 
@@ -234,7 +276,9 @@
     var paperScale = 1.0;
     var variableArray = [
         'Resultaat', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-        'aa', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az'
+        'aa', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at', 'au', 'av', 'aw', 'ax', 'ay', 'az',
+        'ba', 'bc', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'bp', 'bq', 'br', 'bs', 'bt', 'bu', 'bv', 'bw', 'bx', 'by', 'bz',
+        'ca', 'cc', 'cd', 'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn', 'co', 'cp', 'cq', 'cr', 'cs', 'ct', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz'
     ];
     var curVariableIndex = 0;
     var macro;
@@ -273,7 +317,7 @@
                 },
                 '.label': { text: 'Model', 'ref-x': 10, 'ref-y': .2, 'ref': '.body' },
 
-                // CHANGED: find better positions for port labels 
+                // CHANGED: find better positions for port labels
                 '.inPorts .port-label': { dy: -30, x: 4 },
                 '.outPorts .port-label': { dy: 15, x: 4 }
                 //
@@ -365,6 +409,15 @@
         if (data == "Publicatiedatum") {
             m = createPublicationDateModel(x, y).addTo(graph);
         }
+        else if (data == "Container") {
+            m = createContainerModel(x, y).addTo(graph);
+        }
+        else if (data == "Attributen") {
+            m = createAttributesModel(x, y).addTo(graph);
+        }
+        else if (data == "Geocachetype") {
+            m = createGeocacheTypeModel(x, y).addTo(graph);
+        }
         else if (data == "Maximum") {
             m = createMaximumModel(x, y).addTo(graph);
         }
@@ -379,6 +432,9 @@
         }
         else if (data == "Beschikbaar") {
             m = createAvailableModel(x, y).addTo(graph);
+        }
+        else if (data == "Geblokkeerd") {
+            m = createLockedModel(x, y).addTo(graph);
         }
         else if (data == "Eigenaren") {
             m = createOwnersModel(x, y).addTo(graph);
@@ -417,24 +473,24 @@
             m = createLongitudeModel(x, y).addTo(graph);
         }
         else if (data == "Breedtegraad") {
-                m = createLatitudeModel(x, y).addTo(graph);
-            }
+            m = createLatitudeModel(x, y).addTo(graph);
+        }
         else if (data == "Moeilijkheid") {
-                m = createDifficultyModel(x, y).addTo(graph);
-            }
+            m = createDifficultyModel(x, y).addTo(graph);
+        }
         else if (data == "Terrein") {
-                m = createTerrainModel(x, y).addTo(graph);
-            }
+            m = createTerrainModel(x, y).addTo(graph);
+        }
         else if (data == "Lengte") {
             m = createLengteModel(x, y).addTo(graph);
         }
         else if (data == "Parel") {
-                m = createParelModel(x, y).addTo(graph);
-            }
+            m = createParelModel(x, y).addTo(graph);
+        }
         else if (data == "PremiumMemberOnly") {
-                m = createPMOModel(x, y).addTo(graph);
-            }
-}
+            m = createPMOModel(x, y).addTo(graph);
+        }
+    }
 
     function setActiveCellView(c) {
         if (activeCellView != null) {
@@ -450,6 +506,9 @@
             $('#locvalprop').hide();
             $('#countryvalprop').hide();
             $('#maximumvalprop').hide();
+            $('#containervalprop').hide();           
+            $('#gctypevalprop').hide();           
+            $('#attributesvalprop').hide();
             if (s == "Publicatiedatum") {
                 copyDateModelToProperty(c);
                 $('#datumprop').show();
@@ -457,6 +516,18 @@
             else if (s == "Naam bevat tekst") {
                 copyTextModelToProperty(c);
                 $('#txtvalprop').show();
+            }
+            else if (s == "Container") {
+                copyContainerModelToProperty(c);
+                $('#containervalprop').show();
+            }
+            else if (s == "Attributen") {
+                copyAttributesModelToProperty(c);
+                $('#attributesvalprop').show();
+            }
+            else if (s == "Geocache type") {
+                copyGeocacheTypeModelToProperty(c);
+                $('#gctypevalprop').show();
             }
             else if (s == "Maximum") {
                 copyMaximumModelToProperty(c);
@@ -500,6 +571,8 @@
             }
             else if (s == "Beschikbaar") {
             }
+            else if (s == "Geblokkeerd") {
+            }
             else if (s == "Premium Member Only") {
             }
             else if (s == "Moeilijkheid") {
@@ -531,21 +604,23 @@
                 $('#txtvalprop').show();
             }
             else if (s == "Archive datum") {
-                    copyTextModelToProperty(c);
-                    $('#txtvalprop').show();
-                }
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
             else if (s == "Aangepast datum") {
-                    copyTextModelToProperty(c);
-                    $('#txtvalprop').show();
-                }
-}
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+        }
         activeCellView = c;
         if (activeCellView != null && activeCellView.model.attr('.label/text') != "Start" && c.model.attr('.label/text') != "Resultaat") {
             activeCellView.highlight();
             $('#propeditor').show();
+            $("#editproperties").collapse('show');
         }
         else {
             $('#propeditor').hide();
+            $("#editproperties").collapse('hide');
         }
     }
 
@@ -691,6 +766,22 @@
         });
     }
 
+    function createAttributesModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['='],
+            attrs: {
+                '.label': { text: 'Attributen\r\n1', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
     function createGeocachePicturesModel(px, py) {
         var d = moment();
         return new joint.shapes.devs.Model({
@@ -731,6 +822,36 @@
             outPorts: ['=', '<>'],
             attrs: {
                 '.label': { text: 'Naam bevat tekst\r\nde tekst', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createContainerModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Container\r\n3', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createGeocacheTypeModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Geocache type\r\n2', 'ref-x': .1, 'ref-y': .2 },
                 rect: { fill: modelFill },
                 '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
                 '.outPorts circle': { fill: outportFill, type: 'output' }
@@ -836,6 +957,21 @@
             outPorts: ['=', '<>'],
             attrs: {
                 '.label': { text: 'Beschikbaar', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createLockedModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Geblokkeerd', 'ref-x': .1, 'ref-y': .2 },
                 rect: { fill: modelFill },
                 '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
                 '.outPorts circle': { fill: outportFill, type: 'output' }
@@ -998,13 +1134,120 @@
         }
     }
 
+    function copyContainerModelToProperty(c) {
+        var s = c.model.attr('.label/text').split('\r\n');
+        for (var i=0; i<containerTypes.length; i++)
+        {
+            $('#contype'+containerTypes[i].toString()).prop('checked', false);
+        }
+        for (var i = 1; i < s.length; i++) {
+            $('#contype'+s[i]).prop('checked', true);
+        }
+    }
+
+    function copyGeocacheTypeModelToProperty(c) {
+        var s = c.model.attr('.label/text').split('\r\n');
+        for (var i=0; i<geocacheTypes.length; i++)
+        {
+            $('#gctype'+geocacheTypes[i].ID.toString()).prop('checked', false);
+        }
+        for (var i = 1; i < s.length; i++) {
+            $('#gctype'+s[i]).prop('checked', true);
+        }
+    }
+
+    function copyAttributesModelToProperty(c) {
+        var s = c.model.attr('.label/text').split('\r\n');
+        for (var i=0; i<attributeTypes.length; i++)
+        {
+            if (attributeTypes[i].ID!=16)
+            {
+                var id = attributeTypes[i].ID.toString();
+                $('#attrnegvalue'+id).val('0');
+                var sr = $("#attrnegimg"+id).attr("src");
+                sr = sr.replace("_"+id, id);
+                sr = sr.replace(id+".", id+"_.");
+                $("#attrnegimg"+id).attr("src", sr);
+            }
+
+        }
+        for (var i = 1; i < s.length; i++) {
+            var id = parseInt(s[i]);
+            if (id>=0)
+            {
+                var sr = $("#attrnegimg"+s[i]).attr("src");
+                sr = sr.replace(s[i]+"_", s[i]);
+                $("#attrnegimg"+s[i]).attr("src", sr);
+                $('#attrnegvalue'+id).val("1");
+            }
+            else 
+            {
+                var nid = s[i].replace('-','');
+                var sr = $("#attrnegimg"+nid).attr("src");
+                sr = sr.replace(nid+"_", "_"+nid);
+                $("#attrnegimg"+nid).attr("src", sr);
+                $('#attrnegvalue'+nid).val("2");
+            }
+        }
+    }
+
     function copyMaximumModelToProperty(c) {
         var s1 = c.model.attr('.label/text').split('\r\n')[1];
         var s2 = c.model.attr('.label/text').split('\r\n')[2];
-        var s3 = c.model.attr('.label/text').split('\r\n')[2];
+        var s3 = c.model.attr('.label/text').split('\r\n')[3];
         $("#maximumtxtval1").val(s1);
         $("#newSortBy").val(s2);
         $("#newSortDir").val(s3);
+    }
+
+    function copyContainerPropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            for(var i=0; i<containerTypes.length; i++)
+            {
+                if ($('#contype'+containerTypes[i].toString()).prop('checked'))
+                {
+                    s += "\r\n" + containerTypes[i].toString();
+                }
+            }
+            activeCellView.model.attr('.label/text', s);
+        }
+    }
+
+    function copyGeocacheTypePropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            for(var i=0; i<geocacheTypes.length; i++)
+            {
+                if ($('#gctype'+geocacheTypes[i].ID.toString()).prop('checked'))
+                {
+                    s += "\r\n" + geocacheTypes[i].ID.toString();
+                }
+            }
+            activeCellView.model.attr('.label/text', s);
+        }
+    }
+
+    function copyAttributesPropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            for(var i=0; i<attributeTypes.length; i++)
+            {
+                if (attributeTypes[i].ID!=16)
+                {
+                    var v = $('#attrnegvalue'+attributeTypes[i].ID.toString()).val();
+                    if (v=='1')
+                    {
+                        s += "\r\n" + attributeTypes[i].ID.toString();
+                    }
+                    else if (v=='2')
+                    {
+                        s += "\r\n" + '-' + attributeTypes[i].ID.toString();
+                    }
+                }
+            }
+            activeCellView.model.attr('.label/text', s);
+        }
     }
 
     function copyTextPropertyToModel() {
@@ -1181,6 +1424,54 @@
             }
             macro += ' )';
         }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Attributen") {
+            if (outPort == '=') {
+                macro += ' BevatAttribuut(';
+            }
+            else {
+                macro += ' NietBevatAttribuut(';
+            }
+            var cn = m.attr('.label/text').split('\r\n');
+            if (cn.length > 1) {
+                macro += cn[1];
+                for (var h = 2; h < cn.length; h++) {
+                    macro += ',' + cn[h];
+                }
+            }
+            macro += ' )';
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Container") {
+            if (outPort == '=') {
+                macro += ' Container(';
+            }
+            else {
+                macro += ' NietContainer(';
+            }
+            var cn = m.attr('.label/text').split('\r\n');
+            if (cn.length > 1) {
+                macro += cn[1];
+                for (var h = 2; h < cn.length; h++) {
+                    macro += ',' + cn[h];
+                }
+            }
+            macro += ' )';
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Geocache type") {
+            if (outPort == '=') {
+                macro += ' CacheType(';
+            }
+            else {
+                macro += ' NietCacheType(';
+            }
+            var cn = m.attr('.label/text').split('\r\n');
+            if (cn.length > 1) {
+                macro += cn[1];
+                for (var h = 2; h < cn.length; h++) {
+                    macro += ',' + cn[h];
+                }
+            }
+            macro += ' )';
+        }
         else if (m.attr('.label/text').split('\r\n')[0] == "Hint bevat tekst") {
             if (outPort == '=') {
                 macro += ' HintsBevatTekst("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"") + '")';
@@ -1224,6 +1515,14 @@
             }
             else {
                 macro += ' NietBeschikbaar()';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Geblokkeerd") {
+            if (outPort == '=') {
+                macro += ' IsGeblokkeerd()';
+            }
+            else {
+                macro += ' NietIsGeblokkeerd()';
             }
         }
         else if (m.attr('.label/text').split('\r\n')[0] == "Locatie") {
@@ -1467,54 +1766,54 @@
             }
         }
         else if (m.attr('.label/text').split('\r\n')[0] == "Archive datum") {
-                var s = m.attr('.label/text').split('\r\n')[1];
-                var d = moment(s, "D-M-YYYY");
-                if (outPort == '=') {
-                    d.subtract(1, 'days');
-                    macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
-                    d.add(1, 'days');
-                    macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
-                }
-                else if (outPort == '<') {
-                    d.subtract(1, 'days');
-                    macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
-                }
-                else if (outPort == '<=') {
-                    macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
-                }
-                else if (outPort == '=>') {
-                    d.subtract(1, 'days');
-                    macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
-                }
-                else if (outPort == '>') {
-                    macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
-                }
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = moment(s, "D-M-YYYY");
+            if (outPort == '=') {
+                d.subtract(1, 'days');
+                macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
+                d.add(1, 'days');
+                macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
             }
+            else if (outPort == '<') {
+                d.subtract(1, 'days');
+                macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '<=') {
+                macro += ' NietArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '=>') {
+                d.subtract(1, 'days');
+                macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' ArchivedLogNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+        }
         else if (m.attr('.label/text').split('\r\n')[0] == "Aangepast datum") {
-                var s = m.attr('.label/text').split('\r\n')[1];
-                var d = moment(s, "D-M-YYYY");
-                if (outPort == '=') {
-                    d.subtract(1, 'days');
-                    macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
-                    d.add(1, 'days');
-                    macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
-                }
-                else if (outPort == '<') {
-                    d.subtract(1, 'days');
-                    macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
-                }
-                else if (outPort == '<=') {
-                    macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
-                }
-                else if (outPort == '=>') {
-                    d.subtract(1, 'days');
-                    macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
-                }
-                else if (outPort == '>') {
-                    macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
-                }
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = moment(s, "D-M-YYYY");
+            if (outPort == '=') {
+                d.subtract(1, 'days');
+                macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') en ';
+                d.add(1, 'days');
+                macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ')'
             }
-    macro += "\r\n";
+            else if (outPort == '<') {
+                d.subtract(1, 'days');
+                macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '<=') {
+                macro += ' NietAangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '=>') {
+                d.subtract(1, 'days');
+                macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' AangepastNaDatum(' + d.date().toString() + ',' + (d.month() + 1).toString() + ',' + d.year() + ') ';
+            }
+        }
+        macro += "\r\n";
     }
 
     function getConnectedModel(link) {
@@ -1754,6 +2053,30 @@
 
     }
 
+    function toggleNegAttributeButton(id){
+        var v = $('#attrnegvalue'+id).val();
+        var s = $("#attrnegimg"+id).attr("src");
+        if (v=='0')
+        {
+            v = '1';
+            s = s.replace(id+"_", id);
+            $("#attrnegimg"+id).attr("src", s);
+        }
+        else if (v=='1')
+        {
+            v = '2';
+            s = s.replace(id, "_"+id);
+            $("#attrnegimg"+id).attr("src", s);
+        }
+        else{
+            v = '0';
+            s = s.replace("_"+id, id+"_");
+            $("#attrnegimg"+id).attr("src", s);
+        }
+        $('#attrnegvalue'+id).val(v);
+        copyAttributesPropertyToModel();
+    }
+
     $(function () {
         var e = moment();
         $('#changedate').datetimepicker({
@@ -1795,6 +2118,19 @@
         $("#newSortDir").change(function () {
             copyMaximumPropertyToModel();
         });
+        for (var i=0; i<containerTypes.length; i++)
+        {
+            $('#contype'+containerTypes[i].toString()).change(function () {
+                copyContainerPropertyToModel();
+            });
+        }
+        for (var i=0; i<geocacheTypes.length; i++)
+        {
+            $('#gctype'+geocacheTypes[i].ID.toString()).change(function () {
+                copyGeocacheTypePropertyToModel();
+            });
+        }
+
         $("#zoomin").click(function () {
             paperScale += 0.1;
             paper.scale(paperScale, paperScale);
@@ -1831,7 +2167,8 @@
         $("#buildingblocks").css({ top: t });
         $("#editproperties").css({ top: t });
 
+        $("#buildingblocks").collapse('show');
+
         updateGraphList(@Html.Raw(Json.Encode(@Model)));
     });
-
 </script>

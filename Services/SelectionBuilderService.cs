@@ -72,7 +72,6 @@ namespace Globalcaching.Services
             var settings = _gcEuUserSettingsService.GetSettings();
             if (settings != null && settings.YafUserID>1)
             {
-                result.UserSettings = settings;
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                 {
                     result.AllOwnedGraphs = db.Fetch<GCEuSelectionBuilder>("where UserID=@0", settings.YafUserID);
