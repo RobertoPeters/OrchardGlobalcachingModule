@@ -30,22 +30,17 @@ namespace Globalcaching.Controllers
             return Json(_ftfStatsService.GetFTFRanking(UserName, Jaar, RankingType, page, pageSize));
         }
 
-        //temp: to be removed!!
         [Themed]
-        public ActionResult FixLogOldSite(string gccode)
+        public ActionResult AddGeocache(string gccode)
         {
             if (Services.Authorizer.Authorize(Permissions.FTFAdmin))
             {
-                using (var db = new Core.DBCon(Core.DBCon.dbForumConnString))
-                using (var db2 = new Core.DBCon(Core.DBCon.dbForumConnString))
+                if (!string.IsNullOrEmpty(gccode) && gccode.ToUpper().StartsWith("GC"))
                 {
-                    var dr = db.ExecuteReader(string.Format("select * from UserLogs where Waypoint='{0}'", gccode.Replace("'", "''")));
-                    while (dr.Read())
-                    {
-                        db2.ExecuteNonQuery(string.Format("update UserLogs set LogText='{0}' where Linktolog='{1}'", (dr["LogText"] as string ?? "").Replace("'", "''").Replace("<!--", ""), dr["Linktolog"]));
-                    }
+                    List<string> l = new List<string>();
+                    l.Add(gccode.ToUpper().Trim());
+                    _taskSchedulerService.AddScheduledWaypoint(l, true);
                 }
-
                 var m = _ftfStatsService.GetUnassignedFTF(1, 50);
                 m.QueueLength = _taskSchedulerService.GetScheduledGeocaches().Count();
                 return View("Home", m);

@@ -1445,11 +1445,11 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
-                        "FixLogOldSite",
+                        "FTF/AddGeocache",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
                             {"controller", "FTFStats"},
-                            {"action", "FixLogOldSite"}
+                            {"action", "AddGeocache"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {

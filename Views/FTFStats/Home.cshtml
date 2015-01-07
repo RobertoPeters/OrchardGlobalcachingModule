@@ -2,11 +2,11 @@
 <button class="btn btn-primary" onclick="addAllToQueue()">Werk all geocaches bij</button> (Aantal in de wachtrij: @Model.QueueLength)
 
 <hr />
-Tijdelijke log fix voor huidige website
-@using (Html.BeginFormAntiForgeryPost(Url.Action("FixLogOldSite", "FTFStats", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+Voeg een geocache handmatig toe (wordt in de wachtrij gezet)
+@using (Html.BeginFormAntiForgeryPost(Url.Action("AddGeocache", "FTFStats", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
 {
     <input type="text" id="gccode" name="gccode" placeholder="GC12345">
-    <button type="submit" value="FixLogOldSite" class="btn btn-primary">@T("Fix logs")</button>
+    <button type="submit" value="AddGeocache" class="btn btn-primary">@T("Voeg geocache toe")</button>
 }
 
 <hr />
