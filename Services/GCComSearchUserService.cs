@@ -46,7 +46,7 @@ namespace Globalcaching.Services
             result.CurrentPage = 1;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
-                var items = db.Page<GCComUser>(page, pageSize, string.Format("Where UserName like '%{0}%' order by UserName", (name ?? "").Replace("'", "''")));
+                var items = db.Page<GCComUser>(page, pageSize, string.Format("Where UserName like '%{0}%' order by UserName", (name ?? "").Replace("@", "@@").Replace("'", "''")));
                 result.Users = items.Items.ToArray();
                 result.CurrentPage = items.CurrentPage;
                 result.PageCount = items.TotalPages;
