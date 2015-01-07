@@ -65,7 +65,7 @@ namespace Globalcaching.Services
                 }
                 if (filter.SortOn == 0)
                 {
-                    result.FavoriteGeocachers = items.OrderByDescending(x => x.FoundCount).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    result.FavoriteGeocachers = items.OrderByDescending(x => x.FavoriteCount).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 }
                 else
                 {

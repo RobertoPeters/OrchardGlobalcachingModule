@@ -26,7 +26,7 @@
 
 
 <div class="form-group">
-    <label for="name">Selecteer stroomdiagram</label>
+    <label for="name">Selecteer eerder opgeslagen stroomdiagram</label>
     <div class="dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
             Stroomdiagram
@@ -72,7 +72,7 @@
             <li class="list-group-item" style="cursor: pointer" id="Favorites" draggable="true" ondragstart="drag(event)" title="Het aantal Favorites wat de geocache gekregen heeft">Favorites</li>
             <li class="list-group-item" style="cursor: pointer" id="Geocacheplaatjes" draggable="true" ondragstart="drag(event)" title="Het aantal plaatjes in de geocachebeschrijving dat geupload is naar geocaching.com">Geocacheplaatjes</li>
             <li class="list-group-item" style="cursor: pointer" id="GevondenLogs" draggable="true" ondragstart="drag(event)" title="Het aantal found logs">Gevonden logs</li>
-            <li class="list-group-item" style="cursor: pointer" id="Maximum" draggable="true" ondragstart="drag(event)" title="Het maximum aantakl caches dat geselecteerd mag worden">Maximum</li>
+            <li class="list-group-item" style="cursor: pointer" id="Maximum" draggable="true" ondragstart="drag(event)" title="Het maximum aantakl caches dat geselecteerd mag worden">Maximum aantal</li>
             <li class="list-group-item list-group-item-info">Datum</li>
             <li class="list-group-item" style="cursor: pointer" id="Aanmaakdatum" draggable="true" ondragstart="drag(event)" title="De zogenaamde 'Hidden date'">Aanmaakdatum</li>
             <li class="list-group-item" style="cursor: pointer" id="Aangepastdatum" draggable="true" ondragstart="drag(event)" title="De datum van de laatste aanpassing aan de geocache of log">Aangepast datum</li>
@@ -85,6 +85,7 @@
             <li class="list-group-item" style="cursor: pointer" id="Container" draggable="true" ondragstart="drag(event)" title="De container grootte of type">Container</li>
             <li class="list-group-item" style="cursor: pointer" id="Geocachetype" draggable="true" ondragstart="drag(event)" title="De geocache type">Geocache type</li>
             <li class="list-group-item" style="cursor: pointer" id="Gevondendoor" draggable="true" ondragstart="drag(event)" title="De geocaches die minimaal door 1 van de opgegeven cachers gevonden is">Gevonden door</li>
+            <li class="list-group-item" style="cursor: pointer" id="Lengte" draggable="true" ondragstart="drag(event)" title="De geocache/wandel afstand in kilometers">Lengte (in km)</li>
             <li class="list-group-item" style="cursor: pointer" id="Parel" draggable="true" ondragstart="drag(event)" title="Parel van de Maand">Parel</li>
             <li class="list-group-item" style="cursor: pointer" id="PremiumMemberOnly" draggable="true" ondragstart="drag(event)" title="Premium Member Only (PMO) geocaches">Premium Member Only</li>
             <li class="list-group-item list-group-item-info">Locatie</li>
@@ -93,7 +94,6 @@
             <li class="list-group-item" style="cursor: pointer" id="Lengtegraad" draggable="true" ondragstart="drag(event)" title="De longitude tussen twee waarden">Lengtegraad tussen</li>
             <li class="list-group-item" style="cursor: pointer" id="Locatie" draggable="true" ondragstart="drag(event)" title="Geef middelpunt en radius in km op">Locatie</li>
             <li class="list-group-item list-group-item-info">M/T</li>
-            <li class="list-group-item" style="cursor: pointer" id="Lengte" draggable="true" ondragstart="drag(event)" title="De geocache/wandel afstand ik kilometers">Lengte</li>
             <li class="list-group-item" style="cursor: pointer" id="Moeilijkheid" draggable="true" ondragstart="drag(event)" title="De moeilijkheid">Moeilijkheid</li>
             <li class="list-group-item" style="cursor: pointer" id="Terrein" draggable="true" ondragstart="drag(event)" title="Het terrein">Terrein</li>
             <li class="list-group-item list-group-item-info">Status</li>
@@ -982,7 +982,7 @@
     function createPMOModel(px, py) {
         return new joint.shapes.devs.Model({
             position: { x: px, y: py },
-            size: { width: 130, height: 90 },
+            size: { width: 150, height: 90 },
             inPorts: ['in'],
             outPorts: ['=', '<>'],
             attrs: {
