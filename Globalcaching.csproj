@@ -375,6 +375,7 @@
     <Content Include="Views\DisplayTemplates\Parts.LogCorrection.cshtml" />
     <Content Include="Views\DisplayTemplates\Yaf.MostRecentContent.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.SelectionBuilder.cshtml" />
+    <Content Include="Views\UsersOnline\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -421,6 +422,7 @@
     <Compile Include="Controllers\MacroController.cs" />
     <Compile Include="Controllers\OnlineToolsController.cs" />
     <Compile Include="Controllers\SelectionBuilderController.cs" />
+    <Compile Include="Controllers\UsersOnlineController.cs" />
     <Compile Include="Core\DBCon.cs" />
     <Compile Include="Core\DotNetDBF\DBFBase.cs" />
     <Compile Include="Core\DotNetDBF\DBFException.cs" />
@@ -583,6 +585,7 @@
     <Compile Include="ViewModels\GeocacheFilterMacroModel.cs" />
     <Compile Include="ViewModels\SearchByAttributesModel.cs" />
     <Compile Include="ViewModels\SelectionBuilderModel.cs" />
+    <Compile Include="ViewModels\UsersOnlineModel.cs" />
     <Compile Include="ViewModels\YafMostRecentContentModel.cs" />
   </ItemGroup>
   <ItemGroup>

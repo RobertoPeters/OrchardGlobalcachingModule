@@ -34,6 +34,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "BezoekersActiviteiten",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "UsersOnline"},
+                            {"action", "Index"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "SaveGraph",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

@@ -1,5 +1,6 @@
 ﻿using Globalcaching.Core;
 using Globalcaching.Models;
+using Globalcaching.ViewModels;
 using Orchard;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Globalcaching.Services
     public interface IUsersOnlineService : IDependency
     {
         OnlineUserInfo GetOnLineUsers();
+        List<UsersOnlineModel> GetUserActivity();
     }
 
     public class UsersOnlineService : IUsersOnlineService
@@ -29,6 +31,16 @@ namespace Globalcaching.Services
         private HttpContextBase HttpContext
         {
             get { return _workContextAccessor.GetContext().HttpContext; }
+        }
+
+        public List<UsersOnlineModel> GetUserActivity()
+        {
+            List<UsersOnlineModel> result = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(DBCon.dbForumConnString, "System.Data.SqlClient"))
+            {
+                result = db.Fetch<UsersOnlineModel>("select yaf_User.Name, yaf_User.UserID, LastPageAccess.IP, LastPageAccess.LastActive, LastPageAccess.Location, LastPageAccess.PageParam from yaf_User inner join LastPageAccess on LastPageAccess.UserID=yaf_User.UserID where LastPageAccess.BoardID=1 order by LastActive desc");
+            }
+            return result;
         }
 
         public OnlineUserInfo GetOnLineUsers()
