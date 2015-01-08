@@ -44,6 +44,11 @@ namespace Globalcaching.Controllers
 
         }
 
+        public ActionResult OldMainPage()
+        {
+            return Redirect("~/");
+        }
+
         public ActionResult GeoRSS()
         {
             string country = Request.QueryString["country"] ?? "Netherlands";

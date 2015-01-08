@@ -41,7 +41,8 @@ namespace Globalcaching.Services
             {
                 using (var dbcon = new DBCon(DBCon.dbForumConnString))
                 {
-                    SqlDataReader dr = GetCurrentSiteVisitors(dbcon, 3600, true, HttpContext.Session.SessionID, settings.YafUserID);
+                    UpdateLastPageAccess(dbcon, HttpContext.Request.UserHostAddress??"", HttpContext.Request.RawUrl??"", settings.YafUserID);
+                    SqlDataReader dr = GetCurrentSiteVisitors(dbcon, 3600, true, HttpContext.Request.UserHostAddress??"", settings.YafUserID);
                     if (dr != null)
                     {
                         while (dr.Read())
@@ -102,5 +103,57 @@ namespace Globalcaching.Services
             return result;
         }
 
+        public static void UpdateLastPageAccess(DBCon dbcon, string ip, string rawUrl, int userID)
+        {
+            try
+            {
+                int userId = userID;
+                if (userId <= 0)
+                {
+                    userId = 1; //Guest
+                }
+                string page;
+                string pageParam;
+                int pos = rawUrl.IndexOf('?');
+                if (pos > 0 && pos < (rawUrl.Length - 1))
+                {
+                    page = rawUrl.Substring(0, pos);
+                    pageParam = rawUrl.Substring(pos + 1);
+                }
+                else
+                {
+                    page = rawUrl;
+                    pageParam = "";
+                }
+                int boardID = 1;
+
+                dbcon.ExecuteNonQuery(string.Format("delete from LastPageAccess where LastActive < '{0}'", DateTime.Now.AddMinutes(-60).ToString("u")));
+                if (userId == 1)
+                {
+                    if ((int)dbcon.ExecuteScalar(string.Format("select count(1) from LastPageAccess where IP='{0}' and BoardID={1}", ip, boardID)) > 0)
+                    {
+                        dbcon.ExecuteNonQuery(string.Format("update LastPageAccess set UserID={4}, LastActive='{1}', Location='{2}', PageParam='{3}' where IP='{0}' and BoardID={5}", ip, DateTime.Now.ToString("u"), page.Replace("'", "''"), pageParam.Replace("'", "''"), userId, boardID));
+                    }
+                    else
+                    {
+                        dbcon.ExecuteNonQuery(string.Format("insert into LastPageAccess (IP, LastActive, Location, PageParam, UserID, BoardID) values ('{0}', '{1}', '{2}', '{3}', {4}, {5})", ip, DateTime.Now.ToString("u"), page.Replace("'", "''"), pageParam.Replace("'", "''"), userId, boardID));
+                    }
+                }
+                else
+                {
+                    if ((int)dbcon.ExecuteScalar(string.Format("select count(1) from LastPageAccess where UserID={0} and BoardID={1}", userId, boardID)) > 0)
+                    {
+                        dbcon.ExecuteNonQuery(string.Format("update LastPageAccess set IP='{0}', LastActive='{1}', Location='{2}', PageParam='{3}' where UserID={4} and BoardID={5}", ip, DateTime.Now.ToString("u"), page.Replace("'", "''"), pageParam.Replace("'", "''"), userId, boardID));
+                    }
+                    else
+                    {
+                        dbcon.ExecuteNonQuery(string.Format("insert into LastPageAccess (IP, LastActive, Location, PageParam, UserID, BoardID) values ('{0}', '{1}', '{2}', '{3}', {4}, {5})", ip, DateTime.Now.ToString("u"), page.Replace("'", "''"), pageParam.Replace("'", "''"), userId, boardID));
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
     }
 }
