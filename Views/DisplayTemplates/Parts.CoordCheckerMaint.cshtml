@@ -92,7 +92,7 @@
             type: "POST",
             url: '@Url.Action("GetAttempts", "CoordChecker", new { area = "Globalcaching" })',
             data: {
-                page: 1,
+                page: page,
                 pageSize: "20",
                 code: $("#code").val(),
                 __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'

@@ -319,7 +319,7 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
-                        "Services/GeoRSS.aspx",
+                        "Service/GeoRSS.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
                             {"controller", "GlobalcachingServices"},
@@ -334,7 +334,7 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
-                        "Services/GeocacheCodes.aspx",
+                        "Service/GeocacheCodes.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
                             {"controller", "GlobalcachingServices"},
@@ -349,7 +349,7 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
-                        "Services/CacheFavorites.aspx",
+                        "Service/CacheFavorites.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
                             {"controller", "GlobalcachingServices"},
@@ -364,7 +364,7 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
-                        "Services/CacheDistance.aspx",
+                        "Service/CacheDistance.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
                             {"controller", "GlobalcachingServices"},
@@ -379,7 +379,7 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
-                        "Services/Archived.aspx",
+                        "Service/Archived.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
                             {"controller", "GlobalcachingServices"},

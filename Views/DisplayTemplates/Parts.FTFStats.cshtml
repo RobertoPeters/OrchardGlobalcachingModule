@@ -68,7 +68,7 @@
             var td3 = '<a href="@Href("~/FTFLogs/")' + line.UserID.toString() + '">' + line.FTFCount.toString() + '</a>';
             var td4 = '<a href="@Href("~/STFLogs/")' + line.UserID.toString() + '">' + line.STFCount.toString() + '</a>';
             var td5 = '<a href="@Href("~/TTFLogs/")' + line.UserID.toString() + '">' + line.TTFCount.toString() + '</a>';
-            var td6 = line.FTFCount * 5 + line.STFCount * 5 + line.TTFCount;
+            var td6 = line.FTFCount * 5 + line.STFCount * 3 + line.TTFCount;
 
             $(resultElementName + ' > tbody:last').append('<tr><td style="vertical-align:middle">' + td1 + '</td><td style="vertical-align:middle">' + td2 + '</td><td style="vertical-align:middle">' + td3 + '</td><td style="vertical-align:middle">' + td4 + '</td><td style="vertical-align:middle">' + td5 + '</td><td style="vertical-align:middle">' + td6 + '</td></tr>');
         }
