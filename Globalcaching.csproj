@@ -376,6 +376,7 @@
     <Content Include="Views\DisplayTemplates\Yaf.MostRecentContent.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.SelectionBuilder.cshtml" />
     <Content Include="Views\UsersOnline\Home.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.TrackableGroupMaint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -422,6 +423,7 @@
     <Compile Include="Controllers\MacroController.cs" />
     <Compile Include="Controllers\OnlineToolsController.cs" />
     <Compile Include="Controllers\SelectionBuilderController.cs" />
+    <Compile Include="Controllers\TrackableGroupController.cs" />
     <Compile Include="Controllers\UsersOnlineController.cs" />
     <Compile Include="Core\DBCon.cs" />
     <Compile Include="Core\DotNetDBF\DBFBase.cs" />
@@ -447,6 +449,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
     <Compile Include="Drivers\SelectionBuilderPartDriver.cs" />
     <Compile Include="Drivers\LogCorrectionPartDriver.cs" />
     <Compile Include="Drivers\ContactFormPartDriver.cs" />
@@ -505,6 +508,8 @@
     <Compile Include="Models\GCComQuickGeocacheSearch.cs" />
     <Compile Include="Models\GCComSearchLogImagesFilter.cs" />
     <Compile Include="Models\GCComSearchLogImagesResult.cs" />
+    <Compile Include="Models\GCComTrackable.cs" />
+    <Compile Include="Models\GCComTrackableLog.cs" />
     <Compile Include="Models\GCComUser.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
     <Compile Include="Models\GCEuCodeCheckAttempt.cs" />
@@ -517,6 +522,8 @@
     <Compile Include="Models\GCEuLiveAPIDownloadStatus.cs" />
     <Compile Include="Models\GCEuParel.cs" />
     <Compile Include="Models\GCEuSelectionBuilder.cs" />
+    <Compile Include="Models\GCEuTrackableGroup.cs" />
+    <Compile Include="Models\GCEuTrackable.cs" />
     <Compile Include="Models\GCEuUserSettings.cs" />
     <Compile Include="Models\GCEuGeocacheFilterMacro.cs" />
     <Compile Include="Models\GeocacheSearchFilter.cs" />
@@ -556,6 +563,7 @@
     <Compile Include="Services\SelectionBuilderService.cs" />
     <Compile Include="Services\StatisticsService.cs" />
     <Compile Include="Services\TaskSchedulerService.cs" />
+    <Compile Include="Services\TrackableGroupService.cs" />
     <Compile Include="Services\UsersOnlineService.cs" />
     <Compile Include="Services\YafMembershipService.cs" />
     <Compile Include="Services\YafMostRecentShoutService.cs" />
@@ -585,6 +593,7 @@
     <Compile Include="ViewModels\GeocacheFilterMacroModel.cs" />
     <Compile Include="ViewModels\SearchByAttributesModel.cs" />
     <Compile Include="ViewModels\SelectionBuilderModel.cs" />
+    <Compile Include="ViewModels\TrackableGroupMaintModel.cs" />
     <Compile Include="ViewModels\UsersOnlineModel.cs" />
     <Compile Include="ViewModels\YafMostRecentContentModel.cs" />
   </ItemGroup>

@@ -34,6 +34,81 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "TrackableGroup/DeleteGroup",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "TrackableGroup"},
+                            {"action", "DeleteGroup"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "TrackableGroup/GetGroupInfo",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "TrackableGroup"},
+                            {"action", "GetGroupInfo"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "TrackableGroup/SaveGroup",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "TrackableGroup"},
+                            {"action", "SaveGroup"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "TrackableGroup/AddTrackable",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "TrackableGroup"},
+                            {"action", "AddTrackable"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "TrackableGroup/DeleteTrackable",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "TrackableGroup"},
+                            {"action", "DeleteTrackable"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "BezoekersActiviteiten",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

@@ -16,6 +16,7 @@ namespace Globalcaching.Services
         void AddScheduledWaypoint(List<string> gcIds, bool fullRefresh);
         void AddScheduledWaypointForParels();
         SchedulerInfoModel GetSchedulerInfoModel();
+        void AddScheduledTrackable(string code);
     }
 
     public class TaskSchedulerService : ITaskSchedulerService
@@ -26,6 +27,15 @@ namespace Globalcaching.Services
         public TaskSchedulerService()
         { 
         }
+
+        public void AddScheduledTrackable(string code)
+        {
+            using (PetaPoco.Database db = new PetaPoco.Database(dbTaskSchedulerConnString, "System.Data.SqlClient"))
+            {
+                db.Execute(string.Format("insert into ScheduledTrackable (Code, DateAdded) values ('{0}', GETDATE())", code.Replace("'","''")));
+            }
+        }
+
 
         public SchedulerInfoModel GetSchedulerInfoModel()
         {

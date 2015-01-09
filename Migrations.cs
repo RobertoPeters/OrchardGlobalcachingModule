@@ -523,5 +523,19 @@ namespace Globalcaching
             return 37;
         }
 
+        public int UpdateFrom37()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("TrackableGroupMaintWidget",
+                cfg => cfg
+                    .DisplayedAs("Trackable Group Maint")
+                    .WithPart("TrackableGroupMaintPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 38;
+        }
+
     }
 }
