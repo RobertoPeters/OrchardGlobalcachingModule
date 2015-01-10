@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class TrackableGroupsPart : ContentPart
+    {
+    }
+
     public class TrackableGroupMaintPart : ContentPart
     {
     }

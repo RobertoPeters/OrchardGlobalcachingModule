@@ -37,6 +37,7 @@
         <tr>
             <th>Code</th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -63,7 +64,7 @@
             $('#groupdescription').val(response.ActiveGroup.Description);
 
             for (var i = 0; i < response.TBCodes.length; i++) {
-                $('#codesInGroup > tbody:last').append('<tr><td>' + response.TBCodes[i] + '</td><td><button class="btn btn-primary btn-xs" onclick="removeTBFromGroup(\'' + response.TBCodes[i] + '\')">verwijder</button></td></tr>');
+                $('#codesInGroup > tbody:last').append('<tr><td>' + response.TBCodes[i] + '</td><td><button class="btn btn-danger btn-xs" onclick="removeTBFromGroup(\'' + response.TBCodes[i] + '\')">verwijder</button></td><td><button class="btn btn-primary btn-xs" onclick="updateTBOfGroup(\'' + response.TBCodes[i] + '\')">bijwerken</button></td></tr>');
             }
             $('#addtbform').show();
         }
@@ -128,6 +129,28 @@
             data: {
                 id: $('#groups').val(),
                 code: $('#tbcode').val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateGroupList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function updateTBOfGroup(code) {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateTrackable", "TrackableGroup", new { area = "Globalcaching" })',
+            data: {
+                id: $('#groups').val(),
+                code: code,
                 __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
             },
             success: function (response) {

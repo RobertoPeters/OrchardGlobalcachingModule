@@ -116,7 +116,7 @@ namespace Globalcaching.Controllers
         {
             string filename = _liveAPIDownloadService.GetDownloadFilePath();
             string contentType = "application/gpx+xml";
-            return File(filename, contentType, "Globalcaching.gpx");
+            return File(filename, contentType, string.Format("{0}.gpx", DateTime.Now.ToString("yyyMMddhhmmss")));
         }
 
         public FileResult DownloadGeocache(string id)

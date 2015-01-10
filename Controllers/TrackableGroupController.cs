@@ -1,5 +1,6 @@
 ﻿using Globalcaching.Models;
 using Globalcaching.Services;
+using Orchard.Themes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,18 @@ namespace Globalcaching.Controllers
         {
             _trackableGroupService = trackableGroupService;
             _userSettingsService = userSettingsService;
+        }
+
+        [HttpPost]
+        public ActionResult GetGroups(int page, int pageSize)
+        {
+            return Json(_trackableGroupService.GetTrackableGroups(page, pageSize));
+        }
+
+        [Themed]
+        public ActionResult ShowGroup(int id)
+        {
+            return View("Home", _trackableGroupService.GetTrackableGroupData(id)); ;
         }
 
         [HttpPost]
@@ -66,6 +79,21 @@ namespace Globalcaching.Controllers
                 if (settings != null && settings.YafUserID > 1)
                 {
                     return Json(_trackableGroupService.AddTrackableToGroup(settings.YafUserID, int.Parse(id), code));
+                }
+            }
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult UpdateTrackable(string id, string code)
+        {
+            var settings = _userSettingsService.GetSettings();
+            code = code.ToUpper().Trim();
+            if (!string.IsNullOrEmpty(code) && code.StartsWith("TB"))
+            {
+                if (settings != null && settings.YafUserID > 1)
+                {
+                    return Json(_trackableGroupService.ScheduleTrackableOfGroup(settings.YafUserID, int.Parse(id), code));
                 }
             }
             return null;

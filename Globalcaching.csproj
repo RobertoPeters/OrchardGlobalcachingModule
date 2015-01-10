@@ -377,6 +377,8 @@
     <Content Include="Views\DisplayTemplates\Parts.SelectionBuilder.cshtml" />
     <Content Include="Views\UsersOnline\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.TrackableGroupMaint.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.TrackableGroups.cshtml" />
+    <Content Include="Views\TrackableGroup\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -449,6 +451,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
     <Compile Include="Drivers\SelectionBuilderPartDriver.cs" />
     <Compile Include="Drivers\LogCorrectionPartDriver.cs" />
@@ -593,6 +596,8 @@
     <Compile Include="ViewModels\GeocacheFilterMacroModel.cs" />
     <Compile Include="ViewModels\SearchByAttributesModel.cs" />
     <Compile Include="ViewModels\SelectionBuilderModel.cs" />
+    <Compile Include="ViewModels\TrackableGroupModel.cs" />
+    <Compile Include="ViewModels\TrackableGroupsModel.cs" />
     <Compile Include="ViewModels\TrackableGroupMaintModel.cs" />
     <Compile Include="ViewModels\UsersOnlineModel.cs" />
     <Compile Include="ViewModels\YafMostRecentContentModel.cs" />
