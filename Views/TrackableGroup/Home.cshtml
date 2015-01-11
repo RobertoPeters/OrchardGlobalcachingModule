@@ -18,7 +18,7 @@
     Beschrijving:
 </div>
 <div class="col-md-10">
-    @Model.Group.Description
+    @Html.Raw(HttpUtility.HtmlEncode(@Model.Group.Description).Replace("\n","<br />"))
 </div>
 <div class="col-md-2">
     Aantal trackables:
@@ -75,7 +75,7 @@
                     }
                     <br />
                     <small>Voor het laatst bijgewerkt op: 
-                    @if (@Model.Trackables[i].GCEuTrackable != null)
+                    @if (@Model.Trackables[i].GCEuTrackable.Updated != null)
                     {
                         @Model.Trackables[i].GCEuTrackable.Updated.ToString("dd-MM-yyyy HH:mm:ss");
                     }
