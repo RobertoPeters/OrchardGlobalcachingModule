@@ -51,6 +51,7 @@ namespace Globalcaching.Controllers
             }
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult Banner()
         {
             string sid = Request.QueryString["id"];

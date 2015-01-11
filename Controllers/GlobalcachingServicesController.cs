@@ -49,6 +49,7 @@ namespace Globalcaching.Controllers
             return Redirect("~/");
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult GeoRSS()
         {
             string country = Request.QueryString["country"] ?? "Netherlands";
@@ -96,6 +97,7 @@ namespace Globalcaching.Controllers
             return null;
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult GeocacheCodes()
         {
             StringBuilder sb = new StringBuilder();
@@ -122,6 +124,7 @@ namespace Globalcaching.Controllers
         }
 
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult CacheFavorites()
         {
             StringBuilder sb = new StringBuilder();
@@ -147,6 +150,8 @@ namespace Globalcaching.Controllers
             return Content(sb.ToString());
         }
 
+
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult CacheDistance()
         {
             Response.Clear();
@@ -184,6 +189,7 @@ namespace Globalcaching.Controllers
             return null;
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult Archived()
         {
             string country = Request.QueryString["country"];
@@ -225,6 +231,7 @@ namespace Globalcaching.Controllers
             return null;
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult PQSet(int max, int maxLastPQ, int countryID)
         {
             StringBuilder sb = new StringBuilder();
@@ -283,6 +290,7 @@ namespace Globalcaching.Controllers
             return Content(sb.ToString());
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult PQSetNL()
         {
             int max = 950;
@@ -292,6 +300,7 @@ namespace Globalcaching.Controllers
             return PQSet(max, maxLastPQ, 141);
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult PQSetBE()
         {
             int max = 950;
@@ -301,6 +310,7 @@ namespace Globalcaching.Controllers
             return PQSet(max, maxLastPQ, 4);
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult PQSetLU()
         {
             int max = 950;

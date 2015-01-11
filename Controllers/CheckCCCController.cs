@@ -27,6 +27,7 @@ namespace Globalcaching.Controllers
             return Json(_gcEuCCCSettingsService.GetCCCUsersForGeocache(page, pageSize, Request["id"] as string, true));
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult CCCCheck()
         {
             string gccode = Request.QueryString["wp"];

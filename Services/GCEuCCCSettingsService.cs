@@ -174,6 +174,22 @@ namespace Globalcaching.Services
                             var settings = GetSettings(username);
                             if (settings != null && settings.Active)
                             {
+                                result.AppendLine("BeginTitel");
+                                string t = null;
+                                using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                                {
+                                    t = db.FirstOrDefault<string>("select top 1 Name from GCComGeocache where Code=@0", gccode);
+                                }
+                                if (!string.IsNullOrEmpty(t))
+                                {
+                                    result.AppendLine(t);
+                                }
+                                else
+                                {
+                                    result.AppendLine("Cache is unknown");
+                                }
+                                result.AppendLine("EndTitel");
+
                                 var cccResult = GetCCCUsersForGeocache(1, 200, gccode, false);
                                 if (cccResult != null)
                                 {
