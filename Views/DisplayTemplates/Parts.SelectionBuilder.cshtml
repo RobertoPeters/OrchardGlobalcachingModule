@@ -1488,6 +1488,14 @@
                 macro += ' NietGevondenDoor("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
             }
         }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Eigenaren") {
+            if (outPort == '=') {
+                macro += ' VanEigenaar("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
+            }
+            else {
+                macro += ' NietVanEigenaar("' + m.attr('.label/text').split('\r\n')[1].replace(/\"/g, "\\\"").replace(/\,/g, "\",\"") + '")';
+            }
+        }
         else if (m.attr('.label/text').split('\r\n')[0] == "Parel") {
             if (outPort == '=') {
                 macro += ' IsParel()';
