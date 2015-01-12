@@ -73,6 +73,7 @@
         $('#gccomSearchLogsFor').keypress(function (e) {
             if (e.which == '13') {
                 requestgccomSearchLogsPage('1');
+                e.preventDefault();
             }
         });
 

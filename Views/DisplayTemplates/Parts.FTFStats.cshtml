@@ -113,5 +113,12 @@
     $("#jaar").val(@Model.Jaar);
     $("#sorton").val(@Model.RankingType);
 
+    $('#usrname').keypress(function (e) {
+        if (e.which == '13') {
+            requestFTFPage('1');
+            e.preventDefault();
+        }
+    });
+
     updateFTFList(@Html.Raw(Json.Encode(@Model)));
 </script>

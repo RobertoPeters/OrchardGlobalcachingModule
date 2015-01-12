@@ -5,6 +5,10 @@
         <select class="form-control" id="groups">
         </select>
     </div>
+    <div id="urltogroup" style="margin-bottom: 50px">
+        <div class="col-md-2">URL naar de groep:</div>
+        <div class="col-md-10"><a href="" id="linktogroup"></a></div>
+    </div>
     <div class="form-group">
         <label class="control-label">Naam:</label>
         <input class="form-control" id="groupname" value="" placeholder="korte naam" />
@@ -67,11 +71,15 @@
                 $('#codesInGroup > tbody:last').append('<tr><td>' + response.TBCodes[i] + '</td><td><button class="btn btn-danger btn-xs" onclick="removeTBFromGroup(\'' + response.TBCodes[i] + '\')">verwijder</button></td><td><button class="btn btn-primary btn-xs" onclick="updateTBOfGroup(\'' + response.TBCodes[i] + '\')">bijwerken</button></td></tr>');
             }
             $('#addtbform').show();
+            $('#linktogroup').text("http://www.globalcaching.eu/TrackableGroep/" + response.ActiveGroup.ID.toString());
+            $('#linktogroup').attr("href", "http://www.globalcaching.eu/TrackableGroep/" + response.ActiveGroup.ID.toString());
+            $('#urltogroup').show();
         }
         else {
             $('#groupname').val("");
             $('#groupdescription').val("");
             $('#addtbform').hide();
+            $('#urltogroup').hide();
         }
         ignoreSelection = false;
     }

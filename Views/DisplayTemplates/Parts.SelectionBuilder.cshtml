@@ -48,6 +48,7 @@
 <button class="btn btn-primary" id="savegraph">Opslaan</button>
 <button class="btn btn-primary" id="loadgraph">Laden</button>
 <button class="btn btn-primary" id="newgraph">Nieuw</button>
+<button class="btn btn-primary" id="copygraph">Kopieer</button>
 <button class="btn btn-danger pull-right" id="deletegraph">Verwijderen</button>
 
 <h3>Editor <span id="activeedit"></span></h3>
@@ -1956,10 +1957,12 @@
             $('#commenttext').val("");
             $("#loadgraph").hide();
             $("#deletegraph").hide();
+            $("#copygraph").hide();            
         }
         else {
             $("#loadgraph").show();
             $("#deletegraph").show();
+            $("#copygraph").show();            
             $('#graphname').val(availableGraphs[selectedGraphIndex].Name);
             $('#commenttext').val(availableGraphs[selectedGraphIndex].Comment);
         }
@@ -2008,6 +2011,55 @@
                 if (id == -1) {
                     updateGraphList(response);
                 }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+
+    }
+
+    function copyGraph() {
+        var id = -1;
+        var comment;
+        var name;
+        var ispublic = "false";
+        if (activeGraph != null) {
+            id = activeGraph.ID;
+            if (availableGraphs[selectedGraphIndex].ID == activeGraph.ID) {
+                comment = $('#commenttext').val();
+                name = $('#graphname').val();
+                availableGraphs[selectedGraphIndex].Comment = comment;
+                availableGraphs[selectedGraphIndex].Name = name;
+            }
+            else {
+                comment = activeGraph.Comment;
+                name = activeGraph.Name;
+            }
+        }
+        else {
+            //new graph
+            comment = $('#commenttext').val();
+            name = $('#graphname').val();
+        }
+
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveGraph", "SelectionBuilder", new { area = "Globalcaching" })',
+            data: {
+                id: '-1',
+                graph: JSON.stringify(graph),
+                comment: comment,
+                name: name,
+                ispublic: ispublic,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateGraphList(response);
             },
             error: function (data, errorText) {
                 myApp.hidePleaseWait();
@@ -2161,6 +2213,9 @@
         });
         $("#savegraph").click(function () {
             saveGraph();
+        });
+        $("#copygraph").click(function () {
+            copyGraph();
         });
         $("#loadgraph").click(function () {
             loadGraph();
