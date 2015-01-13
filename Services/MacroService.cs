@@ -719,6 +719,14 @@ namespace Globalcaching.Services
                         m.ProcessedSteps = -1; //meaning error
                         db.Save(m);
                     }
+                    finally
+                    {
+                        List<string> tables = db.Fetch<string>(string.Format("SELECT name FROM GCEuMacroData.sys.tables WHERE name like 'macro_{0}_%' and name <> 'macro_{0}_Resultaat'", m.UserID));
+                        foreach (string t in tables)
+                        {
+                            db.Execute(string.Format("drop table GCEuMacroData.dbo.{0}", t));
+                        }
+                    }
                 }
             }
         }

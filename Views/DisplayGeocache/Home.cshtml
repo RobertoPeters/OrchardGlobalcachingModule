@@ -234,7 +234,7 @@
             }
             else
             {
-                @Model.GCComGeocacheData.ShortDescription.Replace("\r", "<br />")
+                @Html.Raw(HttpUtility.HtmlEncode(Model.GCComGeocacheData.ShortDescription).Replace("\n", "<br />"))
             }
         }
         @if (@Model.GCComGeocacheData.LongDescription != null)
@@ -245,7 +245,7 @@
             }
             else
             {
-                @Model.GCComGeocacheData.LongDescription.Replace("\r", "<br />")
+                @Html.Raw(HttpUtility.HtmlEncode(Model.GCComGeocacheData.LongDescription).Replace("\n", "<br />"))
             }
         }
     </div>
@@ -522,11 +522,49 @@
         });
     }
 
-    function clearFTF() {
+    function clearFTF(id) {
         myApp.showPleaseWait();
         $.ajax({
             type: "POST",
             url: '@Url.Action("ClearFTFAssignment", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                window.location.reload(true);
+            },
+            error: function (data, errorText) {
+                myApp.showPleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function clearSTF(id) {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ClearSTFAssignment", "FTFStats", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                window.location.reload(true);
+            },
+            error: function (data, errorText) {
+                myApp.showPleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function clearTTF(id) {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ClearTTFAssignment", "FTFStats", new { area = "Globalcaching" })',
             data: {
                 id: id,
                 __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
