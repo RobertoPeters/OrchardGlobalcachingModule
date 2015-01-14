@@ -116,8 +116,8 @@ LiveAPILastAccessTime datetime
 
                 db.Insert("GCEuMacroData.dbo.LiveAPIDownloadStatus", "UserID", false, result);
             }
-            if (result.TotalToDownload < 0)
-            {
+            //if (result.TotalToDownload < 0)
+            //{
                 if (db.ExecuteScalar<int>(string.Format("SELECT count(1) FROM GCEuMacroData.sys.tables WHERE name = 'LiveAPIDownload_{0}_CachesToDo'", usrId)) == 0)
                 {
                     //create table
@@ -129,7 +129,7 @@ LiveAPILastAccessTime datetime
                     result.TotalToDownload = db.ExecuteScalar<int>(string.Format("SELECT count(1) FROM GCEuMacroData.dbo.LiveAPIDownload_{0}_CachesToDo", usrId));
                 }
                 db.Update("GCEuMacroData.dbo.LiveAPIDownloadStatus", "UserID", result);
-            }
+            //}
             lock (_activeDownloadsForUserID)
             {
                 result.IsDownloading = _activeDownloadsForUserID.Contains(usrId);
