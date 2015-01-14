@@ -22,6 +22,7 @@ namespace Globalcaching.Services
         GCEuGeocacheFilterMacro GetMacro(int UserID, string name);
         List<GCEuGeocacheFilterMacro> GetMacrosOfUser(int UserID);
         MacroFunctionInfo[] GetFunctions();
+        void DynamicTableCreated(PetaPoco.Database db, string tableName);
     }
 
     public class MacroService : IMacroService
@@ -34,12 +35,34 @@ namespace Globalcaching.Services
 
         private static MacroFunctionInfo[] _macroFunctionInfo = null;
         private static object _lockObject = new object();
+        private static volatile bool _dynamicInfoTableChecked = false;
 
         public MacroService(IGCEuUserSettingsService gcEuUserSettingsService,
             IWorkContextAccessor workContextAccessor)
         {
             _gcEuUserSettingsService = gcEuUserSettingsService;
             _workContextAccessor = workContextAccessor;
+        }
+
+        public void DynamicTableCreated(PetaPoco.Database db, string tableName)
+        {
+            if (!_dynamicInfoTableChecked)
+            {
+                if (db.ExecuteScalar<int>("SELECT count(1) FROM GCEuMacroData.sys.tables WHERE name = 'TableCreationInfo'") == 0)
+                {
+                    db.Execute(@"create table GCEuMacroData.dbo.TableCreationInfo
+(
+TableName nvarchar(255) not null,
+Created datetime not null
+)
+");
+                }
+                _dynamicInfoTableChecked = true;
+            }
+            if (db.Execute("update GCEuMacroData.dbo.TableCreationInfo set Created=@0 where TableName=@1", DateTime.Now, tableName) == 0)
+            {
+                db.Execute("insert into GCEuMacroData.dbo.TableCreationInfo (TableName, Created) values (@0, @1)", tableName, DateTime.Now);
+            }
         }
 
         public MacroFunctionInfo[] GetFunctions()
@@ -761,6 +784,10 @@ namespace Globalcaching.Services
 
             variables.Add(v);
             db.Execute(string.Format("create table GCEuMacroData.dbo.macro_{0}_{1} (ID bigint not null)", m.UserID, v));
+            if (string.Compare(string.Format("macro_{0}_{1}", m.UserID, v), string.Format("macro_{0}_Resultaat", m.UserID), true)==0)
+            {
+                DynamicTableCreated(db, string.Format("macro_{0}_{1}", m.UserID, v));
+            }
 
             //variable EN .. => inner join
             //variabele OF .. => union

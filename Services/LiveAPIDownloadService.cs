@@ -34,6 +34,7 @@ namespace Globalcaching.Services
 
         public readonly IGCEuUserSettingsService _gcEuUserSettingsService;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IMacroService _macroService;
 
         public class viewport
         {
@@ -44,10 +45,12 @@ namespace Globalcaching.Services
         }
 
         public LiveAPIDownloadService(IGCEuUserSettingsService gcEuUserSettingsService,
-            IWorkContextAccessor workContextAccessor)
+            IWorkContextAccessor workContextAccessor,
+            IMacroService macroService)
         {
             _gcEuUserSettingsService = gcEuUserSettingsService;
             _workContextAccessor = workContextAccessor;
+            _macroService = macroService;
         }
 
         public LiveAPIDownloadStatus DownloadStatus 
@@ -131,6 +134,7 @@ LiveAPILastAccessTime datetime
             {
                 result.IsDownloading = _activeDownloadsForUserID.Contains(usrId);
             }
+            _macroService.DynamicTableCreated(db, string.Format("LiveAPIDownload_{0}_CachesToDo", usrId));
 
             return result;
         }
