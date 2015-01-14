@@ -149,11 +149,11 @@
                 <div class="col-md-9">
                     @if (Model.FTF == null)
                     {
-                        <span>-</span>
+                        <span id="ftfusrname">-</span>
                     }
                     else
                     {
-                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.FTF.UserName</a>
+                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank"><span id="ftfusrname">@Model.FTF.UserName</span></a>
                         if (Model.IsFTFAdmin == true)
                         {
                             <button class="btn btn-primary btn-xs" onclick="@string.Format("clearFTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
@@ -166,11 +166,11 @@
                 <div class="col-md-9">
                     @if (Model.STF == null)
                     {
-                        <span>-</span>
+                        <span id="stfusrname">-</span>
                     }
                     else
                     {
-                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.STF.UserName</a>
+                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank"><span id="stfusrname">@Model.STF.UserName</span></a>
                         if (Model.IsFTFAdmin == true)
                         {
                             <button class="btn btn-primary  btn-xs" onclick="@string.Format("clearSTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
@@ -183,11 +183,11 @@
                 <div class="col-md-9">
                     @if (Model.TTF == null)
                     {
-                        <span>-</span>
+                        <span id="ttfusrname">-</span>
                     }
                     else
                     {
-                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.TTF.UserName</a>
+                        <a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank"><span id="ttfusrname">@Model.TTF.UserName</span></a>
                         if (Model.IsFTFAdmin)
                         {
                             <button class="btn btn-primary  btn-xs" onclick="@string.Format("clearTTF({0})", Model.GCComGeocacheData.ID)">Verwijder</button>
@@ -374,9 +374,9 @@
                             {
                                 <table>
                                     <tr>
-                                        <td><button class="btn btn-primary btn-xs" onclick="@string.Format("setFTF({0})", gcl.Log.ID)">FTF</button></td>
-                                        <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setSTF({0})", gcl.Log.ID)">STF</button></td>
-                                        <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setTTF({0})", gcl.Log.ID)">TTF</button></td>
+                                        <td><button class="btn btn-primary btn-xs" onclick="@string.Format("setFTF({0}, '{1}')", gcl.Log.ID, gcl.Writer.UserName.Replace("'", ""))">FTF</button></td>
+                                        <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setSTF({0}, '{1}')", gcl.Log.ID, gcl.Writer.UserName.Replace("'", ""))">STF</button></td>
+                                        <td>&nbsp;&nbsp;<button class="btn btn-primary btn-xs" onclick="@string.Format("setTTF({0}, '{1}')", gcl.Log.ID, gcl.Writer.UserName.Replace("'",""))">TTF</button></td>
                                     </tr>
                                 </table>
                             }
@@ -443,7 +443,7 @@
     var geocacheCode = '@Model.GCComGeocacheData.Code';
     var geocacheID = @Model.GCComGeocacheData.ID;
 
-    function setFTF(id)
+    function setFTF(id, usrname)
     {
         myApp.showPleaseWait();
         $.ajax({
@@ -458,6 +458,7 @@
                 myApp.hidePleaseWait();
                 if (response=="OK")
                 {
+                    $('#ftfusrname').text(usrname);
                 }
                 else{
                     alert('Er is een fout opgetreden!');
@@ -469,7 +470,7 @@
             }
         });
     }
-    function setSTF(id)
+    function setSTF(id, usrname)
     {
         myApp.showPleaseWait();
         $.ajax({
@@ -484,6 +485,7 @@
                 myApp.hidePleaseWait();
                 if (response=="OK")
                 {
+                    $('#stfusrname').text(usrname);
                 }
                 else{
                     alert('Er is een fout opgetreden!');
@@ -495,7 +497,7 @@
             }
         });
     }
-    function setTTF(id)
+    function setTTF(id, usrname)
     {
         myApp.showPleaseWait();
         $.ajax({
@@ -510,6 +512,7 @@
                 myApp.hidePleaseWait();
                 if (response=="OK")
                 {
+                    $('#ttfusrname').text(usrname);
                 }
                 else{
                     alert('Er is een fout opgetreden!');
