@@ -341,6 +341,22 @@ Created datetime not null
                             }
                             , new MacroFunctionInfo
                             {
+                                Name = "FavorietenPercentageMeerDan",
+                                ProtoType = "FavorietenPercentageMeerDan(percentage)",
+                                Description = "Caches met meer dan het opgegeven percentage aan Favorites (tov alle found logs)",
+                                Examples = "FavorietenPercentageMeerDan(20)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietFavorietenPercentageMeerDan",
+                                ProtoType = "NietFavorietenPercentageMeerDan(percentage)",
+                                Description = "Caches met niet meer dan het opgegeven percentage aan Favorites (tov alle found logs)",
+                                Examples = "NietFavorietenPercentageMeerDan(20)",
+                                PMOnly = true
+                            }
+                            , new MacroFunctionInfo
+                            {
                                 Name = "IsGeblokkeerd",
                                 ProtoType = "IsGeblokkeerd()",
                                 Description = "Caches die geblokkeerd zijn",
@@ -1093,6 +1109,14 @@ Created datetime not null
                         LatLon ll = Helper.GetLocation(parameters[0]);
                         whereClauses.Add(string.Format(" GcComData.dbo.F_GREAT_CIRCLE_DISTANCE(GcComData.dbo.GCComGeocache.Latitude, GcComData.dbo.GCComGeocache.Longitude, {0}, {1}) >= {2}", ll.lat.ToString().Replace(',', '.'), ll.lon.ToString().Replace(',', '.'), getDouble(parameters[1])));
                     }
+                    break;
+                case "favorietenpercentagemeerdan":
+                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.FavPer100Found > {0} ", getDouble(parameters[0])));
+                    break;
+                case "nietfavorietenpercentagemeerdan":
+                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.FavPer100Found <= {0} ", getDouble(parameters[0])));
                     break;
                 case "aantalkeergevondenmeerdan":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
