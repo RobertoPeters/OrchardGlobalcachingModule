@@ -24,6 +24,12 @@ namespace Globalcaching.Controllers
             public string Code { get; set; }
             public int? FavoritePoints { get; set; }
         }
+        public class CacheFavoritesWithFoundsPoco
+        {
+            public string Code { get; set; }
+            public int? FavoritePoints { get; set; }
+            public int FoundCount { get; set; }
+        }
         public class GeocacheCodesPoco
         {
             public string Code { get; set; }
@@ -140,6 +146,32 @@ namespace Globalcaching.Controllers
                         foreach (var s in codes)
                         {
                             sb.AppendLine(string.Format("{0},{1}", s.Code, s.FavoritePoints));
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return Content(sb.ToString());
+        }
+
+        [OutputCache(Duration = 0, NoStore = true)]
+        public ActionResult CacheFavoritesWithFoundCount()
+        {
+            StringBuilder sb = new StringBuilder();
+            try
+            {
+                string token = Request.QueryString["token"];
+                if (!string.IsNullOrEmpty(token) && Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId > 1)
+                {
+                    using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                    {
+                        var sql = PetaPoco.Sql.Builder.Append("SELECT GCComGeocache.Code, GCComGeocache.FavoritePoints, GCEuGeocache.FoundCount FROM GCComGeocache inner join GCEuData.dbo.GCEuGeocache on GCComGeocache.ID=GCEuGeocache.ID WHERE Archived=0 AND FavoritePoints is not null");
+                        List<CacheFavoritesWithFoundsPoco> codes = db.Fetch<CacheFavoritesWithFoundsPoco>(sql);
+                        foreach (var s in codes)
+                        {
+                            sb.AppendLine(string.Format("{0},{1},{2}", s.Code, s.FavoritePoints??0, s.FoundCount));
                         }
                     }
                 }

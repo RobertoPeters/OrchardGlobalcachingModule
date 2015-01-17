@@ -514,6 +514,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "Service/CacheFavoritesWithFoundCount",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingServices"},
+                            {"action", "CacheFavoritesWithFoundCount"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "Service/CacheDistance.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
