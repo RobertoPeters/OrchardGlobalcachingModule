@@ -42,7 +42,7 @@ namespace Globalcaching.Services
                 {
                     YafShout yp = new YafShout();
                     yp.Username = dr["Username"] as string;
-                    yp.PostedAt = ((DateTime)dr["Date"]).AddHours(2);
+                    yp.PostedAt = ((DateTime)dr["Date"]).Add(TimeZone.CurrentTimeZone.GetUtcOffset((DateTime)dr["Date"]));
                     if (canSeeMessage)
                     {
                         yp.Message = Core.SmileySupport.Instance.ReplaceCodes(dr["Message"] as string ?? "");

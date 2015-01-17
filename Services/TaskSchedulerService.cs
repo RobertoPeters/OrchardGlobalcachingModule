@@ -87,7 +87,7 @@ namespace Globalcaching.Services
                 DateTime n = DateTime.Now;
                 DateTime dtFrom = new DateTime(n.Year, n.Month, 1).AddMonths(-1).Date;
                 DateTime dtTo = new DateTime(n.Year, n.Month, 1).Date;
-                codes = db.Fetch<string>("select GCComGeocache.Code from GCComGeocache inner join GCEuData.dbo.GCEuGeocache on GCComGeocache.ID = GCEuGeocache.ID where (GCComGeocache.CountryID=141 or GCComGeocache.CountryID=4) and GCEuGeocache.PublishedAtDate>=@0 and GCEuGeocache.PublishedAtDate<@1", dtFrom, dtTo);
+                codes = db.Fetch<string>("select GCComGeocache.Code from GCComGeocache inner join GCEuData.dbo.GCEuGeocache on GCComGeocache.ID = GCEuGeocache.ID where GCComGeocache.CountryID=141 and GCEuGeocache.PublishedAtDate>=@0 and GCEuGeocache.PublishedAtDate<@1", dtFrom, dtTo);
             }
             AddScheduledWaypoint(codes, true);
         }

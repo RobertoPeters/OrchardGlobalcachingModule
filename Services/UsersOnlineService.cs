@@ -40,6 +40,10 @@ namespace Globalcaching.Services
             {
                 result = db.Fetch<UsersOnlineModel>("select yaf_User.Name, yaf_User.UserID, LastPageAccess.IP, LastPageAccess.LastActive, LastPageAccess.Location, LastPageAccess.PageParam from yaf_User inner join LastPageAccess on LastPageAccess.UserID=yaf_User.UserID where LastPageAccess.BoardID=1 order by LastActive desc");
             }
+            foreach (var r in result)
+            {
+                r.LastActive = r.LastActive.ToUniversalTime();
+            }
             return result;
         }
 

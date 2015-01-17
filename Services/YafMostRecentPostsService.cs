@@ -37,7 +37,7 @@ namespace Globalcaching.Services
                     YafPost yp = new YafPost();
                     yp.Username = dr["LastUserName"] as string;
                     yp.PostUrl = string.Format("/forum/Default.aspx?g=posts&amp;m={0}#post{0}", dr["LastMessageID"]);
-                    yp.PostedAt = ((DateTime)dr["LastPosted"]).AddHours(2);
+                    yp.PostedAt = ((DateTime)dr["LastPosted"]).Add(TimeZone.CurrentTimeZone.GetUtcOffset((DateTime)dr["LastPosted"]));
                     yp.Topic = dr["Topic"] as string;
                     result.Add(yp);
                 }
