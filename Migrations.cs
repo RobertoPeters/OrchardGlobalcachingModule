@@ -551,5 +551,19 @@ namespace Globalcaching
             return 39;
         }
 
+        public int UpdateFrom39()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("FoundsPerCountryRankingWidget",
+                cfg => cfg
+                    .DisplayedAs("Founds Per Country Ranking")
+                    .WithPart("FoundsPerCountryRankingPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 40;
+        }
+
     }
 }

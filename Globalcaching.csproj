@@ -379,6 +379,7 @@
     <Content Include="Views\DisplayTemplates\Parts.TrackableGroupMaint.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.TrackableGroups.cshtml" />
     <Content Include="Views\TrackableGroup\Home.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.FoundsPerCountryRanking.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -405,6 +406,7 @@
     <Compile Include="Controllers\CoordCheckerController.cs" />
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
+    <Compile Include="Controllers\FoundsPerCountryRankingController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
     <Compile Include="Controllers\GeocacheDistanceController.cs" />
     <Compile Include="Controllers\GeocacheSeriesController.cs" />
@@ -451,6 +453,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
     <Compile Include="Drivers\SelectionBuilderPartDriver.cs" />
@@ -520,6 +523,7 @@
     <Compile Include="Models\GCEuContactForm.cs" />
     <Compile Include="Models\GCEuCoordCheckAttempt.cs" />
     <Compile Include="Models\GCEuCoordCheckCode.cs" />
+    <Compile Include="Models\GCEuFoundsRanking.cs" />
     <Compile Include="Models\GCEuFTFStats.cs" />
     <Compile Include="Models\GCEuGeocache.cs" />
     <Compile Include="Models\GCEuLiveAPIDownloadStatus.cs" />
@@ -547,6 +551,7 @@
     <Compile Include="Services\CoordCheckerService.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
     <Compile Include="Services\EventCalendarService.cs" />
+    <Compile Include="Services\FoundsPerCountryRankingService.cs" />
     <Compile Include="Services\FTFStatsService.cs" />
     <Compile Include="Services\GeocacheDistanceService.cs" />
     <Compile Include="Services\GeocacheSearchFilterService.cs" />
@@ -577,6 +582,7 @@
     <Compile Include="ViewModels\CoordCheckerCheckModel.cs" />
     <Compile Include="ViewModels\CodeCheckerMaintModel.cs" />
     <Compile Include="ViewModels\CoordCheckerMaintModel.cs" />
+    <Compile Include="ViewModels\FoundsPerCountryRankingModel.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\NewestCachesModel.cs" />
     <Compile Include="ViewModels\ParelVanDeMaandModel.cs" />

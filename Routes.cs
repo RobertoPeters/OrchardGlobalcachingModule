@@ -34,6 +34,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GetFoundsRanking",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "FoundsPerCountryRanking"},
+                            {"action", "GetFoundsRanking"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "TrackableGroep/{id}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

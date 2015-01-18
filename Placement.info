@@ -38,4 +38,5 @@
   <Place Parts_SelectionBuilder="Content:1"/>
   <Place Parts_TrackableGroupMaint="Content:1"/>
   <Place Parts_TrackableGroups="Content:1"/>
+  <Place Parts_FoundsPerCountryRanking="Content:1"/>
 </Placement>
