@@ -38,7 +38,7 @@ namespace Globalcaching.Services
                 }
                 else
                 {
-                    items = db.Page<FoundsPerCountryRankingItem>(page, pageSize, string.Format("select GCEuFoundsRanking.Ranking, GCEuFoundsRanking.Founds , GCComUser.AvatarUrl, GCComUser.FindCount, GCComUser.MemberTypeId, GCComUser.PublicGuid, GCComUser.UserName from GCEuFoundsRanking inner join GCComData.dbo.GCComUser on GCEuFoundsRanking.GCComUserID = GCComUser.ID where GCEuFoundsRanking.RankYear=@0 and GCEuFoundsRanking.CountryID=@1 and GCComData.UserName like '%{0}%' order by GCEuFoundsRanking.Ranking", nameFilter.Replace("'","''").Replace("@","@@")), year, countryId);
+                    items = db.Page<FoundsPerCountryRankingItem>(page, pageSize, string.Format("select GCEuFoundsRanking.Ranking, GCEuFoundsRanking.Founds , GCComUser.AvatarUrl, GCComUser.FindCount, GCComUser.MemberTypeId, GCComUser.PublicGuid, GCComUser.UserName from GCEuFoundsRanking inner join GCComData.dbo.GCComUser on GCEuFoundsRanking.GCComUserID = GCComUser.ID where GCEuFoundsRanking.RankYear=@0 and GCEuFoundsRanking.CountryID=@1 and GCComUser.UserName like '%{0}%' order by GCEuFoundsRanking.Ranking", nameFilter.Replace("'", "''").Replace("@", "@@")), year, countryId);
                 }
                 result.Items = items.Items;
                 result.CurrentPage = items.CurrentPage;
