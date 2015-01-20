@@ -565,5 +565,19 @@ namespace Globalcaching
             return 40;
         }
 
+        public int UpdateFrom40()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("CombiRankingWidget",
+                cfg => cfg
+                    .DisplayedAs("Combi Ranking")
+                    .WithPart("CombiRankingPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 41;
+        }
+
     }
 }

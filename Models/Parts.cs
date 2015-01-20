@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class CombiRankingPart : ContentPart
+    {
+    }
+
     public class FoundsPerCountryRankingPart : ContentPart
     {
     }

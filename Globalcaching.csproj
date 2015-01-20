@@ -380,6 +380,7 @@
     <Content Include="Views\DisplayTemplates\Parts.TrackableGroups.cshtml" />
     <Content Include="Views\TrackableGroup\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FoundsPerCountryRanking.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.CombiRanking.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -406,6 +407,7 @@
     <Compile Include="Controllers\CoordCheckerController.cs" />
     <Compile Include="Controllers\EditCCCSettingsController.cs" />
     <Compile Include="Controllers\ForumController.cs" />
+    <Compile Include="Controllers\CombiRankingController.cs" />
     <Compile Include="Controllers\FoundsPerCountryRankingController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
     <Compile Include="Controllers\GeocacheDistanceController.cs" />
@@ -453,6 +455,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\CombiRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
@@ -551,6 +554,7 @@
     <Compile Include="Services\CoordCheckerService.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
     <Compile Include="Services\EventCalendarService.cs" />
+    <Compile Include="Services\CombiRankingService.cs" />
     <Compile Include="Services\FoundsPerCountryRankingService.cs" />
     <Compile Include="Services\FTFStatsService.cs" />
     <Compile Include="Services\GeocacheDistanceService.cs" />
@@ -582,6 +586,7 @@
     <Compile Include="ViewModels\CoordCheckerCheckModel.cs" />
     <Compile Include="ViewModels\CodeCheckerMaintModel.cs" />
     <Compile Include="ViewModels\CoordCheckerMaintModel.cs" />
+    <Compile Include="ViewModels\CombiRankingModel.cs" />
     <Compile Include="ViewModels\FoundsPerCountryRankingModel.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\NewestCachesModel.cs" />
