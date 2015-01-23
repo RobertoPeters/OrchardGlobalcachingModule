@@ -382,6 +382,9 @@
     <Content Include="Views\DisplayTemplates\Parts.FoundsPerCountryRanking.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.CombiRanking.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FoundsPerCountryBanner.cshtml" />
+    <Content Include="Views\CheckCCC\Home.cshtml" />
+    <Content Include="Views\EditUserSettings\Home.cshtml" />
+    <Content Include="Views\GAPPInfo\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -411,6 +414,7 @@
     <Compile Include="Controllers\CombiRankingController.cs" />
     <Compile Include="Controllers\FoundsPerCountryRankingController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
+    <Compile Include="Controllers\GAPPInfoController.cs" />
     <Compile Include="Controllers\GeocacheDistanceController.cs" />
     <Compile Include="Controllers\GeocacheSeriesController.cs" />
     <Compile Include="Controllers\FavoriteGeocachersController.cs" />
@@ -591,6 +595,8 @@
     <Compile Include="ViewModels\CombiRankingModel.cs" />
     <Compile Include="ViewModels\FoundsPerCountryRankingModel.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
+    <Compile Include="ViewModels\ListMemberSettingsModel.cs" />
+    <Compile Include="ViewModels\ListCCCMembersModel.cs" />
     <Compile Include="ViewModels\NewestCachesModel.cs" />
     <Compile Include="ViewModels\ParelVanDeMaandModel.cs" />
     <Compile Include="ViewModels\SchedulerInfoModel.cs" />

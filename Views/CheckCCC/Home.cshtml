@@ -1,0 +1,39 @@
+﻿<table class="table table-striped table-hover" >
+    <thead>
+        <tr>
+            <th>Global naam</th>
+            <th>GCCom naam</th>
+            <th>Actief</th>
+            <th>Telnr</th>
+            <th>SMS</th>
+            <th>Voorkeur SMS</th>
+            <th>Verberg email</th>
+            <th>Aangepast</th>
+            <th>Aangemaakt</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in @Model)
+        {
+            <tr>
+                <td>@m.Name</td>
+                <td>@m.UserName</td>
+                <td>@m.Active</td>
+                <td>@m.Telnr</td>
+                <td>@m.SMS</td>
+                <td>@m.PreferSMS</td>
+                <td>@m.HideEmailAddress</td>
+                <td>@m.ModifiedAt</td>
+                <td>@m.RegisteredAt</td>
+                <td>
+@using (Html.BeginFormAntiForgeryPost(Url.Action("DeactivateCCCMember", "CheckCCC", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{                
+    <input type="hidden" name="id" value="@m.UserID" />
+    <button type="submit" value="deactivate" class="btn btn-primary btn-xs">deactiveren</button>
+}
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

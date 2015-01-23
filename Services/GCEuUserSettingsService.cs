@@ -1,4 +1,5 @@
 ﻿using Globalcaching.Models;
+using Globalcaching.ViewModels;
 using Orchard;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Globalcaching.Services
         GCEuUserSettings GetSettings(string userName);
         void UpdateSettings(GCEuUserSettings settings);
         string GetEMail(int yafUserID);
+        List<ListMemberSettingsModel> GetAllMemberSettings();
     }
 
     public class GCEuUserSettingsService : IGCEuUserSettingsService
@@ -35,6 +37,16 @@ namespace Globalcaching.Services
         private HttpContextBase HttpContext
         {
             get { return _workContextAccessor.GetContext().HttpContext; }
+        }
+
+        public List<ListMemberSettingsModel> GetAllMemberSettings()
+        {
+            List<ListMemberSettingsModel> result;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                result = db.Fetch<ListMemberSettingsModel>("select GCEuUserSettings.*, yaf_user.Name from GCEuUserSettings inner join Globalcaching.dbo.yaf_user on GCEuUserSettings.YafUserID = yaf_user.UserID order by Name");
+            }
+            return result;
         }
 
         public string GetEMail(int yafUserID)

@@ -45,6 +45,9 @@ namespace Globalcaching {
 
         public void GetMenu(Orchard.ContentManagement.IContent menu, NavigationBuilder builder)
         {
+            builder.Add(T("Lid instellingen"), "1.0", item => item.Action("ListMemberSettings", "EditUserSettings", new { area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
+            builder.Add(T("GAPP autorizaties"), "1.0", item => item.Action("ListAuthorizations", "GAPPInfo", new { area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
+            builder.Add(T("CCC deelnemers"), "1.0", item => item.Action("ListCCCMembers", "CheckCCC", new { area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
             builder.Add(T("Site Admin"), "1.0", item => item.Action("Index", "Admin", new { area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
             builder.Add(T("FTF Admin"), "1.0", item => item.Action("Index", "FTFStats", new { area = "Globalcaching" }).Permission(Permissions.FTFAdmin));
             builder.Add(T("Afstand Admin"), "1.0", item => item.Action("Index", "GeocacheDistance", new { area = "Globalcaching" }).Permission(Permissions.DistanceAdmin));

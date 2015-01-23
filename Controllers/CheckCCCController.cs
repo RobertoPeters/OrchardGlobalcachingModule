@@ -1,4 +1,7 @@
 ﻿using Globalcaching.Services;
+using Orchard;
+using Orchard.Security;
+using Orchard.Themes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +13,14 @@ namespace Globalcaching.Controllers
 {
     public class CheckCCCController: Controller
     {
+        public IOrchardServices Services { get; set; }
         private readonly IGCEuCCCSettingsService _gcEuCCCSettingsService;
 
-        public CheckCCCController(IGCEuCCCSettingsService gcEuCCCSettingsService)
+        public CheckCCCController(IGCEuCCCSettingsService gcEuCCCSettingsService,
+            IOrchardServices services)
         {
             _gcEuCCCSettingsService = gcEuCCCSettingsService;
+            Services = services;
         }
 
         [HttpPost]
@@ -35,5 +41,34 @@ namespace Globalcaching.Controllers
             string password = Request.QueryString["pwd"];
             return Content(_gcEuCCCSettingsService.GetCCCServiceResult(gccode, username, password));
         }
+
+        [Themed]
+        public ActionResult ListCCCMembers()
+        {
+            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            {
+                return View("Home", _gcEuCCCSettingsService.GetAllCCCUsers());
+            }
+            else
+            {
+                return new HttpUnauthorizedResult();
+            }
+        }
+
+        [Themed]
+        [HttpPost]
+        public ActionResult DeactivateCCCMember(int id)
+        {
+            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            {
+                _gcEuCCCSettingsService.DeactivateCCCMember(id);
+                return RedirectToAction("ListCCCMembers");
+            }
+            else
+            {
+                return new HttpUnauthorizedResult();
+            }
+        }
+
     }
 }

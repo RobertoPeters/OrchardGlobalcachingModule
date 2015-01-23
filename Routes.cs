@@ -34,6 +34,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "ListGAPPAuthorizations",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GAPPInfo"},
+                            {"action", "ListAuthorizations"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "GetCombiRanking",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -649,6 +664,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "ListMemberSettings",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "EditUserSettings"},
+                            {"action", "ListMemberSettings"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "EditUserSettings/{id}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -1209,6 +1239,36 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "CacheMap"},
                             {"action", "MacroResult"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ListCCCMembers",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CheckCCC"},
+                            {"action", "ListCCCMembers"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "DeactivateCCCMember",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CheckCCC"},
+                            {"action", "DeactivateCCCMember"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {

@@ -3,6 +3,8 @@ using Globalcaching.ViewModels;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
+using Orchard.Security;
+using Orchard.Themes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,5 +66,17 @@ namespace Globalcaching.Controllers
             return Redirect(settings.ReturnUrl);
         }
 
+        [Themed]
+        public ActionResult ListMemberSettings()
+        {
+            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            {
+                return View("Home", _gcEuUserSettingsService.GetAllMemberSettings());
+            }
+            else
+            {
+                return new HttpUnauthorizedResult();
+            }
+        }
     }
 }

@@ -1,0 +1,23 @@
+﻿<table class="table table-striped table-hover" >
+    <thead>
+        <tr>
+            <th></th>
+            <th>Datum</th>
+            <th>Naam</th>
+            <th>ID</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in @Model)
+        {
+            <tr>
+                <td>@m.Row</td>
+                <td>@m.requestdate</td>
+                <td>@m.Username</td>
+                <td>@m.MemberId</td>
+                <td>@m.MemberType</td>
+            </tr>
+        }
+    </tbody>
+</table>

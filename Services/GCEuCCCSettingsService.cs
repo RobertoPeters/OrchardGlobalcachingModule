@@ -1,4 +1,5 @@
 ﻿using Globalcaching.Models;
+using Globalcaching.ViewModels;
 using Orchard;
 using Orchard.Security;
 using System;
@@ -18,6 +19,8 @@ namespace Globalcaching.Services
         void UpdateSettings(GCEuCCCUser settings);
         CheckCCCResult GetCCCUsersForGeocache(int page, int pageSize, string GCCode, bool removeEmailAddress);
         string GetCCCServiceResult(string gccode, string username, string password);
+        List<ListCCCMembersModel> GetAllCCCUsers();
+        void DeactivateCCCMember(int id);
     }
 
     public class GCEuCCCSettingsService : IGCEuCCCSettingsService
@@ -41,6 +44,23 @@ namespace Globalcaching.Services
             _membershipService = membershipService;
         }
 
+        public void DeactivateCCCMember(int id)
+        {
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                db.Execute("update GCEuCCCUser set Active=0 where UserID=@0", id);
+            }
+        }
+
+        public List<ListCCCMembersModel> GetAllCCCUsers()
+        {
+            List<ListCCCMembersModel> result;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                result = db.Fetch<ListCCCMembersModel>("select GCEuCCCUser.*, yaf_user.Name, GCComUser.UserName from GCEuCCCUser inner join Globalcaching.dbo.yaf_user on GCEuCCCUser.UserID = yaf_user.UserID inner join GCComData.dbo.GCComUser on GCEuCCCUser.GCComUserID = GCComUser.ID order by ModifiedAt desc");
+            }
+            return result;
+        }
 
         public GCEuCCCUser GetSettings()
         {
