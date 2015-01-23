@@ -21,5 +21,13 @@ namespace Globalcaching.Controllers
         {
             return Json(_foundsPerCountryRankingService.GetRanking(page, pageSize, rankyear, countryid, nameFilter));
         }
+
+        [OutputCache(Duration = 0, NoStore = true)]
+        public ActionResult Banner(long id, int countryid, int year, int type)
+        {
+            _foundsPerCountryRankingService.CreateBanner(Response, id, countryid, year, type);
+            return null;
+        }
+
     }
 }

@@ -381,6 +381,7 @@
     <Content Include="Views\TrackableGroup\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FoundsPerCountryRanking.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.CombiRanking.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.FoundsPerCountryBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -457,6 +458,7 @@
     <Compile Include="Core\TemporaryFile.cs" />
     <Compile Include="Drivers\CombiRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
+    <Compile Include="Drivers\FoundsPerCountryBannerPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
     <Compile Include="Drivers\SelectionBuilderPartDriver.cs" />

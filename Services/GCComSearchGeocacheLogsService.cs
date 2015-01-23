@@ -61,7 +61,7 @@ namespace Globalcaching.Services
             {
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                 {
-                    var items = db.Page<GCComGeocacheLogEx>(page, pageSize, "select GCComGeocacheLog.*, GCComGeocache.GeocacheTypeId, GCComGeocache.Name, GCComGeocache.Url as GeocacheUrl from GCComGeocacheLog with (nolock) inner join GCComGeocache with (nolock) on GCComGeocache.ID=GCComGeocacheLog.GeocacheID inner join GCEuData.dbo.GCEuGeocache with (nolock) on GCComGeocache.ID=GCEuGeocache.ID Where FinderId=@0 and GCEuGeocache.FTFUserID=@0 order by VisitDate desc, GCComGeocacheLog.ID desc", result.User.ID);
+                    var items = db.Page<GCComGeocacheLogEx>(page, pageSize, "select GCComGeocacheLog.*, GCComGeocache.GeocacheTypeId, GCComGeocache.Name, GCComGeocache.Url as GeocacheUrl from GCComGeocacheLog with (nolock) inner join GCComGeocache with (nolock) on GCComGeocache.ID=GCComGeocacheLog.GeocacheID inner join GCEuData.dbo.GCEuGeocache with (nolock) on GCComGeocache.ID=GCEuGeocache.ID Where FinderId=@0 and GCEuGeocache.FTFUserID=@0 and WptLogTypeId=2 order by VisitDate desc, GCComGeocacheLog.ID desc", result.User.ID);
                     result.Logs = items.Items.ToArray();
                     result.CurrentPage = items.CurrentPage;
                     result.PageCount = items.TotalPages;
@@ -86,7 +86,7 @@ namespace Globalcaching.Services
             {
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                 {
-                    var items = db.Page<GCComGeocacheLogEx>(page, pageSize, "select GCComGeocacheLog.*, GCComGeocache.GeocacheTypeId, GCComGeocache.Name, GCComGeocache.Url as GeocacheUrl from GCComGeocacheLog with (nolock) inner join GCComGeocache with (nolock) on GCComGeocache.ID=GCComGeocacheLog.GeocacheID inner join GCEuData.dbo.GCEuGeocache with (nolock) on GCComGeocache.ID=GCEuGeocache.ID Where FinderId=@0 and GCEuGeocache.STFUserID=@0 order by VisitDate desc, GCComGeocacheLog.ID desc", result.User.ID);
+                    var items = db.Page<GCComGeocacheLogEx>(page, pageSize, "select GCComGeocacheLog.*, GCComGeocache.GeocacheTypeId, GCComGeocache.Name, GCComGeocache.Url as GeocacheUrl from GCComGeocacheLog with (nolock) inner join GCComGeocache with (nolock) on GCComGeocache.ID=GCComGeocacheLog.GeocacheID inner join GCEuData.dbo.GCEuGeocache with (nolock) on GCComGeocache.ID=GCEuGeocache.ID Where FinderId=@0 and GCEuGeocache.STFUserID=@0 and WptLogTypeId=2 order by VisitDate desc, GCComGeocacheLog.ID desc", result.User.ID);
                     result.Logs = items.Items.ToArray();
                     result.CurrentPage = items.CurrentPage;
                     result.PageCount = items.TotalPages;
@@ -111,7 +111,7 @@ namespace Globalcaching.Services
             {
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                 {
-                    var items = db.Page<GCComGeocacheLogEx>(page, pageSize, "select GCComGeocacheLog.*, GCComGeocache.GeocacheTypeId, GCComGeocache.Name, GCComGeocache.Url as GeocacheUrl from GCComGeocacheLog with (nolock) inner join GCComGeocache with (nolock) on GCComGeocache.ID=GCComGeocacheLog.GeocacheID inner join GCEuData.dbo.GCEuGeocache with (nolock) on GCComGeocache.ID=GCEuGeocache.ID Where FinderId=@0 and GCEuGeocache.TTFUserID=@0 order by VisitDate desc, GCComGeocacheLog.ID desc", result.User.ID);
+                    var items = db.Page<GCComGeocacheLogEx>(page, pageSize, "select GCComGeocacheLog.*, GCComGeocache.GeocacheTypeId, GCComGeocache.Name, GCComGeocache.Url as GeocacheUrl from GCComGeocacheLog with (nolock) inner join GCComGeocache with (nolock) on GCComGeocache.ID=GCComGeocacheLog.GeocacheID inner join GCEuData.dbo.GCEuGeocache with (nolock) on GCComGeocache.ID=GCEuGeocache.ID Where FinderId=@0 and GCEuGeocache.TTFUserID=@0 and WptLogTypeId=2 order by VisitDate desc, GCComGeocacheLog.ID desc", result.User.ID);
                     result.Logs = items.Items.ToArray();
                     result.CurrentPage = items.CurrentPage;
                     result.PageCount = items.TotalPages;

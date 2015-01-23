@@ -40,4 +40,5 @@
   <Place Parts_TrackableGroups="Content:1"/>
   <Place Parts_FoundsPerCountryRanking="Content:1"/>
   <Place Parts_CombiRanking="Content:1"/>
+  <Place Parts_FoundsPerCountryBanner="Content:1"/>
 </Placement>
