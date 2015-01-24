@@ -34,6 +34,51 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GetGeocachesByOwner",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheBatchLog"},
+                            {"action", "GetGeocachesByOwner"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetGeocachesByCode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheBatchLog"},
+                            {"action", "GetGeocachesByCode"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetGeocachesByName",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheBatchLog"},
+                            {"action", "GetGeocachesByName"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "ListGAPPAuthorizations",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -1510,6 +1555,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "LogGCCom"},
                             {"action", "LogGC"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SimulateLogGC",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LogGCCom"},
+                            {"action", "SimulateLogGC"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {

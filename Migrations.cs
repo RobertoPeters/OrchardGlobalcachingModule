@@ -593,5 +593,19 @@ namespace Globalcaching
             return 42;
         }
 
+        public int UpdateFrom42()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("GeocacheBatchLogWidget",
+                cfg => cfg
+                    .DisplayedAs("Geocache Batch Log")
+                    .WithPart("GeocacheBatchLogPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 43;
+        }
+
     }
 }

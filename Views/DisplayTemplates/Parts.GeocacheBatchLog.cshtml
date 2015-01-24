@@ -1,0 +1,335 @@
+﻿<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+@{
+    Style.Require("datetimepicker.Style");
+    Script.Require("jQueryUI_Sortable").AtFoot();
+}
+
+<style>
+
+    #sortable li {
+        cursor:move;
+    }
+
+</style>
+
+<h3>Geocaches toevoegen aan de lijst</h3>
+
+<div class="input-group">
+    <input type="text" class="form-control" id="addgccode" placeholder="GC code bv GC12345">
+    <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" id="addgccodeButton">Toevoegen</button>
+    </span>
+</div>
+<div class="input-group">
+    <input type="text" class="form-control" id="addowner" placeholder="caches van eigenaar bv pietje">
+    <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" id="addownerButton">Toevoegen</button>
+    </span>
+</div>
+<div class="input-group">
+    <input type="text" class="form-control" id="addname" placeholder="(deel van) naam geocache(s)">
+    <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" id="addnameButton">Toevoegen</button>
+    </span>
+</div>
+
+
+<h3>Geocaches</h3>
+<ul id="sortable" class="list-group">
+</ul>
+
+<h3>Log</h3>
+<div class="form-horizontal">
+    <div class="form-group">
+        <label for="visitDateDiv" class="col-sm-1 control-label">@T("Datum")</label>
+        <div class='col-sm-11 input-group date' id='visitDateDiv'>
+            <input type='text' class="form-control" id='visitDate' />
+            <span class="input-group-addon">
+                <span class="fa fa-calendar"></span>
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="logText" class="col-sm-1 control-label">@T("Tekst")</label>
+        <div class="col-sm-11">
+            <textarea id="logText" rows="7" class="form-control" placeholder="plaats hier jouw log"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-11">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="pauseafterlog" />
+                    @T("Stop na elke log")
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="gcid" value="@Model.Code" />
+    <a type="button" class="col-sm-offset-1 col-sm-11 btn btn-primary" href="#" id="submitLogButton">Start (Log geocaches als gevonden)</a>
+    <a type="button" class="col-sm-offset-1 col-sm-11 btn btn-primary" href="#" id="stopLogButton">Stop het loggen</a>
+</div>
+
+<script>
+    var repTimer = null;
+    var isSingleLog = false;
+    var availableCodes = [];
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function addGeocaches(response) {
+        if (response != null && response != "") {
+            for (var i = 0; i < response.length; i++) {
+                var line = response[i];
+                if ($('#' + line.Code).length==0)
+                {
+                    availableCodes.push(line.Code);
+                    $("#sortable").append('<li id="' + line.Code + '" class="list-group-item"><button class="btn btn-primary" type="button" id="log' + line.Code + '" onclick="return logGeocache(\'' + line.Code + '\')">log</button> ' + line.Code + ': ' + htmlEncode(line.Name) + ' <button class="btn btn-danger btn-xs pull-right" type="button" id="remove' + line.Code + '" onclick="return removeGeocache(\'' + line.Code + '\')">verwijder</button></li>');
+                    if (line.Found) {
+                        $('#log' + line.Code).hide();
+                    }
+                }
+            }
+        }
+    }
+
+    function enableLogButtons(enable) {
+        for (var i = 0; i < availableCodes.length; i++) {
+            if (enable) {
+                $("#log" + availableCodes[i]).removeAttr("disabled");
+            }
+            else {
+                $("#log" + availableCodes[i]).attr("disabled", "disabled");
+            }
+        }
+        if (enable) {
+            $("#submitLogButton").show();
+            $("#stopLogButton").hide();
+        }
+        else {
+            $("#submitLogButton").hide();
+            $("#stopLogButton").show();
+        }
+    }
+
+    function logGeocache(code) {
+        isSingleLog = true;
+        submitLog(code);
+        return false;
+    }
+
+    function removeGeocache(code) {
+        var el = null;
+        $("#sortable").find('li').each(function () {
+            var currentId = $(this).attr('id');
+            if (currentId===code) {
+                el = $(this);
+                return false;
+            }
+        });
+        if (el != null) {
+            el.remove();
+            for (var i = availableCodes.length - 1; i >= 0; i--) {
+                if (availableCodes[i] === code) {
+                    availableCodes.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+
+    function addByGCCode() {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetGeocachesByCode", "GeocacheBatchLog", new { area = "Globalcaching" })',
+            data: {
+                code: $("#addgccode").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                addGeocaches(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function addByOwner() {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetGeocachesByOwner", "GeocacheBatchLog", new { area = "Globalcaching" })',
+            data: {
+                owner: $("#addowner").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                addGeocaches(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function addByName() {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetGeocachesByName", "GeocacheBatchLog", new { area = "Globalcaching" })',
+            data: {
+                name: $("#addname").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                addGeocaches(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function getFirstGeocacheToLog() {
+        var code = null;
+        $("#sortable").find('li').each(function () {
+            var currentId = $(this).attr('id');
+            if ($("#log" + currentId).is(":visible")) {
+                code = currentId;
+                return false;
+            }
+        });
+        return code;
+    }
+
+    function startLogging() {
+        if ($("#logText").val() == '') {
+            alert("Vul eerst de logtekst in.");
+            return;
+        }
+        var code = getFirstGeocacheToLog();
+        if (code != null) {
+            submitLog(code);
+        }
+    }
+
+    function submitLog(code) {
+        if ($("#logText").val() == '') {
+            alert("Vul eerst de logtekst in.");
+            return;
+        }
+        myApp.showPleaseWait();
+        enableLogButtons(false);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("LogGC", "LogGCCom", new { area = "Globalcaching" })',
+            data: {
+                gcid: code,
+                visitDate: $("#visitDateDiv").data("DateTimePicker").getDate().toISOString(),
+                logText: $("#logText").val(),
+                favorite: false,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                enableLogButtons(true);
+                if (response != null) {
+                    if (response[0] == "OK") {
+                        $('#log' + code).hide();
+                        if (!isSingleLog) {
+                            if (getFirstGeocacheToLog() != null) {
+                                enableLogButtons(false);
+                                repTimer = setTimeout(function () { startLogging(); }, 2000);
+                            }
+                        }
+                    }
+                    else {
+                        alert("ERROR");
+                    }
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                enableLogButtons(true);
+                alert(errorText);
+            }
+        });
+    }
+
+    $(function () {
+        $("#sortable").sortable();
+
+        var d = moment();
+        $('#visitDateDiv').datetimepicker({
+            defaultDate: d
+        });
+
+        $("#stopLogButton").hide();
+
+        $("#stopLogButton").click(function () {
+            if (repTimer != null) {
+                clearTimeout(repTimer);
+            }
+            enableLogButtons(true);
+            return false;
+        });
+
+        $("#submitLogButton").click(function () {
+            isSingleLog = $("#pauseafterlog").is(':checked');
+            startLogging();
+            return false;
+        });
+
+        $('#addgccode').keypress(function (e) {
+            if (e.which == '13') {
+                addByGCCode();
+                e.preventDefault();
+            }
+        });
+
+        $("#addgccodeButton").click(function () {
+            addByGCCode();
+        });
+
+        $('#addowner').keypress(function (e) {
+            if (e.which == '13') {
+                addByOwner();
+                e.preventDefault();
+            }
+        });
+
+        $("#addownerButton").click(function () {
+            addByOwner();
+        });
+
+        $('#addname').keypress(function (e) {
+            if (e.which == '13') {
+                addByName();
+                e.preventDefault();
+            }
+        });
+
+        $("#addnameButton").click(function () {
+            addByName();
+        });
+
+    });
+</script>

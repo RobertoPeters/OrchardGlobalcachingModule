@@ -6,10 +6,14 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class GeocacheBatchLogPart : ContentPart
+    {
+    }
 
     public class FoundsPerCountryBannerPart : ContentPart
     {
     }
+
     public class CombiRankingPart : ContentPart
     {
     }

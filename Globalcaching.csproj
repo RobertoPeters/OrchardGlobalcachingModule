@@ -385,6 +385,7 @@
     <Content Include="Views\CheckCCC\Home.cshtml" />
     <Content Include="Views\EditUserSettings\Home.cshtml" />
     <Content Include="Views\GAPPInfo\Home.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.GeocacheBatchLog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -415,6 +416,7 @@
     <Compile Include="Controllers\FoundsPerCountryRankingController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
     <Compile Include="Controllers\GAPPInfoController.cs" />
+    <Compile Include="Controllers\GeocacheBatchLogController.cs" />
     <Compile Include="Controllers\GeocacheDistanceController.cs" />
     <Compile Include="Controllers\GeocacheSeriesController.cs" />
     <Compile Include="Controllers\FavoriteGeocachersController.cs" />
@@ -463,6 +465,7 @@
     <Compile Include="Drivers\CombiRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryBannerPartDriver.cs" />
+    <Compile Include="Drivers\GeocacheBatchLogPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
     <Compile Include="Drivers\SelectionBuilderPartDriver.cs" />
@@ -563,6 +566,7 @@
     <Compile Include="Services\CombiRankingService.cs" />
     <Compile Include="Services\FoundsPerCountryRankingService.cs" />
     <Compile Include="Services\FTFStatsService.cs" />
+    <Compile Include="Services\GeocacheBatchLogService.cs" />
     <Compile Include="Services\GeocacheDistanceService.cs" />
     <Compile Include="Services\GeocacheSearchFilterService.cs" />
     <Compile Include="Services\GeocacheSeriesService.cs" />
@@ -594,6 +598,7 @@
     <Compile Include="ViewModels\CoordCheckerMaintModel.cs" />
     <Compile Include="ViewModels\CombiRankingModel.cs" />
     <Compile Include="ViewModels\FoundsPerCountryRankingModel.cs" />
+    <Compile Include="ViewModels\GeocacheBatchLogModel.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\ListMemberSettingsModel.cs" />
     <Compile Include="ViewModels\ListCCCMembersModel.cs" />

@@ -115,6 +115,22 @@ namespace Globalcaching.Controllers
         }
 
         [HttpPost]
+        public ActionResult SimulateLogGC(string gcid, DateTime visitDate, string logText, bool favorite)
+        {
+            string[] result = new string[3];
+            result[0] = "ERROR";
+            var usrSettings = _gcEuUserSettingsService.GetSettings();
+            if (usrSettings != null && usrSettings.YafUserID > 1 && !string.IsNullOrEmpty(usrSettings.LiveAPIToken))
+            {
+                System.Threading.Thread.Sleep(1500);
+                result[0] = "OK";
+                result[1] = Url.Action("Index", "DisplayGeocache", new { id = gcid });
+                result[2] = "";
+            }
+            return Json(result);
+        }
+
+        [HttpPost]
         public ActionResult LogTB(string tbsToLog, string tbsLogged, DateTime visitDate, string logText)
         {
             string[] result = new string[3];
