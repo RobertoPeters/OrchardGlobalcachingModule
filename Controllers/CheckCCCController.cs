@@ -23,14 +23,27 @@ namespace Globalcaching.Controllers
             Services = services;
         }
 
+        public ActionResult RedirectFromOldSite()
+        {
+            return Redirect(Request.Url.ToString().ToLower().Replace("cachers/ccc.aspx", "CCCHulp"));
+        }
+
         [HttpPost]
         public ActionResult Index()
         {
-            int page = 1;
-            int pageSize = 50;
-            int.TryParse(Request["page"] ?? "1", out page);
-            int.TryParse(Request["pageSize"] ?? "50", out pageSize);
-            return Json(_gcEuCCCSettingsService.GetCCCUsersForGeocache(page, pageSize, Request["id"] as string, true));
+            var settings = _gcEuCCCSettingsService.GetSettings();
+            if (settings != null && settings.Active)
+            {
+                int page = 1;
+                int pageSize = 50;
+                int.TryParse(Request["page"] ?? "1", out page);
+                int.TryParse(Request["pageSize"] ?? "50", out pageSize);
+                return Json(_gcEuCCCSettingsService.GetCCCUsersForGeocache(page, pageSize, Request["id"] as string, true));
+            }
+            else
+            {
+                return null;
+            }
         }
 
         [OutputCache(Duration = 0, NoStore = true)]

@@ -49,6 +49,7 @@
     }
 
     function updateList(response) {
+        if (response==null || response=="") return;
         var resultElementName = "#cccContent";
         var pagerElementName = ".cccSearch";
 

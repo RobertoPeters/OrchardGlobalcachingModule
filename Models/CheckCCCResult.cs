@@ -37,6 +37,7 @@ namespace Globalcaching.Models
 
     public class CheckCCCResult
     {
+        public bool IsCCCMember { get; set; }
         public long TotalCount { get; set; }
         public long PageCount { get; set; }
         public long CurrentPage { get; set; }

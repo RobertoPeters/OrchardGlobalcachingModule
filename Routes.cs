@@ -439,6 +439,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "cachers/ccc.aspx",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CheckCCC"},
+                            {"action", "RedirectFromOldSite"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "caches/coordcheck.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

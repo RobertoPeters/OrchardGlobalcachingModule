@@ -32,15 +32,29 @@ namespace Globalcaching.Drivers
 
         protected override DriverResult Display(CheckCCCPart part, string displayType, dynamic shapeHelper)
         {
-            CheckCCCResult m;
-            string wp = HttpContext.Request.QueryString["wp"];
-            if (!string.IsNullOrEmpty(wp))
+            CheckCCCResult m = null;
+            var settings = _cccSettingsService.GetSettings();
+            if (settings != null && settings.Active)
             {
-                m = _cccSettingsService.GetCCCUsersForGeocache(1, 50, wp, true);
+                string wp = HttpContext.Request.QueryString["wp"];
+                if (!string.IsNullOrEmpty(wp))
+                {
+                    m = _cccSettingsService.GetCCCUsersForGeocache(1, 50, wp, true);
+                }
+                else
+                {
+                    m = new CheckCCCResult();
+                    m.GeocacheCode = "";
+                    m.TotalCount = 0;
+                    m.PageCount = 1;
+                    m.CurrentPage = 1;
+                }
+                m.IsCCCMember = true;
             }
             else
             {
                 m = new CheckCCCResult();
+                m.IsCCCMember = false;
                 m.GeocacheCode = "";
                 m.TotalCount = 0;
                 m.PageCount = 1;
