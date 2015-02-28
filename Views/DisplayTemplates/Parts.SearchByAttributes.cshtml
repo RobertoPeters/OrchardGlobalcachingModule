@@ -18,6 +18,20 @@
     </div>
 </div>
 
+<!-- Found -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkfoundcountpm" type="checkbox" data-toggle="collapse" data-target="#pnlfoundcountpm" />
+        &nbsp;&nbsp;Aantal keer gevonden door Premium Members
+    </div>
+    <div id="pnlfoundcountpm" class="panel-body collapse in">
+        Van
+        <input type="text" id="foundcountpmfrom" width="80" value="0" />
+        t/m
+        <input type="text" id="foundcountpmto" width="80" value="10" />
+    </div>
+</div>
+
 <!-- Geocache pictures -->
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -692,6 +706,7 @@
     $('#pnllongitude').collapse();
     $('#pnlowners').collapse();
     $('#pnlfoundcount').collapse();
+    $('#pnlfoundcountpm').collapse();
     $('#pnlparel').collapse();
     $('#pnlfoundby').collapse();
     $('#pnlnotfoundby').collapse();
@@ -879,6 +894,14 @@
                 result = addMacroFunction(result, 'AantalKeerGevondenMeerDan(' + (parseInt($('#foundcountfrom').val())-1).toString() + ')');
             }
             result = addMacroFunction(result, 'NietAantalKeerGevondenMeerDan(' + $('#foundcountto').val() + ')');
+        }
+        if ($('#chkfoundcountpm').prop('checked'))
+        {
+            if ($('#foundcountpmfrom').val()!='0')
+            {
+                result = addMacroFunction(result, 'AantalKeerPMGevondenMeerDan(' + (parseInt($('#foundcountpmfrom').val())-1).toString() + ')');
+            }
+            result = addMacroFunction(result, 'NietAantalKeerPMGevondenMeerDan(' + $('#foundcountpmto').val() + ')');
         }
         if ($('#chkgcpictures').prop('checked'))
         {

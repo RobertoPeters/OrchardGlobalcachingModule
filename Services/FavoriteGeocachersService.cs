@@ -34,7 +34,7 @@ namespace Globalcaching.Services
             result.Filter = filter;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
-                var sql = PetaPoco.Sql.Builder.Append("select GCComGeocache.OwnerId, Count(1) as CacheCount, AVG(GCComGeocache.Latitude) as Latitude, AVG(GCComGeocache.Longitude) as Longitude, SUM(GCEuGeocache.FoundCount) as FoundCount, SUM(GCComGeocache.FavoritePoints) as FavoriteCount, SUM(DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE())) as DaysOnline from GCComGeocache");
+                var sql = PetaPoco.Sql.Builder.Append("select GCComGeocache.OwnerId, Count(1) as CacheCount, AVG(GCComGeocache.Latitude) as Latitude, AVG(GCComGeocache.Longitude) as Longitude, SUM(GCEuGeocache.FoundCount) as FoundCount, SUM(GCEuGeocache.PMFoundCount) as PMFoundCount, SUM(GCComGeocache.FavoritePoints) as FavoriteCount, SUM(DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE())) as DaysOnline from GCComGeocache");
                 sql = sql.InnerJoin("GCComUser").On("GCComGeocache.OwnerId = GCComUser.ID");
                 sql = sql.InnerJoin("[GCEuData].[dbo].[GCEuGeocache]").On("GCComGeocache.ID = GCEuGeocache.ID");
                 sql = sql.Where("GCComGeocache.Archived=0");
@@ -54,9 +54,9 @@ namespace Globalcaching.Services
                 var items = db.Fetch<FavoriteGeocacherInfo>(sql);
                 foreach (var item in items)
                 {
-                    if (item.FoundCount > 0)
+                    if (item.PMFoundCount > 0)
                     {
-                        item.FavPer100Found = 100.0 * (double)item.FavoriteCount / (double)item.FoundCount;
+                        item.FavPer100Found = 100.0 * (double)item.FavoriteCount / (double)item.PMFoundCount;
                     }
                     else
                     {

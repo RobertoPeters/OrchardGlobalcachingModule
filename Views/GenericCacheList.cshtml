@@ -233,6 +233,10 @@
             if (line.FavoritePoints!=null)
             {
                 description += ' | Fav.: <strong>' + line.FavoritePoints + '</strong>';
+                if (line.FavPer100Found!=null)
+                {
+                    description += '(' + line.FavPer100Found.toFixed(0) + '%)';
+                }
             }
             description += ' | <img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" />: <strong>' + line.FoundCount + '</strong>';
             description += '<br />Acties:';

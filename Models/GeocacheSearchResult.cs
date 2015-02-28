@@ -32,6 +32,7 @@ namespace Globalcaching.Models
         public int FoundCount { get; set; }
         public DateTime? PublishedAtDate { get; set; }
         public DateTime? MostRecentFoundDate { get; set; }
+        public double? FavPer100Found { get; set; }
         
         [PetaPoco.Ignore]
         public string DirectionIcon { get; set; }

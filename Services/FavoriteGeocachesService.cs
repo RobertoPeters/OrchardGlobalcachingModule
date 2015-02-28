@@ -33,7 +33,7 @@ namespace Globalcaching.Services
             result.Filter = filter;
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
             {
-                var sql = PetaPoco.Sql.Builder.Append("select GCComGeocache.ID, GCComGeocache.Code, GCComGeocache.Latitude, GCComGeocache.Longitude, GCComGeocache.Name, GCComGeocache.Archived, GCComGeocache.Available, GCComGeocache.GeocacheTypeId, GCComGeocache.OwnerId, GCComGeocache.ContainerTypeId, GCComGeocache.FavoritePoints, GCComGeocache.Url, GCComUser.UserName, GCComUser.PublicGuid, GCComUser.AvatarUrl, GCEuGeocache.FoundCount, DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE()) as DaysOnline, GCEuGeocache.FavPer100Found from GCComGeocache");
+                var sql = PetaPoco.Sql.Builder.Append("select GCComGeocache.ID, GCComGeocache.Code, GCComGeocache.Latitude, GCComGeocache.Longitude, GCComGeocache.Name, GCComGeocache.Archived, GCComGeocache.Available, GCComGeocache.GeocacheTypeId, GCComGeocache.OwnerId, GCComGeocache.ContainerTypeId, GCComGeocache.FavoritePoints, GCComGeocache.Url, GCComUser.UserName, GCComUser.PublicGuid, GCComUser.AvatarUrl, GCEuGeocache.FoundCount, GCEuGeocache.PMFoundCount, DATEDIFF(DAY,GCComGeocache.UTCPlaceDate,GETDATE()) as DaysOnline, GCEuGeocache.FavPer100Found from GCComGeocache");
                 sql = sql.InnerJoin("GCComUser").On("GCComGeocache.OwnerId = GCComUser.ID");
                 sql = sql.InnerJoin("[GCEuData].[dbo].[GCEuGeocache]").On("GCComGeocache.ID = GCEuGeocache.ID");
                 sql = sql.Where("GCComGeocache.Archived=0");

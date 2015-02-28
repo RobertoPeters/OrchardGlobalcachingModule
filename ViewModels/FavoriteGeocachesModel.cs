@@ -37,6 +37,7 @@ namespace Globalcaching.ViewModels
 
         //GCEuGeocache
         public int FoundCount { get; set; }
+        public int PMFoundCount { get; set; }
         public double FavPer100Found { get; set; }
 
         //computed

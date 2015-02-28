@@ -79,6 +79,10 @@
                     @if (@Model.GCComGeocacheData.FavoritePoints != null)
                     {
                         @String.Format("{0}", @Model.GCComGeocacheData.FavoritePoints)
+                        if (Model.GCEuGeocacheData.FavPer100Found != null)
+                        {
+                            @String.Format(" ({0:0}%)", @Model.GCEuGeocacheData.FavPer100Found)
+                        }
                     }
                     else
                     {
@@ -142,7 +146,7 @@
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Gevonden:</strong></div>
-                <div class="col-md-9">@String.Format("{0}", @Model.GCEuGeocacheData.FoundCount)</div>
+                <div class="col-md-9">@String.Format("{0} ({1} PM)", @Model.GCEuGeocacheData.FoundCount, @Model.GCEuGeocacheData.PMFoundCount)</div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>FTF:</strong></div>

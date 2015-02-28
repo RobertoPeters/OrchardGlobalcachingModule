@@ -71,10 +71,11 @@
         <ul class="list-group">
             <li class="list-group-item list-group-item-info">Aantallen</li>
             <li class="list-group-item" style="cursor: pointer" id="Favorites" draggable="true" ondragstart="drag(event)" title="Het aantal Favorites wat de geocache gekregen heeft">Favorites</li>
-            <li class="list-group-item" style="cursor: pointer" id="Favoritespercentage" draggable="true" ondragstart="drag(event)" title="Het Favorites percentage tov totaal aantal logs wat de geocache gekregen heeft">Favorites percentage</li>
+            <li class="list-group-item" style="cursor: pointer" id="Favoritespercentage" draggable="true" ondragstart="drag(event)" title="Het Favorites percentage tov totaal aantal gevonden logs wat de geocache gekregen heeft van Premium Members">Favorites percentage</li>
             <li class="list-group-item" style="cursor: pointer" id="Geocacheplaatjes" draggable="true" ondragstart="drag(event)" title="Het aantal plaatjes in de geocachebeschrijving dat geupload is naar geocaching.com">Geocacheplaatjes</li>
             <li class="list-group-item" style="cursor: pointer" id="GevondenLogs" draggable="true" ondragstart="drag(event)" title="Het aantal found logs">Gevonden logs</li>
-            <li class="list-group-item" style="cursor: pointer" id="Maximum" draggable="true" ondragstart="drag(event)" title="Het maximum aantakl caches dat geselecteerd mag worden">Maximum aantal</li>
+            <li class="list-group-item" style="cursor: pointer" id="GevondenLogsPM" draggable="true" ondragstart="drag(event)" title="Het aantal found logs van Premium Members">Gevonden logs PM</li>
+            <li class="list-group-item" style="cursor: pointer" id="Maximum" draggable="true" ondragstart="drag(event)" title="Het maximum aantal caches dat geselecteerd mag worden">Maximum aantal</li>
             <li class="list-group-item list-group-item-info">Datum</li>
             <li class="list-group-item" style="cursor: pointer" id="Aanmaakdatum" draggable="true" ondragstart="drag(event)" title="De zogenaamde 'Hidden date'">Aanmaakdatum</li>
             <li class="list-group-item" style="cursor: pointer" id="Aangepastdatum" draggable="true" ondragstart="drag(event)" title="De datum van de laatste aanpassing aan de geocache of log">Aangepast datum</li>
@@ -453,6 +454,9 @@
         else if (data == "GevondenLogs") {
             m = createFoundCountModel(x, y).addTo(graph);
         }
+        else if (data == "GevondenLogsPM") {
+            m = createFoundCountPMModel(x, y).addTo(graph);
+        }
         else if (data == "Geocacheplaatjes") {
             m = createGeocachePicturesModel(x, y).addTo(graph);
         }
@@ -543,6 +547,10 @@
                 $('#txtvalprop').show();
             }
             else if (s == "Gevonden logs") {
+                copyTextModelToProperty(c);
+                $('#txtvalprop').show();
+            }
+            else if (s == "Gevonden logs PM") {
                 copyTextModelToProperty(c);
                 $('#txtvalprop').show();
             }
@@ -752,6 +760,22 @@
             outPorts: ['<', '<=', '=', '=>', '>'],
             attrs: {
                 '.label': { text: 'Gevonden logs\r\n100', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
+    function createFoundCountPMModel(px, py) {
+        var d = moment();
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['<', '<=', '=', '=>', '>'],
+            attrs: {
+                '.label': { text: 'Gevonden logs PM\r\n100', 'ref-x': .1, 'ref-y': .2 },
                 rect: { fill: modelFill },
                 '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
                 '.outPorts circle': { fill: outportFill, type: 'output' }
@@ -1604,6 +1628,30 @@
             }
             else if (outPort == '>') {
                 macro += ' AantalKeerGevondenMeerDan(' + d.toString() + ') ';
+            }
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Gevonden logs PM") {
+            var s = m.attr('.label/text').split('\r\n')[1];
+            var d = parseInt(s);
+            if (outPort == '=') {
+                d -= 1;
+                macro += ' AantalKeerPMGevondenMeerDan(' + d.toString() + ') en ';
+                d += 2;
+                macro += ' NietAantalKeerPMGevondenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<') {
+                d -= 1;
+                macro += ' NietAantalKeerPMGevondenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '<=') {
+                macro += ' NietAantalKeerPMGevondenMeerDan(' + d.toString() + ')'
+            }
+            else if (outPort == '=>') {
+                d -= 1;
+                macro += ' AantalKeerPMGevondenMeerDan(' + d.toString() + ') ';
+            }
+            else if (outPort == '>') {
+                macro += ' AantalKeerPMGevondenMeerDan(' + d.toString() + ') ';
             }
         }
         else if (m.attr('.label/text').split('\r\n')[0] == "Geocacheplaatjes") {

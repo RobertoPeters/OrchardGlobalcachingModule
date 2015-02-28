@@ -343,7 +343,7 @@ Created datetime not null
                             {
                                 Name = "FavorietenPercentageMeerDan",
                                 ProtoType = "FavorietenPercentageMeerDan(percentage)",
-                                Description = "Caches met meer dan het opgegeven percentage aan Favorites (tov alle found logs)",
+                                Description = "Caches met meer dan het opgegeven percentage aan Favorites (tov PM found logs)",
                                 Examples = "FavorietenPercentageMeerDan(20)",
                                 PMOnly = true
                             }
@@ -351,7 +351,7 @@ Created datetime not null
                             {
                                 Name = "NietFavorietenPercentageMeerDan",
                                 ProtoType = "NietFavorietenPercentageMeerDan(percentage)",
-                                Description = "Caches met niet meer dan het opgegeven percentage aan Favorites (tov alle found logs)",
+                                Description = "Caches met niet meer dan het opgegeven percentage aan Favorites (tov PM found logs)",
                                 Examples = "NietFavorietenPercentageMeerDan(20)",
                                 PMOnly = true
                             }
@@ -513,6 +513,22 @@ Created datetime not null
                                 ProtoType = "NietAantalKeerGevondenMeerDan(waarde)",
                                 Description = "Caches welke niet meer dan opgegeven waarde gevonden zijn",
                                 Examples = "NietAantalKeerGevondenMeerDan(100)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "AantalKeerPMGevondenMeerDan",
+                                ProtoType = "AantalKeerPMGevondenMeerDan(waarde)",
+                                Description = "Caches welke al meer dan opgegeven waarde gevonden zijn door Premium Members",
+                                Examples = "AantalKeerPMGevondenMeerDan(100)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietAantalKeerPMGevondenMeerDan",
+                                ProtoType = "NietAantalKeerPMGevondenMeerDan(waarde)",
+                                Description = "Caches welke niet meer dan opgegeven waarde gevonden zijn door Premium Members",
+                                Examples = "NietAantalKeerPMGevondenMeerDan(100)",
                                 PMOnly = false
                             }
                             , new MacroFunctionInfo
@@ -1125,6 +1141,14 @@ Created datetime not null
                 case "nietaantalkeergevondenmeerdan":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
                     whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.FoundCount <= {0} ", int.Parse(parameters[0])));
+                    break;
+                case "aantalkeerpmgevondenmeerdan":
+                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.PMFoundCount > {0} ", int.Parse(parameters[0])));
+                    break;
+                case "nietaantalkeerpmgevondenmeerdan":
+                    addInnerJoin(" inner join GcEuData.dbo.GCEuGeocache with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuGeocache.ID ", innerJoins);
+                    whereClauses.Add(string.Format(" GcEuData.dbo.GCEuGeocache.PMFoundCount <= {0} ", int.Parse(parameters[0])));
                     break;
                 case "isparel":
                     addInnerJoin(" inner join GcEuData.dbo.GCEuParel with (nolock) on GcComData.dbo.GCComGeocache.ID = GcEuData.dbo.GCEuParel.GeocacheID ", innerJoins);

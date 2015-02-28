@@ -24,6 +24,7 @@ namespace Globalcaching.ViewModels
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public int FoundCount { get; set; }
+        public int PMFoundCount { get; set; }
         public int CacheCount { get; set; }
         public int FavoriteCount { get; set; }
         public int DaysOnline { get; set; }

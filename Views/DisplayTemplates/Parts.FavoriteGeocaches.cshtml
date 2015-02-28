@@ -41,7 +41,7 @@
             <th></th>
             <th>#Fav</th>
             <th>%Fav</th>
-            <th>Gevonden</th>
+            <th>Gevonden (PM)</th>
             <th>#Dagen</th>
         </tr>
     </thead>
@@ -86,8 +86,8 @@
             if (line.FavoritePoints != null) {
                 td5 = line.FavoritePoints.toString();
             }
-            td6 = line.FavPer100Found.toFixed(1);
-            td7 = line.FoundCount.toString();
+            td6 = line.FavPer100Found.toFixed(0);
+            td7 = line.FoundCount.toString() + ' (' + line.PMFoundCount.toString() + ')';
             td8 = line.DaysOnline.toString();
 
             $(resultElementName + ' > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td><td>' + td6 + '</td><td>' + td7 + '</td><td>' + td8 + '</td></tr>');
