@@ -57,6 +57,12 @@ namespace Globalcaching.Controllers
         }
 
         [Themed]
+        public ActionResult PublishedMaxDaysAgo(int countryid, int maxdaysago)
+        {
+            return Search(new GeocacheSearchFilter() { CountryID = countryid, MaxPublishedDaysAgo = maxdaysago });
+        }
+
+        [Themed]
         public ActionResult NameSeries(int countryId, string nameSeriesMatch)
         {
             return Search(new GeocacheSearchFilter() { CountryID = countryId, NameSeriesMatch = nameSeriesMatch });

@@ -42,5 +42,7 @@ namespace Globalcaching.Models
         public bool? MacroResult { get; set; }
         public string NameSeriesMatch { get; set; }
         public bool? Parel { get; set; }
+        public int? MaxPublishedDaysAgo { get; set; }
+        public bool? FTFOpen { get; set; }
     }
 }

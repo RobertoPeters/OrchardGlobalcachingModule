@@ -20,6 +20,7 @@ namespace Globalcaching.Models
         public string MarkLogTextColor3 { get; set; }
         public int? SortGeocachesBy { get; set; }
         public int? SortGeocachesDirection { get; set; }
+        public int? NewestCachesMode { get; set; }
 
         [PetaPoco.Ignore]
         public bool IsPM { get; set; }

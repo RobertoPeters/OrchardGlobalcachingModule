@@ -88,6 +88,14 @@ namespace Globalcaching.Services
                 {
                     sql.Append("and dbo.F_GREAT_CIRCLE_DISTANCE(GCComGeocache.Latitude, GCComGeocache.Longitude, @0, @1) < @2", filter.HomeLat, filter.HomeLon, filter.Radius);
                 }
+                if (filter.FTFOpen == true)
+                {
+                    sql = sql.Append("and (GCEuGeocache.FTFUserID is null or GCEuGeocache.STFUserID is null or GCEuGeocache.TTFUserID is null) and GCEuGeocache.FTFCompleted = 0 and GCComGeocache.CountryID = 141");
+                }
+                if (filter.MaxPublishedDaysAgo != null)
+                {
+                    sql = sql.Append("and DATEDIFF(DAY,GCEuGeocache.PublishedAtDate,GETDATE())<=@0", filter.MaxPublishedDaysAgo);
+                }
                 if (!string.IsNullOrEmpty(filter.NameSeriesMatch))
                 {
                     //sep = ...

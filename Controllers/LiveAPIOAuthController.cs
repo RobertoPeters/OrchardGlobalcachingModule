@@ -36,6 +36,7 @@ namespace Globalcaching.Controllers
             T = NullLocalizer.Instance;
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult Index(string ReturnUrl)
         {
             _workContextAccessor.GetContext().HttpContext.Session["ReturnUrl"] = ReturnUrl;
@@ -69,6 +70,7 @@ namespace Globalcaching.Controllers
             return null;
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult LiveAPICallback()
         {
             var tokenManager = _workContextAccessor.GetContext().HttpContext.Session[WcfTokenManagerTag] as InMemoryTokenManager;

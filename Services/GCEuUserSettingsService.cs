@@ -130,6 +130,7 @@ namespace Globalcaching.Services
                                 result.DefaultCountryCode = 141;
                                 result.SortGeocachesBy = (int)GeocacheSearchFilterOrderOnItem.PublicationDate;
                                 result.SortGeocachesDirection = -1;
+                                result.NewestCachesMode = null;
                                 db.Insert(result);
                             }
                         }

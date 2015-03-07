@@ -1,3 +1,40 @@
 ﻿@using Orchard.Mvc.Html;
 
+@using (Html.BeginFormAntiForgeryPost(Url.Action("SetMode", "NewestCaches", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <input id="modeId" name="mode" type="hidden" value="" />
+    <input id="returnurlId" name="returnurl" type="hidden" value="@Request.Url.ToString()" />
+    <button id="setModeButton" type="submit" value="SetMode" class="btn btn-primary">@T("Set Mode")</button>
+}
+
+<div class="row">
+    <div class="col-md-2" style="cursor: pointer" onclick="setMode(0)">
+        <input type="radio" @string.Format("{0}",Model.Mode==0?"checked=true":"")/> <span>Nederland</span>
+    </div>
+    <div class="col-md-2" style="cursor: pointer" onclick="setMode(1)">
+        <input type="radio" @string.Format("{0}", Model.Mode == 1 ? "checked=checked" : "") /> <span>Belgie</span>
+    </div>
+    <div class="col-md-2" style="cursor: pointer" onclick="setMode(2)">
+        <input type="radio" @string.Format("{0}", Model.Mode == 2 ? "checked=checked" : "") /> <span>Luxemburg</span>
+    </div>
+    @if (Model.Geocaches.Filter.HomeLat!=null && Model.Geocaches.Filter.HomeLon!=null)
+    { 
+    <div class="col-md-2" style="cursor: pointer" onclick="setMode(3)">
+        <input type="radio" @string.Format("{0}", Model.Mode == 3 ? "checked=checked" : "") /> <span>Binnen straal van 30km</span>
+    </div>
+    <div class="col-md-2" style="cursor: pointer" onclick="setMode(4)">
+        <input type="radio" @string.Format("{0}", Model.Mode == 4 ? "checked=checked" : "") /> <span>Binnen straal van 30km en open FTF podium</span>
+    </div>
+    }
+</div>
+
 @Display.GenericCacheList(Model.Geocaches)
+
+<script type="text/javascript">
+    $('#setModeButton').hide();
+
+    function setMode(mode) {
+        $('#modeId').val(mode);
+        $('#setModeButton').trigger("click");
+    }
+</script>

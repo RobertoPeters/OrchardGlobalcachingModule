@@ -8,6 +8,7 @@ namespace Globalcaching.ViewModels
 {
     public class NewestCachesModel
     {
+        public int Mode { get; set; }
         public GeocacheSearchResult Geocaches { get; set; }
     }
 }

@@ -37,6 +37,8 @@
     @Html.HiddenFor(m => m.Filter.MacroResult)
     @Html.HiddenFor(m => m.Filter.NameSeriesMatch)
     @Html.HiddenFor(m => m.Filter.Parel)
+    @Html.HiddenFor(m => m.Filter.MaxPublishedDaysAgo)
+    @Html.HiddenFor(m => m.Filter.FTFOpen)
     <input id="minLat" name="minLat" type="hidden" />
     <input id="minLon" name="minLon" type="hidden" />
     <input id="maxLat" name="maxLat" type="hidden" />
@@ -82,6 +84,8 @@
         MacroResult = Model.Filter.MacroResult ?? null,
         NameSeriesMatch = Model.Filter.NameSeriesMatch ?? null,
         Parel = Model.Filter.Parel ?? null,
+        MaxPublishedDaysAgo = Model.Filter.MaxPublishedDaysAgo ?? null,
+        FTFOpen = Model.Filter.FTFOpen ?? null,
         OwnerName = Model.Filter.OwnerName ?? null
         }));
 

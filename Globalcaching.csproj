@@ -434,6 +434,7 @@
     <Compile Include="Controllers\GCComUserSearchController.cs" />
     <Compile Include="Controllers\LogGCComController.cs" />
     <Compile Include="Controllers\MacroController.cs" />
+    <Compile Include="Controllers\NewestCachesController.cs" />
     <Compile Include="Controllers\OnlineToolsController.cs" />
     <Compile Include="Controllers\SelectionBuilderController.cs" />
     <Compile Include="Controllers\TrackableGroupController.cs" />

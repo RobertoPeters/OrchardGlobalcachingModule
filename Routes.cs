@@ -1054,6 +1054,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "CachesGepubliceerdAfgelopenDagen/{countryid}/{maxdaysago}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "PublishedMaxDaysAgo"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "NaamSeries/{countryId}/{nameSeriesMatch}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -2125,6 +2140,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "GeocacheDistance"},
                             {"action", "ClearDistance"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SetNewestCachesMode",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "NewestCaches"},
+                            {"action", "SetMode"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {
