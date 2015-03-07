@@ -90,7 +90,7 @@ namespace Globalcaching.Services
                 }
                 if (filter.FTFOpen == true)
                 {
-                    sql = sql.Append("and (GCEuGeocache.FTFUserID is null or GCEuGeocache.STFUserID is null or GCEuGeocache.TTFUserID is null) and GCEuGeocache.FTFCompleted = 0 and GCComGeocache.CountryID = 141");
+                    sql = sql.Append("and GCEuGeocache.FoundCount < 3 and GCEuGeocache.FTFCompleted = 0 and GCComGeocache.CountryID = 141");
                 }
                 if (filter.MaxPublishedDaysAgo != null)
                 {
