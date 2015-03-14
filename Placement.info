@@ -42,4 +42,5 @@
   <Place Parts_CombiRanking="Content:1"/>
   <Place Parts_FoundsPerCountryBanner="Content:1"/>
   <Place Parts_GeocacheBatchLog="Content:1"/>
+  <Place Parts_GeocacheTypeStats="Content:1"/>
 </Placement>

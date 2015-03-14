@@ -607,5 +607,19 @@ namespace Globalcaching
             return 43;
         }
 
+        public int UpdateFrom43()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("GeocacheTypeStatsWidget",
+                cfg => cfg
+                    .DisplayedAs("Geocache Type Stats")
+                    .WithPart("GeocacheTypeStatsPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 44;
+        }
+        
     }
 }

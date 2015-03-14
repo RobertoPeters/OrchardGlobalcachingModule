@@ -386,6 +386,7 @@
     <Content Include="Views\EditUserSettings\Home.cshtml" />
     <Content Include="Views\GAPPInfo\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheBatchLog.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.GeocacheTypeStats.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -467,6 +468,7 @@
     <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryBannerPartDriver.cs" />
     <Compile Include="Drivers\GeocacheBatchLogPartDriver.cs" />
+    <Compile Include="Drivers\GeocacheTypeStatsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
     <Compile Include="Drivers\SelectionBuilderPartDriver.cs" />
@@ -600,6 +602,7 @@
     <Compile Include="ViewModels\CombiRankingModel.cs" />
     <Compile Include="ViewModels\FoundsPerCountryRankingModel.cs" />
     <Compile Include="ViewModels\GeocacheBatchLogModel.cs" />
+    <Compile Include="ViewModels\GeocacheTypeStats.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\ListMemberSettingsModel.cs" />
     <Compile Include="ViewModels\ListCCCMembersModel.cs" />

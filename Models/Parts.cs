@@ -6,6 +6,11 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+
+    public class GeocacheTypeStatsPart : ContentPart
+    {
+    }
+
     public class GeocacheBatchLogPart : ContentPart
     {
     }

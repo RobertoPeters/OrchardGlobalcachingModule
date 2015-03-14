@@ -1,0 +1,29 @@
+﻿<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">Geocachetype</th>
+            <th class="text-center">Aantal<small><br />A</small></th>
+            <th class="text-center">Dagen online<small><br />B</small></th>
+            <th class="text-center">Gem. Dagen online<small><br />B/A</small></th>
+            <th class="text-center">Gevonden<small><br />100*Gevonden/B</small></th>
+            <th class="text-center">PM Gevonden<small><br />100*PM Gevonden/B</small></th>
+            <th class="text-center">Favorites<small><br />100*Favorites/B</small></th>
+            <th class="text-center">Logfoto's<small><br />100*Logfoto's/B</small></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var l in Model)
+        {
+            <tr>
+                <td class="text-center"><img src="@Href(string.Format("~/Modules/Globalcaching/Media/WptTypes/{0}.gif", l.GeocacheTypeId))" /></td>
+                <td class="text-center">@l.CacheCount</td>
+                <td class="text-center">@l.DaysOnline</td>
+                <td class="text-center">@string.Format("{0:0.0}", (double)l.DaysOnline / (double)l.CacheCount)</td>
+                <td class="text-center">@string.Format("{0:0.0}", 100.0 * (double)l.FoundCount / (double)l.DaysOnline)</td>
+                <td class="text-center">@string.Format("{0:0.0}", 100.0 * (double)l.PMFoundCount / (double)l.DaysOnline)</td>
+                <td class="text-center">@string.Format("{0:0.0}", 100.0 * (double)l.FavoritePoints / (double)l.DaysOnline)</td>
+                <td class="text-center">@string.Format("{0:0.0}", 100.0 * (double)l.LogImageCount / (double)l.DaysOnline)</td>
+            </tr>
+        }
+    </tbody>
+</table>
