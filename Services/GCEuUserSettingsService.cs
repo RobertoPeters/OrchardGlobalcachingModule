@@ -191,6 +191,21 @@ namespace Globalcaching.Services
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                     {
                         db.Update("GCEuUserSettings", "YafUserID", settings);
+                        try
+                        {
+                            if (settings.GCComUserID != null && string.IsNullOrEmpty(settings.LiveAPIToken))
+                            {
+                                var m = new GCEuLiveAPIHelpers();
+                                m.YafUserID = settings.YafUserID;
+                                m.GCComUserID = (long)settings.GCComUserID;
+                                m.LiveAPIToken = settings.LiveAPIToken;
+                                db.Execute("delete from GCEuLiveAPIHelpers where YafUserID = @0", m.YafUserID);
+                                db.Insert(m);
+                            }
+                        }
+                        catch
+                        {
+                        }
                     }
                 }
                 setPM(currentSettings);

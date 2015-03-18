@@ -542,6 +542,7 @@
     <Compile Include="Models\GCEuFTFStats.cs" />
     <Compile Include="Models\GCEuGeocache.cs" />
     <Compile Include="Models\GCEuLiveAPIDownloadStatus.cs" />
+    <Compile Include="Models\GCEuLiveAPIHelpers.cs" />
     <Compile Include="Models\GCEuParel.cs" />
     <Compile Include="Models\GCEuSelectionBuilder.cs" />
     <Compile Include="Models\GCEuTrackableGroup.cs" />
