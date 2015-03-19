@@ -1,4 +1,18 @@
-﻿@if (Model.ErrorMessages != null && Model.ErrorMessages.Count > 0)
+﻿@if (Model.UserSettings == null || Model.UserSettings.YafUserID <= 1)
+{
+    <div class="alert alert-danger" role="alert">
+        Welkom gast! Om van alle functies gebruik te kunnen maken moet je @Html.ActionLink(T("Inloggen").ToString(), "LogOn", new { Controller = "Account", Area = "Orchard.Users", ReturnUrl = Context.Request.RawUrl }) na eenmalige en gratis <a href="/forum/default.aspx?g=register">Registratie</a>.
+    </div>
+}
+
+@if (Model.UserSettings != null && Model.UserSettings.YafUserID > 1 && Model.UserSettings.GCComUserID==null)
+{
+    <div class="alert alert-danger" role="alert">
+        Welkom! Om van alle functies gebruik te kunnen maken moet je Globalcaching.eu <a href="/LiveAPI">Autoriseren</a> voor de <a href="/LiveAPI">Live API</a> van geocaching.com.
+    </div>
+}
+
+@if (Model.ErrorMessages != null && Model.ErrorMessages.Count > 0)
 {
     <div class="alert alert-danger" role="alert">
         @foreach (var s in Model.ErrorMessages)

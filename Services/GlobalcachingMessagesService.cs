@@ -20,10 +20,13 @@ namespace Globalcaching.Services
         public static string dbTaskSchedulerConnString = ConfigurationManager.ConnectionStrings["SchedulerConnectionString"].ToString();
 
         public IOrchardServices Services { get; set; }
+        private readonly IGCEuUserSettingsService _gcEuUserSettingsService = null;
 
-        public GlobalcachingMessagesService(IOrchardServices services)
+        public GlobalcachingMessagesService(IOrchardServices services,
+            IGCEuUserSettingsService gcEuUserSettingsService)
         {
             Services = services;
+            _gcEuUserSettingsService = gcEuUserSettingsService;
         }
 
         public GlobalcachingMessagesModel GetMessages()
@@ -32,6 +35,7 @@ namespace Globalcaching.Services
             result.ErrorMessages = new List<string>();
             result.InformationMessages = new List<string>();
             result.WarningMessages = new List<string>();
+            result.UserSettings = _gcEuUserSettingsService.GetSettings();
             using (PetaPoco.Database db = new PetaPoco.Database(dbTaskSchedulerConnString, "System.Data.SqlClient"))
             {
                 var scheduler = db.Fetch<SchedulerStatus>("").FirstOrDefault();
