@@ -28,7 +28,7 @@ namespace Globalcaching.Controllers
         [Themed]
         public ActionResult Index()
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 return View("Home", _contactFormServices.GetContactForms(1, 20));
             }
@@ -40,7 +40,7 @@ namespace Globalcaching.Controllers
 
         public ActionResult GetContactForms(int page, int pageSize)
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 return Json(_contactFormServices.GetContactForms(page, pageSize));
             }

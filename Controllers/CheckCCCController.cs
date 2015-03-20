@@ -58,7 +58,7 @@ namespace Globalcaching.Controllers
         [Themed]
         public ActionResult ListCCCMembers()
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 return View("Home", _gcEuCCCSettingsService.GetAllCCCUsers());
             }
@@ -72,7 +72,7 @@ namespace Globalcaching.Controllers
         [HttpPost]
         public ActionResult DeactivateCCCMember(int id)
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 _gcEuCCCSettingsService.DeactivateCCCMember(id);
                 return RedirectToAction("ListCCCMembers");

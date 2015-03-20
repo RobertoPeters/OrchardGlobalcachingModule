@@ -8,6 +8,7 @@ namespace Globalcaching
     {
         public static readonly Permission FTFAdmin = new Permission { Description = "FTF administratie", Name = "FTFAdmin" };
         public static readonly Permission DistanceAdmin = new Permission { Description = "Afstand administratie", Name = "DistanceAdmin" };
+        public static readonly Permission GlobalAdmin = new Permission { Description = "Globalcaching administratie", Name = "GlobalAdmin" };
 
         public virtual Feature Feature { get; set; }
 
@@ -16,6 +17,7 @@ namespace Globalcaching
             return new[] {
                 FTFAdmin,
                 DistanceAdmin,
+                GlobalAdmin
             };
         }
 
@@ -24,7 +26,7 @@ namespace Globalcaching
             return new[] {
                 new PermissionStereotype {
                     Name = "Administrator",
-                    Permissions = new[] {FTFAdmin, DistanceAdmin}
+                    Permissions = new[] {FTFAdmin, DistanceAdmin, GlobalAdmin}
                 },
                 new PermissionStereotype {
                     Name = "Editor",

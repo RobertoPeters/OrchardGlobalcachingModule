@@ -69,7 +69,7 @@ namespace Globalcaching.Controllers
         [Themed]
         public ActionResult ListMemberSettings()
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 return View("Home", _gcEuUserSettingsService.GetAllMemberSettings());
             }

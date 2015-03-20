@@ -193,7 +193,7 @@ namespace Globalcaching.Services
                         db.Update("GCEuUserSettings", "YafUserID", settings);
                         try
                         {
-                            if (settings.GCComUserID != null && string.IsNullOrEmpty(settings.LiveAPIToken))
+                            if (settings.GCComUserID != null && !string.IsNullOrEmpty(settings.LiveAPIToken))
                             {
                                 var m = new GCEuLiveAPIHelpers();
                                 m.YafUserID = settings.YafUserID;

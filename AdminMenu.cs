@@ -45,15 +45,15 @@ namespace Globalcaching {
 
         public void GetMenu(Orchard.ContentManagement.IContent menu, NavigationBuilder builder)
         {
-            builder.Add(T("Lid instellingen"), "1.0", item => item.Action("ListMemberSettings", "EditUserSettings", new { area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
-            builder.Add(T("GAPP autorizaties"), "1.0", item => item.Action("ListAuthorizations", "GAPPInfo", new { area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
-            builder.Add(T("CCC deelnemers"), "1.0", item => item.Action("ListCCCMembers", "CheckCCC", new { area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
-            builder.Add(T("Site Admin"), "1.0", item => item.Action("Index", "Admin", new { area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
+            builder.Add(T("Lid instellingen"), "1.0", item => item.Action("ListMemberSettings", "EditUserSettings", new { area = "Globalcaching" }).Permission(Permissions.GlobalAdmin));
+            builder.Add(T("GAPP autorizaties"), "1.0", item => item.Action("ListAuthorizations", "GAPPInfo", new { area = "Globalcaching" }).Permission(Permissions.GlobalAdmin));
+            builder.Add(T("CCC deelnemers"), "1.0", item => item.Action("ListCCCMembers", "CheckCCC", new { area = "Globalcaching" }).Permission(Permissions.GlobalAdmin));
+            builder.Add(T("Site Admin"), "1.0", item => item.Action("Index", "Admin", new { area = "Globalcaching" }).Permission(Permissions.GlobalAdmin));
             builder.Add(T("FTF Admin"), "1.0", item => item.Action("Index", "FTFStats", new { area = "Globalcaching" }).Permission(Permissions.FTFAdmin));
             builder.Add(T("Afstand Admin"), "1.0", item => item.Action("Index", "GeocacheDistance", new { area = "Globalcaching" }).Permission(Permissions.DistanceAdmin));
             builder.Add(T("Dashboard"), "1.0", item => item.Action("Index", "Admin", new { Area = "Dashboard" }).Permission(StandardPermissions.AccessAdminPanel));
-            builder.Add(T("Contactform."), "1.0", item => item.Action("Index", "ContactForm", new { Area = "Globalcaching" }).Permission(StandardPermissions.AccessAdminPanel));
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel) || Services.Authorizer.Authorize(Permissions.FTFAdmin))
+            builder.Add(T("Contactform."), "1.0", item => item.Action("Index", "ContactForm", new { Area = "Globalcaching" }).Permission(Permissions.GlobalAdmin));
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin) || Services.Authorizer.Authorize(Permissions.FTFAdmin))
             {
                 builder.Add(T("Activiteiten"), "1.0", item => item.Action("Index", "UsersOnline", new { Area = "Globalcaching" }));
             }            

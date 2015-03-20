@@ -36,7 +36,7 @@ namespace Globalcaching.Controllers
 
         public ActionResult Index()
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 return View("Home", _taskSchedulerService.GetSchedulerInfoModel());
             }
@@ -48,7 +48,7 @@ namespace Globalcaching.Controllers
 
         public ActionResult Restart()
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 _hostEnvironment.RestartAppDomain();
             }
@@ -57,7 +57,7 @@ namespace Globalcaching.Controllers
 
         public ActionResult RefreshForParels()
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, T("De geocaches worden bijgewerkt"));
                 _taskSchedulerService.AddScheduledWaypointForParels();
@@ -68,7 +68,7 @@ namespace Globalcaching.Controllers
 
         public ActionResult AddParel(string gccode)
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 long id = 0;
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))

@@ -25,7 +25,7 @@ namespace Globalcaching.Controllers
         [Themed]
         public ActionResult Index()
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel) || Services.Authorizer.Authorize(Permissions.FTFAdmin))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin) || Services.Authorizer.Authorize(Permissions.FTFAdmin))
             {
                 return View("Home", _usersOnlineService.GetUserActivity());
             }

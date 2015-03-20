@@ -47,7 +47,7 @@ namespace Globalcaching.Services
                 {
                     result.WarningMessages.Add("De Live API service van www.geocaching.com is niet beschikbaar.");
                 }
-                if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+                if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
                 {
                     var services = db.Fetch<ServiceInfo>("");
                     var dt = services.Max(x => x.LastRun);

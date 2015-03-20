@@ -31,7 +31,7 @@ namespace Globalcaching.Controllers
         [Themed]
         public ActionResult ListAuthorizations()
         {
-            if (Services.Authorizer.Authorize(StandardPermissions.AccessAdminPanel))
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
             {
                 List<GAPPAuthorizationPoco> m;
                 using (PetaPoco.Database db = new PetaPoco.Database(DBCon.dbForumConnString, "System.Data.SqlClient"))
