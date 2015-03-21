@@ -51,6 +51,70 @@
     </div>
 </form>
 
+<style>
+    div.img {
+        margin-left: 25px;
+        padding: 5px;
+        height: auto;
+        float: left;
+        text-align: center;
+    }
+    div.imgalt {
+        background-color:#f1e6e6;
+    }
+
+    div.img img {
+        display: inline;
+        margin-top: 5px;
+        max-width: 100px;
+        border: 1px solid #ffffff;
+    }
+
+    div.img a:hover img {
+        border: 1px solid #0000ff;
+    }
+
+    div.log {
+        text-align: center;
+        font-weight: normal;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    div.name {
+        text-align: left;
+        font-weight: normal;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 5px;
+    }
+    div.logdate {
+        text-align: left;
+        font-weight: normal;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 5px;
+    }
+    div.by {
+        text-align: left;
+        font-weight: normal;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 5px;
+    }
+    div.cache {
+        text-align: left;
+        font-weight: normal;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 5px;
+    }
+</style>
+
 <div id="gccomSearchLogImagesTopPager">
 </div>
 <div class="row" id="logImagesContent">
@@ -98,36 +162,41 @@
     function updateList(response) {
         var resultElementName = "#logImagesContent";
         var pagerElementName = ".gccomSearchLogImages";
-        var html = '<table width="100%">';
         var col = 0;
+        var odd = true;
+        var html = '';
         for (var i = 0; i < response.Items.length; i++) {
             var line = response.Items[i];
 
             if (col == 0) {
-                html += '<tr>';
+                html += '<div class="row">';
             }
 
             var d = eval('new' + line.VisitDate.replace(/\//g, ' '));
-            html += '<td><table width="100%">';
-            html += '<tr><td colspan="2"><center><a href="' + line.ImageUrl + '" target="_blank"><img src="' + line.ThumbUrl + '"/></a><br /><a href="' + line.LogUrl + '" target="_blank">Log</a></center></td></tr>';
-            html += '<tr><td>Naam:</td><td>' + line.Name + '</td></tr>';
-            html += '<tr><td>Datum:</td><td>' + formatDateToShortDate(d) + '</td></tr>';
-            html += '<tr><td>Door:</td><td><a href="http://www.geocaching.com/profile/?guid=' + line.UserNameGuid + '" target="_blank">' + line.UserName + '</a></td></tr>';
-            html += '<tr><td>Cache:</td><td><a href="@Href("~/Geocache/")' + line.GeocacheCode + '">' + line.GeocacheName + '</a></td></tr>';
-            html += '</table></td>';
+            if (odd) {
+                html += '<div class="img imgalt col-md-2">';
+            }
+            else {
+                html += '<div class="img col-md-2">';
+            }
+            odd = !odd;
+            html += '<a href="' + line.ImageUrl + '" target="_blank"><img src="' + line.ThumbUrl + '"/></a>';
+            html += '<div class="log"><a href="' + line.LogUrl + '" target="_blank">Log</a></div>';
+            html += '<div class="name">Naam: <strong>' + line.Name + '</strong></div>';
+            html += '<div class="logdate">Datum: <strong>' + formatDateToShortDate(d) + '</strong></div>';
+            html += '<div class="by">Door: <a href="http://www.geocaching.com/profile/?guid=' + line.UserNameGuid + '" target="_blank">' + line.UserName + '</a></div>';
+            html += '<div class="cache">Cache: <a href="@Href("~/Geocache/")' + line.GeocacheCode + '">' + line.GeocacheName + '</a></div>';
+            html += '</div>';
 
             col++;
-            if (col>=5)
-            {
+            if (col >= 5) {
                 col = 0;
-                html += '</tr>';
+                html += '</div>';
             }
         }
-        if (col > 0)
-        {
-            html += '</tr>';
+        if (col > 0) {
+            html += '</div>';
         }
-        html += '</table>';
         $(resultElementName).html(html);
         setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestgccomSearchLogImagesPage");
     }
@@ -139,7 +208,7 @@
     });
 
     $(function () {
-        var d = moment('@Model.Filter.StartDate.Month' + '/' + '@Model.Filter.StartDate.Day'+ '/' +  '@Model.Filter.StartDate.Year');
+        var d = moment('@Model.Filter.StartDate.Month' + '/' + '@Model.Filter.StartDate.Day' + '/' + '@Model.Filter.StartDate.Year');
         $('#startdate1').datetimepicker({
             defaultDate: d
         });
