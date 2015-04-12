@@ -387,6 +387,7 @@
     <Content Include="Views\GAPPInfo\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheBatchLog.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheTypeStats.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.CombiBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -467,6 +468,7 @@
     <Compile Include="Drivers\CombiRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryBannerPartDriver.cs" />
+    <Compile Include="Drivers\CombiBannerPartDriver.cs" />
     <Compile Include="Drivers\GeocacheBatchLogPartDriver.cs" />
     <Compile Include="Drivers\GeocacheTypeStatsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />

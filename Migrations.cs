@@ -620,6 +620,20 @@ namespace Globalcaching
 
             return 44;
         }
-        
+
+        public int UpdateFrom44()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("CombiBannerWidget",
+                cfg => cfg
+                    .DisplayedAs("Combi Banner")
+                    .WithPart("CombiBannerPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 45;
+        }
+
     }
 }

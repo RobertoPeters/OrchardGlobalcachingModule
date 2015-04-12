@@ -1,0 +1,63 @@
+﻿@if (Model == null || Model.YafUserID<=1)
+{ 
+    <div class="alert alert-danger" role="alert">Voor het verkrijgen van de juiste URL moet je ingelogd zijn.</div>
+}
+else if (Model.GCComUserID==null)
+{
+    <div class="alert alert-danger" role="alert">Voor het verkrijgen van de juiste URL moet je Live API geautoriseerd hebben.</div>
+}
+else
+{ 
+<form role="form">
+    <div class="form-group">
+        <label class="control-label">Jaar:</label>
+        <select class="form-control" id="combijaar">
+            <option value="0">Alle</option>
+            @for (int i = 2001; i <= DateTime.Now.Year; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Type:</label>
+        <select class="form-control" id="combiranktype">
+            <option value="1">Op positie</option>
+            <option value="2">Op punten</option>
+        </select>
+    </div>
+    <div>
+        <img id="combibanner" src="" />
+    </div>
+    <div>
+        <div class="form-group">
+            <label class="control-label">HTML:</label>
+            <textarea cols="120" rows="2" id="combibannerhtml"></textarea>
+        </div>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+
+    function updateCombiBanner() {
+        var j = "";
+        if ($('#combijaar').val() != 0) {
+            j = $('#combijaar').val().toString();
+        }
+        var id = '@Model.YafUserID';
+        $("#combibanner").attr("src", "http://www.globalcaching.eu/images/nlcombirank.aspx?id=" + id + "&year=" + j + "&type=" + $('#combiranktype').val());
+        $("#combibannerhtml").val('<a href="http://www.globalcaching.eu/CombiRanglijst"><img src="' + $("#combibanner").attr("src") + '" /></a>');
+    }
+
+    $("#combijaar").change(function () {
+        updateCombiBanner();
+    });
+
+    $("#combiranktype").change(function () {
+        updateCombiBanner();
+    });
+
+    updateCombiBanner();
+</script>
+}
