@@ -23,6 +23,7 @@ namespace Globalcaching.Services
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
         public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
         public static string dbYafForumConnString = ConfigurationManager.ConnectionStrings["yafnet"].ToString();
+        public static string dbTaskSchedulerConnString = ConfigurationManager.ConnectionStrings["SchedulerConnectionString"].ToString();
 
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IOrchardServices _orchardServices;
@@ -133,6 +134,20 @@ namespace Globalcaching.Services
                                 result.NewestCachesMode = null;
                                 db.Insert(result);
                             }
+                            else if (result.GCComUserID != null)
+                            {
+                                var lapih = db.FirstOrDefault<GCEuLiveAPIHelpers>("where GCComUserID = @0", result.GCComUserID);
+                                if (lapih == null)
+                                {
+                                    result.GCComUserID = null;
+                                    result.LiveAPIToken = null;
+                                    db.Update("GCEuUserSettings", "YafUserID", result);
+                                }
+                                else if (result.ShowGeocachesOnGlobal==null)
+                                {
+                                    result.ShowGeocachesOnGlobal = true;
+                                }
+                            }
                         }
                         HttpContext.Session["GCEuUserSettings"] = result;
                         HttpContext.Session["GCEuUserSettingsForUser"] = _orchardServices.WorkContext.CurrentUser.UserName;
@@ -190,6 +205,10 @@ namespace Globalcaching.Services
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                     {
+                        if (settings.ShowGeocachesOnGlobal==null && settings.GCComUserID != null && !string.IsNullOrEmpty(settings.LiveAPIToken))
+                        {
+                            settings.ShowGeocachesOnGlobal = true;
+                        }
                         db.Update("GCEuUserSettings", "YafUserID", settings);
                         try
                         {
@@ -200,7 +219,24 @@ namespace Globalcaching.Services
                                 m.GCComUserID = (long)settings.GCComUserID;
                                 m.LiveAPIToken = settings.LiveAPIToken;
                                 db.Execute("delete from GCEuLiveAPIHelpers where YafUserID = @0", m.YafUserID);
-                                db.Insert(m);
+                                if (m.YafUserID != 7)
+                                {
+                                    db.Insert(m);
+                                }
+                                else
+                                {
+                                    using (PetaPoco.Database db3 = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                                    {
+                                        var gcComUsr = db3.FirstOrDefault<GCComUser>("where ID = @0", settings.GCComUserID);
+                                        if (gcComUsr != null)
+                                        {
+                                            using (PetaPoco.Database db2 = new PetaPoco.Database(dbTaskSchedulerConnString, "System.Data.SqlClient"))
+                                            {
+                                                db2.Execute("update GcComAccounts set Token = @0 where Name = @1", m.LiveAPIToken, gcComUsr.UserName);
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                         catch
