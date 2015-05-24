@@ -2,7 +2,8 @@
 
 @{
     Style.Require("datetimepicker.Style");
-    Script.Require("jQueryUI_Sortable").AtFoot();
+    Script.Require("jQuery").AtFoot();
+    Script.Require("jQueryUI").AtFoot();
 }
 
 <style>
@@ -33,7 +34,12 @@
         <button class="btn btn-primary" type="button" id="addnameButton">Toevoegen</button>
     </span>
 </div>
-
+<div class="input-group">
+    <textarea class="form-control" rows="10" id="geocachevisits" placeholder="geocache_visits.txt inhoud" readonly="readonly"></textarea>
+    <span class="input-group-btn">
+        <input id="fileupload" type="file" name="file" accept=".txt" class="btn btn-primary">
+    </span>
+</div>
 
 <h3>Geocaches</h3>
 <ul id="sortable" class="list-group">
@@ -74,10 +80,29 @@
     <a type="button" class="col-sm-offset-1 col-sm-11 btn btn-primary" href="#" id="stopLogButton">Stop het loggen</a>
 </div>
 
+<div class="modal fade" id="dialog-getgcinfo" tabindex="-1" role="dialog" aria-labelledby="getgcinfoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="getgcinfoLabel">Ophalen van de geocache informatie</h4>
+            </div>
+            <div class="modal-body">
+                Bezig met ophalen van de geocaches...
+                <div id="progress" class="progress">
+                    <div class="progress-bar progress-bar-success"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var repTimer = null;
     var isSingleLog = false;
     var availableCodes = [];
+    var gvinfo = {};
+    var gvinfoKeys = [];
+    var gvinfoFetchPosition = 0;
 
     function htmlEncode(value) {
         return $('<div/>').text(value).html();
@@ -87,8 +112,7 @@
         if (response != null && response != "") {
             for (var i = 0; i < response.length; i++) {
                 var line = response[i];
-                if ($('#' + line.Code).length==0)
-                {
+                if ($('#' + line.Code).length == 0) {
                     availableCodes.push(line.Code);
                     $("#sortable").append('<li id="' + line.Code + '" class="list-group-item"><button class="btn btn-primary" type="button" id="log' + line.Code + '" onclick="return logGeocache(\'' + line.Code + '\')">log</button> ' + line.Code + ': ' + htmlEncode(line.Name) + ' <button class="btn btn-danger btn-xs pull-right" type="button" id="remove' + line.Code + '" onclick="return removeGeocache(\'' + line.Code + '\')">verwijder</button></li>');
                     if (line.Found) {
@@ -128,7 +152,7 @@
         var el = null;
         $("#sortable").find('li').each(function () {
             var currentId = $(this).attr('id');
-            if (currentId===code) {
+            if (currentId === code) {
                 el = $(this);
                 return false;
             }
@@ -164,6 +188,41 @@
                 alert(errorText);
             }
         });
+    }
+
+    function addByGCInfo() {
+        if (gvinfoFetchPosition < gvinfoKeys.length) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetGeocachesByCode", "GeocacheBatchLog", new { area = "Globalcaching" })',
+                data: {
+                    code: gvinfoKeys[gvinfoFetchPosition],
+                    __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+                },
+                success: function (response) {
+                    addGeocaches(response);
+                    gvinfoFetchPosition++;
+                    var progress = gvinfoFetchPosition / gvinfoKeys.length * 100;
+                    $('#progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                    addByGCInfo();
+                },
+                error: function (data, errorText) {
+                    gvinfoFetchPosition++;
+                    var progress = gvinfoFetchPosition / gvinfoKeys.length * 100;
+                    $('#progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                    addByGCInfo();
+                }
+            });
+        }
+        else {
+            $('#dialog-getgcinfo').modal('hide');
+        }
     }
 
     function addByOwner() {
@@ -276,6 +335,39 @@
 
     $(function () {
         $("#sortable").sortable();
+
+        $('#fileupload').change(function () {
+            gvinfo = {};
+            var f = document.getElementById('fileupload').files[0];
+            if (f) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var content = e.target.result;
+                    $('#geocachevisits').text(content);
+                    var lines = content.match(/[^\r\n]+/g);
+                    var cacheCount = 0;
+                    for (var i = 0; i < lines.length; i++) {
+                        if (lines[i] != '') {
+                            var parts = lines[i].match(/[^,]+/g);
+                            if (parts.length == 4) {
+                                if (parts[2] === 'Found it') {
+                                    cacheCount++;
+                                    gvinfo[parts[0]] = parts;
+                                }
+                            }
+                        }
+                    }
+                    if (cacheCount > 0) {
+                        $('#dialog-getgcinfo').appendTo('body').modal({ "backdrop": "static", "keyboard": false });
+                        gvinfoKeys = Object.keys(gvinfo);
+                        gvinfoFetchPosition = 0;
+                        addByGCInfo();
+                    }
+                }
+                reader.readAsText(f, 'UTF-16');
+            }
+        });
 
         var d = moment();
         $('#visitDateDiv').datetimepicker({
