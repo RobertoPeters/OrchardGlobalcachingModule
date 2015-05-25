@@ -844,6 +844,51 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "FTFGeocaches/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "FTFLog"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "STFGeocaches/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "STFLog"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "TTFGeocaches/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CacheList"},
+                            {"action", "TTFLog"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "FTFLogs/{id}",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

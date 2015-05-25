@@ -67,7 +67,22 @@ namespace Globalcaching.Services
                 {
                     sql = sql.InnerJoin(string.Format("[{0}].[dbo].[GCEuParel]", euDatabase)).On("GCComGeocache.ID = GCEuParel.GeocacheID");
                 }
-                sql = sql.Where("Archived=@0", false);
+                if (filter.FTFLog != null)
+                {
+                    sql = sql.Where("GCEuGeocache.FTFUserID=@0", filter.FTFLog);
+                }
+                else if (filter.STFLog != null)
+                {
+                    sql = sql.Where("GCEuGeocache.STFUserID=@0", filter.STFLog);
+                }
+                else if (filter.TTFLog != null)
+                {
+                    sql = sql.Where("GCEuGeocache.TTFUserID=@0", filter.TTFLog);
+                }
+                else
+                {
+                    sql = sql.Where("Archived=@0", false);
+                }
                 if (filter.OwnerID != null)
                 {
                     sql = sql.Append("and GCComUser.ID=@0", filter.OwnerID);

@@ -4,6 +4,10 @@
 
 <h1>@string.Format("Alle FTF logs van {0}", Model.User.UserName)</h1>
 
+<div>
+    <span><a href="@Href(string.Format("~/FTFGeocaches/{0}", Model.User.ID))">Cachelijst</a></span>
+</div>
+
 <div id="gccomSearchLogsTopPager">
 </div>
 <table class="table table-striped table-hover" id="gccomSearchLogsResults">

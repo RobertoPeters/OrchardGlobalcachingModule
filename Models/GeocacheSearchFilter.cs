@@ -44,5 +44,8 @@ namespace Globalcaching.Models
         public bool? Parel { get; set; }
         public int? MaxPublishedDaysAgo { get; set; }
         public bool? FTFOpen { get; set; }
+        public long? FTFLog { get; set; }
+        public long? STFLog { get; set; }
+        public long? TTFLog { get; set; }
     }
 }

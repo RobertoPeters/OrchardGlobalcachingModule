@@ -57,6 +57,24 @@ namespace Globalcaching.Controllers
         }
 
         [Themed]
+        public ActionResult FTFLog(int id)
+        {
+            return Search(new GeocacheSearchFilter() { FTFLog = id });
+        }
+
+        [Themed]
+        public ActionResult STFLog(int id)
+        {
+            return Search(new GeocacheSearchFilter() { STFLog = id });
+        }
+
+        [Themed]
+        public ActionResult TTFLog(int id)
+        {
+            return Search(new GeocacheSearchFilter() { TTFLog = id });
+        }
+
+        [Themed]
         public ActionResult PublishedMaxDaysAgo(int countryid, int maxdaysago)
         {
             return Search(new GeocacheSearchFilter() { CountryID = countryid, MaxPublishedDaysAgo = maxdaysago });

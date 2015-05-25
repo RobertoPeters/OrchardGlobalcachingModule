@@ -39,6 +39,9 @@
     @Html.HiddenFor(m => m.Filter.Parel)
     @Html.HiddenFor(m => m.Filter.MaxPublishedDaysAgo)
     @Html.HiddenFor(m => m.Filter.FTFOpen)
+    @Html.HiddenFor(m => m.Filter.FTFLog)
+    @Html.HiddenFor(m => m.Filter.STFLog)
+    @Html.HiddenFor(m => m.Filter.TTFLog)
     <input id="minLat" name="minLat" type="hidden" />
     <input id="minLon" name="minLon" type="hidden" />
     <input id="maxLat" name="maxLat" type="hidden" />
@@ -86,6 +89,9 @@
         Parel = Model.Filter.Parel ?? null,
         MaxPublishedDaysAgo = Model.Filter.MaxPublishedDaysAgo ?? null,
         FTFOpen = Model.Filter.FTFOpen ?? null,
+        FTFLog = Model.Filter.FTFLog ?? null,
+        STFLog = Model.Filter.STFLog ?? null,
+        TTFLog = Model.Filter.TTFLog ?? null,
         OwnerName = Model.Filter.OwnerName ?? null
         }));
 
