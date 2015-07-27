@@ -21,14 +21,14 @@ namespace Globalcaching.Core
             LiveClient lc = GetLiveClient();
             try
             {
-                GetYourUserProfileRequest req = new GetYourUserProfileRequest();
-                req.ProfileOptions = new Tucson.Geocaching.WCF.API.Geocaching1.Types.UserProfileOptions();
+                var req = new GetYourUserProfileRequest();
+                req.ProfileOptions = new YourUserProfileOptions();
                 req.DeviceInfo = new Tucson.Geocaching.WCF.API.Geocaching1.Types.DeviceData();
                 req.DeviceInfo.DeviceName = "globalcaching.eu";
                 req.DeviceInfo.ApplicationSoftwareVersion = "V3.0.0.0";
                 req.DeviceInfo.DeviceUniqueId = "internal";
                 req.AccessToken = token;
-                GetUserProfileResponse resp = lc.GetYourUserProfile(req);
+                var resp = lc.GetYourUserProfile(req);
 
                 if (resp.Status.StatusCode == 0)
                 {
