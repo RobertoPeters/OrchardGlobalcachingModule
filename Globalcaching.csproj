@@ -388,6 +388,7 @@
     <Content Include="Views\DisplayTemplates\Parts.GeocacheBatchLog.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheTypeStats.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.CombiBanner.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.ForDonatorsOnly.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -466,6 +467,7 @@
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
     <Compile Include="Drivers\CombiRankingPartDriver.cs" />
+    <Compile Include="Drivers\ForDonatorsOnlyPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryBannerPartDriver.cs" />
     <Compile Include="Drivers\CombiBannerPartDriver.cs" />

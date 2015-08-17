@@ -24,5 +24,7 @@ namespace Globalcaching.Models
 
         [PetaPoco.Ignore]
         public bool IsPM { get; set; }
+        [PetaPoco.Ignore]
+        public bool IsDonator { get; set; }
     }
 }

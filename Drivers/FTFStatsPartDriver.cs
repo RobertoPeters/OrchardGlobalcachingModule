@@ -15,20 +15,35 @@ namespace Globalcaching.Drivers
     {
         protected override string Prefix { get { return ""; } }
         private readonly IFTFStatsService _ftfStatsService;
+        private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
 
-        public FTFStatsPartPartDriver(IFTFStatsService ftfStatsService)
+        public FTFStatsPartPartDriver(IFTFStatsService ftfStatsService,
+            IGCEuUserSettingsService gcEuUserSettingsService)
         {
             _ftfStatsService = ftfStatsService;
+            _gcEuUserSettingsService = gcEuUserSettingsService;
         }
 
         protected override DriverResult Display(FTFStatsPart part, string displayType, dynamic shapeHelper)
         {
-            var m = _ftfStatsService.GetFTFRanking(null, DateTime.Now.Year, 0, 1, 50);
-            return ContentShape("Parts_FTFStats",
-                    () => shapeHelper.DisplayTemplate(
-                            TemplateName: "Parts.FTFStats",
-                            Model: m,
-                            Prefix: Prefix));
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.IsDonator)
+            {
+                var m = _ftfStatsService.GetFTFRanking(null, DateTime.Now.Year, 0, 1, 50);
+                return ContentShape("Parts_FTFStats",
+                        () => shapeHelper.DisplayTemplate(
+                                TemplateName: "Parts.FTFStats",
+                                Model: m,
+                                Prefix: Prefix));
+            }
+            else
+            {
+                return ContentShape("Parts_ForDonatorsOnly",
+                        () => shapeHelper.DisplayTemplate(
+                                TemplateName: "Parts.ForDonatorsOnly",
+                                Model: null,
+                                Prefix: Prefix));
+            }
         }
     }
 }

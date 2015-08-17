@@ -25,16 +25,27 @@ namespace Globalcaching.Drivers
         {
             int cntryId = 141;
             var settings = _userSettingsService.GetSettings();
-            if (settings != null && settings.DefaultCountryCode!=null)
+            if (settings != null && settings.IsDonator)
             {
-                cntryId = (int)settings.DefaultCountryCode;
+                if (settings.DefaultCountryCode != null)
+                {
+                    cntryId = (int)settings.DefaultCountryCode;
+                }
+                var m = _foundsPerCountryRankingService.GetRanking(1, 20, DateTime.Now.Year, cntryId, null);
+                return ContentShape("Parts_FoundsPerCountryRanking",
+                        () => shapeHelper.DisplayTemplate(
+                                TemplateName: "Parts.FoundsPerCountryRanking",
+                                Model: m,
+                                Prefix: Prefix));
             }
-            var m = _foundsPerCountryRankingService.GetRanking(1, 20, DateTime.Now.Year, cntryId, null);
-            return ContentShape("Parts_FoundsPerCountryRanking",
-                    () => shapeHelper.DisplayTemplate(
-                            TemplateName: "Parts.FoundsPerCountryRanking",
-                            Model: m,
-                            Prefix: Prefix));
+            else
+            {
+                return ContentShape("Parts_ForDonatorsOnly",
+                        () => shapeHelper.DisplayTemplate(
+                                TemplateName: "Parts.ForDonatorsOnly",
+                                Model: null,
+                                Prefix: Prefix));
+            }
         }
 
     }

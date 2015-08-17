@@ -635,5 +635,19 @@ namespace Globalcaching
             return 45;
         }
 
+        public int UpdateFrom45()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("ForDonatorsOnlyWidget",
+                cfg => cfg
+                    .DisplayedAs("For Donators Only")
+                    .WithPart("ForDonatorsOnlyPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 46;
+        }
+
     }
 }

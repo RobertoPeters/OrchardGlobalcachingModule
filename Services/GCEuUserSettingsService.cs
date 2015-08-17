@@ -68,12 +68,14 @@ namespace Globalcaching.Services
         {
             GCEuUserSettings result = null;
             int? YafUserID = null;
+            bool isDonator = false;
             using (PetaPoco.Database db = new PetaPoco.Database(dbYafForumConnString, "System.Data.SqlClient"))
             {
                 var idl = db.Fetch<int?>("select UserID from Yaf_User where Name=@0", userName);
                 if (idl != null && idl.Count > 0)
                 {
                     YafUserID = (int)idl[0];
+                    isDonator = db.ExecuteScalar<int>("select count(1) from yaf_UserGroup where UserID=@0 and GroupID in (1, 4)", YafUserID) > 0;
                 }
             }
             if (YafUserID != null)
@@ -81,6 +83,10 @@ namespace Globalcaching.Services
                 using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
                 {
                     result = db.FirstOrDefault<GCEuUserSettings>("where YafUserID = @0", YafUserID);
+                    if (result != null)
+                    {
+                        result.IsDonator = isDonator;
+                    }
                 }
             }
             return result;
@@ -110,12 +116,14 @@ namespace Globalcaching.Services
                 {
                     //get it!
                     int? YafUserID = null;
+                    bool isDonator = false;
                     using (PetaPoco.Database db = new PetaPoco.Database(dbYafForumConnString, "System.Data.SqlClient"))
                     {
                         var idl = db.Fetch<int?>("select UserID from Yaf_User where Name=@0", _orchardServices.WorkContext.CurrentUser.UserName);
                         if (idl != null && idl.Count > 0)
                         {
                             YafUserID = (int)idl[0];
+                            isDonator = db.ExecuteScalar<int>("select count(1) from yaf_UserGroup where UserID=@0 and GroupID in (1, 4)", YafUserID) > 0;
                         }
                     }
                     if (YafUserID != null)
@@ -128,6 +136,7 @@ namespace Globalcaching.Services
                             {
                                 result = new GCEuUserSettings();
                                 result.YafUserID = (int)YafUserID;
+                                result.IsDonator = isDonator;
                                 result.DefaultCountryCode = 141;
                                 result.SortGeocachesBy = (int)GeocacheSearchFilterOrderOnItem.PublicationDate;
                                 result.SortGeocachesDirection = -1;
@@ -136,6 +145,7 @@ namespace Globalcaching.Services
                             }
                             else if (result.GCComUserID != null)
                             {
+                                result.IsDonator = isDonator;
                                 var lapih = db.FirstOrDefault<GCEuLiveAPIHelpers>("where GCComUserID = @0", result.GCComUserID);
                                 if (lapih == null)
                                 {
@@ -169,6 +179,7 @@ namespace Globalcaching.Services
                 {
                     result = new GCEuUserSettings();
                     result.YafUserID = 1;
+                    result.IsDonator = false;
                     result.DefaultCountryCode = 141;
                     HttpContext.Session["GCEuUserSettings"] = result;
                     HttpContext.Session["GCEuUserSettingsForUser"] = "";

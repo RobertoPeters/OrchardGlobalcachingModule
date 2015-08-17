@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class ForDonatorsOnlyPart : ContentPart
+    {
+    }
+
     public class CombiBannerPart : ContentPart
     {
     }
