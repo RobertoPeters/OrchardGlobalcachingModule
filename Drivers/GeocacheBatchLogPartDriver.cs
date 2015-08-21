@@ -20,17 +20,28 @@ namespace Globalcaching.Drivers
         protected override DriverResult Display(GeocacheBatchLogPart part, string displayType, dynamic shapeHelper)
         {
             var settings = _userSettingsService.GetSettings();
-            if (settings != null && settings.YafUserID > 1 && !string.IsNullOrEmpty(settings.LiveAPIToken))
+            if (settings != null && settings.IsDonator)
             {
-                return ContentShape("Parts_GeocacheBatchLog",
-                        () => shapeHelper.DisplayTemplate(
-                                TemplateName: "Parts.GeocacheBatchLog",
-                                Model: null,
-                                Prefix: Prefix));
+                if (settings.YafUserID > 1 && !string.IsNullOrEmpty(settings.LiveAPIToken))
+                {
+                    return ContentShape("Parts_GeocacheBatchLog",
+                            () => shapeHelper.DisplayTemplate(
+                                    TemplateName: "Parts.GeocacheBatchLog",
+                                    Model: null,
+                                    Prefix: Prefix));
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
-                return null;
+                return ContentShape("Parts_ForDonatorsOnly",
+                        () => shapeHelper.DisplayTemplate(
+                                TemplateName: "Parts.ForDonatorsOnly",
+                                Model: null,
+                                Prefix: Prefix));
             }
         }
     }
