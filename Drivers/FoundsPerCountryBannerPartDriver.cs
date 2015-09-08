@@ -24,11 +24,22 @@ namespace Globalcaching.Drivers
         protected override DriverResult Display(FoundsPerCountryBannerPart part, string displayType, dynamic shapeHelper)
         {
             var m = _userSettingsService.GetSettings();
-            return ContentShape("Parts_FoundsPerCountryBanner",
-                    () => shapeHelper.DisplayTemplate(
-                            TemplateName: "Parts.FoundsPerCountryBanner",
-                            Model: m,
-                            Prefix: Prefix));
+            if (m != null && m.IsDonator)
+            {
+                return ContentShape("Parts_FoundsPerCountryBanner",
+                        () => shapeHelper.DisplayTemplate(
+                                TemplateName: "Parts.FoundsPerCountryBanner",
+                                Model: m,
+                                Prefix: Prefix));
+            }
+            else
+            {
+                return ContentShape("Parts_ForDonatorsOnly",
+                        () => shapeHelper.DisplayTemplate(
+                                TemplateName: "Parts.ForDonatorsOnly",
+                                Model: null,
+                                Prefix: Prefix));
+            }
         }
     }
 }

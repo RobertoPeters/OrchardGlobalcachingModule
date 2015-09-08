@@ -11,10 +11,13 @@ namespace Globalcaching.Controllers
     public class GCComGeocacheLogsSearchController : Controller
     {
         private readonly IGCComSearchGeocacheLogsService _gcComSearchLogsService;
+        private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
 
-        public GCComGeocacheLogsSearchController(IGCComSearchGeocacheLogsService gcComSearchLogsService)
+        public GCComGeocacheLogsSearchController(IGCComSearchGeocacheLogsService gcComSearchLogsService,
+            IGCEuUserSettingsService gcEuUserSettingsService)
         {
             _gcComSearchLogsService = gcComSearchLogsService;
+            _gcEuUserSettingsService = gcEuUserSettingsService;
         }
 
         [HttpPost]
@@ -32,7 +35,15 @@ namespace Globalcaching.Controllers
         {
             int page = 1;
             int pageSize = 25;
-            return View("FTFLogs", _gcComSearchLogsService.GetFTFLogsOfUser(page, pageSize, id));
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.IsDonator)
+            {
+                return View("FTFLogs", _gcComSearchLogsService.GetFTFLogsOfUser(page, pageSize, id));
+            }
+            else
+            {
+                return View("DisplayTemplates/Parts.ForDonatorsOnly");
+            }
         }
 
         [HttpPost]
@@ -42,7 +53,15 @@ namespace Globalcaching.Controllers
             int pageSize = 25;
             int.TryParse(Request["page"] ?? "1", out page);
             int.TryParse(Request["pageSize"] ?? "25", out pageSize);
-            return Json(_gcComSearchLogsService.GetFTFLogsOfUser(page, pageSize, long.Parse(Request["id"])));
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.IsDonator)
+            {
+                return Json(_gcComSearchLogsService.GetFTFLogsOfUser(page, pageSize, long.Parse(Request["id"])));
+            }
+            else
+            {
+                return null;
+            }
         }
 
         [Themed]
@@ -50,7 +69,15 @@ namespace Globalcaching.Controllers
         {
             int page = 1;
             int pageSize = 25;
-            return View("STFLogs", _gcComSearchLogsService.GetSTFLogsOfUser(page, pageSize, id));
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.IsDonator)
+            {
+                return View("STFLogs", _gcComSearchLogsService.GetSTFLogsOfUser(page, pageSize, id));
+            }
+            else
+            {
+                return View("DisplayTemplates/Parts.ForDonatorsOnly");
+            }
         }
 
         [HttpPost]
@@ -60,7 +87,15 @@ namespace Globalcaching.Controllers
             int pageSize = 25;
             int.TryParse(Request["page"] ?? "1", out page);
             int.TryParse(Request["pageSize"] ?? "25", out pageSize);
-            return Json(_gcComSearchLogsService.GetSTFLogsOfUser(page, pageSize, long.Parse(Request["id"])));
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.IsDonator)
+            {
+                return Json(_gcComSearchLogsService.GetSTFLogsOfUser(page, pageSize, long.Parse(Request["id"])));
+            }
+            else
+            {
+                return null;
+            }
         }
 
         [Themed]
@@ -68,7 +103,15 @@ namespace Globalcaching.Controllers
         {
             int page = 1;
             int pageSize = 25;
-            return View("TTFLogs", _gcComSearchLogsService.GetTTFLogsOfUser(page, pageSize, id));
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.IsDonator)
+            {
+                return View("TTFLogs", _gcComSearchLogsService.GetTTFLogsOfUser(page, pageSize, id));
+            }
+            else
+            {
+                return View("DisplayTemplates/Parts.ForDonatorsOnly");
+            }
         }
 
         [HttpPost]
@@ -78,7 +121,15 @@ namespace Globalcaching.Controllers
             int pageSize = 25;
             int.TryParse(Request["page"] ?? "1", out page);
             int.TryParse(Request["pageSize"] ?? "25", out pageSize);
-            return Json(_gcComSearchLogsService.GetTTFLogsOfUser(page, pageSize, long.Parse(Request["id"])));
+            var settings = _gcEuUserSettingsService.GetSettings();
+            if (settings != null && settings.IsDonator)
+            {
+                return Json(_gcComSearchLogsService.GetTTFLogsOfUser(page, pageSize, long.Parse(Request["id"])));
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
