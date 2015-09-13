@@ -243,7 +243,12 @@
                 description += '</s>';
             }
             description += '</a>';
-            description += ' (<a href="'+ line.Url +'" target="_blank">' + line.Code + '</a>)<br />';
+            description += ' (<a href="'+ line.Url +'" target="_blank">' + line.Code + '</a>)';
+            if (line.IsPremium)
+            {
+                description += ' <small><strong>pmo</strong></small>';
+            }
+            description += '<br />';
             description += line.Country;
             if (line.City!=null)
             {

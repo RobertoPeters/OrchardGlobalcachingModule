@@ -33,6 +33,7 @@ namespace Globalcaching.Models
         public DateTime? PublishedAtDate { get; set; }
         public DateTime? MostRecentFoundDate { get; set; }
         public double? FavPer100Found { get; set; }
+        public bool? IsPremium { get; set; }
         
         [PetaPoco.Ignore]
         public string DirectionIcon { get; set; }
