@@ -3,10 +3,11 @@
 <table class="table table-striped table-hover" id="searchDistanceResults">
     <thead>
         <tr>
-            <th>Code</th>
+            <th>Code (*)</th>
             <th>Type</th>
             <th>Naam</th>
             <th>Datum</th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -35,20 +36,22 @@
             var line = response.Geocaches[i];
             // insert after last row!
             var td1 = '<a href="@Href("~/Geocache/")' + line.Code + '" target="_blank">' + line.Code + '</a>';
+            if (line.DistanceHandledBy != null) td1 += '(' + line.DistanceHandledBy.toString() + ')';
             var td2 = line.GeocacheTypeName;
             var td3 = htmlEncode(line.Name);
             var d = eval('new' + line.PublishedAtDate.replace(/\//g, ' '));
             var td4 = formatDateToShortDate(d);
+            var td5 = '<button class="btn btn-success btn-xs" onclick="setDistanceHandledBy(' + line.ID + ')">In behandeling</button>';
+            var td6 = '<button class="btn btn-danger btn-xs" onclick="setDistanceCompleted(' + line.ID + ')">Afgehandeld</button>';
 
-            var td5 = '<button class="btn btn-primary" onclick="setDistanceCompleted(' + line.ID + ')">Afgehandeld</button>';
-
-            $(resultElementName + ' > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td></tr>');
+            $(resultElementName + ' > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td><td>' + td6 + '</td></tr>');
         }
 
         setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestDistancePage");
     }
 
     function setDistanceCompleted(id) {
+        myApp.showPleaseWait();
         $.ajax({
             type: "POST",
             url: '@Url.Action("SetDistanceChecked", "GeocacheDistance", new { area = "Globalcaching" })',
@@ -57,9 +60,31 @@
                 __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
             },
             success: function (response) {
+                myApp.hidePleaseWait();
                 requestDistancePage(currentPage);
             },
             error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function setDistanceHandledBy(id) {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SetDistanceHandledBy", "GeocacheDistance", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                requestDistancePage(currentPage);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
                 alert(errorText);
             }
         });

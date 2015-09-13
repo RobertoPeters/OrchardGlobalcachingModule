@@ -47,6 +47,18 @@ namespace Globalcaching.Controllers
             }
         }
 
+        public ActionResult SetDistanceHandledBy(int id)
+        {
+            if (Services.Authorizer.Authorize(Permissions.DistanceAdmin))
+            {
+                return Content(_geocacheDistanceService.SetDistanceHandledBy(id) ? "OK" : "NOK");
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public ActionResult GetUnassignedDistance(int page, int pageSize)
         {
             if (Services.Authorizer.Authorize(Permissions.DistanceAdmin))

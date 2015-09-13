@@ -10,6 +10,7 @@ namespace Globalcaching.ViewModels
         //GCEuGeocache
         public long ID { get; set; }
         public DateTime? PublishedAtDate { get; set; }
+        public int? DistanceHandledBy { get; set; }
 
         //GCComGeocache
         public string Code { get; set; }

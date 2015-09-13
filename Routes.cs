@@ -2165,6 +2165,21 @@ namespace Globalcaching
                  new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "SetDistanceHandledBy",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheDistance"},
+                            {"action", "SetDistanceHandledBy"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "GetUnassignedDistance",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
