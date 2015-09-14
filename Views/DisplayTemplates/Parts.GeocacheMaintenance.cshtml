@@ -1,0 +1,94 @@
+﻿<div class="input-group">
+    <input type="text" class="form-control" id="gccomName" placeholder="geocaching.com accountnaam">
+    <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" id="gccomNameButton">Zoek!</button>
+    </span>
+</div><!-- /input-group -->
+
+<table class="table table-striped table-hover" id="gccomGeocacheResults">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Type</th>
+            <th>Container</th>
+            <th>Publicatie</th>
+            <th># Gevonden</th>
+            <th>Recent onderhoud</th>
+            <th>Gemiddeld gevonden<br />per onderhoud</th>
+            <th>Gevonden na<br />recente onderhoud</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script type="text/javascript">
+
+    function handleResponse(response) {
+        if (response != null && response != '') {
+            $("#gccomName").val(response.UserName);
+            for (var i = 0; i < response.Geocaches.length; i++) {
+                var line = response.Geocaches[i];
+                var td1 = '<a href="@Href("~/Geocache/")' + line.Code + '">' + line.Code + '</a>';
+                var td2 = '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId + '.gif"/>';
+                var td3 = '<img src="@Href("~/Modules/Globalcaching/Media/container/")' + line.ContainerTypeId + '.gif"/>';
+                var d = eval('new' + line.PublishedDate.replace(/\//g, ' '));
+                var td4 = formatDateToShortDate(d);
+                var td5 = line.FoundCount.toString();
+                var td6 = '-';
+                var td8 = line.LogsMaintenance.toString();
+                if (line.LastOwnerMaintenance != null) {
+                    d = eval('new' + line.LastOwnerMaintenance.replace(/\//g, ' '));
+                    td6 = formatDateToShortDate(d) + ' (' + line.CountMaintenance.toString() + ')';
+                }
+                else {
+                    var td8 = line.FoundCount.toString();
+                }
+                var td7 = '-';
+                if (line.CountMaintenance > 0) {
+                    var founds = line.FoundCount - line.LogsMaintenance;
+                    td7 = (founds / line.CountMaintenance).toFixed(0);
+                }
+                $('#gccomGeocacheResults > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td><td>' + td6 + '</td><td>' + td7 + '</td><td>' + td8 + '</td></tr>');
+            }
+        }
+        else {
+        }
+    }
+
+    function requestgccomMaintInfo() {
+        var resultElementName = "#gccomGeocacheResults";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetGeocacheMaintenanceInfo", "GeocacheMaintenance", new { area = "Globalcaching" })',
+            data: {
+                id: $("#gccomName").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                handleResponse(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $('#gccomName').keypress(function (e) {
+        if (e.which == '13') {
+            requestgccomMaintInfo();
+            e.preventDefault();
+        }
+    });
+
+    $("#gccomNameButton").click(function () {
+        requestgccomMaintInfo();
+    });
+
+    handleResponse(@Html.Raw(Json.Encode(@Model)));
+</script>

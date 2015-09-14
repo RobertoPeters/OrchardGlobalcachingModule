@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class GeocacheMaintenancePart : ContentPart
+    {
+    }
+
     public class ForDonatorsOnlyPart : ContentPart
     {
     }

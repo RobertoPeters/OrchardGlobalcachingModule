@@ -45,4 +45,5 @@
   <Place Parts_GeocacheTypeStats="Content:1"/>
   <Place Parts_CombiBanner="Content:1"/>
   <Place Parts_ForDonatorsOnly="Content:1"/>
+  <Place Parts_GeocacheMaintenance="Content:1"/>
 </Placement>

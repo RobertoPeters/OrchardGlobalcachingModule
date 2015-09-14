@@ -649,5 +649,18 @@ namespace Globalcaching
             return 46;
         }
 
+        public int UpdateFrom46()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("GeocacheMaintenanceWidget",
+                cfg => cfg
+                    .DisplayedAs("Geocache Maintenance")
+                    .WithPart("GeocacheMaintenancePart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 47;
+        }
     }
 }

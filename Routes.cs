@@ -2225,6 +2225,21 @@ namespace Globalcaching
                  new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GetGeocacheMaintenanceInfo",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GeocacheMaintenance"},
+                            {"action", "GetGeocacheMaintenanceInfo"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "SetNewestCachesMode",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
