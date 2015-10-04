@@ -56,6 +56,7 @@ namespace Globalcaching.Services
 from
 (select GCComGeocache.ID,
 GCComGeocache.Code,
+GCComGeocache.Name,
 GCComGeocache.ContainerTypeId,
 GCComGeocache.GeocacheTypeId,
 GCComGeocache.Url,

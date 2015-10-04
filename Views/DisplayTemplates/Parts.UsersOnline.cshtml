@@ -21,12 +21,12 @@
         }
         if (@Model.Users[i].YafUserName == "Guest")
         {
-            @Html.Label("Gasten (" + @Model.Users[i].Count + ")", new { @class = classname })
+            @Html.Label("", "Gasten (" + @Model.Users[i].Count + ")", new { @class = classname })
         }
         else
         {
             @Html.Raw("<a href=\"/forum/yaf_profile" + @Model.Users[i].YafUserID + ".aspx\" title=\"" + @Model.Users[i].LastAccess + "\">")
-            @Html.Label(@Model.Users[i].YafUserName, new { @class = classname })
+            @Html.Label("", @Model.Users[i].YafUserName, new { @class = classname })
             @Html.Raw("</a>")
         }
     }

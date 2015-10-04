@@ -11,7 +11,6 @@
             <th>Code</th>
             <th>Type</th>
             <th>Container</th>
-            <th>Publicatie</th>
             <th># Gevonden</th>
             <th>Recent onderhoud</th>
             <th>Gemiddeld gevonden<br />per onderhoud</th>
@@ -28,11 +27,11 @@
             $("#gccomName").val(response.UserName);
             for (var i = 0; i < response.Geocaches.length; i++) {
                 var line = response.Geocaches[i];
-                var td1 = '<a href="@Href("~/Geocache/")' + line.Code + '">' + line.Code + '</a>';
+                var td1 = '<a href="@Href("~/Geocache/")' + line.Code + '">' + line.Name + '</a>' + ' ' + '(<a href="' + line.Url + '">' + line.Code + '</a>)';
                 var td2 = '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId + '.gif"/>';
                 var td3 = '<img src="@Href("~/Modules/Globalcaching/Media/container/")' + line.ContainerTypeId + '.gif"/>';
                 var d = eval('new' + line.PublishedDate.replace(/\//g, ' '));
-                var td4 = formatDateToShortDate(d);
+                //var td4 = formatDateToShortDate(d);
                 var td5 = line.FoundCount.toString();
                 var td6 = '-';
                 var td8 = line.LogsMaintenance.toString();
@@ -48,7 +47,7 @@
                     var founds = line.FoundCount - line.LogsMaintenance;
                     td7 = (founds / line.CountMaintenance).toFixed(0);
                 }
-                $('#gccomGeocacheResults > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td><td>' + td6 + '</td><td>' + td7 + '</td><td>' + td8 + '</td></tr>');
+                $('#gccomGeocacheResults > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td5 + '</td><td>' + td6 + '</td><td>' + td7 + '</td><td>' + td8 + '</td></tr>');
             }
         }
         else {
