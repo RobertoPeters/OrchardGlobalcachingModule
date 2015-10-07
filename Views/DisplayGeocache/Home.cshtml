@@ -63,7 +63,9 @@
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Eigenaar:</strong></div>
-                <div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.Owner.UserName</a></div>
+                <div class="col-md-9"><a href="http://www.geocaching.com/profile/?guid=@Model.Owner.PublicGuid" target="_blank">@Model.Owner.UserName</a>
+                    <a href="https://www.geocaching.com/account/messagecenter?recipientId=@Model.Owner.PublicGuid&gcCode=@Model.GCComGeocacheData.Code" target="_blank"><img src="@Href("~/Modules/Globalcaching/Media/Message.gif")" /></a>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-3"><strong>Plaatsingsdatum:</strong></div>

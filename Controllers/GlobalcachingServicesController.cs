@@ -1,4 +1,6 @@
 ﻿using Globalcaching.Core;
+using Globalcaching.Models;
+using Globalcaching.Services;
 using ICSharpCode.SharpZipLib.Zip;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace Globalcaching.Controllers
     public class GlobalcachingServicesController: Controller
     {
         public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
+        private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
 
         public class CacheDistancePoco
         {
@@ -45,9 +48,9 @@ namespace Globalcaching.Controllers
             public string GeocacheTypeName { get; set; }
         }
 
-        public GlobalcachingServicesController()
+        public GlobalcachingServicesController(IGCEuUserSettingsService gcEuUserSettingsService)
         {
-
+            _gcEuUserSettingsService = gcEuUserSettingsService;
         }
 
         public ActionResult OldMainPage()
@@ -110,7 +113,8 @@ namespace Globalcaching.Controllers
             try
             {
                 string country = Request.QueryString["country"];
-                if (!string.IsNullOrEmpty(country))
+                string token = Request.QueryString["token"];
+                if (!string.IsNullOrEmpty(country) && !string.IsNullOrEmpty(token) && IsDonator(token))
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -137,7 +141,7 @@ namespace Globalcaching.Controllers
             try
             {
                 string token = Request.QueryString["token"];
-                if (!string.IsNullOrEmpty(token) && Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId>1)
+                if (!string.IsNullOrEmpty(token) && IsDonator(token) && Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId>1)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -163,7 +167,7 @@ namespace Globalcaching.Controllers
             try
             {
                 string token = Request.QueryString["token"];
-                if (!string.IsNullOrEmpty(token) && Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId > 1)
+                if (!string.IsNullOrEmpty(token) && IsDonator(token) && Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId > 1)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -187,37 +191,41 @@ namespace Globalcaching.Controllers
         public ActionResult CacheDistance()
         {
             Response.Clear();
-            Response.ContentType = "application/zip";
-            Response.AppendHeader("content-disposition", "attachment;filename=CacheDistance.zip");
-            using (ICSharpCode.SharpZipLib.Zip.ZipOutputStream oZipStream = new ICSharpCode.SharpZipLib.Zip.ZipOutputStream(Response.OutputStream))
+            string token = Request.QueryString["token"];
+            if (!string.IsNullOrEmpty(token) && IsDonator(token))
             {
-                oZipStream.SetLevel(9); // maximum compression
-
-                ZipEntry oZipEntry = new ZipEntry("globalcaching.xml");
-                //byte[] obuffer = System.Text.ASCIIEncoding.UTF8.GetBytes(content.ToString());
-                //oZipEntry.Size = obuffer.Length;
-                byte[] obuffer = System.Text.ASCIIEncoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<wps>\r\n");
-                oZipStream.PutNextEntry(oZipEntry);
-                oZipStream.Write(obuffer, 0, obuffer.Length);
-                using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                Response.ContentType = "application/zip";
+                Response.AppendHeader("content-disposition", "attachment;filename=CacheDistance.zip");
+                using (ICSharpCode.SharpZipLib.Zip.ZipOutputStream oZipStream = new ICSharpCode.SharpZipLib.Zip.ZipOutputStream(Response.OutputStream))
                 {
-                    var sql = PetaPoco.Sql.Builder.Append("SELECT Code, Distance FROM GCComGeocache inner join GCEuData.dbo.GCEuGeocache on GCComGeocache.ID=GCEuGeocache.ID WHERE Archived=0 AND Distance is not null");
-                    List<CacheDistancePoco> codes = db.Fetch<CacheDistancePoco>(sql);
-                    foreach (var s in codes)
-                    {
-                        obuffer = System.Text.ASCIIEncoding.UTF8.GetBytes(string.Format("<wp code=\"{0}\" dist=\"{1}\" />\r\n", s.Code, s.Distance.ToString().Replace(',', '.')));
-                        oZipStream.Write(obuffer, 0, obuffer.Length);
-                    }
-                }
-                obuffer = System.Text.ASCIIEncoding.UTF8.GetBytes("</wps>");
-                oZipStream.Write(obuffer, 0, obuffer.Length);
+                    oZipStream.SetLevel(9); // maximum compression
 
-                oZipStream.Finish();
-                oZipStream.Flush();
-                oZipStream.Close();
+                    ZipEntry oZipEntry = new ZipEntry("globalcaching.xml");
+                    //byte[] obuffer = System.Text.ASCIIEncoding.UTF8.GetBytes(content.ToString());
+                    //oZipEntry.Size = obuffer.Length;
+                    byte[] obuffer = System.Text.ASCIIEncoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<wps>\r\n");
+                    oZipStream.PutNextEntry(oZipEntry);
+                    oZipStream.Write(obuffer, 0, obuffer.Length);
+                    using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                    {
+                        var sql = PetaPoco.Sql.Builder.Append("SELECT Code, Distance FROM GCComGeocache inner join GCEuData.dbo.GCEuGeocache on GCComGeocache.ID=GCEuGeocache.ID WHERE Archived=0 AND Distance is not null");
+                        List<CacheDistancePoco> codes = db.Fetch<CacheDistancePoco>(sql);
+                        foreach (var s in codes)
+                        {
+                            obuffer = System.Text.ASCIIEncoding.UTF8.GetBytes(string.Format("<wp code=\"{0}\" dist=\"{1}\" />\r\n", s.Code, s.Distance.ToString().Replace(',', '.')));
+                            oZipStream.Write(obuffer, 0, obuffer.Length);
+                        }
+                    }
+                    obuffer = System.Text.ASCIIEncoding.UTF8.GetBytes("</wps>");
+                    oZipStream.Write(obuffer, 0, obuffer.Length);
+
+                    oZipStream.Finish();
+                    oZipStream.Flush();
+                    oZipStream.Close();
+                }
+                Response.Flush();
+                Response.End();
             }
-            Response.Flush();
-            Response.End();
             return null;
         }
 
@@ -225,7 +233,8 @@ namespace Globalcaching.Controllers
         public ActionResult Archived()
         {
             string country = Request.QueryString["country"];
-            if (!string.IsNullOrEmpty(country))
+            string token = Request.QueryString["token"];
+            if (!string.IsNullOrEmpty(country) && !string.IsNullOrEmpty(token) && IsDonator(token))
             {
                 Response.Clear();
                 Response.ContentType = "application/zip";
@@ -352,5 +361,29 @@ namespace Globalcaching.Controllers
             return PQSet(max, maxLastPQ, 8);
         }
 
+        private GCEuUserSettings GetUserSettingsFromToken(string token)
+        {
+            GCEuUserSettings result = null;
+            if (!string.IsNullOrEmpty(token))
+            {
+                var profile = LiveAPIClient.GetMemberProfile(token);
+                if (profile != null)
+                {
+                    result = _gcEuUserSettingsService.GetSettings(profile.User.Id ?? -1);
+                }
+            }
+            return result;
+        }
+
+        private bool IsDonator(string token)
+        {
+            bool result = false;
+            var settings = GetUserSettingsFromToken(token);
+            if (settings != null)
+            {
+                result = settings.IsDonator;
+            }
+            return result;
+        }
     }
 }
