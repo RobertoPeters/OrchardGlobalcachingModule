@@ -2,6 +2,7 @@
 using Globalcaching.Models;
 using Globalcaching.Services;
 using ICSharpCode.SharpZipLib.Zip;
+using Orchard;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,8 +15,14 @@ namespace Globalcaching.Controllers
 {
     public class GlobalcachingServicesController: Controller
     {
+        private static string ForumBaseUrl = ConfigurationManager.AppSettings["forumBaseUrl"].ToString();
+
         public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
+        public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
+
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
+        private readonly IGCComSearchUserService _gcComSearchUserService;
+        private readonly IWorkContextAccessor _workContextAccessor;
 
         public class CacheDistancePoco
         {
@@ -48,9 +55,18 @@ namespace Globalcaching.Controllers
             public string GeocacheTypeName { get; set; }
         }
 
-        public GlobalcachingServicesController(IGCEuUserSettingsService gcEuUserSettingsService)
+        public GlobalcachingServicesController(IGCEuUserSettingsService gcEuUserSettingsService,
+            IGCComSearchUserService gcComSearchUserService,
+            IWorkContextAccessor workContextAccessor)
         {
             _gcEuUserSettingsService = gcEuUserSettingsService;
+            _gcComSearchUserService = gcComSearchUserService;
+            _workContextAccessor = workContextAccessor;
+        }
+
+        private HttpContextBase HttpContext
+        {
+            get { return _workContextAccessor.GetContext().HttpContext; }
         }
 
         public ActionResult OldMainPage()
@@ -114,7 +130,10 @@ namespace Globalcaching.Controllers
             {
                 string country = Request.QueryString["country"];
                 string token = Request.QueryString["token"];
-                if (!string.IsNullOrEmpty(country) && !string.IsNullOrEmpty(token) && IsDonator(token))
+                string usr = Request.QueryString["usr"];
+                string pwd = Request.QueryString["pwd"];
+                var settings = GetUserSettings("GeocacheCodes", token, usr, pwd);
+                if (!string.IsNullOrEmpty(country) && settings != null && settings.IsDonator)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -141,7 +160,23 @@ namespace Globalcaching.Controllers
             try
             {
                 string token = Request.QueryString["token"];
-                if (!string.IsNullOrEmpty(token) && IsDonator(token) && Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId>1)
+                string usr = Request.QueryString["usr"];
+                string pwd = Request.QueryString["pwd"];
+                var settings = GetUserSettings("CacheFavorites", token, usr, pwd);
+                bool isPM = false;
+                if (!string.IsNullOrEmpty(token))
+                {
+                    isPM = Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId > 1;
+                }
+                else if (!string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID != null)
+                {
+                    var gcu = _gcComSearchUserService.GetGeocachingComUser((long)settings.GCComUserID);
+                    if (gcu != null)
+                    {
+                        isPM = gcu.MemberTypeId > 1;
+                    }
+                }
+                if (settings != null && settings.IsDonator && isPM)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -167,7 +202,23 @@ namespace Globalcaching.Controllers
             try
             {
                 string token = Request.QueryString["token"];
-                if (!string.IsNullOrEmpty(token) && IsDonator(token) && Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId > 1)
+                string usr = Request.QueryString["usr"];
+                string pwd = Request.QueryString["pwd"];
+                var settings = GetUserSettings("CacheFavoritesWithFoundCount", token, usr, pwd);
+                bool isPM = false;
+                if (!string.IsNullOrEmpty(token))
+                {
+                    isPM = Core.LiveAPIClient.GetMemberProfile(token).User.MemberType.MemberTypeId > 1;
+                }
+                else if (!string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID!=null)
+                {
+                    var gcu = _gcComSearchUserService.GetGeocachingComUser((long)settings.GCComUserID);
+                    if (gcu != null)
+                    {
+                        isPM = gcu.MemberTypeId > 1;
+                    }
+                }
+                if (settings != null && settings.IsDonator && isPM)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -192,7 +243,10 @@ namespace Globalcaching.Controllers
         {
             Response.Clear();
             string token = Request.QueryString["token"];
-            if (!string.IsNullOrEmpty(token) && IsDonator(token))
+            string usr = Request.QueryString["usr"];
+            string pwd = Request.QueryString["pwd"];
+            var settings = GetUserSettings("CacheDistance", token, usr, pwd);
+            if (settings != null && settings.IsDonator)
             {
                 Response.ContentType = "application/zip";
                 Response.AppendHeader("content-disposition", "attachment;filename=CacheDistance.zip");
@@ -234,7 +288,10 @@ namespace Globalcaching.Controllers
         {
             string country = Request.QueryString["country"];
             string token = Request.QueryString["token"];
-            if (!string.IsNullOrEmpty(country) && !string.IsNullOrEmpty(token) && IsDonator(token))
+            string usr = Request.QueryString["usr"];
+            string pwd = Request.QueryString["pwd"];
+            var settings = GetUserSettings("Archived", token, usr, pwd);
+            if (settings != null && settings.IsDonator)
             {
                 Response.Clear();
                 Response.ContentType = "application/zip";
@@ -375,14 +432,60 @@ namespace Globalcaching.Controllers
             return result;
         }
 
-        private bool IsDonator(string token)
+        private GCEuUserSettings GetUserSettingsFromCredentials(string usr, string pwd)
         {
-            bool result = false;
-            var settings = GetUserSettingsFromToken(token);
-            if (settings != null)
+            GCEuUserSettings result = null;
+            if (!string.IsNullOrEmpty(usr) && !string.IsNullOrEmpty(pwd))
             {
-                result = settings.IsDonator;
+                try
+                {
+                    string url = ForumBaseUrl.Replace("/forum/", "");
+                    System.Net.HttpWebRequest webRequest = System.Net.WebRequest.Create(string.Format("{0}/Layar/ccc.aspx?usr={1}&pwd={2}", url, HttpUtility.UrlEncode(usr), HttpUtility.UrlEncode(pwd))) as System.Net.HttpWebRequest;
+                    webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.17 Safari/533.4";
+                    using (System.IO.StreamReader responseReader = new System.IO.StreamReader(webRequest.GetResponse().GetResponseStream()))
+                    {
+                        // and read the response
+                        string doc = responseReader.ReadToEnd();
+                        if (doc == "OK")
+                        {
+                            result = _gcEuUserSettingsService.GetSettings(usr);
+                        }
+                    }
+                }
+                catch
+                {
+                }
             }
+            return result;
+        }
+
+        private GCEuUserSettings GetUserSettings(string ServiceName, string token, string usr, string pwd)
+        {
+            GCEuUserSettings result = null;
+            if (!string.IsNullOrEmpty(token))
+            {
+                result = GetUserSettingsFromToken(token);
+            }
+            else
+            {
+                result = GetUserSettingsFromCredentials(usr, pwd);
+            }
+            var record = new GCEuServiceCall();
+            record.CalledAt = DateTime.Now;
+            record.IPAddress = HttpContext.Request.UserHostAddress ?? "";
+            record.Credentials = (!string.IsNullOrEmpty(usr) && !string.IsNullOrEmpty(pwd));
+            record.ServiceName = ServiceName;
+            record.Token = !string.IsNullOrEmpty(token);
+            if (result != null)
+            {
+                record.UserID = result.YafUserID;
+                record.GCComUserID = result.GCComUserID;
+            }
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                db.Insert(record);
+            }
+
             return result;
         }
     }

@@ -552,6 +552,7 @@
     <Compile Include="Models\GCEuLiveAPIHelpers.cs" />
     <Compile Include="Models\GCEuParel.cs" />
     <Compile Include="Models\GCEuSelectionBuilder.cs" />
+    <Compile Include="Models\GCEuServiceCall.cs" />
     <Compile Include="Models\GCEuTrackableGroup.cs" />
     <Compile Include="Models\GCEuTrackable.cs" />
     <Compile Include="Models\GCEuUserSettings.cs" />
