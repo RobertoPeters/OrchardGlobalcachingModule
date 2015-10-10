@@ -390,6 +390,7 @@
     <Content Include="Views\DisplayTemplates\Parts.CombiBanner.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.ForDonatorsOnly.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheMaintenance.cshtml" />
+    <Content Include="Views\GlobalcachingServices\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -615,6 +616,7 @@
     <Compile Include="ViewModels\GeocacheMaintenanceModel.cs" />
     <Compile Include="ViewModels\GeocacheTypeStats.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
+    <Compile Include="ViewModels\GlobalcachingServiceCallModel.cs" />
     <Compile Include="ViewModels\ListMemberSettingsModel.cs" />
     <Compile Include="ViewModels\ListCCCMembersModel.cs" />
     <Compile Include="ViewModels\NewestCachesModel.cs" />

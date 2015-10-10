@@ -1,8 +1,10 @@
 ﻿using Globalcaching.Core;
 using Globalcaching.Models;
 using Globalcaching.Services;
+using Globalcaching.ViewModels;
 using ICSharpCode.SharpZipLib.Zip;
 using Orchard;
+using Orchard.Themes;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -20,6 +22,7 @@ namespace Globalcaching.Controllers
         public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();
         public static string dbGcEuDataConnString = ConfigurationManager.ConnectionStrings["GCEuDataConnectionString"].ToString();
 
+        public IOrchardServices Services { get; set; }
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
         private readonly IGCComSearchUserService _gcComSearchUserService;
         private readonly IWorkContextAccessor _workContextAccessor;
@@ -55,10 +58,12 @@ namespace Globalcaching.Controllers
             public string GeocacheTypeName { get; set; }
         }
 
-        public GlobalcachingServicesController(IGCEuUserSettingsService gcEuUserSettingsService,
+        public GlobalcachingServicesController(IOrchardServices services,
+            IGCEuUserSettingsService gcEuUserSettingsService,
             IGCComSearchUserService gcComSearchUserService,
             IWorkContextAccessor workContextAccessor)
         {
+            Services = services;
             _gcEuUserSettingsService = gcEuUserSettingsService;
             _gcComSearchUserService = gcComSearchUserService;
             _workContextAccessor = workContextAccessor;
@@ -73,6 +78,53 @@ namespace Globalcaching.Controllers
         {
             return Redirect("~/");
         }
+
+        [Themed]
+        public ActionResult Index()
+        {
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
+            {
+                return View("Home", GetServiceCallsPageModel(1, 500));
+            }
+            else
+            {
+                return new HttpUnauthorizedResult();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetServiceCallsPage(int page, int pageSize)
+        {
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
+            {
+                return Json(GetServiceCallsPageModel(page, pageSize));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private GlobalcachingServiceCallModel GetServiceCallsPageModel(int page, int pageSize)
+        {
+            GlobalcachingServiceCallModel result = new GlobalcachingServiceCallModel();
+            result.PageCount = 1;
+            result.CurrentPage = 1;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                var items = db.Page<GlobalcachingServiceCallItem>(page, pageSize, "select GCEuServiceCall.*, GCComUser.UserName as GCComNick, yaf_User.Name as GlobalNick, GCComUser.MemberTypeId, \"IsDonator\" = case when yaf_UserGroup.GroupID = 4 then 1 else 0 end from GCEuServiceCall left join GCComData.dbo.GCComUser on GCEuServiceCall.GCComUserID = GCComUser.ID left join Globalcaching.dbo.yaf_User on GCEuServiceCall.UserID = yaf_User.UserID left join Globalcaching.dbo.yaf_UserGroup on GCEuServiceCall.UserID = yaf_UserGroup.UserID and GroupID=4 order by GCEuServiceCall.ID desc");
+                result.Calls = items.Items;
+                foreach (var item in result.Calls)
+                {
+                    item.CalledAt = item.CalledAt.ToUniversalTime();
+                }
+                result.CurrentPage = items.CurrentPage;
+                result.TotalCount = items.TotalItems;
+                result.PageCount = items.TotalPages;
+            }
+            return result;
+        }
+
 
         [OutputCache(Duration = 0, NoStore = true)]
         public ActionResult GeoRSS()
