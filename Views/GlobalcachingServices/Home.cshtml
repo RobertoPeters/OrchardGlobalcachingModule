@@ -38,7 +38,7 @@
             // insert after last row!
 
             var d = eval('new' + line.CalledAt.replace(/\//g, ' '));
-            var td1 = moment(d).format("YYYY-MM-DD HH:mm:ss");
+            var td1 = moment(d).utc().format("YYYY-MM-DD HH:mm:ss");
             var td2 = line.IPAddress;
             var td3 = line.ServiceName;
             var td4 = line.Token.toString();

@@ -1,0 +1,116 @@
+﻿@using Orchard.Mvc.Html;
+@using Globalcaching.Core;
+@{
+    Layout.Title = @Model.GCComUser.UserName;
+}
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Geocaching.com account informatie
+    </div>
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2"><strong>Avatar:</strong></div>
+                <div class="col-md-10"><img src="@Model.GCComUser.AvatarUrl" height="48" width="48" /></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><strong>Nick:</strong></div>
+                <div class="col-md-10">
+                    <a href="http://www.geocaching.com/profile/?guid=@Model.GCComUser.PublicGuid" target="_blank">@Model.GCComUser.UserName</a>
+                    <a href="https://www.geocaching.com/account/messagecenter?recipientId=@Model.GCComUser.PublicGuid" target="_blank"><img src="@Href("~/Modules/Globalcaching/Media/Message.gif")" /></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><strong>Member Type:</strong></div>
+                <div class="col-md-10">
+                    @if (Model.GCComUser.MemberTypeId == 1)
+                    {
+                        <span>Basic Member</span>
+                    }
+                    else if (Model.GCComUser.MemberTypeId == 2)
+                    {
+                        <span>Charter Member</span>
+                    }
+                    else if (Model.GCComUser.MemberTypeId == 3)
+                    {
+                        <span>Premium Member</span>
+                    }
+                    else
+                    {
+                        <span>??? Member</span>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><strong>Gevonden:</strong></div>
+                <div class="col-md-10">@Model.GCComUser.FindCount</div>
+            </div>
+            <div class="row">
+                <div class="col-md-2"><strong>Verborgen:</strong></div>
+                <div class="col-md-10">@Model.GCComUser.HideCount</div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3>Gedetecteerde naamsverandering (vanaf jaar 2011)</h3>
+            @if (Model.GCComNameChanges.Count > 0)
+            {
+                <table class="table table-striped table-hover" id="ftfResults">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Van naam</th>
+                            <th>Naar naam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var nc in Model.GCComNameChanges)
+                        {
+                            <tr>
+                                <td>@nc.DetectedAt.ToString("d")</td>
+                                <td>@nc.OldName</td>
+                                <td>@nc.NewName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <span>Geen naamsveranderingen gedetecteerd</span>                
+            }
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Globalcaching.eu account informatie
+    </div>
+    <div class="panel-body">
+        <div class="col-md-8">
+            @if (Model.GCEuUserSettings!=null)
+            { 
+                <div class="row">
+                    <div class="col-md-2"><strong>Donateur:</strong></div>
+                    <div class="col-md-10">
+                        @if (Model.GCEuUserSettings.IsDonator)
+                        {
+                            <span>Ja</span>
+                        }
+                        else
+                        {
+                            <span>Nee</span>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2"><strong>Nick:</strong></div>
+                    <div class="col-md-10">
+                        <a href="@string.Format("forum/yaf_profile",Model.GCEuUserSettings.YafUserID)">@Model.GCEuUserName</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

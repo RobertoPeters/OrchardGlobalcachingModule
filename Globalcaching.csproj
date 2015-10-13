@@ -391,6 +391,7 @@
     <Content Include="Views\DisplayTemplates\Parts.ForDonatorsOnly.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.GeocacheMaintenance.cshtml" />
     <Content Include="Views\GlobalcachingServices\Home.cshtml" />
+    <Content Include="Views\GCComUserSearch\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -543,6 +544,7 @@
     <Compile Include="Models\GCEuCCCUser.cs" />
     <Compile Include="Models\GCEuCodeCheckAttempt.cs" />
     <Compile Include="Models\GCEuCodeCheckCode.cs" />
+    <Compile Include="Models\GCEuComUserNameChange.cs" />
     <Compile Include="Models\GCEuContactForm.cs" />
     <Compile Include="Models\GCEuCoordCheckAttempt.cs" />
     <Compile Include="Models\GCEuCoordCheckCode.cs" />
@@ -614,6 +616,7 @@
     <Compile Include="ViewModels\FoundsPerCountryRankingModel.cs" />
     <Compile Include="ViewModels\GeocacheBatchLogModel.cs" />
     <Compile Include="ViewModels\GeocacheMaintenanceModel.cs" />
+    <Compile Include="ViewModels\GeocacherInfoModel.cs" />
     <Compile Include="ViewModels\GeocacheTypeStats.cs" />
     <Compile Include="ViewModels\GlobalcachingMessagesModel.cs" />
     <Compile Include="ViewModels\GlobalcachingServiceCallModel.cs" />

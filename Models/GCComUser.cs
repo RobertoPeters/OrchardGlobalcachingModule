@@ -33,11 +33,17 @@ namespace Globalcaching.Models
         }
     }
 
-    public class GCComUserSearchResult
+    public class GCComUserSearchListResult
     {
         public long TotalCount { get; set; }
         public long PageCount { get; set; }
         public long CurrentPage { get; set; }
         public GCComUser[] Users { get; set; }
+    }
+
+    public class GCComUserSearchResult
+    {
+        public GCComUserSearchListResult Current { get; set; }
+        public GCComUserSearchListResult History { get; set; }
     }
 }

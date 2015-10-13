@@ -34,6 +34,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GCComGebruikerInfo/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCComUserSearch"},
+                            {"action", "ShowGCComUserInfo"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "GetGeocachesByOwner",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

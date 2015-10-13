@@ -5,6 +5,8 @@
     </span>
 </div><!-- /input-group -->
 
+<h3>Resultaat voor de huidige namen</h3>
+
 <div id="gccomSearchTopPager">
 </div>
 <table class="table table-striped table-hover" id="gccomSearchResults">
@@ -21,10 +23,105 @@
 <div id="gccomSearchBottomPager">
 </div>
 
+<h3>Resultaat voor de alle namen inclusief naamsverandering in het verleden</h3>
+
+<div id="gccomSearchHistTopPager">
+</div>
+<table class="table table-striped table-hover" id="gccomSearchHistResults">
+    <thead>
+        <tr>
+            <th>Avatar</th>
+            <th>Naam</th>
+            <th>Aantal gevonden</th>
+            <th>Aantal verborgen</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div id="gccomSearchHistBottomPager">
+</div>
+
     <script type="text/javascript">
 
         initGlobalcachingPager("gccomSearchTopPager", "gccomSearch");
         initGlobalcachingPager("gccomSearchBottomPager", "gccomSearch");
+
+        initGlobalcachingPager("gccomSearchHistTopPager", "gccomSearchHist");
+        initGlobalcachingPager("gccomSearchHistBottomPager", "gccomSearchHist");
+
+        function handleResponse(mode, response) {
+            var resultElementName = "#gccomSearchResults";
+            var pagerElementName = ".gccomSearch";
+
+            var resultHistElementName = "#gccomSearchHistResults";
+            var pagerHistElementName = ".gccomSearchHist";
+
+            if (mode == 0 || mode == 1) {
+                //=================
+                //content
+                //=================
+                for (var i = 0; i < response.Current.Users.length; i++) {
+                    var line = response.Current.Users[i];
+                    // insert after last row!
+                    $(resultElementName + ' > tbody:last').append('<tr><td>' + '<img src="' + line.AvatarUrl + '" height="48" width="48"/>' + '</td><td><a href="@Href("~/GCComGebruikerInfo/")' + line.ID + '">' + line.UserName + '</a></td><td>' + line.FindCount + '</td><td>' + line.HideCount + '</td></tr>');
+                }
+
+                //=================
+                //Pager
+                //=================
+                setupGlobalcachingPage(response.Current.CurrentPage, response.Current.PageCount, response.Current.TotalCount, pagerElementName, "requestgccomSearchPage");
+            }
+            if (mode == 0 || mode == 2) {
+                //=================
+                //content
+                //=================
+                for (var i = 0; i < response.History.Users.length; i++) {
+                    var line = response.History.Users[i];
+                    // insert after last row!
+                    $(resultHistElementName + ' > tbody:last').append('<tr><td>' + '<img src="' + line.AvatarUrl + '" height="48" width="48"/>' + '</td><td><a href="@Href("~/GCComGebruikerInfo/")' + line.ID + '">' + line.UserName + '</a></td><td>' + line.FindCount + '</td><td>' + line.HideCount + '</td></tr>');
+                }
+
+                //=================
+                //Pager
+                //=================
+                setupGlobalcachingPage(response.History.CurrentPage, response.History.PageCount, response.History.TotalCount, pagerHistElementName, "requestgccomSearchHistPage");
+            }
+        }
+
+        function requestgccomSearchForUser() {
+            var resultElementName = "#gccomSearchResults";
+            var pagerElementName = ".gccomSearch";
+
+            var resultHistElementName = "#gccomSearchHistResults";
+            var pagerHistElementName = ".gccomSearchHist";
+
+            myApp.showPleaseWait();
+
+            $(resultElementName).find("tr:gt(0)").remove();
+            $(pagerElementName).find("li").remove();
+            $(resultHistElementName).find("tr:gt(0)").remove();
+            $(pagerHistElementName).find("li").remove();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Index", "GCComUserSearch", new { area = "Globalcaching" })',
+                data: {
+                    id: $("#gccomSearchFor").val(),
+                    page: "1",
+                    mode: "0",
+                    pageSize: "25",
+                    __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+                },
+                success: function (response) {
+                    myApp.hidePleaseWait();
+                    handleResponse(0, response);
+                },
+                error: function (data, errorText) {
+                    myApp.hidePleaseWait();
+                    alert(errorText);
+                }
+            });
+        }
+
 
         function requestgccomSearchPage(page) {
             var resultElementName = "#gccomSearchResults";
@@ -40,25 +137,42 @@
                 data: {
                     id: $("#gccomSearchFor").val(),
                     page: page,
-                    pageSize: "50",
+                    mode: "1",
+                    pageSize: "25",
                     __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
                 },
                 success: function (response) {
                     myApp.hidePleaseWait();
+                    handleResponse(1, response);
+                },
+                error: function (data, errorText) {
+                    myApp.hidePleaseWait();
+                    alert(errorText);
+                }
+            });
+        }
 
-                    //=================
-                    //content
-                    //=================
-                    for (var i = 0; i < response.Users.length; i++) {
-                        var line = response.Users[i];
-                        // insert after last row!
-                        $(resultElementName + ' > tbody:last').append('<tr><td>' + '<img src="' + line.AvatarUrl + '" height="48" width="48"/>' + '</td><td><a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="_blank">' + line.UserName + '</a></td><td>' + line.FindCount + '</td><td>' + line.HideCount + '</td></tr>');
-                    }
+        function requestgccomSearchHistPage(page) {
+            var resultElementName = "#gccomSearchHistResults";
+            var pagerElementName = ".gccomSearchHist";
 
-                    //=================
-                    //Pager
-                    //=================
-                    setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestgccomSearchPage");
+            myApp.showPleaseWait();
+
+            $(resultElementName).find("tr:gt(0)").remove();
+            $(pagerElementName).find("li").remove();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Index", "GCComUserSearch", new { area = "Globalcaching" })',
+                data: {
+                    id: $("#gccomSearchFor").val(),
+                    page: page,
+                    mode: "2",
+                    pageSize: "25",
+                    __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+                },
+                success: function (response) {
+                    myApp.hidePleaseWait();
+                    handleResponse(2, response);
                 },
                 error: function (data, errorText) {
                     myApp.hidePleaseWait();
@@ -69,12 +183,12 @@
 
         $('#gccomSearchFor').keypress(function (e) {
             if (e.which == '13') {
-                requestgccomSearchPage('1');
+                requestgccomSearchForUser();
                 e.preventDefault();
             }
         });
 
         $("#gccomSearchButton").click(function () {
-            requestgccomSearchPage('1');
+            requestgccomSearchForUser();
         });
-    </script>
+</script>

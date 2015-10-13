@@ -114,10 +114,6 @@ namespace Globalcaching.Controllers
             {
                 var items = db.Page<GlobalcachingServiceCallItem>(page, pageSize, "select GCEuServiceCall.*, GCComUser.UserName as GCComNick, yaf_User.Name as GlobalNick, GCComUser.MemberTypeId, \"IsDonator\" = case when yaf_UserGroup.GroupID = 4 then 1 else 0 end from GCEuServiceCall left join GCComData.dbo.GCComUser on GCEuServiceCall.GCComUserID = GCComUser.ID left join Globalcaching.dbo.yaf_User on GCEuServiceCall.UserID = yaf_User.UserID left join Globalcaching.dbo.yaf_UserGroup on GCEuServiceCall.UserID = yaf_UserGroup.UserID and GroupID=4 order by GCEuServiceCall.ID desc");
                 result.Calls = items.Items;
-                foreach (var item in result.Calls)
-                {
-                    item.CalledAt = item.CalledAt.ToUniversalTime();
-                }
                 result.CurrentPage = items.CurrentPage;
                 result.TotalCount = items.TotalItems;
                 result.PageCount = items.TotalPages;
