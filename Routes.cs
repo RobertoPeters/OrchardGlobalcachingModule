@@ -19,6 +19,66 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "Donateurs",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingDonation"},
+                            {"action", "Index"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetDonatorRecord",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingDonation"},
+                            {"action", "GetDonatorRecord"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SaveDonatorRecord",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingDonation"},
+                            {"action", "SaveDonatorRecord"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetDonators",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GlobalcachingDonation"},
+                            {"action", "GetDonators"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "GCComSearchUser",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

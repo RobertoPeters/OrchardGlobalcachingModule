@@ -1,0 +1,259 @@
+﻿@{
+    Style.Require("datetimepicker.Style");
+    Script.Require("moment.Script").AtHead();
+}
+
+<h2>Bewerk of voeg een nieuwe donatie toe</h2>
+<form role="form">
+    <input type="hidden" id="recordid" />
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <label class="control-label">Nick:</label>
+            <input class="form-control" id="usernick" value="" placeholder="globalcaching nick" />
+        </div>
+        <div class="col-md-3 form-group">
+            <label class="control-label">Nick partner:</label>
+            <input class="form-control" id="partnernick" value="" placeholder="globalcaching nick" />
+        </div>
+        <div class="col-md-6 form-group">
+            <label class="control-label">Naam:</label>
+            <input class="form-control" id="username" value="" placeholder="naam" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <label class="control-label">Bedrag:</label>
+            <input class="form-control" id="amount" value="" placeholder="bedrag in euro's'" />
+        </div>
+        <div class="col-md-3 form-group">
+            <label class="control-label">Betalingsmethode:</label>
+            <input class="form-control" id="payedby" value="" placeholder="bank of paypal" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <label class="control-label">Datum donatie:</label>
+            <div id="donationdate" class="date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+        <div class="col-md-3 form-group">
+            <label class="control-label">Verloopdatum:</label>
+            <div id="expirationdate" class="date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Opmerkingen:</label>
+        <textarea class="form-control" rows="5" id="comment" placeholder="opmerkingen"></textarea>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <input type="checkbox" id="thankyousent" /> Bedankje verzonden
+        </div>
+        <div class="col-md-3">
+            <input type="checkbox" id="remindersent" /> Herinnering verzonden
+        </div>
+    </div>
+    <br />
+    <button class="btn btn-primary" type="button" id="saveRecordButton">Opslaan</button>
+</form>
+
+<h2>Alle donaties</h2>
+
+Totaal aan donaties afgelopen jaar is <span id="totallastyear"></span> Euro<br />
+Totaal aan donaties dit jaar is <span id="totalthisyear"></span> Euro<br />
+
+<div id="callsTopPager">
+</div>
+<table class="table" id="callsResults">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Datum</th>
+            <th>Verloopt</th>
+            <th>Nick</th>
+            <th>Bedrag</th>
+            <th>Info</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div id="callsBottomPager">
+</div>
+
+<script type="text/javascript">
+    initGlobalcachingPager("callsTopPager", "callsPager");
+    initGlobalcachingPager("callsBottomPager", "callsPager");
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function updateEditItem(response) {
+        if (response != null) {
+            $('#recordid').val(response.ID);
+            $('#amount').val(response.Amount);
+            $('#usernick').val(response.Name);
+            $('#partnernick').val(response.PartnerName);
+            $('#username').val(response.RealName);
+            $('#payedby').val(response.DonationMethod);
+            var d = eval('new' + response.DonatedAt.replace(/\//g, ' '));
+            //$('#donationdate').datetimepicker('update', d);
+            $('#donationdate').data("DateTimePicker").setValue(moment(d));
+            d = eval('new' + response.ExpirationDate.replace(/\//g, ' '));
+            //$('#expirationdate').datetimepicker('update', d);
+            $('#expirationdate').data("DateTimePicker").setValue(moment(d));
+            $('#comment').val(response.Comment);
+            $("#remindersent").prop("checked", response.ReminderSent);
+            $("#thankyousent").prop("checked", response.ThankYouSent);
+        }
+    }
+
+    function updateFromResponse(response) {
+        var resultElementName = "#callsResults";
+        var pagerElementName = ".callsPager";
+
+        updateEditItem(response.EditItem)
+        $('#totallastyear').text(response.TotalLastYear.toFixed(2));
+        $('#totalthisyear').text(response.TotalThisYear.toFixed(2));
+        currentPage = response.CurrentPage;
+
+        for (var i = 0; i < response.Items.length; i++) {
+            var line = response.Items[i];
+            // insert after last row!
+
+            var td0 = '<button class="btn btn-primary btn-xs" type="button" onclick="javascript:editRecord('+ line.ID.toString() +')" >bewerk</button>';
+
+            var d = eval('new' + line.DonatedAt.replace(/\//g, ' '));
+            var td1 = formatDateToShortDate(d);
+            d = eval('new' + line.ExpirationDate.replace(/\//g, ' '));
+            var td2 = formatDateToShortDate(d);
+            var td3 = '<a href="/forum/yaf_admin_edituser.aspx?u=' + line.UserID + '" target="_blank">' + htmlEncode(line.Name) + '</a>';
+            if (line.PartnerUserID != null) {
+                td3 += '<br /><a href="/forum/yaf_admin_edituser.aspx?u=' + line.PartnerUserID + '" target="_blank">' + htmlEncode(line.PartnerName) + '</a>';
+            }
+            var td4 = line.Amount.toString();
+            var td5 = 'Naam: ' + htmlEncode(line.RealName) + '<br />';
+            td5 += 'Betalingsmethode: ' + htmlEncode(line.DonationMethod) + '<br />';
+            td5 += 'Bedankje=' + line.ThankYouSent + ' Herinn.=' + line.ReminderSent + '<br />';
+            td5 += htmlEncode(line.Comment);
+
+            var background = '';
+            if (line.IsInWrongState) {
+                background = ' bgcolor="#FF0000"'
+            }
+
+            $(resultElementName + ' > tbody:last').append('<tr' + background + '><td>' + td0 + '</td><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td></tr>');
+        }
+
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestCallsPage");
+    }
+
+    function editRecord(id) {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDonatorRecord", "GlobalcachingDonation", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateEditItem(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+
+    function requestCallsPage(page) {
+        var resultElementName = "#callsResults";
+        var pagerElementName = ".callsPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDonators", "GlobalcachingDonation", new { area = "Globalcaching" })',
+            data: {
+                page: page,
+                pageSize: "500",
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateFromResponse(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function saveRecord() {
+        var resultElementName = "#callsResults";
+        var pagerElementName = ".callsPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveDonatorRecord", "GlobalcachingDonation", new { area = "Globalcaching" })',
+            data: {
+                page: 1,
+                pageSize: "500",
+                id: $('#recordid').val(),
+                nick: $('#usernick').val(),
+                partnernick: $('#partnernick').val(),
+                name: $('#username').val(),
+                amount: $('#amount').val(),
+                payedby: $('#payedby').val(),
+                donationdate: $('#donationdate').data("DateTimePicker").getDate().toISOString(),
+                expirationdate: $('#expirationdate').data("DateTimePicker").getDate().toISOString(),
+                comment: $('#comment').val(),
+                remindersent: $("#remindersent").is(':checked'),
+                thankyousent: $("#thankyousent").is(':checked'),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateFromResponse(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $(function () {
+        var d = moment();
+        $('#donationdate').datetimepicker({
+            defaultDate: d
+        });
+        $('#expirationdate').datetimepicker({
+            defaultDate: moment().add(1, 'y')
+        });
+
+        $("#saveRecordButton").click(function () {
+            saveRecord();
+        });
+
+        updateFromResponse(@Html.Raw(Json.Encode(@Model)));
+    });
+
+</script>
