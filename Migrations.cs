@@ -662,5 +662,20 @@ namespace Globalcaching
 
             return 47;
         }
+
+        public int UpdateFrom47()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("BookmarksWidget",
+                cfg => cfg
+                    .DisplayedAs("Bookmarks")
+                    .WithPart("BookmarksPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 48;
+        }
+
     }
 }

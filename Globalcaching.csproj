@@ -393,6 +393,7 @@
     <Content Include="Views\GlobalcachingServices\Home.cshtml" />
     <Content Include="Views\GCComUserSearch\Home.cshtml" />
     <Content Include="Views\GlobalcachingDonation\Home.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.Bookmarks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -423,6 +424,7 @@
     <Compile Include="Controllers\FoundsPerCountryRankingController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
     <Compile Include="Controllers\GAPPInfoController.cs" />
+    <Compile Include="Controllers\BookmarksController.cs" />
     <Compile Include="Controllers\GeocacheBatchLogController.cs" />
     <Compile Include="Controllers\GeocacheDistanceController.cs" />
     <Compile Include="Controllers\GeocacheMaintenanceController.cs" />
@@ -477,6 +479,7 @@
     <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryBannerPartDriver.cs" />
     <Compile Include="Drivers\CombiBannerPartDriver.cs" />
+    <Compile Include="Drivers\BookmarksPartDriver.cs" />
     <Compile Include="Drivers\GeocacheMaintenancePartDriver.cs" />
     <Compile Include="Drivers\GeocacheBatchLogPartDriver.cs" />
     <Compile Include="Drivers\GeocacheTypeStatsPartDriver.cs" />
@@ -530,6 +533,8 @@
     <Compile Include="Models\CheckCCCResult.cs" />
     <Compile Include="Models\GcComAccounts.cs" />
     <Compile Include="Models\GCComAttributeType.cs" />
+    <Compile Include="Models\GCComBookmark.cs" />
+    <Compile Include="Models\GCComBookmarkContent.cs" />
     <Compile Include="Models\GCComGeocache.cs" />
     <Compile Include="Models\GCComGeocacheAttribute.cs" />
     <Compile Include="Models\GCComGeocacheImage.cs" />
@@ -584,6 +589,7 @@
     <Compile Include="Services\CombiRankingService.cs" />
     <Compile Include="Services\FoundsPerCountryRankingService.cs" />
     <Compile Include="Services\FTFStatsService.cs" />
+    <Compile Include="Services\BookmarksService.cs" />
     <Compile Include="Services\GeocacheBatchLogService.cs" />
     <Compile Include="Services\GeocacheMaintenanceService.cs" />
     <Compile Include="Services\GeocacheDistanceService.cs" />
@@ -610,6 +616,7 @@
     <Compile Include="Services\YafMostRecentShoutService.cs" />
     <Compile Include="Services\YafMostRecentPostsService.cs" />
     <Compile Include="Shapes\FaviconShapes.cs" />
+    <Compile Include="ViewModels\BookmarkModel.cs" />
     <Compile Include="ViewModels\ContactFormModel.cs" />
     <Compile Include="ViewModels\CodeCheckerCheckModel.cs" />
     <Compile Include="ViewModels\CoordCheckerCheckModel.cs" />

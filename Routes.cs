@@ -2356,6 +2356,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetBookmarks",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Bookmarks"},
+                            {"action", "GetBookmarks"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                  }
             };
         }
