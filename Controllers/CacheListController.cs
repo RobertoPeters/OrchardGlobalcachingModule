@@ -51,6 +51,12 @@ namespace Globalcaching.Controllers
         }
 
         [Themed]
+        public ActionResult Bookmark(int id)
+        {
+            return Search(new GeocacheSearchFilter() { BookmarkListID = id });
+        }
+
+        [Themed]
         public ActionResult MostRecentCountry(int id)
         {
             return Search(new GeocacheSearchFilter() { CountryID = id });

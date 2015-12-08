@@ -42,6 +42,7 @@
     @Html.HiddenFor(m => m.Filter.FTFLog)
     @Html.HiddenFor(m => m.Filter.STFLog)
     @Html.HiddenFor(m => m.Filter.TTFLog)
+    @Html.HiddenFor(m => m.Filter.BookmarkListID)
     <input id="minLat" name="minLat" type="hidden" />
     <input id="minLon" name="minLon" type="hidden" />
     <input id="maxLat" name="maxLat" type="hidden" />
@@ -92,6 +93,7 @@
         FTFLog = Model.Filter.FTFLog ?? null,
         STFLog = Model.Filter.STFLog ?? null,
         TTFLog = Model.Filter.TTFLog ?? null,
+        BookmarkListID = Model.Filter.BookmarkListID ?? null,
         OwnerName = Model.Filter.OwnerName ?? null
         }));
 

@@ -24,6 +24,7 @@
             <input type="hidden" name="Filter.FTFLog" value="@(Model.Filter.FTFLog == null ? "" : Model.Filter.FTFLog.ToString())" />
             <input type="hidden" name="Filter.STFLog" value="@(Model.Filter.STFLog == null ? "" : Model.Filter.STFLog.ToString())" />
             <input type="hidden" name="Filter.TTFLog" value="@(Model.Filter.TTFLog == null ? "" : Model.Filter.TTFLog.ToString())" />
+            <input type="hidden" name="Filter.BookmarkListID" value="@(Model.Filter.BookmarkListID == null ? "" : Model.Filter.BookmarkListID.ToString())" />
             <span>Sorteer op:</span>
             <select id="newSortBy" name="newSortBy">
                 <option value="0">Afstand van middelpunt of thuislocatie *)</option>
@@ -71,6 +72,7 @@
             <input type="hidden" name="Filter.FTFLog" value="@(Model.Filter.FTFLog == null ? "" : Model.Filter.FTFLog.ToString())" />
             <input type="hidden" name="Filter.STFLog" value="@(Model.Filter.STFLog == null ? "" : Model.Filter.STFLog.ToString())" />
             <input type="hidden" name="Filter.TTFLog" value="@(Model.Filter.TTFLog == null ? "" : Model.Filter.TTFLog.ToString())" />
+            <input type="hidden" name="Filter.BookmarkListID" value="@(Model.Filter.BookmarkListID == null ? "" : Model.Filter.BookmarkListID.ToString())" />
             <button type="submit" value="Kaart" class="btn btn-primary">@T("Kaart")</button>
         }
     </div>
@@ -97,6 +99,7 @@
             <input type="hidden" name="Filter.FTFLog" value="@(Model.Filter.FTFLog == null ? "" : Model.Filter.FTFLog.ToString())" />
             <input type="hidden" name="Filter.STFLog" value="@(Model.Filter.STFLog == null ? "" : Model.Filter.STFLog.ToString())" />
             <input type="hidden" name="Filter.TTFLog" value="@(Model.Filter.TTFLog == null ? "" : Model.Filter.TTFLog.ToString())" />
+            <input type="hidden" name="Filter.BookmarkListID" value="@(Model.Filter.BookmarkListID == null ? "" : Model.Filter.BookmarkListID.ToString())" />
             <button id="downloadAllButton" type="submit" value="Kaart" class="btn btn-primary">@T("Download")</button>
         }
     </div>
@@ -168,6 +171,7 @@
         FTFLog = Model.Filter.FTFLog ?? null,
         STFLog = Model.Filter.STFLog ?? null,
         TTFLog = Model.Filter.TTFLog ?? null,
+        BookmarkListID = Model.Filter.BookmarkListID ?? null,
         MacroResult = Model.Filter.MacroResult ?? null
             }));
 

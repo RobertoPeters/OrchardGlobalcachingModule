@@ -4,7 +4,7 @@
         <input class="form-control" id="NumberOfItems" value="@Model.Filter.NumberOfItems" />
     </div>
     <div class="form-group">
-        <label class="control-label">Minimum totaal aantal geocaches i de BeNuLux:</label>
+        <label class="control-label">Minimum totaal aantal geocaches in de BeNeLux:</label>
         <input class="form-control" id="NumberOfKnownItems" value="@Model.Filter.NumberOfKnownItems" />
     </div>
     <div class="form-group">
@@ -27,6 +27,7 @@
         <tr>
             <th>Eigenaar</th>
             <th>Naam</th>
+            <th>Caches</th>
             <th width="250px">Beschrijving</th>
             <th>#</th>
             <th>#BeNeLux</th>
@@ -55,11 +56,12 @@
             // insert after last row!
             var td1 = '<img src="' + line.AvatarUrl + '" height="48" width="48"/>' + '<br /><a href="@Href("~/GCComGebruikerInfo/")' + line.GCComUserID + '">' + line.UserName + '</a>';
             var td2 = '<a href="https://www.geocaching.com/bookmarks/view.aspx?guid=' + line.ListGUID.toString() + '" target="_blank">' + htmlEncode(line.ListName) + '</a>';
-            var td3 = htmlEncode(line.ListDescription);
-            var td4 = line.NumberOfItems;
-            var td5 = line.NumberOfKnownItems;
+            var td3 = '<a href="@Href("~/Bookmark/")' + line.ListID + '">lijst</a>';
+            var td4 = htmlEncode(line.ListDescription);
+            var td5 = line.NumberOfItems;
+            var td6 = line.NumberOfKnownItems;
 
-            $(resultElementName + ' > tbody:last').append('<tr><td align="center" valign="top">' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td></tr>');
+            $(resultElementName + ' > tbody:last').append('<tr><td align="center" valign="top">' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td><td>' + td6 + '</td></tr>');
         }
 
         setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestBookmarksPage");

@@ -48,7 +48,11 @@ namespace Globalcaching.Services
             string euDatabase = Core.Helper.GetTableNameFromConnectionString(dbGcEuDataConnString);
             sql = sql.From("GCComGeocache with (nolock)")
                 .InnerJoin(string.Format("[{0}].[dbo].[GCEuGeocache]", euDatabase)).On("GCComGeocache.ID = GCEuGeocache.ID")
-                .InnerJoin(string.Format("GCComUser", euDatabase)).On("GCComGeocache.OwnerId = GCComUser.ID");
+                .InnerJoin("GCComUser").On("GCComGeocache.OwnerId = GCComUser.ID");
+            if (filter.BookmarkListID != null)
+            {
+                sql = sql.InnerJoin("GCComBookmarkContent").On("GCComGeocache.ID = GCComBookmarkContent.GCComGeocacheID");
+            }
             if (filter.MacroResult != null)
             {
                 var settings = _gcEuUserSettingsService.GetSettings();
@@ -67,7 +71,11 @@ namespace Globalcaching.Services
                 {
                     sql = sql.InnerJoin(string.Format("[{0}].[dbo].[GCEuParel]", euDatabase)).On("GCComGeocache.ID = GCEuParel.GeocacheID");
                 }
-                if (filter.FTFLog != null)
+                if (filter.BookmarkListID != null)
+                {
+                    sql = sql.Where("GCComBookmarkContent.GCComBookmarkListID=@0", filter.BookmarkListID);
+                }
+                else if (filter.FTFLog != null)
                 {
                     sql = sql.Where("GCEuGeocache.FTFUserID=@0", filter.FTFLog);
                 }

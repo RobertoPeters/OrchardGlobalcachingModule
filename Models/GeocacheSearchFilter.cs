@@ -47,5 +47,6 @@ namespace Globalcaching.Models
         public long? FTFLog { get; set; }
         public long? STFLog { get; set; }
         public long? TTFLog { get; set; }
+        public long? BookmarkListID { get; set; }
     }
 }
