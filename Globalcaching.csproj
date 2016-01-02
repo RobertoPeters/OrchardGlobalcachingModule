@@ -394,6 +394,8 @@
     <Content Include="Views\GCComUserSearch\Home.cshtml" />
     <Content Include="Views\GlobalcachingDonation\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.Bookmarks.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\FinancialYearStatus.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.FinancialYearStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -474,6 +476,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\FinancialYearStatusDriver.cs" />
     <Compile Include="Drivers\CombiRankingPartDriver.cs" />
     <Compile Include="Drivers\ForDonatorsOnlyPartDriver.cs" />
     <Compile Include="Drivers\FoundsPerCountryRankingPartDriver.cs" />
@@ -529,6 +532,7 @@
     <Compile Include="Gavaghan.Geodesy\GeodeticMeasurement.cs" />
     <Compile Include="Gavaghan.Geodesy\GlobalCoordinates.cs" />
     <Compile Include="Gavaghan.Geodesy\GlobalPosition.cs" />
+    <Compile Include="Handlers\FinancialYearStatusHandler.cs" />
     <Compile Include="Migrations.cs" />
     <Compile Include="Models\CheckCCCResult.cs" />
     <Compile Include="Models\GcComAccounts.cs" />
@@ -584,6 +588,7 @@
     <Compile Include="Services\ContactFormService.cs" />
     <Compile Include="Services\CodeCheckerService.cs" />
     <Compile Include="Services\CoordCheckerService.cs" />
+    <Compile Include="Services\FinancialYearStatusService.cs" />
     <Compile Include="Services\FavoriteGeocachersService.cs" />
     <Compile Include="Services\EventCalendarService.cs" />
     <Compile Include="Services\CombiRankingService.cs" />
@@ -623,6 +628,7 @@
     <Compile Include="ViewModels\CodeCheckerMaintModel.cs" />
     <Compile Include="ViewModels\CoordCheckerMaintModel.cs" />
     <Compile Include="ViewModels\CombiRankingModel.cs" />
+    <Compile Include="ViewModels\FinancialYearStatusModel.cs" />
     <Compile Include="ViewModels\FoundsPerCountryRankingModel.cs" />
     <Compile Include="ViewModels\GeocacheBatchLogModel.cs" />
     <Compile Include="ViewModels\GeocacheMaintenanceModel.cs" />
@@ -674,7 +680,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GeneratedFiles\" />
-    <Folder Include="Handlers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\DisplayTemplates\Parts.EditUserSettings.cshtml" />

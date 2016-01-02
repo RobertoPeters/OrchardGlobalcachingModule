@@ -1,0 +1,22 @@
+﻿@model Globalcaching.Models.FinancialYearStatusPart
+
+<fieldset>
+    <legend>Map Fields</legend>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Year)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(model => model.Year)
+        @Html.ValidationMessageFor(model => model.Year)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.TotalCosts)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(model => model.TotalCosts)
+        @Html.ValidationMessageFor(model => model.TotalCosts)
+    </div>
+
+</fieldset>

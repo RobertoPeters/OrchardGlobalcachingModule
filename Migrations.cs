@@ -1,5 +1,6 @@
 ﻿using Orchard.ContentManagement.MetaData;
 using Orchard.Data.Migration;
+using System.Data;
 
 namespace Globalcaching
 {
@@ -675,6 +676,26 @@ namespace Globalcaching
                 );
 
             return 48;
+        }
+
+        public int UpdateFrom48()
+        {
+            SchemaBuilder.CreateTable("FinancialYearStatusRecord", table => table
+                            .ContentPartRecord()
+                            .Column("Year", DbType.Int32)
+                            .Column("TotalCosts", DbType.Double)
+                        );
+
+            ContentDefinitionManager.AlterTypeDefinition("FinancialYearStatusWidget",
+                cfg => cfg
+                    .DisplayedAs("FinancialYearStatus")
+                    .WithPart("FinancialYearStatusPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 49;
         }
 
     }

@@ -1,11 +1,36 @@
 ﻿using Orchard.ContentManagement;
+using Orchard.ContentManagement.Records;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class FinancialYearStatusRecord : ContentPartRecord
+    {
+        public virtual int Year { get; set; }
+        public virtual double TotalCosts { get; set; }
+    }
+
+    public class FinancialYearStatusPart : ContentPart<FinancialYearStatusRecord>
+    {
+        [Required]
+        public int Year
+        {
+            get { return Retrieve(r => r.Year); }
+            set { Store(r => r.Year, value); }
+        }
+
+        [Required]
+        public double TotalCosts
+        {
+            get { return Retrieve(r => r.TotalCosts); }
+            set { Store(r => r.TotalCosts, value); }
+        }
+    }
+
     public class BookmarksPart : ContentPart
     {
     }

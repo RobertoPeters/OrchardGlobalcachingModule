@@ -47,4 +47,6 @@
   <Place Parts_ForDonatorsOnly="Content:1"/>
   <Place Parts_GeocacheMaintenance="Content:1"/>
   <Place Parts_Bookmarks="Content:1"/>
+  <Place Parts_FinancialYearStatus="Content:1"/>
+  <Place Parts_FinancialYearStatus_Edit="Content:7.5"/>
 </Placement>
