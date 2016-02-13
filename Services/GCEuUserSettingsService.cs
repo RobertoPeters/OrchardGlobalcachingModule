@@ -78,6 +78,7 @@ namespace Globalcaching.Services
                 {
                     result.IsDonator = db.ExecuteScalar<int>("select count(1) from yaf_UserGroup where UserID=@0 and GroupID in (1, 4)", result.YafUserID) > 0;
                 }
+                validateLiveAPISettings(result);
             }
             return result;
         }
@@ -107,6 +108,10 @@ namespace Globalcaching.Services
                     }
                 }
             }
+            if (result != null)
+            {
+                validateLiveAPISettings(result);
+            }
             return result;
         }
 
@@ -115,18 +120,18 @@ namespace Globalcaching.Services
             GCEuUserSettings result = null;
             if (_orchardServices.WorkContext.CurrentUser != null)
             {
-                result = HttpContext.Session["GCEuUserSettings"] as GCEuUserSettings;
+                result = HttpContext.Session["GCEuUserSettingsV2"] as GCEuUserSettings;
                 if (result != null)
                 {
                     //just to be sure, check it!
-                    if (HttpContext.Session["GCEuUserSettingsForUser"] as string == _orchardServices.WorkContext.CurrentUser.UserName)
+                    if (HttpContext.Session["GCEuUserSettingsForUserV2"] as string == _orchardServices.WorkContext.CurrentUser.UserName && result.ExpirationTime > DateTime.Now)
                     {
                         //ok
                     }
                     else
                     {
-                        HttpContext.Session["GCEuUserSettings"] = null;
-                        HttpContext.Session["GCEuUserSettingsForUser"] = null;
+                        HttpContext.Session["GCEuUserSettingsV2"] = null;
+                        HttpContext.Session["GCEuUserSettingsForUserV2"] = null;
                         result = null;
                     }
                 }
@@ -177,15 +182,16 @@ namespace Globalcaching.Services
                                 }
                             }
                         }
-                        HttpContext.Session["GCEuUserSettings"] = result;
-                        HttpContext.Session["GCEuUserSettingsForUser"] = _orchardServices.WorkContext.CurrentUser.UserName;
+                        validateLiveAPISettings(result);
+                        HttpContext.Session["GCEuUserSettingsV2"] = result;
+                        HttpContext.Session["GCEuUserSettingsForUserV2"] = _orchardServices.WorkContext.CurrentUser.UserName;
                     }
                     setPM(result);
                 }
             }
             else
             {
-                result = HttpContext.Session["GCEuUserSettings"] as GCEuUserSettings;
+                result = HttpContext.Session["GCEuUserSettingsV2"] as GCEuUserSettings;
                 if (result != null)
                 {
                     if (result.YafUserID > 1)
@@ -199,8 +205,8 @@ namespace Globalcaching.Services
                     result.YafUserID = 1;
                     result.IsDonator = false;
                     result.DefaultCountryCode = 141;
-                    HttpContext.Session["GCEuUserSettings"] = result;
-                    HttpContext.Session["GCEuUserSettingsForUser"] = "";
+                    HttpContext.Session["GCEuUserSettingsV2"] = result;
+                    HttpContext.Session["GCEuUserSettingsForUserV2"] = "";
                 }
             }
             return result;
@@ -220,6 +226,22 @@ namespace Globalcaching.Services
                         {
                             settings.IsPM = gcComUsr.MemberTypeId > 1;
                         }
+                    }
+                }
+            }
+        }
+
+        private void validateLiveAPISettings(GCEuUserSettings settings)
+        {
+            if (settings != null && settings.GCComUserID != null && settings.YafUserID > 1 && settings.YafUserID!=7)
+            {
+                using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                {
+                    if (db.FirstOrDefault<GCEuLiveAPIHelpers>("WHERE YafUserID=@0", settings.YafUserID) == null)
+                    {
+                        settings.GCComUserID = null;
+                        settings.LiveAPIToken = null;
+                        db.Update("GCEuUserSettings", "YafUserID", settings);
                     }
                 }
             }

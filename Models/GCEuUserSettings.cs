@@ -8,6 +8,11 @@ namespace Globalcaching.Models
     [PetaPoco.TableName("GCEuUserSettings")]
     public class GCEuUserSettings
     {
+        public GCEuUserSettings()
+        {
+            ExpirationTime = DateTime.Now.AddMinutes(30);
+        }
+
         public int YafUserID { get; set; }
         public long? GCComUserID { get; set; }
         public string LiveAPIToken { get; set; }
@@ -26,5 +31,7 @@ namespace Globalcaching.Models
         public bool IsPM { get; set; }
         [PetaPoco.Ignore]
         public bool IsDonator { get; set; }
+        [PetaPoco.Ignore]
+        public DateTime ExpirationTime { get; set; }
     }
 }

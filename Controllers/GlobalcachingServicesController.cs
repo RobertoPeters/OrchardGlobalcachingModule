@@ -181,7 +181,7 @@ namespace Globalcaching.Controllers
                 string usr = Request.QueryString["usr"];
                 string pwd = Request.QueryString["pwd"];
                 var settings = GetUserSettings("GeocacheCodes", token, usr, pwd);
-                if (!string.IsNullOrEmpty(country) && settings != null && settings.IsDonator)
+                if (!string.IsNullOrEmpty(country) && settings != null && settings.IsDonator && !string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID != null)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -224,7 +224,7 @@ namespace Globalcaching.Controllers
                         isPM = gcu.MemberTypeId > 1;
                     }
                 }
-                if (settings != null && settings.IsDonator && isPM)
+                if (settings != null && settings.IsDonator && isPM && !string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID != null)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -266,7 +266,7 @@ namespace Globalcaching.Controllers
                         isPM = gcu.MemberTypeId > 1;
                     }
                 }
-                if (settings != null && settings.IsDonator && isPM)
+                if (settings != null && settings.IsDonator && isPM && !string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID != null)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
@@ -294,7 +294,7 @@ namespace Globalcaching.Controllers
             string usr = Request.QueryString["usr"];
             string pwd = Request.QueryString["pwd"];
             var settings = GetUserSettings("CacheDistance", token, usr, pwd);
-            if (settings != null && settings.IsDonator)
+            if (settings != null && settings.IsDonator && !string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID != null)
             {
                 Response.ContentType = "application/zip";
                 Response.AppendHeader("content-disposition", "attachment;filename=CacheDistance.zip");
@@ -339,7 +339,7 @@ namespace Globalcaching.Controllers
             string usr = Request.QueryString["usr"];
             string pwd = Request.QueryString["pwd"];
             var settings = GetUserSettings("Archived", token, usr, pwd);
-            if (settings != null && settings.IsDonator)
+            if (settings != null && settings.IsDonator && !string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID != null)
             {
                 Response.Clear();
                 Response.ContentType = "application/zip";

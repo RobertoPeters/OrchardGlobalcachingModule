@@ -108,6 +108,7 @@ namespace Globalcaching.Controllers
                                     settings.HomelocationLat = profile.User.HomeCoordinates.Latitude;
                                     settings.HomelocationLon = profile.User.HomeCoordinates.Longitude;
                                 }
+                                settings.ExpirationTime = DateTime.Now.AddMinutes(30);
                                 _gcEuUserSettingsService.UpdateSettings(settings);
                             }
                             Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, T("Geocaching.com autorisatie is geslaagd."));
