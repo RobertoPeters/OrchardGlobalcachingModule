@@ -1880,6 +1880,21 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GetLiveAPILogDownloadStatus",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LiveAPIDownload"},
+                            {"action", "GetLiveAPILogDownloadStatus"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "UpdateLiveAPILimits",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},
@@ -1900,6 +1915,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"},
                             {"controller", "LiveAPIDownload"},
                             {"action", "StartDownload"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "StartLiveAPILogDownload",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "LiveAPIDownload"},
+                            {"action", "StartLogDownload"}
                         },
                         new RouteValueDictionary(),
                         new RouteValueDictionary {

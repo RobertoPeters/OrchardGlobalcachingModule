@@ -39,6 +39,20 @@ namespace Globalcaching.Controllers
         }
 
         [HttpPost]
+        public ActionResult GetLiveAPILogDownloadStatus()
+        {
+            var m = _liveAPIDownloadService.DownloadLogStatus;
+            if (m == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Json(m);
+            }
+        }
+
+        [HttpPost]
         public ActionResult UpdateLiveAPILimits()
         {
             var m = _liveAPIDownloadService.UpdateLiveAPILimits();
@@ -56,6 +70,20 @@ namespace Globalcaching.Controllers
         public ActionResult StartDownload(bool isLite, string fileFormat)
         {
             var m = _liveAPIDownloadService.StartDownload(isLite, fileFormat);
+            if (m == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Json(m);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult StartLogDownload(string names, bool inclarch)
+        {
+            var m = _liveAPIDownloadService.StartLogDownload(names, inclarch);
             if (m == null)
             {
                 return null;

@@ -1,0 +1,169 @@
+﻿<h2>Log download status</h2>
+<div id="newRequestInfo">
+    <span>Het kan een minuutje duren voordat een nieuw verzoek verwerkt wordt.</span>
+</div>
+<div id="busyIndicator">
+    <center>
+        <img src="@Href("~/Modules/Globalcaching/Media/wait28.gif")" />
+        <strong>Bezig met downwloaden...</strong>
+    </center>
+</div>
+<table class="table table-striped table-hover" id="downloadStatusOverview">
+    <thead>
+        <tr>
+            <th class="col-md-3">Item</th>
+            <th>Waarde</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Status</td>
+            <td id="Status"></td>
+        </tr>
+@if (Model.Busy != null)
+{
+    <tr id="rLastUpdateAt">
+        <td>Status bijgewerkt op</td>
+        <td id="LastUpdateAt"></td>
+    </tr>
+    <tr id="rRequestAt">
+        <td>Verzoek gedaan op</td>
+        <td id="RequestAt"></td>
+    </tr>
+    <tr id="rUserNames">
+        <td>Logs van</td>
+        <td id="UserNames"></td>
+    </tr>
+    <tr id="rIncludeYourArchived">
+        <td>Inclusief jouw gearchiveerde</td>
+        <td id="IncludeYourArchived"></td>
+    </tr>
+    <tr id="rTotalFindCount">
+        <td>Totaal gevonden logs</td>
+        <td id="TotalFindCount"></td>
+    </tr>
+    <tr id="rTotalLogsImported">
+        <td>Logs gedownload</td>
+        <td id="TotalLogsImported"></td>
+    </tr>
+    <tr id="rUserNamesCompleted">
+        <td>Logs gedownload van</td>
+        <td id="UserNamesCompleted"></td>
+    </tr>
+    <tr id="rUserNameBusy">
+        <td>Bezig met</td>
+        <td id="UserNameBusy"></td>
+    </tr>
+}
+    </tbody>
+</table>
+
+<h3>Log download verzoek</h3>
+<form role="form" id="startDownloadForm">
+    <div class="form-group">
+        <label class="control-label">Geocaching.com account namen (maximaal 10):</label>
+        <input class="form-control" id="requsernames" value="" placeholder="pietje, jantje, henkje" />
+    </div>
+
+    <div class="form-group">
+        <input type="checkbox" id="reqinclarchived" /> Inclusief jouw gearchiveerde logs.
+    </div>
+
+    <button class="btn btn-primary" type="button" id="startDownloadLogsButton">Haal logs op</button>
+</form>
+
+<script type="text/javascript">
+
+    function handleDownloadStatus(response) {
+        if (response != null) {
+            $("#Status").text(response.Status);
+            if (response.Busy !== null) {
+                var d = eval('new' + response.LastUpdateAt.replace(/\//g, ' '));
+                $("#LastUpdateAt").text(d.toLocaleString());
+                d = eval('new' + response.RequestedAt.replace(/\//g, ' '));
+                $("#RequestAt").text(d.toLocaleString());
+                $("#UserNames").text(response.UserNames);
+                $("#IncludeYourArchived").text(response.IncludeYourArchived ? "Ja" : "Nee");
+                $("#TotalFindCount").text(response.TotalFindCount);
+                $("#TotalLogsImported").text(response.TotalLogsImported);
+                $("#UserNamesCompleted").text(response.UserNamesCompleted);
+                $("#UserNameBusy").text(response.UserNameBusy);
+
+                $("#newRequestInfo").hide();
+                $("#rLastUpdateAt").show();
+                $("#rRequestAt").show();
+                $("#rUserNames").show();
+                $("#rIncludeYourArchived").show();
+                $("#rTotalFindCount").show();
+                $("#rTotalLogsImported").show();
+                $("#rUserNamesCompleted").show();
+                $("#rUserNameBusy").show();
+            }
+            else {
+                $("#newRequestInfo").show();
+                $("#rLastUpdateAt").hide();
+                $("#rRequestAt").hide();
+                $("#rUserNames").hide();
+                $("#rIncludeYourArchived").hide();
+                $("#rTotalFindCount").hide();
+                $("#rTotalLogsImported").hide();
+                $("#rUserNamesCompleted").hide();
+                $("#rUserNameBusy").hide();
+            }
+
+            if (response.Busy === true) {
+                $("#busyIndicator").show();
+            }
+            else {
+                $("#busyIndicator").hide();
+            }
+
+            if (response.Busy !== false) {
+                setTimeout(function () { getDownloadStatus(); }, 5000);
+            }
+        }
+        else {
+            $("#downloadStatusOverview").hide();
+            $("#startDownloadForm").hide();
+        }
+    }
+
+    function getDownloadStatus() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLiveAPILogDownloadStatus", "LiveAPIDownload", new { area = "Globalcaching" })',
+            data: {
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                handleDownloadStatus(response);
+            },
+            error: function (data, errorText) {
+            }
+        });
+    }
+
+    function startDownload() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("StartLogDownload", "LiveAPIDownload", new { area = "Globalcaching" })',
+            data: {
+                names: $("#requsernames").val(),
+                inclarch: $("#reqinclarchived").is(':checked'),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                handleDownloadStatus(response);
+            },
+            error: function (data, errorText) {
+            }
+        });
+    }
+
+    $("#startDownloadLogsButton").click(function () {
+        startDownload();
+    });
+
+    handleDownloadStatus(@Html.Raw(Json.Encode(@Model)));
+
+</script>

@@ -15,6 +15,7 @@ namespace Globalcaching.Services
 {
     public interface ILiveAPIDownloadService : IDependency
     {
+        //geocaches
         LiveAPIDownloadStatus DownloadStatus { get; }
         bool SetMacroResultForDownload();
         bool SetQueryResultForDownload(PetaPoco.Sql sql);
@@ -23,6 +24,10 @@ namespace Globalcaching.Services
         string GetDownloadFilePath();
         string DownloadGPX(string Code);
         LiveAPIDownloadStatus UpdateLiveAPILimits();
+
+        //logs
+        GCEuDownloadLogsStatus DownloadLogStatus { get; }
+        GCEuDownloadLogsStatus StartLogDownload(string names, bool inclYourArchived);
     }
 
     public class LiveAPIDownloadService : ILiveAPIDownloadService
@@ -70,6 +75,62 @@ namespace Globalcaching.Services
             }
         }
 
+        public GCEuDownloadLogsStatus DownloadLogStatus
+        {
+            get
+            {
+                GCEuDownloadLogsStatus result = null;
+                using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                {
+                    var settings = _gcEuUserSettingsService.GetSettings();
+                    if (settings != null)
+                    {
+                        result = db.FirstOrDefault<GCEuDownloadLogsStatus>("select * from GCEuMacroData.dbo.GCEuDownloadLogsStatus where UserID=@0", settings.YafUserID);
+                    }
+                }
+                return result;
+            }
+        }
+
+        public GCEuDownloadLogsStatus StartLogDownload(string names, bool inclYourArchived)
+        {
+            GCEuDownloadLogsStatus result = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                var settings = _gcEuUserSettingsService.GetSettings();
+                if (settings != null && settings.YafUserID>1)
+                {
+                    result = db.FirstOrDefault<GCEuDownloadLogsStatus>("select * from GCEuMacroData.dbo.GCEuDownloadLogsStatus where UserID=@0", settings.YafUserID);
+                    if (result == null)
+                    {
+                        result = new GCEuDownloadLogsStatus();
+                        result.Busy = null;
+                        result.LastUpdateAt = DateTime.Now;
+                        result.LogTableName = "";
+                        result.Status = "Nieuw verzoek gedaan.";
+                        result.TotalFindCount = null;
+                        result.TotalLogsImported = 0;
+                        result.UserID = settings.YafUserID;
+                        result.UserNameBusy = "";
+                        result.UserNamesCompleted = "";
+                        result.IncludeYourArchived = inclYourArchived;
+                        result.RequestedAt = DateTime.Now;
+                        result.UserNames = names;
+                        db.Insert("GCEuMacroData.dbo.GCEuDownloadLogsStatus", "UserID", false, result);
+                    }
+                    else
+                    {
+                        result.Busy = null;
+                        result.Status = "Nieuw verzoek gedaan.";
+                        result.IncludeYourArchived = inclYourArchived;
+                        result.RequestedAt = DateTime.Now;
+                        result.UserNames = names;
+                        db.Update("GCEuMacroData.dbo.GCEuDownloadLogsStatus", "UserID", result);
+                    }
+                }
+            }
+            return result;
+        }
 
         private LiveAPIDownloadStatus getOrCreateDownLoadStatus(PetaPoco.Database db, int usrId)
         {

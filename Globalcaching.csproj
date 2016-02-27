@@ -396,6 +396,7 @@
     <Content Include="Views\DisplayTemplates\Parts.Bookmarks.cshtml" />
     <Content Include="Views\EditorTemplates\Parts\FinancialYearStatus.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FinancialYearStatus.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.LiveAPILogDownload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -486,6 +487,7 @@
     <Compile Include="Drivers\GeocacheMaintenancePartDriver.cs" />
     <Compile Include="Drivers\GeocacheBatchLogPartDriver.cs" />
     <Compile Include="Drivers\GeocacheTypeStatsPartDriver.cs" />
+    <Compile Include="Drivers\LiveAPILogDownloadPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
     <Compile Include="Drivers\SelectionBuilderPartDriver.cs" />
@@ -560,6 +562,7 @@
     <Compile Include="Models\GCEuCoordCheckAttempt.cs" />
     <Compile Include="Models\GCEuCoordCheckCode.cs" />
     <Compile Include="Models\GCEuDonations.cs" />
+    <Compile Include="Models\GCEuDownloadLogsStatus.cs" />
     <Compile Include="Models\GCEuFoundsRanking.cs" />
     <Compile Include="Models\GCEuFTFStats.cs" />
     <Compile Include="Models\GCEuGeocache.cs" />
