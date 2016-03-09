@@ -39,6 +39,20 @@ namespace Globalcaching.Controllers
         }
 
         [HttpPost]
+        public ActionResult GetLiveAPIGetLogs(int page, int pageSize, string txt, string ltids, DateTime ldf, DateTime ldt, DateTime cdf, DateTime cdt, int ddiff, int ddift, int numpf, int numpt, string arch, string osbnl, string enc)
+        {
+            var m = _liveAPIDownloadService.GetLogs(page, pageSize, txt: txt, ltids: ltids, ldf: ldf.ToLocalTime(), ldt: ldt.ToLocalTime(), cdf: cdf.ToLocalTime(), cdt: cdt.ToLocalTime(), ddiff: ddiff, ddift: ddift, numpf: numpf, numpt: numpt, arch: arch != "0", osbnl: osbnl != "0", enc: enc != "0");
+            if (m == null)
+            {
+                return null;
+            }
+            else
+            {
+                return Json(m);
+            }
+        }
+
+        [HttpPost]
         public ActionResult GetLiveAPILogDownloadStatus()
         {
             var m = _liveAPIDownloadService.DownloadLogStatus;

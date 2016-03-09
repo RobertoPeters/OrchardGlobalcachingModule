@@ -1,0 +1,273 @@
+﻿@{
+    Style.Require("datetimepicker.Style");
+}
+<h3>Zoek in gedownloade logs</h3>
+
+<form role="form" id="startDownloadForm">
+
+    <div class="form-group">
+        <label class="control-label">Log bevat tekst:</label>
+        <input class="form-control" id="searchlogtext" value="" placeholder="" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Logtypes:</label>
+        <div>
+            @foreach (var gt in Model.LogTypes)
+            {
+                <div class="col-md-1"><center><img src="@Href(string.Format("~/Modules/Globalcaching/Media/logtypes/{0}.gif", gt.ID))" title="@gt.WptLogTypeName" /><br /><input type="checkbox" id="@string.Format("lgtype{0}", @gt.ID)" /></center></div>
+            }
+        </div>
+    </div>
+    <div class="row"></div>
+
+    <div class="form-group">
+        <label class="control-label">Logdatum:</label>
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="visitfromdate" class="col-md-3 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+            <div class="col-md-1">
+                t/m:
+            </div>
+            <div id="visittodate" class="col-md-3 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Aanmaakdatum:</label>
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div id="createfromdate" class="col-md-3 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+            <div class="col-md-1">
+                t/m:
+            </div>
+            <div id="createtodate" class="col-md-3 date">
+                <input type='text' width="100" />
+                <span class="fa fa-calendar"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Aantal dagen tussen logdatum en aanmaakdatum:</label>
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div class="col-md-3">
+                <input type='text' width="100" id="daysbetweenfrom" value="0" />
+            </div>
+            <div class="col-md-1">
+                t/m:
+            </div>
+            <div class="col-md-3">
+                <input type='text' width="100" id="daysbetweento" value="999999" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Aantal toegevoegde foto's:</label>
+        <div class="row">
+            <div class="col-md-1">
+                Vanaf:
+            </div>
+            <div class="col-md-3">
+                <input type='text' width="100" id="imagecountfrom"  value="0" />
+            </div>
+            <div class="col-md-1">
+                t/m:
+            </div>
+            <div class="col-md-3">
+                <input type='text' width="100" value="999999" id="imagecountto" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="checkbox" id="searcharchived" /> Alleen jouw gearchiveerde logs.
+    </div>
+
+    <div class="form-group">
+        <input type="checkbox" id="outsidebenelux" /> Alleen buiten de BeNeLux.
+    </div>
+
+    <div class="form-group">
+        <input type="checkbox" id="encodedlogs" /> Alleen ge-encodeerde logs.
+    </div>
+
+    <button class="btn btn-primary" type="button" id="gccomSearchLogsButton">Zoek</button>
+</form>
+
+<h3>Gevonden logs</h3>
+
+<div id="gccomSearchLogsTopPager">
+</div>
+<table class="table table-striped table-hover" id="gccomSearchLogsResults">
+    <tbody></tbody>
+</table>
+<div id="gccomSearchLogsBottomPager">
+</div>
+
+<script type="text/javascript">
+
+    initGlobalcachingPager("gccomSearchLogsTopPager", "gccomSearchLogs");
+    initGlobalcachingPager("gccomSearchLogsBottomPager", "gccomSearchLogs");
+
+    var allLogTypes;
+
+    function handleGetLogsResponse(response) {
+        var resultElementName = "#gccomSearchLogsResults";
+        var pagerElementName = ".gccomSearchLogs";
+
+        if (response.LogTypes != null) {
+            allLogTypes = response.LogTypes;
+        }
+
+        //=================
+        //content
+        //=================
+        for (var i = 0; i < response.Logs.length; i++) {
+            var line = response.Logs[i];
+            // insert after last row!
+            var d = eval('new' + line.VisitDate.replace(/\//g, ' '));
+            var d2 = eval('new' + line.UTCCreateDate.replace(/\//g, ' '));
+            var s = '';
+            s += '<tr>';
+            s += '<td class="col-md-2">';
+            s += '<a href="@Href("~/Geocache/")' + line.CacheCode + '" target="_blank">' + line.CacheCode + '</a><br />';
+            if (line.GeocacheTypeId != null) {
+                s += '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId + '.gif" /><br />';
+                s += line.Name;
+            }
+            s += '</td>';
+            s += '<td class="col-md-2">';
+            s += '<a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="blank">' + line.UserName + '</a><br />';
+            s += '<small>';
+            if (line.MemberTypeId == 1) {
+                s += 'Basic Member';
+            }
+            else {
+                s += 'Premium Member';
+            }
+            s += '</small><br />';
+            s += '<img src="' + line.AvatarUrl + '" height="48" width="48" /><br />';
+            s += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" />&nbsp; ' + line.FindCount + '</td>';
+            s += '<td class="col-md-8">';
+            s += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/")' + line.WptLogTypeId + '.gif" />&nbsp; ' + line.WptLogTypeName;
+            s += '<span class="pull-right"> ' + formatDateToShortDate(d) + '</span><br />';
+            s += line.LogText;
+            s += '<br />';
+            s += '<br />';
+            if (line.NumberOfImages > 0) {
+                s += "<small>" + line.NumberOfImages + " foto's toegevoegd</small><br />";
+            }
+            s += '<small>Log aangemaakt op ' + formatDateToShortDate(d2) + ' ' + d2.getHours() + ':' + (d2.getMinutes() < 10 ? '0' : '') + d2.getMinutes() + '</small>';
+            s += '<span class="pull-right"><a href="' + line.Url + '" target="blank">Bekijk log</a><span>';
+            s += '</td>';
+            s += '</tr>';
+            $(resultElementName + ' > tbody:last').append(s);
+        }
+
+        //=================
+        //Pager
+        //=================
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestgccomSearchLogsPage");
+    }
+
+    function requestgccomSearchLogsPage(page) {
+        var resultElementName = "#gccomSearchLogsResults";
+        var pagerElementName = ".gccomSearchLogs";
+
+        $(resultElementName).find("tr").remove();
+        $(pagerElementName).find("li").remove();
+
+        myApp.showPleaseWait();
+
+        var lst = "";
+        for (var i = 0; i < allLogTypes.length; i++) {
+            if ($('#lgtype' + allLogTypes[i].ID.toString()).prop('checked')) {
+                if (lst == "") {
+                    lst = lst + allLogTypes[i].ID.toString();
+                }
+                else {
+                    lst = lst + ", " + allLogTypes[i].ID.toString();
+                }
+            }
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLiveAPIGetLogs", "LiveAPIDownload", new { area = "Globalcaching" })',
+            data: {
+                page: page,
+                pageSize: "50",
+                txt: $("#searchlogtext").val(),
+                ltids: lst,
+                ldf: $("#visitfromdate").data("DateTimePicker").getDate().toISOString(),
+                ldt: $("#visittodate").data("DateTimePicker").getDate().toISOString(),
+                cdf: $("#createfromdate").data("DateTimePicker").getDate().toISOString(),
+                cdt: $("#createtodate").data("DateTimePicker").getDate().toISOString(),
+                ddiff: $("#daysbetweenfrom").val(),
+                ddift: $("#daysbetweento").val(),
+                numpf: $("#imagecountfrom").val(),
+                numpt: $("#imagecountto").val(),
+                arch: $('#searcharchived').prop('checked')?"1":"0",
+                osbnl: $('#outsidebenelux').prop('checked') ? "1" : "0",
+                enc: $('#encodedlogs').prop('checked') ? "1" : "0",
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                handleGetLogsResponse(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $('#gccomSearchLogsFor').keypress(function (e) {
+        if (e.which == '13') {
+            requestgccomSearchLogsPage('1');
+            e.preventDefault();
+        }
+    });
+
+    $("#gccomSearchLogsButton").click(function () {
+        requestgccomSearchLogsPage('1');
+    });
+
+    $(function () {
+        var d = moment('1/1/2001');
+        $('#visitfromdate').datetimepicker({
+            defaultDate: d
+        });
+        $('#createfromdate').datetimepicker({
+            defaultDate: d
+        });
+        var e = moment().add(1, 'years');
+        $('#visittodate').datetimepicker({
+            defaultDate: e
+        });
+        $('#createtodate').datetimepicker({
+            defaultDate: e
+        });
+        handleGetLogsResponse(@Html.Raw(Json.Encode(@Model)));
+    });
+
+</script>

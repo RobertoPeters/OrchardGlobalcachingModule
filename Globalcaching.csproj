@@ -397,6 +397,7 @@
     <Content Include="Views\EditorTemplates\Parts\FinancialYearStatus.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.FinancialYearStatus.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.LiveAPILogDownload.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.LiveAPILogSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -487,6 +488,7 @@
     <Compile Include="Drivers\GeocacheMaintenancePartDriver.cs" />
     <Compile Include="Drivers\GeocacheBatchLogPartDriver.cs" />
     <Compile Include="Drivers\GeocacheTypeStatsPartDriver.cs" />
+    <Compile Include="Drivers\LiveAPILogSearchPartDriver.cs" />
     <Compile Include="Drivers\LiveAPILogDownloadPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupsPartDriver.cs" />
     <Compile Include="Drivers\TrackableGroupMaintPartDriver.cs" />
@@ -544,6 +546,7 @@
     <Compile Include="Models\GCComGeocache.cs" />
     <Compile Include="Models\GCComGeocacheAttribute.cs" />
     <Compile Include="Models\GCComGeocacheImage.cs" />
+    <Compile Include="Models\GCComGeocacheLogLiveAPI.cs" />
     <Compile Include="Models\GCComGeocacheLog.cs" />
     <Compile Include="Models\GCComGeocacheLogImage.cs" />
     <Compile Include="Models\GCComGeocacheType.cs" />

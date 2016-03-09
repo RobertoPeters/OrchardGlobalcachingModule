@@ -712,5 +712,19 @@ namespace Globalcaching
             return 50;
         }
 
+        public int UpdateFrom50()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("LiveAPILogSearchWidget",
+                cfg => cfg
+                    .DisplayedAs("LiveAPILogSearch")
+                    .WithPart("LiveAPILogSearchPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 51;
+        }
+
     }
 }

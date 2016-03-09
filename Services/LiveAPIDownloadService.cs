@@ -28,6 +28,7 @@ namespace Globalcaching.Services
         //logs
         GCEuDownloadLogsStatus DownloadLogStatus { get; }
         GCEuDownloadLogsStatus StartLogDownload(string names, bool inclYourArchived);
+        GCComGeocacheLogLiveAPISearchResult GetLogs(int page, int pageSize, string txt = null, string ltids = null, DateTime? ldf = null, DateTime? ldt = null, DateTime? cdf = null, DateTime? cdt = null, int? ddiff = null, int? ddift = null, int? numpf = null, int? numpt = null, bool? arch = null, bool? osbnl = null, bool? enc = null);
     }
 
     public class LiveAPIDownloadService : ILiveAPIDownloadService
@@ -131,6 +132,104 @@ namespace Globalcaching.Services
             }
             return result;
         }
+
+        public GCComGeocacheLogLiveAPISearchResult GetLogs(int page, int pageSize, string txt = null, string ltids = null, DateTime? ldf = null, DateTime? ldt = null, DateTime? cdf = null, DateTime? cdt = null, int? ddiff = null, int? ddift = null, int? numpf = null, int? numpt = null, bool? arch = null, bool? osbnl = null, bool? enc = null)
+        {
+            var result = new GCComGeocacheLogLiveAPISearchResult();
+            result.PageCount = 1;
+            result.CurrentPage = 1;
+            var status = DownloadLogStatus;
+            if (status != null && status.Busy != null)
+            {
+                try
+                {
+                    using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                    {
+                        if (txt == null)
+                        {
+                            result.LogTypes = db.Fetch<GCComLogType>("where ID in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 22, 23, 24, 45, 46, 47, 74)");
+                        }
+                        var sql = PetaPoco.Sql.Builder.Append(string.Format("select {0}.*, GCComGeocache.GeocacheTypeId, GCComGeocache.Name, GCComGeocache.Url as GeocacheUrl, GCComUser.AvatarUrl, GCComUser.FindCount, GCComUser.MemberTypeId, GCComUser.PublicGuid, GCComUser.UserName, GCComLogType.WptLogTypeName", status.LogTableName))
+                            .Append(string.Format("from GCEuMacroData.dbo.{0} with (nolock)", status.LogTableName))
+                            .Append(string.Format("left join GCComGeocache with (nolock) on GCComGeocache.ID={0}.GeocacheID", status.LogTableName))
+                            .Append(string.Format("inner join GCComUser with (nolock) ON {0}.FinderId=GCComUser.ID", status.LogTableName))
+                            .Append(string.Format("inner join GCComLogType with (nolock) ON {0}.WptLogTypeId=GCComLogType.ID", status.LogTableName))
+                            .Append("WHERE 1=1");
+                        if (ldf != null && ldt != null && (ldf.Value.Date != new DateTime(2001, 1, 1) || ldt.Value.Date != DateTime.Now.Date.AddYears(1)))
+                        {
+                            sql = sql.Append("AND VisitDate BETWEEN @0 AND @1", ldf.Value.AddDays(-1), ldt.Value.AddDays(1));
+                        }
+                        if (cdf != null && ldt != null && (cdf.Value.Date != new DateTime(2001, 1, 1) || cdt.Value.Date != DateTime.Now.Date.AddYears(1)))
+                        {
+                            sql = sql.Append("AND UTCCreateDate BETWEEN @0 AND @1", cdf.Value.AddDays(-1), cdt.Value.AddDays(1));
+                        }
+                        if (ddiff != null && ddift != null && (ddiff.Value != 0 || ddift.Value != 999999))
+                        {
+                            sql = sql.Append("AND ABS(DATEDIFF(day,UTCCreateDate,VisitDate)) BETWEEN @0 AND @1", ddiff.Value-1, ddift.Value+1);
+                        }
+                        if (numpf != null && numpt != null && (numpf.Value != 0 || numpt.Value != 999999))
+                        {
+                            sql = sql.Append("AND NumberOfImages BETWEEN @0 AND @1", numpf.Value - 1, numpt.Value + 1);
+                        }
+                        if (arch != null && arch.Value)
+                        {
+                            sql = sql.Append("AND IsArchived = 1");
+                        }
+                        if (enc != null && enc.Value)
+                        {
+                            sql = sql.Append("AND LogIsEncoded = 1");
+                        }
+                        if (osbnl != null && osbnl.Value)
+                        {
+                            sql = sql.Append("AND GeocacheTypeId is null");
+                        }
+                        if (!string.IsNullOrWhiteSpace(txt))
+                        {
+                            sql = sql.Append(string.Format("AND LogText LIKE '%{0}%'", txt.Replace("'", "''").Replace("@", "@@")));
+                        }
+                        if (!string.IsNullOrWhiteSpace(ltids))
+                        {
+                            var parts = ltids.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                            sql = sql.Append(string.Format("AND WptLogTypeId in ({0})", string.Join(",", (from a in parts select int.Parse(a)).ToArray())));
+                        }
+                        sql = sql.Append(string.Format("order by VisitDate desc, {0}.ID desc", status.LogTableName));
+                        var items = db.Page<GCComGeocacheLogLiveAPI>(page, pageSize, sql);
+                        result.Logs = items.Items.ToArray();
+                        result.CurrentPage = items.CurrentPage;
+                        result.PageCount = items.TotalPages;
+                        result.TotalCount = items.TotalItems;
+
+                        for (int i = 0; i < result.Logs.Length; i++)
+                        {
+                            //result.Logs[i].UTCCreateDate = result.Logs[i].UTCCreateDate.ToLocalTime();
+                            result.Logs[i].LogText = HttpUtility.HtmlEncode(result.Logs[i].LogText ?? "").Replace("\r","<br />").Replace("\n","");
+                            if (!string.IsNullOrWhiteSpace(txt))
+                            {
+                                int pos = result.Logs[i].LogText.IndexOf(txt, StringComparison.OrdinalIgnoreCase);
+                                while (pos >= 0)
+                                {
+                                    string replaceStr = string.Format("<span style=\"background-color: #FFFF00\">{0}</span>", txt);
+                                    result.Logs[i].LogText = string.Concat(result.Logs[i].LogText.Substring(0, pos), replaceStr, result.Logs[i].LogText.Substring(pos + txt.Length));
+                                    pos = result.Logs[i].LogText.IndexOf(txt, pos + replaceStr.Length, StringComparison.OrdinalIgnoreCase);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    result.Logs = new GCComGeocacheLogLiveAPI[0];
+                    result.TotalCount = 0;
+                }
+            }
+            else
+            {
+                result.Logs = new GCComGeocacheLogLiveAPI[0];
+                result.TotalCount = 0;
+            }
+            return result;            
+        }
+
 
         private LiveAPIDownloadStatus getOrCreateDownLoadStatus(PetaPoco.Database db, int usrId)
         {

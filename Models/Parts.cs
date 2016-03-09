@@ -31,6 +31,10 @@ namespace Globalcaching.Models
         }
     }
 
+    public class LiveAPILogSearchPart : ContentPart
+    {
+    }
+
     public class LiveAPILogDownloadPart : ContentPart
     {
     }
