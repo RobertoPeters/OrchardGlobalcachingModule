@@ -157,19 +157,19 @@ namespace Globalcaching.Services
                             .Append("WHERE 1=1");
                         if (ldf != null && ldt != null && (ldf.Value.Date != new DateTime(2001, 1, 1) || ldt.Value.Date != DateTime.Now.Date.AddYears(1)))
                         {
-                            sql = sql.Append("AND VisitDate BETWEEN @0 AND @1", ldf.Value.AddDays(-1), ldt.Value.AddDays(1));
+                            sql = sql.Append("AND VisitDate >= @0 AND VisitDate <= @1", ldf.Value.Date, ldt.Value.Date);
                         }
                         if (cdf != null && ldt != null && (cdf.Value.Date != new DateTime(2001, 1, 1) || cdt.Value.Date != DateTime.Now.Date.AddYears(1)))
                         {
-                            sql = sql.Append("AND UTCCreateDate BETWEEN @0 AND @1", cdf.Value.AddDays(-1), cdt.Value.AddDays(1));
+                            sql = sql.Append("AND UTCCreateDate >= @0 AND UTCCreateDate <= @1", cdf.Value.Date, cdt.Value.Date);
                         }
                         if (ddiff != null && ddift != null && (ddiff.Value != 0 || ddift.Value != 999999))
                         {
-                            sql = sql.Append("AND ABS(DATEDIFF(day,UTCCreateDate,VisitDate)) BETWEEN @0 AND @1", ddiff.Value-1, ddift.Value+1);
+                            sql = sql.Append("AND ABS(DATEDIFF(day,UTCCreateDate,VisitDate)) >= @0 AND ABS(DATEDIFF(day,UTCCreateDate,VisitDate)) <= @1", ddiff.Value, ddift.Value);
                         }
                         if (numpf != null && numpt != null && (numpf.Value != 0 || numpt.Value != 999999))
                         {
-                            sql = sql.Append("AND NumberOfImages BETWEEN @0 AND @1", numpf.Value - 1, numpt.Value + 1);
+                            sql = sql.Append("AND NumberOfImages >= @0 AND NumberOfImages <= @1", numpf.Value, numpt.Value);
                         }
                         if (arch != null && arch.Value)
                         {
@@ -226,6 +226,13 @@ namespace Globalcaching.Services
             {
                 result.Logs = new GCComGeocacheLogLiveAPI[0];
                 result.TotalCount = 0;
+            }
+            if (result.LogTypes == null && txt == null)
+            {
+                using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                {
+                    result.LogTypes = db.Fetch<GCComLogType>("where ID in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 22, 23, 24, 45, 46, 47, 74)");
+                }
             }
             return result;            
         }
