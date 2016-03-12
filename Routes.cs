@@ -529,6 +529,36 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GetCCCRequests",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CheckCCC"},
+                            {"action", "GetRequests"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetCCCRequestsPage",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "CheckCCC"},
+                            {"action", "GetRequestsPage"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "cachers/ccc.aspx",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

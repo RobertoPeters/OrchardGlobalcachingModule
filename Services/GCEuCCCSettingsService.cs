@@ -21,6 +21,7 @@ namespace Globalcaching.Services
         string GetCCCServiceResult(string gccode, string username, string password);
         List<ListCCCMembersModel> GetAllCCCUsers();
         void DeactivateCCCMember(int id);
+        GCEuCCCRequestModel GetRequestCalls(int page, int pageSize);
     }
 
     public class GCEuCCCSettingsService : IGCEuCCCSettingsService
@@ -181,17 +182,32 @@ namespace Globalcaching.Services
             StringBuilder result = new StringBuilder();
             try
             {
+                var m = new GCEuCCCRequest();
+                m.UserName = username;
+                m.GCCode = gccode;
+                m.ValidPassword = false;
+                m.ResultCount = 0;
+                m.MemberCCC = false;
+                m.GCComUserID = null;
+                m.RequestAt = DateTime.Now;
                 if (username != null && password != null)
                 {
                     if (_membershipService.ValidateUser(username, password)!=null)
                     {
+                        var settings = GetSettings(username);
+
+                        m.MemberCCC = (settings != null && settings.Active);
+                        m.ValidPassword = true;
+                        if (settings != null)
+                        {
+                            m.GCComUserID = settings.GCComUserID;
+                        }
                         if (gccode == null)
                         {
                             result.Append("OK");
                         }
                         else
                         {
-                            var settings = GetSettings(username);
                             if (settings != null && settings.Active)
                             {
                                 result.AppendLine("BeginTitel");
@@ -213,8 +229,10 @@ namespace Globalcaching.Services
                                 var cccResult = GetCCCUsersForGeocache(1, 200, gccode, false);
                                 if (cccResult != null)
                                 {
+                                    m.ResultCount = cccResult.Items.Length;
                                     if (cccResult.Owner != null)
                                     {
+                                        m.ResultCount++;
                                         result.AppendLine("BeginRecord");
                                         result.AppendLine(string.Format("Name:{0} (CO)", cccResult.Owner.UserName??""));
                                         result.AppendLine(string.Format("Tel:{0}", cccResult.Owner.Telnr??""));
@@ -266,6 +284,10 @@ namespace Globalcaching.Services
                         result.Append("2");
                     }
                 }
+                using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+                {
+                    db.Insert(m);
+                }
             }
             catch
             {
@@ -275,6 +297,21 @@ namespace Globalcaching.Services
             return result.ToString();
         }
 
+        public GCEuCCCRequestModel GetRequestCalls(int page, int pageSize)
+        {
+            var result = new GCEuCCCRequestModel();
+            result.PageCount = 1;
+            result.CurrentPage = 1;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
+            {
+                var items = db.Page<GCEuCCCRequest>(page, pageSize, "select * from GCEuCCCRequest order by GCEuCCCRequest.ID desc");
+                result.Calls = items.Items;
+                result.CurrentPage = items.CurrentPage;
+                result.TotalCount = items.TotalItems;
+                result.PageCount = items.TotalPages;
+            }
+            return result;
+        }
 
     }
 }

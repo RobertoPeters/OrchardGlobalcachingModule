@@ -1,0 +1,81 @@
+﻿@{
+    Script.Require("moment.Script").AtHead();
+}
+
+<div id="callsTopPager">
+</div>
+<table class="table table-striped table-hover" id="callsResults">
+    <thead>
+        <tr>
+            <th>Tijd</th>
+            <th>Global Nick</th>
+            <th>GCCom ID</th>
+            <th>CCC Member</th>
+            <th>Val.Pwd.</th>
+            <th>GCCode</th>
+            <th># results</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div id="callsBottomPager">
+</div>
+
+<script type="text/javascript">
+    initGlobalcachingPager("callsTopPager", "callsPager");
+    initGlobalcachingPager("callsBottomPager", "callsPager");
+
+    function updateFTFList(response) {
+        var resultElementName = "#callsResults";
+        var pagerElementName = ".callsPager";
+
+        for (var i = 0; i < response.Calls.length; i++) {
+            var line = response.Calls[i];
+            // insert after last row!
+
+            var d = eval('new' + line.RequestAt.replace(/\//g, ' '));
+            var td1 = moment(d).utc().format("YYYY-MM-DD HH:mm:ss");
+            var td2 = line.UserName == null ? 'NULL' : line.UserName;
+            var td3 = line.GCComUserID == null ? '' : line.GCComUserID.toString();
+            var td4 = line.MemberCCC.toString();
+            var td5 = line.ValidPassword.toString();
+            var td6 = line.GCCode == null ? 'NULL' : line.GCCode;
+            var td7 = line.ResultCount.toString();
+
+
+            $(resultElementName + ' > tbody:last').append('<tr><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td><td>' + td5 + '</td><td>' + td6 + '</td><td>' + td7 + '</td></tr>');
+        }
+
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestCallsPage");
+    }
+
+    function requestCallsPage(page) {
+        var resultElementName = "#callsResults";
+        var pagerElementName = ".callsPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRequestsPage", "CheckCCC", new { area = "Globalcaching" })',
+            data: {
+                page: page,
+                pageSize: "500",
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateFTFList(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    updateFTFList(@Html.Raw(Json.Encode(@Model)));
+
+</script>

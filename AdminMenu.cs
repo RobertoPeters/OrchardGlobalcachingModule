@@ -55,6 +55,7 @@ namespace Globalcaching {
             builder.Add(T("Afstand Admin"), "1.0", item => item.Action("Index", "GeocacheDistance", new { area = "Globalcaching" }).Permission(Permissions.DistanceAdmin));
             builder.Add(T("Dashboard"), "1.0", item => item.Action("Index", "Admin", new { Area = "Dashboard" }).Permission(StandardPermissions.AccessAdminPanel));
             builder.Add(T("Contactform."), "1.0", item => item.Action("Index", "ContactForm", new { Area = "Globalcaching" }).Permission(Permissions.GlobalAdmin));
+            builder.Add(T("CCC mob. aanr."), "1.0", item => item.Action("GetRequests", "CheckCCC", new { area = "Globalcaching" }).Permission(Permissions.GlobalAdmin));
             if (Services.Authorizer.Authorize(Permissions.GlobalAdmin) || Services.Authorizer.Authorize(Permissions.FTFAdmin))
             {
                 builder.Add(T("Activiteiten"), "1.0", item => item.Action("Index", "UsersOnline", new { Area = "Globalcaching" }));

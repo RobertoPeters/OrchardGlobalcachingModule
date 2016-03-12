@@ -83,5 +83,31 @@ namespace Globalcaching.Controllers
             }
         }
 
+        [Themed]
+        public ActionResult GetRequests()
+        {
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
+            {
+                return View("Requests", _gcEuCCCSettingsService.GetRequestCalls(1, 500));
+            }
+            else
+            {
+                return new HttpUnauthorizedResult();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetRequestsPage(int page, int pageSize)
+        {
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin))
+            {
+                return Json(_gcEuCCCSettingsService.GetRequestCalls(page, pageSize));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }
