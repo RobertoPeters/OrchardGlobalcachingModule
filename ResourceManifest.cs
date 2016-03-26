@@ -25,9 +25,15 @@ namespace Globalcaching
             manifest.DefineStyle("zabuto_calendar.Style").SetUrl("zabuto_calendar.min.css");
             manifest.DefineScript("zabuto_calendar.Script").SetUrl("zabuto_calendar.min.js");
             manifest.DefineScript("GoogleAnalytics.Script").SetUrl("GoogleAnalytics.js");
-            manifest.DefineScript("JointJS.Script").SetUrl("joint.nojquery.min.js");
-            manifest.DefineStyle("JointJS.Style").SetUrl("joint.nojquery.min.css");
-            manifest.DefineScript("JointJSShapes.Script").SetUrl("joint.shapes.devs.min.js");
+            manifest.DefineScript("lodash.Script").SetUrl("lodash.min.js");
+            manifest.DefineScript("Backbone.Script").SetUrl("backbone-min.js").SetDependencies("lodash.Script");
+            //manifest.DefineScript("JointJS.Script").SetUrl("joint.nojquery.min.js");
+            manifest.DefineScript("JointJS.Script").SetUrl("joint.min096.js").SetDependencies("Backbone.Script");
+            //manifest.DefineStyle("JointJS.Style").SetUrl("joint.nojquery.min.css");
+            manifest.DefineStyle("JointJS.Style").SetUrl("joint.min096.css");
+            //manifest.DefineScript("JointJSShapes.Script").SetUrl("joint.shapes.devs.min.js");
+            manifest.DefineScript("JointJSShapes.Script").SetUrl("joint.shapes.devs.min096.js");
+            manifest.DefineScript("JointJSShapes.Script").SetUrl("joint.shapes.devs.min096.js");
             manifest.DefineStyle("BootSideMenu.Style").SetUrl("BootSideMenu.css");
             manifest.DefineScript("BootSideMenu.Script").SetUrl("BootSideMenu.js");
         }

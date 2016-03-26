@@ -303,6 +303,7 @@
     <None Include="Media\Attributes\_9.gif" />
     <None Include="Media\gcicon.ico" />
     <None Include="Scripts\BootSideMenu.js" />
+    <Content Include="Scripts\backbone-min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.nl.js" />
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
@@ -314,13 +315,17 @@
     <None Include="Styles\joint.nojquery.min.css" />
     <None Include="Scripts\joint.nojquery.min.js" />
     <None Include="Scripts\joint.shapes.devs.min.js" />
+    <Content Include="Scripts\joint.min096.js" />
+    <Content Include="Scripts\joint.shapes.devs.min096.js" />
     <Content Include="Scripts\keydragzoom_packed.js" />
+    <Content Include="Scripts\lodash.min.js" />
     <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\zabuto_calendar.js" />
     <Content Include="Scripts\zabuto_calendar.min.js" />
     <None Include="Styles\BootSideMenu.css" />
     <Content Include="Styles\datetimepicker.css" />
+    <Content Include="Styles\joint.min096.css" />
     <Content Include="Styles\usersonline.css" />
     <Content Include="Styles\zabuto_calendar.css" />
     <Content Include="Styles\zabuto_calendar.min.css" />
