@@ -1456,12 +1456,12 @@
         var allElements = graph.getElements();
         for (var i = 0; i < allElements.length; i++) {
             var links = graph.getConnectedLinks(allElements[i]);
-            for (var i = 0; i < links.length; i++) {
-                var c = links[i].get('source').port;
+            for (var k = 0; k < links.length; k++) {
+                var c = links[k].get('source').port;
                 if (c == null) {
                     return false;
                 }
-                c = links[i].get('target').port;
+                c = links[k].get('target').port;
                 if (c == null) {
                     return false;
                 }
