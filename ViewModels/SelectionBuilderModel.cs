@@ -14,5 +14,6 @@ namespace Globalcaching.ViewModels
         public List<GCComGeocacheType> GeocacheTypes { get; set; }
         public List<GCComAttributeType> AttributeTypes { get; set; }
         public List<int> Containers { get; set; }
+        public List<Core.CachedData.GeocacheStateInfo> States { get; set; }
     }
 }

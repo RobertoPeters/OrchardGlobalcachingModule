@@ -443,6 +443,7 @@
         <div class="col-md-2"><input type="checkbox" id="country141" />Nederland</div>
         <div class="col-md-2"><input type="checkbox" id="country4" />Belgie</div>
         <div class="col-md-2"><input type="checkbox" id="country8" />Luxemburg</div>
+        <div class="col-md-2"><input type="checkbox" id="country79" />Duitsland</div>
     </div>
 </div>
 
@@ -556,6 +557,23 @@
         Parel van de Maand
     </div>
 </div>
+
+<!-- Procincie -->
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <input id="chkstate" type="checkbox" data-toggle="collapse" data-target="#pnlstate" />
+        &nbsp;&nbsp;Provincie
+    </div>
+    <div id="pnlstate" class="panel-body collapse in">
+        @foreach (var st in Model.States)
+        {
+            <div class="row">
+                <div class="col-md-12"><input type="checkbox" id="@string.Format("state{0}", st.StateID)" /> @st.State</div>
+            </div>
+        }
+    </div>
+</div>
+
 
 <!-- Geocache status -->
 <div class="panel panel-primary">
@@ -690,6 +708,7 @@
     $('#pnlcontainertype').collapse();
     $('#pnlstatus').collapse();
     $('#pnlcountry').collapse();
+    $('#pnlstate').collapse();
     $('#pnlhiddendate').collapse();
     $('#pnlpublisheddate').collapse();
     $('#pnlchangeddate').collapse();
@@ -720,6 +739,7 @@
     var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
     var containerTypes = @Html.Raw(Json.Encode(@Model.Containers));
     var attributeTypes = @Html.Raw(Json.Encode(@Model.AttributeTypes));
+    var States = @Html.Raw(Json.Encode(@Model.States));
 
     function addMacroFunction(r, f) {
         if (r == "") {
@@ -994,6 +1014,24 @@
             }
             result = addMacroFunction(result, "CacheType("+lst+")");
         }
+        if ($('#chkstate').prop('checked'))
+        {
+            var lst = "";
+            for(var i=0; i<States.length; i++)
+            {
+                if ($('#state'+States[i].StateID.toString()).prop('checked'))
+                {
+                    if (lst=="")
+                    {
+                        lst = lst + States[i].StateID.toString();
+                    }
+                    else{
+                        lst = lst + ", " + States[i].StateID.toString();
+                    }
+                }
+            }
+            result = addMacroFunction(result, "ProvincieCode("+lst+")");
+        }
         if ($('#chkcountry').prop('checked'))
         {
             var lst = "";
@@ -1025,6 +1063,16 @@
                 }
                 else{
                     lst = lst + ", " + '8';
+                }
+            }
+            if ($('#country79').prop('checked'))
+            {
+                if (lst=="")
+                {
+                    lst = lst + '79';
+                }
+                else{
+                    lst = lst + ", " + '79';
                 }
             }
             result = addMacroFunction(result, "LandCode("+lst+")");

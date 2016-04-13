@@ -28,13 +28,11 @@ namespace Globalcaching.Drivers
             SearchByAttributesModel m = new SearchByAttributesModel();
 
             var settings = _gcEuUserSettingsService.GetSettings();
-            using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
-            {
-                m.GeocacheTypes = db.Fetch<GCComGeocacheType>("where ID in (2, 3, 4, 5, 6, 8, 11, 12, 15, 137, 1858) order by ID");
-                m.Containers = new List<int> { 1, 2, 3, 4, 5, 6, 8 };
-                m.AttributeTypes = db.Fetch<GCComAttributeType>("order by ID");
-                m.UserSettings = settings;
-            }
+            m.GeocacheTypes = Core.CachedData.Instance.GeocacheTypesFilter;
+            m.Containers = new List<int> { 1, 2, 3, 4, 5, 6, 8 };
+            m.AttributeTypes = Core.CachedData.Instance.AttributesInfo;
+            m.States = Core.CachedData.Instance.StatesInfo.OrderBy(x => x.State).ToList();
+            m.UserSettings = settings;
 
             return ContentShape("Parts_SearchByAttributes",
                     () => shapeHelper.DisplayTemplate(

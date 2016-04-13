@@ -460,6 +460,7 @@
     <Compile Include="Controllers\SelectionBuilderController.cs" />
     <Compile Include="Controllers\TrackableGroupController.cs" />
     <Compile Include="Controllers\UsersOnlineController.cs" />
+    <Compile Include="Core\CachedData.cs" />
     <Compile Include="Core\DBCon.cs" />
     <Compile Include="Core\DotNetDBF\DBFBase.cs" />
     <Compile Include="Core\DotNetDBF\DBFException.cs" />

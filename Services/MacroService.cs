@@ -157,6 +157,22 @@ Created datetime not null
                             }
                             , new MacroFunctionInfo
                             {
+                                Name = "ProvincieCode",
+                                ProtoType = "ProvincieCode(code1, code2, ...coden)",
+                                Description = "Caches die in 1 van de opgegeven provincie liggen\r\n",
+                                Examples = "ProvincieCode(93)\r\nProvincieCode(93,88)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
+                                Name = "NietProvincieCode",
+                                ProtoType = "NietProvincieCode(code1, code2, ...coden)",
+                                Description = "Caches die in geen van de opgegeven provincie liggen\r\n",
+                                Examples = "NietProvincieCode(93)\r\nNietProvincieCode(93,88)",
+                                PMOnly = false
+                            }
+                            , new MacroFunctionInfo
+                            {
                                 Name = "AanmaakDatumVoor",
                                 ProtoType = "AanmaakDatumVoor(dag,maand,jaar)",
                                 Description = "Caches die aangemaakt zijn voor de opgegeven datum",
@@ -580,12 +596,12 @@ Created datetime not null
                                 PMOnly = false
                             }
                         };
-                        using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
-                        {
-                            List<GCComAttributeType> attr = db.Fetch<GCComAttributeType>("order by id");
-                            _macroFunctionInfo.Where(x => x.Name == "BevatAttribuut").FirstOrDefault().Description += string.Join("\r\n", (from a in attr select string.Format("{0} - {1}", a.ID, a.Name)).ToArray());
-                            _macroFunctionInfo.Where(x => x.Name == "NietBevatAttribuut").FirstOrDefault().Description += string.Join("\r\n", (from a in attr select string.Format("{0} - {1}", a.ID, a.Name)).ToArray());
-                        }
+                        var attr = CachedData.Instance.AttributesInfo;
+                        var states = CachedData.Instance.StatesInfo;
+                        _macroFunctionInfo.Where(x => x.Name == "BevatAttribuut").FirstOrDefault().Description += string.Join("\r\n", (from a in attr select string.Format("{0} - {1}", a.ID, a.Name)).ToArray());
+                        _macroFunctionInfo.Where(x => x.Name == "NietBevatAttribuut").FirstOrDefault().Description += string.Join("\r\n", (from a in attr select string.Format("{0} - {1}", a.ID, a.Name)).ToArray());
+                        _macroFunctionInfo.Where(x => x.Name == "ProvincieCode").FirstOrDefault().Description += string.Join("\r\n", (from a in states select string.Format("{0} - {1}", a.StateID, a.State)).ToArray());
+                        _macroFunctionInfo.Where(x => x.Name == "NietProvincieCode").FirstOrDefault().Description += string.Join("\r\n", (from a in states select string.Format("{0} - {1}", a.StateID, a.State)).ToArray());
                         _macroFunctionInfo = _macroFunctionInfo.OrderBy(x => x.Name).ToArray();
                     }
                 }
@@ -988,6 +1004,12 @@ Created datetime not null
                     break;
                 case "nietlandcode":
                     whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.CountryID not in ({0}) ", string.Join(", ", (from a in parameters select int.Parse(a)).ToArray())));
+                    break;
+                case "provinciecode":
+                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.StateID in ({0}) ", string.Join(", ", (from a in parameters select int.Parse(a)).ToArray())));
+                    break;
+                case "nietprovinciecode":
+                    whereClauses.Add(string.Format(" GcComData.dbo.GCComGeocache.StateID not in ({0}) ", string.Join(", ", (from a in parameters select int.Parse(a)).ToArray())));
                     break;
                 case "aanmaakdatumvoor":
                     whereClauses.Add(string.Format(" CONVERT(date, GcComData.dbo.GCComGeocache.DateCreated) < '{0}-{1}-{2}' ", int.Parse(parameters[2]), int.Parse(parameters[1]), int.Parse(parameters[0])));

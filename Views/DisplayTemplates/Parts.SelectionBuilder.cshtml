@@ -96,6 +96,7 @@
             <li class="list-group-item" style="cursor: pointer" id="Land" draggable="true" ondragstart="drag(event)" title="Geocaches in bepaalde landen">Land</li>
             <li class="list-group-item" style="cursor: pointer" id="Lengtegraad" draggable="true" ondragstart="drag(event)" title="De longitude tussen twee waarden">Lengtegraad tussen</li>
             <li class="list-group-item" style="cursor: pointer" id="Locatie" draggable="true" ondragstart="drag(event)" title="Geef middelpunt en radius in km op">Locatie</li>
+            <li class="list-group-item" style="cursor: pointer" id="Provincie" draggable="true" ondragstart="drag(event)" title="Geocaches in bepaalde provincies">Provincie</li>
             <li class="list-group-item list-group-item-info">M/T</li>
             <li class="list-group-item" style="cursor: pointer" id="Moeilijkheid" draggable="true" ondragstart="drag(event)" title="De moeilijkheid">Moeilijkheid</li>
             <li class="list-group-item" style="cursor: pointer" id="Terrein" draggable="true" ondragstart="drag(event)" title="Het terrein">Terrein</li>
@@ -165,6 +166,16 @@
             <div class="col-md-12"><input type="checkbox" id="country141" />Nederland</div>
             <div class="col-md-12"><input type="checkbox" id="country4" />Belgie</div>
             <div class="col-md-12"><input type="checkbox" id="country8" />Luxemburg</div>
+            <div class="col-md-12"><input type="checkbox" id="country79" />Duitsland</div>
+        </div>
+        <div id="statevalprop">
+            <div class="col-md-12">
+                Provincie:
+            </div>
+            @foreach (var st in Model.States)
+            {
+                <div class="col-md-12"><input type="checkbox" id="@string.Format("state{0}", st.StateID)" />@st.State</div>
+            }
         </div>
         <div id="attributesvalprop">
             <div class="col-md-12">
@@ -175,7 +186,7 @@
                 if (attr.ID != 16)
                 {
                     <div class="col-md-3">
-                        <img style="margin: 5px 5px 5px 5px; cursor: pointer" id="@string.Format("attrnegimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif",@attr.ID))' width="30" height="30" onclick="toggleNegAttributeButton('@attr.ID')" title="@attr.Name" />
+                        <img style="margin: 5px 5px 5px 5px; cursor: pointer" id="@string.Format("attrnegimg{0}", attr.ID)" src='@Href(string.Format("~/Modules/Globalcaching/Media/Attributes/{0}_.gif", @attr.ID))' width="30" height="30" onclick="toggleNegAttributeButton('@attr.ID')" title="@attr.Name" />
                         <input id="@string.Format("attrnegvalue{0}", attr.ID)" type="hidden" value="0" />
                     </div>
                 }
@@ -262,10 +273,29 @@
     </div>
 </div>
 
+    <!-- Modal -->
+<div class="modal fade" id="myModaly" tabindex="-1" role="dialog" aria-labelledby="myModalLabely" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="dlgclosebutton1y" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" >Fout</h4>
+            </div>
+            <div class="modal-body">
+                Het schema bevat fouten. Controleer of alle verbindingslijnen verbonden zijn.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     var geocacheTypes = @Html.Raw(Json.Encode(@Model.GeocacheTypes));
     var containerTypes = @Html.Raw(Json.Encode(@Model.Containers));
     var attributeTypes = @Html.Raw(Json.Encode(@Model.AttributeTypes));
+    var States = @Html.Raw(Json.Encode(@Model.States));
 </script>
 
 <script type="text/javascript">
@@ -430,6 +460,9 @@
         else if (data == "Land") {
             m = createCountryModel(x, y).addTo(graph);
         }
+        else if (data == "Provincie") {
+            m = createStateModel(x, y).addTo(graph);
+        }
         else if (data == "Gearchiveerd") {
             m = createArchivedModel(x, y).addTo(graph);
         }
@@ -514,6 +547,7 @@
             $('#rangevalprop').hide();
             $('#locvalprop').hide();
             $('#countryvalprop').hide();
+            $('#statevalprop').hide();
             $('#maximumvalprop').hide();
             $('#containervalprop').hide();           
             $('#gctypevalprop').hide();           
@@ -561,6 +595,10 @@
             else if (s == "Land") {
                 copyCountryModelToProperty(c);
                 $('#countryvalprop').show();
+            }
+            else if (s == "Provincie") {
+                copyStateModelToProperty(c);
+                $('#statevalprop').show();
             }
             else if (s == "Gevonden door") {
                 copyTextModelToProperty(c);
@@ -923,6 +961,21 @@
         });
     }
 
+    function createStateModel(px, py) {
+        return new joint.shapes.devs.Model({
+            position: { x: px, y: py },
+            size: { width: 130, height: 90 },
+            inPorts: ['in'],
+            outPorts: ['=', '<>'],
+            attrs: {
+                '.label': { text: 'Provincie\r\nGelderland', 'ref-x': .1, 'ref-y': .2 },
+                rect: { fill: modelFill },
+                '.inPorts circle': { fill: inportFill, magnet: 'passive', type: 'input' },
+                '.outPorts circle': { fill: outportFill, type: 'output' }
+            }
+        });
+    }
+
     function createOwnersModel(px, py) {
         return new joint.shapes.devs.Model({
             position: { x: px, y: py },
@@ -1170,6 +1223,7 @@
         $('#country141').prop('checked', false);
         $('#country4').prop('checked', false);
         $('#country8').prop('checked', false);
+        $('#country79').prop('checked', false);
         for (var i = 1; i < s.length; i++) {
             if (s[i] == "Nederland") {
                 $('#country141').prop('checked', true);
@@ -1177,8 +1231,31 @@
             else if (s[i] == "Belgie") {
                 $('#country4').prop('checked', true);
             }
-            if (s[i] == "Luxemburg") {
+            else if (s[i] == "Luxemburg") {
                 $('#country8').prop('checked', true);
+            }
+            else if (s[i] == "Duitsland") {
+                $('#country79').prop('checked', true);
+            }
+        }
+    }
+
+    function copyStateModelToProperty(c) {
+        var s = c.model.attr('.label/text').split('\r\n');
+        for (var i=0; i<States.length; i++)
+        {
+            $('#state' + States[i].StateID.toString()).prop('checked', false);
+        }
+        for (var i = 1; i < s.length; i++) {
+            if (s[i].length>0) {
+                for (var k=0; k<States.length; k++)
+                {
+                    if (s[i]===States[k].State)
+                    {
+                        $('#state' + States[k].StateID.toString()).prop('checked', true);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -1339,17 +1416,58 @@
             if ($('#country8').prop('checked')) {
                 s += "\r\nLuxemburg";
             }
+            if ($('#country79').prop('checked')) {
+                s += "\r\nDuitsland";
+            }
+            activeCellView.model.attr('.label/text', s);
+        }
+    }
+
+    function copyStatePropertyToModel() {
+        if (activeCellView != null) {
+            var s = activeCellView.model.attr('.label/text').split('\r\n')[0];
+            activeCellView.model.attr('.label/text', s);
+            for (var i=0; i<States.length; i++)
+            {
+                if ($('#state' + States[i].StateID.toString()).prop('checked')) {
+                    s += "\r\n" + States[i].State;
+                }
+            }
             activeCellView.model.attr('.label/text', s);
         }
     }
 
     function executeModel() {
-        //todo: check model for missing connections
-        macro = "";
-        createMacroFromModel();
-        //alert(JSON.stringify(graph));
-        //alert(macro);
-        runSba();
+        if (!checkModel())
+        {
+            $('#myModaly').modal({ show: true });
+        }
+        else{
+            macro = "";
+            createMacroFromModel();
+            //alert(JSON.stringify(graph));
+            //alert(macro);
+            runSba();
+        }
+    }
+
+    function checkModel()
+    {
+        var allElements = graph.getElements();
+        for (var i = 0; i < allElements.length; i++) {
+            var links = graph.getConnectedLinks(allElements[i]);
+            for (var i = 0; i < links.length; i++) {
+                var c = links[i].get('source').port;
+                if (c == null) {
+                    return false;
+                }
+                c = links[i].get('target').port;
+                if (c == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     function createMacroFromModel() {
@@ -1459,6 +1577,9 @@
                 else if (cn[1] == "Luxemburg") {
                     macro += '8';
                 }
+                else if (cn[1] == "Duitsland") {
+                    macro += '79';
+                }
                 for (var h = 2; h < cn.length; h++) {
                     if (cn[h] == "Nederland") {
                         macro += ',141';
@@ -1468,6 +1589,34 @@
                     }
                     else if (cn[h] == "Luxemburg") {
                         macro += ',8';
+                    }
+                    else if (cn[h] == "Duitsland") {
+                        macro += ',79';
+                    }
+                }
+            }
+            macro += ' )';
+        }
+        else if (m.attr('.label/text').split('\r\n')[0] == "Provincie"){
+            if (outPort == '=') {
+                macro += ' ProvincieCode(';
+            }
+            else {
+                macro += ' NietProvincieCode(';
+            }
+            var cn = m.attr('.label/text').split('\r\n');
+            for (var h = 1; h < cn.length; h++) {
+                for (var z=0; z<States.length; z++)
+                {
+                    if (cn[h]===States[z].State)
+                    {
+                        if (h==1){
+                            macro += States[z].StateID.toString();
+                        }
+                        else{
+                            macro += ',' + States[z].StateID.toString();
+                        }
+                        break;
                     }
                 }
             }
@@ -2021,7 +2170,7 @@
         var activeIndex = -1;
         $('#graphlist').find("li").remove();
         for (var i = 0; i < availableGraphs.length; i++) {
-            $('#graphlist').append('<li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return selectGraphIndex(' + i + ');">' + htmlEncodex(availableGraphs[i].Name) + '</a></li>');
+            $('#graphlist').append('<li role="presentation"><a role="menuitem" tabindex="-1" href="#" onclick="return loadAndSelectGraph(' + i + ');">' + htmlEncodex(availableGraphs[i].Name) + '</a></li>');
             if (activeGraph != null && activeGraph.ID == availableGraphs[i].ID) {
                 activeIndex = i;
             }
@@ -2036,6 +2185,12 @@
         }
 
         selectGraphIndex(activeIndex);
+    }
+
+    function loadAndSelectGraph(index)
+    {
+        selectedGraphIndex = index;
+        loadGraph();
     }
 
     function selectGraphIndex(index) {
@@ -2265,6 +2420,9 @@
         $("#country8").change(function () {
             copyCountryPropertyToModel();
         });
+        $("#country79").change(function () {
+            copyCountryPropertyToModel();
+        });
         $("#maximumtxtval1").change(function () {
             copyMaximumPropertyToModel();
         });
@@ -2284,6 +2442,12 @@
         {
             $('#gctype'+geocacheTypes[i].ID.toString()).change(function () {
                 copyGeocacheTypePropertyToModel();
+            });
+        }
+        for (var i=0; i<States.length; i++)
+        {
+            $('#state'+States[i].StateID.toString()).change(function () {
+                copyStatePropertyToModel();
             });
         }
 
