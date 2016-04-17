@@ -8,6 +8,7 @@ using Orchard.Themes;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -190,6 +191,110 @@ namespace Globalcaching.Controllers
                         foreach (var s in codes)
                         {
                             sb.AppendLine(string.Format("{0},{1},{2}", s.Code, ((bool)s.Archived) ? "1" : "0", ((bool)s.Available) ? "1" : "0"));
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return Content(sb.ToString());
+        }
+
+
+        [OutputCache(Duration = 0, NoStore = true)]
+        public ActionResult GeocacheCodesExFilter()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Land,Belgium,4");
+            sb.AppendLine("Land,Netherlands,141");
+            sb.AppendLine("Land,Luxembourg,4");
+            var states = CachedData.Instance.StatesInfo.OrderBy(x => x.State).ToArray();
+            foreach (var st in states)
+            {
+                sb.AppendLine(string.Format("Provincie,{0},{1}", st.State, st.StateID));
+            }
+            return Content(sb.ToString());
+        }
+
+        [OutputCache(Duration = 0, NoStore = true)]
+        public ActionResult GeocacheCodesEx()
+        {
+            StringBuilder sb = new StringBuilder();
+            try
+            {
+                string token = Request.QueryString["token"];
+                string usr = Request.QueryString["usr"];
+                string pwd = Request.QueryString["pwd"];
+                var settings = GetUserSettings("GeocacheCodesEx", token, usr, pwd);
+                if (settings != null && settings.IsDonator && !string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID != null)
+                {
+                    using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
+                    {
+                        bool valid = false;
+                        var sql = PetaPoco.Sql.Builder.Append("SELECT Code, Archived, Available FROM GCComGeocache WHERE ");
+
+                        try
+                        {
+                            string sc = Request.QueryString["c"];
+                            if (!string.IsNullOrEmpty(sc))
+                            {
+                                var lst = (from a in sc.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) select (int.Parse(a))).ToArray();
+                                if (lst.Length > 0)
+                                {
+                                    sql = sql.Append("CountryID in (@countries)", new { countries = lst });
+                                    valid = true;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                        }
+
+                        try
+                        {
+                            string sc2 = Request.QueryString["s"];
+                            if (!string.IsNullOrEmpty(sc2))
+                            {
+                                var lst2 = (from a in sc2.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) select (int.Parse(a))).ToArray();
+                                if (lst2.Length > 0)
+                                {
+                                    if (valid) sql.Append(" OR ");
+                                    sql = sql.Append("StateID in (@states)", new { states = lst2 });
+                                    valid = true;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                        }
+
+                        try
+                        {
+                            string slat = Request.QueryString["lat"];
+                            string slon = Request.QueryString["lon"];
+                            string sr = Request.QueryString["r"];
+                            if (!string.IsNullOrEmpty(slat) && !string.IsNullOrEmpty(slon))
+                            {
+                                var lat = double.Parse(slat, CultureInfo.InvariantCulture);
+                                var lon = double.Parse(slon, CultureInfo.InvariantCulture);
+                                var radius = double.Parse(sr, CultureInfo.InvariantCulture);
+                                if (valid) sql.Append(" OR ");
+                                sql.Append("dbo.F_GREAT_CIRCLE_DISTANCE(Latitude, Longitude, @0, @1) < @2", lat, lon, radius);
+                                valid = true;
+                            }
+                        }
+                        catch
+                        {
+                        }
+
+                        if (valid)
+                        {
+                            List<GeocacheCodesPoco> codes = db.Fetch<GeocacheCodesPoco>(sql);
+                            foreach (var s in codes)
+                            {
+                                sb.AppendLine(string.Format("{0},{1},{2}", s.Code, ((bool)s.Archived) ? "1" : "0", ((bool)s.Available) ? "1" : "0"));
+                            }
                         }
                     }
                 }
