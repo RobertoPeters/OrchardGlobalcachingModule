@@ -208,7 +208,7 @@ namespace Globalcaching.Controllers
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Land,Belgium,4");
             sb.AppendLine("Land,Netherlands,141");
-            sb.AppendLine("Land,Luxembourg,4");
+            sb.AppendLine("Land,Luxembourg,8");
             var states = CachedData.Instance.StatesInfo.OrderBy(x => x.State).ToArray();
             foreach (var st in states)
             {
