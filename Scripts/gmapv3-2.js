@@ -25,7 +25,7 @@ var markersAreVisible = true;
 var infowindow = [];
 var markerInfoRequested = null;
 var markerClusterer = null;
-var clusterOptions = { gridSize: 40, maxZoom: 11 };
+var clusterOptions = { gridSize: 40, maxZoom: 11, imagePath: 'http://www.globalcaching.eu/modules/Globalcaching/media/m' };
 var canDownload = true;
 
 var iconTable = {};
