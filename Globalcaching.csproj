@@ -422,6 +422,7 @@
   <ItemGroup>
     <Compile Include="AdminMenu.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\Athom.cs" />
     <Compile Include="Controllers\CacheListController.cs" />
     <Compile Include="Controllers\CacheMapController.cs" />
     <Compile Include="Controllers\CheckCCCController.cs" />

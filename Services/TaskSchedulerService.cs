@@ -45,7 +45,10 @@ namespace Globalcaching.Services
                 result.Scheduler = db.Fetch<SchedulerStatus>("").FirstOrDefault();
                 result.Services = db.Fetch<ServiceInfo>("").OrderByDescending(x => x.LastRun).ToList();
                 result.ServiceAccounts = db.Fetch<GcComAccounts>("");
-
+                if (result.Scheduler != null)
+                {
+                    result.Scheduler.GCComWWWError = false;
+                }
                 foreach (var sa in result.ServiceAccounts)
                 {
                     sa.PM = false;

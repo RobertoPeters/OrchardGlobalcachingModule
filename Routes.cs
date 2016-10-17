@@ -2491,6 +2491,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "athom/webhooks/{id}/{token}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Athom"},
+                            {"action", "webhooks"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                  }
             };
         }
