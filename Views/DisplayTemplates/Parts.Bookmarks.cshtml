@@ -54,7 +54,7 @@
         for (var i = 0; i < response.Bookmarks.length; i++) {
             var line = response.Bookmarks[i];
             // insert after last row!
-            var td1 = '<img src="' + line.AvatarUrl + '" height="48" width="48"/>' + '<br /><a href="@Href("~/GCComGebruikerInfo/")' + line.GCComUserID + '">' + line.UserName + '</a>';
+            var td1 = '<img src="' + line.AvatarUrl.replace('http://','https://') + '" height="48" width="48"/>' + '<br /><a href="@Href("~/GCComGebruikerInfo/")' + line.GCComUserID + '">' + line.UserName + '</a>';
             var td2 = '<a href="https://www.geocaching.com/bookmarks/view.aspx?guid=' + line.ListGUID.toString() + '" target="_blank">' + htmlEncode(line.ListName) + '</a>';
             var td3 = '<a href="@Href("~/Bookmark/")' + line.ListID + '">lijst</a>';
             var td4 = htmlEncode(line.ListDescription);

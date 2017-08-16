@@ -58,7 +58,7 @@
             var line = response.Items[i];
             // insert after last row!
             var td1 = line.Ranking.toString();
-            var td2 = '<img src="' + line.AvatarUrl + '" height="48" width="48" /> <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="blank">' + htmlEncode(line.UserName) + '</a>';
+            var td2 = '<img src="' + line.AvatarUrl.replace('http://', 'https://') + '" height="48" width="48" /> <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="blank">' + htmlEncode(line.UserName) + '</a>';
             var td3 = line.FTFPoints.toString();
             var td4 = line.FoundsPoints.toString();
             var td5 = (line.FTFPoints + line.FoundsPoints).toString();

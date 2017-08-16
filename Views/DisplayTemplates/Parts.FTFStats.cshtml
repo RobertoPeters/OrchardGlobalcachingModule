@@ -64,7 +64,7 @@
             else{
                 td1 = line.Position.toString();
             }
-            var td2 = '<img src="' + line.AvatarUrl + '" height="48" width="48" /> <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="blank">' + htmlEncode(line.UserName) + '</a>';
+            var td2 = '<img src="' + line.AvatarUrl.replace('http://', 'https://') + '" height="48" width="48" /> <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="blank">' + htmlEncode(line.UserName) + '</a>';
             var td3 = '<a href="@Href("~/FTFLogs/")' + line.UserID.toString() + '">' + line.FTFCount.toString() + '</a>';
             var td4 = '<a href="@Href("~/STFLogs/")' + line.UserID.toString() + '">' + line.STFCount.toString() + '</a>';
             var td5 = '<a href="@Href("~/TTFLogs/")' + line.UserID.toString() + '">' + line.TTFCount.toString() + '</a>';

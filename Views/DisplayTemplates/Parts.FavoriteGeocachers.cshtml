@@ -92,7 +92,7 @@
             if (line.DirectionIcon != null) {
                 td1 = '<img src="@Href("~/Modules/Globalcaching/Media/compass/")' + line.DirectionIcon + '.gif"/> ' + line.DirectionIcon + '<br />' + Number(line.DistanceFromHome).toFixed(1) + 'km';
             }
-            td2 = '<table><tr><td><img src="' + line.AvatarUrl + '" height="48" width="48" /></td><td><strong>' + htmlEncode(line.UserName) + '</strong><br /><a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="blank">Profiel</a> | <a href="@Href("~/GeocachesVanEigenaar/")' + line.OwnerId + '">Alle caches</a></td></tr></table>';
+            td2 = '<table><tr><td><img src="' + line.AvatarUrl.replace('http://','https://') + '" height="48" width="48" /></td><td><strong>' + htmlEncode(line.UserName) + '</strong><br /><a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="blank">Profiel</a> | <a href="@Href("~/GeocachesVanEigenaar/")' + line.OwnerId + '">Alle caches</a></td></tr></table>';
             td3 = line.CacheCount.toString();
             if (line.FavoriteCount != null) {
                 td4 = line.FavoriteCount.toString();

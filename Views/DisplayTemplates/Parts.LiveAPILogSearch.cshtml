@@ -164,7 +164,7 @@
                 s += 'Premium Member';
             }
             s += '</small><br />';
-            s += '<img src="' + line.AvatarUrl + '" height="48" width="48" /><br />';
+            s += '<img src="' + line.AvatarUrl.replace('http://', 'https://') + '" height="48" width="48" /><br />';
             s += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/2.gif")" />&nbsp; ' + line.FindCount + '</td>';
             s += '<td class="col-md-8">';
             s += '<img src="@Href("~/Modules/Globalcaching/Media/logtypes/")' + line.WptLogTypeId + '.gif" />&nbsp; ' + line.WptLogTypeName;
