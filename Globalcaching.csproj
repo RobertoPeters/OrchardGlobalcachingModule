@@ -24,6 +24,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -309,6 +310,7 @@
     <Content Include="Scripts\GlobalcachingBusyWaitDlg.js" />
     <Content Include="Scripts\GlobalcachingPager-2.js" />
     <Content Include="packages.config" />
+    <Content Include="Scripts\gmapv3-3.js" />
     <Content Include="Scripts\gmapv3-2.js" />
     <Content Include="Scripts\gmapv3.js" />
     <Content Include="Scripts\GoogleAnalytics.js" />

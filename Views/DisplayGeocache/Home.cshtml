@@ -226,7 +226,7 @@
             <center>
                 <a type="button" class="btn btn-primary" href='@Href("~/LogGeocache/")@Model.GCComGeocacheData.ID'>Log geocache</a><br />
                 <br />
-                <a href="@Href(string.Format("~/GeocacheKaart/?wp={0}", Model.GCComGeocacheData.Code))" /><img src="https://maps.googleapis.com/maps/api/staticmap?center=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.')&zoom=14&size=200x200&markers=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',', '.')&sensor=false&key=AIzaSyDR6TsNhRlLiWoBvK9hORxtB68URaUdBRs" /></a><br />
+                <a href="@Href(string.Format("~/GeocacheKaart/?wp={0}", Model.GCComGeocacheData.Code))" /><img src="https://maps.googleapis.com/maps/api/staticmap?center=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',','.')&zoom=14&size=200x200&markers=@String.Format("{0}", @Model.GCComGeocacheData.Latitude).Replace(',','.'),@String.Format("{0}", @Model.GCComGeocacheData.Longitude).Replace(',', '.')&sensor=false&key=AIzaSyCbgOOtLI80x9n4DRab3wJ6ogXrpYZJ77w" /></a><br />
                 <br />
                 @using (Html.BeginFormAntiForgeryPost(Url.Action("DownloadGeocache", "LiveAPIDownload", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
                 {

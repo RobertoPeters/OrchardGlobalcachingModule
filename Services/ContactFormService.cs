@@ -29,6 +29,10 @@ namespace Globalcaching.Services
 
         public void SubmitContactForm(GCEuContactForm m)
         {
+            if (m.Name == "barnypok" || m.EMail == "jfvynms4281rt@hotmail.com")
+            {
+                return;
+            }
             using (PetaPoco.Database db = new PetaPoco.Database(dbGcEuDataConnString, "System.Data.SqlClient"))
             {
                 m.Created = DateTime.Now;

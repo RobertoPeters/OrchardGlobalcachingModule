@@ -30,7 +30,7 @@ namespace Globalcaching.Services
             _resourceManager.Require("script", "bootstrap-datetimepicker.Script").AtFoot();
             _resourceManager.Require("script", "bootstrap-datetimepicker-nl.Script").AtFoot();
             _resourceManager.Require("stylesheet", "usersonline.Style").AtHead();
-            _resourceManager.Require("script", "GoogleAnalytics.Script").AtHead();
+            //_resourceManager.Require("script", "GoogleAnalytics.Script").AtHead();
         }
 
         public void OnResultExecuted(ResultExecutedContext filterContext) {
