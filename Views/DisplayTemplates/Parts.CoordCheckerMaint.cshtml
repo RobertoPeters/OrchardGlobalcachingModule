@@ -54,6 +54,7 @@
 
 <script type="text/javascript">
     var ignoreSelection = false;
+    var baseUrl = '@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))';
 
     initGlobalcachingPager("searchAttemptsTopPager", "AttemptsPager");
     initGlobalcachingPager("searchAttemptsBottomPager", "AttemptsPager");
@@ -284,7 +285,7 @@
             else {
                 $('#noticorrect').prop('checked', false);
             }
-            $('#htmlcode').text('Je kunt het antwoord van de puzzel controleren op <a href="http://www.globalcaching.eu/CoordinatenChecker?wp=' + activecode.Code + '">www.globalcaching.eu</a>');
+            $('#htmlcode').text('Je kunt het antwoord van de puzzel controleren op <a href="' + baseUrl + 'CoordinatenChecker?wp=' + activecode.Code + '">' + '@Request.Url.Authority' + '</a>');
             $("#updateButton").show();
             $("#deleteButton").show();
         }

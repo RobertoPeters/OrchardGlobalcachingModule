@@ -39,6 +39,7 @@ else
 
 
 <script type="text/javascript">
+    var baseUrl = '@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))';
 
     function updateFTFBanner() {
         var j = "";
@@ -46,8 +47,8 @@ else
             j = $('#ftfjaar').val().toString();
         }
         var id = '@Model.YafUserID';
-        $("#ftfbanner").attr("src", "http://www.globalcaching.eu/images/ftfimg.aspx?id=" + id + "&year=" + j + "&type=" + $('#ftfranktype').val());
-        $("#ftfbannerhtml").val('<a href="http://www.globalcaching.eu/FTFRanglijst"><img src="' + $("#ftfbanner").attr("src") + '" /></a>');
+        $("#ftfbanner").attr("src", baseUrl + "images/ftfimg.aspx?id=" + id + "&year=" + j + "&type=" + $('#ftfranktype').val());
+        $("#ftfbannerhtml").val('<a href="' + baseUrl + 'FTFRanglijst"><img src="' + $("#ftfbanner").attr("src") + '" /></a>');
     }
 
     $("#ftfjaar").change(function () {

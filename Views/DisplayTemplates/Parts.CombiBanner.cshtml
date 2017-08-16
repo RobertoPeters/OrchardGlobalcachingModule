@@ -39,6 +39,7 @@ else
 
 
 <script type="text/javascript">
+    var baseUrl = '@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))';
 
     function updateCombiBanner() {
         var j = "";
@@ -46,8 +47,8 @@ else
             j = $('#combijaar').val().toString();
         }
         var id = '@Model.YafUserID';
-        $("#combibanner").attr("src", "http://www.globalcaching.eu/images/nlcombirank.aspx?id=" + id + "&year=" + j + "&type=" + $('#combiranktype').val());
-        $("#combibannerhtml").val('<a href="http://www.globalcaching.eu/CombiRanglijst"><img src="' + $("#combibanner").attr("src") + '" /></a>');
+        $("#combibanner").attr("src", baseUrl + "images/nlcombirank.aspx?id=" + id + "&year=" + j + "&type=" + $('#combiranktype').val());
+        $("#combibannerhtml").val('<a href="' + baseUrl + 'CombiRanglijst"><img src="' + $("#combibanner").attr("src") + '" /></a>');
     }
 
     $("#combijaar").change(function () {

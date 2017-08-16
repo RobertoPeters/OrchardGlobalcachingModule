@@ -51,6 +51,7 @@
 <script type="text/javascript">
 
     var ignoreSelection = false;
+    var baseUrl = '@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))';
 
     function updateGroupList(response) {
         ignoreSelection = true;
@@ -71,8 +72,8 @@
                 $('#codesInGroup > tbody:last').append('<tr><td>' + response.TBCodes[i] + '</td><td><button class="btn btn-danger btn-xs" onclick="removeTBFromGroup(\'' + response.TBCodes[i] + '\')">verwijder</button></td><td><button class="btn btn-primary btn-xs" onclick="updateTBOfGroup(\'' + response.TBCodes[i] + '\')">bijwerken</button></td></tr>');
             }
             $('#addtbform').show();
-            $('#linktogroup').text("http://www.globalcaching.eu/TrackableGroep/" + response.ActiveGroup.ID.toString());
-            $('#linktogroup').attr("href", "http://www.globalcaching.eu/TrackableGroep/" + response.ActiveGroup.ID.toString());
+            $('#linktogroup').text(baseUrl + "TrackableGroep/" + response.ActiveGroup.ID.toString());
+            $('#linktogroup').attr("href", baseUrl + "TrackableGroep/" + response.ActiveGroup.ID.toString());
             $('#urltogroup').show();
         }
         else {

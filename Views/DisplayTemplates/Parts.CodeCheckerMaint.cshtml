@@ -70,6 +70,7 @@
 
 <script type="text/javascript">
     var ignoreSelection = false;
+    var baseUrl = '@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))';
 
     initGlobalcachingPager("searchAttemptsTopPager", "AttemptsPager");
     initGlobalcachingPager("searchAttemptsBottomPager", "AttemptsPager");
@@ -81,7 +82,7 @@
     function updateAttemptsList(response) {
         var resultElementName = "#searchAttemptsResults";
         var pagerElementName = ".AttemptsPager";
-        
+
         for (var i = 0; i < response.Attempts.length; i++) {
             var line = response.Attempts[i];
             // insert after last row!
@@ -352,7 +353,7 @@
             else {
                 $('#gcomauth').prop('checked', false);
             }
-            $('#htmlcode').text('Je kunt het antwoord van de puzzel controleren op <a href="http://www.globalcaching.eu/CodeChecker?id=' + activecode.UserID.toString() + '&code=' + activecode.EncodedPublicCode + '">www.globalcaching.eu</a>');
+            $('#htmlcode').text('Je kunt het antwoord van de puzzel controleren op <a href="' + baseUrl + 'CodeChecker?id=' + activecode.UserID.toString() + '&code=' + activecode.EncodedPublicCode + '">' + '@Request.Url.Authority' + '</a>');
             $("#updateButton").show();
             $("#deleteButton").show();
         }

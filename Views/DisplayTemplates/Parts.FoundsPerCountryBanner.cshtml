@@ -47,11 +47,12 @@ else
 
 
 <script type="text/javascript">
+    var baseUrl = '@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))';
 
     function updateFTFBanner() {
         var id = '@Model.GCComUserID';
-        $("#ftfbanner").attr("src", "http://www.globalcaching.eu/GevondenInLandBanner/" + id + "/" + $('#countryid').val() + '/' + $('#ftfjaar').val() + "/" + $('#ftfranktype').val());
-        $("#ftfbannerhtml").val('<a href="http://www.globalcaching.eu/RanglijstPerLand"><img src="' + $("#ftfbanner").attr("src") + '" /></a>');
+        $("#ftfbanner").attr("src", baseUrl + "GevondenInLandBanner/" + id + "/" + $('#countryid').val() + '/' + $('#ftfjaar').val() + "/" + $('#ftfranktype').val());
+        $("#ftfbannerhtml").val('<a href="' + baseUrl + 'RanglijstPerLand"><img src="' + $("#ftfbanner").attr("src") + '" /></a>');
     }
 
     $("#ftfjaar").change(function () {
