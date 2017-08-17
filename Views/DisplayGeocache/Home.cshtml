@@ -383,7 +383,7 @@
                                     @Html.Raw("Member")
                                 }
                             </small><br />
-                            <img src="@gcl.Writer.AvatarUrl" height="48" width="48" /><br />
+                            <img src="@gcl.Writer.AvatarUrl.Replace("http://","https://")" height="48" width="48" /><br />
                             <img src="@Href("~/Modules/Globalcaching/Media/logtypes/")2.gif" />&nbsp; @gcl.Writer.FindCount
                         </td>
                         <td class="col-md-10">
