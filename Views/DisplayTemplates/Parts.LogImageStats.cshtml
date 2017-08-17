@@ -95,7 +95,7 @@
             td3 = '<img src="@Href("~/Modules/Globalcaching/Media/WptTypes/")' + line.GeocacheTypeId + '.gif"/><br />';
             td4 = '<a href="@Href("~/Geocache/")' + line.Code + '">' + line.Name + '</a> (<a href="' + line.Url + '" target="_blank">' + line.Code + '</a>)<br />door <a href="http://www.geocaching.com/profile/?guid=' + line.PublicGuid + '" target="_blank">' + line.UserName + '</a> | <a href="@Href("~/GeocachesVanEigenaar/")' + line.OwnerId + '">Alle caches</a><br />';
             for (var k = 0; k < line.LogImages.length; k++) {
-                td4 += '<a href="' + line.LogImages[k].Url + '" target="_blank"><img src="' + line.LogImages[k].ThumbUrl + '" /></a>';
+                td4 += '<a href="' + line.LogImages[k].Url + '" target="_blank"><img src="' + line.LogImages[k].ThumbUrl.replace('http://','https://') + '" /></a>';
             }
             if (line.LogImageCount != null) {
                 td5 = line.LogImageCount.toString();

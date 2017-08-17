@@ -180,7 +180,7 @@
                 html += '<div class="img col-md-2">';
             }
             odd = !odd;
-            html += '<a href="' + line.ImageUrl + '" target="_blank"><img src="' + line.ThumbUrl + '"/></a>';
+            html += '<a href="' + line.ImageUrl + '" target="_blank"><img src="' + line.ThumbUrl.replace('http://','https://') + '"/></a>';
             html += '<div class="log"><a href="' + line.LogUrl + '" target="_blank">Log</a></div>';
             html += '<div class="name">Naam: <strong>' + line.Name + '</strong></div>';
             html += '<div class="logdate">Datum: <strong>' + formatDateToShortDate(d) + '</strong></div>';
