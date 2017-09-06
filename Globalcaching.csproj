@@ -25,6 +25,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +56,10 @@
       <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\newtonsoft.json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.ComponentModel.DataAnnotations">
@@ -406,6 +411,8 @@
     <Content Include="Views\DisplayTemplates\Parts.LiveAPILogDownload.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.LiveAPILogSearch.cshtml" />
     <Content Include="Views\CheckCCC\Requests.cshtml" />
+    <Content Include="Views\Shop\Home.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.ShopUserProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -461,8 +468,10 @@
     <Compile Include="Controllers\NewestCachesController.cs" />
     <Compile Include="Controllers\OnlineToolsController.cs" />
     <Compile Include="Controllers\SelectionBuilderController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\TrackableGroupController.cs" />
     <Compile Include="Controllers\UsersOnlineController.cs" />
+    <Compile Include="Core\ShopAuthorizationManager.cs" />
     <Compile Include="Core\CachedData.cs" />
     <Compile Include="Core\DBCon.cs" />
     <Compile Include="Core\DotNetDBF\DBFBase.cs" />
@@ -495,6 +504,7 @@
     <Compile Include="Drivers\FoundsPerCountryBannerPartDriver.cs" />
     <Compile Include="Drivers\CombiBannerPartDriver.cs" />
     <Compile Include="Drivers\BookmarksPartDriver.cs" />
+    <Compile Include="Drivers\ShopUserProductPartDriver.cs" />
     <Compile Include="Drivers\GeocacheMaintenancePartDriver.cs" />
     <Compile Include="Drivers\GeocacheBatchLogPartDriver.cs" />
     <Compile Include="Drivers\GeocacheTypeStatsPartDriver.cs" />
@@ -568,6 +578,13 @@
     <Compile Include="Models\GCComTrackableLog.cs" />
     <Compile Include="Models\GCComUser.cs" />
     <Compile Include="Models\GCEuCCCRequest.cs" />
+    <Compile Include="Models\ShopProducts.cs" />
+    <Compile Include="Models\ShopCategory.cs" />
+    <Compile Include="Models\ShopAccess.cs" />
+    <Compile Include="NopCommerce.Api.AdapterLibrary\ApiAuthorizer.cs" />
+    <Compile Include="NopCommerce.Api.AdapterLibrary\ApiClient.cs" />
+    <Compile Include="NopCommerce.Api.AdapterLibrary\HttpMethods.cs" />
+    <Compile Include="Services\ShopService.cs" />
     <Compile Include="ViewModels\GCEuCCCRequestModel.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
     <Compile Include="Models\GCEuCodeCheckAttempt.cs" />
@@ -675,6 +692,8 @@
     <Compile Include="ViewModels\GeocacheFilterMacroModel.cs" />
     <Compile Include="ViewModels\SearchByAttributesModel.cs" />
     <Compile Include="ViewModels\SelectionBuilderModel.cs" />
+    <Compile Include="ViewModels\ShopUserProductModel.cs" />
+    <Compile Include="ViewModels\ShopAdminModel.cs" />
     <Compile Include="ViewModels\TrackableGroupModel.cs" />
     <Compile Include="ViewModels\TrackableGroupsModel.cs" />
     <Compile Include="ViewModels\TrackableGroupMaintModel.cs" />

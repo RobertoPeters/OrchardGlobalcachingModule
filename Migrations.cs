@@ -726,5 +726,19 @@ namespace Globalcaching
             return 51;
         }
 
+        public int UpdateFrom51()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("ShopUserProductWidget",
+                cfg => cfg
+                    .DisplayedAs("ShopUserProduct")
+                    .WithPart("ShopUserProductPart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 52;
+        }
+
     }
 }

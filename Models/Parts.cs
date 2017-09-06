@@ -31,6 +31,10 @@ namespace Globalcaching.Models
         }
     }
 
+    public class ShopUserProductPart : ContentPart
+    {
+    }
+
     public class LiveAPILogSearchPart : ContentPart
     {
     }

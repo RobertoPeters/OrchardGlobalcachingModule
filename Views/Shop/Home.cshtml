@@ -1,0 +1,37 @@
+﻿@model Globalcaching.ViewModels.ShopAdminModel
+
+<div>
+@if (Model.TokenExpires.HasValue && Model.TokenExpires > DateTime.Now)
+{
+    <span>Token expires at: @Model.TokenExpires.Value.ToString("s")</span><br />
+}    
+    <button type="submit" value="Authorize" class="btn btn-primary" onclick="window.location.href='@Url.Action("Authorize", "Shop", new { area = "Globalcaching" })'">@T("Autorizeren")</button>
+    @if (Model.TokenExpires.HasValue && Model.TokenExpires > DateTime.Now)
+    {
+        <button type="submit" value="Authorize" class="btn btn-primary" onclick="window.location.href='@Url.Action("RefreshAccessToken", "Shop", new { area = "Globalcaching" })'">@T("Ververs token")</button>
+    }
+</div>
+<div>
+@using (Html.BeginFormAntiForgeryPost(Url.Action("SetMasterCategoryId", "Shop", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form" }))
+{
+    <span>Hoofdcategorie voor gebruikers: </span> 
+    <select name="id">
+        @foreach (var c in Model.AllCategories)
+        {
+            if (Model.MasterCategory != null && c.Id == Model.MasterCategory.Id)
+            {
+                <option value="@c.Id" selected="selected">@c.FullPath</option>
+            }
+            else
+            {
+                <option value="@c.Id">@c.FullPath</option>
+            }
+        }
+    </select>
+    <button type="submit" value="SetCategoryId" class="btn btn-primary">@T("Opslaan")</button>
+}
+
+</div>
+<script type="text/javascript">
+
+</script>

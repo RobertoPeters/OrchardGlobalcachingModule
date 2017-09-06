@@ -2506,8 +2506,143 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
-                 }
-            };
+                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ShopInfo",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "ShopInfo"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "ShopAuthorize",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "Authorize"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetShopAccessToken",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "GetAccessToken"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "RefreshAccessToken",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "RefreshAccessToken"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SetMasterCategoryId/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "SetMasterCategoryId"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetUserProduct",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "GetUserProduct"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "AddUserProduct",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "AddUserProduct"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "DeleteUserProduct",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "DeleteUserProduct"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SaveUserProduct",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "SaveUserProduct"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                }
+           };
         }
     }
 }

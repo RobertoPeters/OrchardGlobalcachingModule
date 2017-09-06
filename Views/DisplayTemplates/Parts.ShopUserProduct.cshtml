@@ -1,0 +1,207 @@
+﻿@model Globalcaching.ViewModels.ShopUserProductModel
+
+<form role="form">
+    <div class="form-group">
+        <label class="control-label">Product:</label>
+        <select class="form-control" id="code"></select>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Naam:</label>
+        <input type="text" class="form-control" id="editname" value="" placeholder="Geef hier een korte naam van het product" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Prijs:</label>
+        <input type="number" min="0" max="1000" step="0.01" class="form-control" id="price" value="0" />
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-3">Categorie:</label>
+        <select class="form-control" id="category">
+            @foreach (var c in Model.AllCategories)
+            {
+                <option value="@c.Id">@c.FullPath</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Korte beschrijving:</label>
+        <textarea rows="5" class="form-control" id="shortdescription" placeholder="Geef een korte beschrijving van het product"></textarea>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Volledige beschrijving:</label>
+        <textarea rows="10" class="form-control" id="fulldescription" placeholder="Geef de volledige beschrijving van het product"></textarea>
+    </div>
+    <div class="row">
+        <button class="btn btn-primary col-md-2" type="button" id="updateButton" style="margin-left: 15px">Opslaan</button>
+        <button class="btn btn-primary col-md-2" type="button" id="createButton" style="margin-left: 5px">Aanmaken</button>
+        <button class="btn btn-danger col-md-2 pull-right" type="button" id="deleteButton" style="margin-right: 15px">Verwijderen</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    var ignoreSelection = false;
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function requestCode() {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetUserProduct", "Shop", new { area = "Globalcaching" })',
+            data: {
+                id: $("#code").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateAllPage(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function createCode() {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddUserProduct", "Shop", new { area = "Globalcaching" })',
+            data: {
+                name: $("#editname").val(),
+                categoryId: $("#category").val(),
+                shortDescription: $("#shortdescription").val(),
+                fullDescription: $("#fulldescription").val(),
+                price: $("#price").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response == null || response == "") {
+                    alert('Product is niet toegevoegd. Controleer alle velden.');
+                }
+                else {
+                    updateAllPage(response);
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function saveCode() {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveUserProduct", "Shop", new { area = "Globalcaching" })',
+            data: {
+                id: $("#code").val(),
+                name: $("#editname").val(),
+                categoryId: $("#category").val(),
+                shortDescription: $("#shortdescription").val(),
+                fullDescription: $("#fulldescription").val(),
+                price: $("#price").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response == null || response == "") {
+                    alert('Product is niet toegevoegd. Controleer alle velden.');
+                }
+                else {
+                    updateAllPage(response);
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function deleteCode() {
+        myApp.showPleaseWait();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteUserProduct", "Shop", new { area = "Globalcaching" })',
+            data: {
+                id: $("#code").val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                if (response == null || response == "") {
+                    alert('Fout opgetreden bij het verwijderen van het product.');
+                }
+                else {
+                    updateAllPage(response);
+                }
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function updateActiveCode(activeProduct) {
+        if (activeProduct != null) {
+            $('#code').val(activeProduct.Id);
+            $('#editname').val(activeProduct.Name);
+            $('#shortdescription').val(activeProduct.ShortDescription);
+            $('#fulldescription').val(activeProduct.FullDescription);
+            $('#price').val(activeProduct.Price);
+            $('#category').val(activeProduct.CategoryId);
+            $("#updateButton").show();
+            $("#deleteButton").show();
+            $("#createButton").hide();
+        }
+        else {
+            $('#editname').val('');
+            $('#price').val('0.00');
+            $('#shortdescription').val('');
+            $('#fulldescription').val('');
+            $("#updateButton").hide();
+            $("#deleteButton").hide();
+            $("#createButton").show();
+        }
+    }
+
+    function updateAllPage(response) {
+        ignoreSelection = true;
+        $('#code').empty();
+        $('#code')
+            .append($("<option></option>")
+                .attr("value", "0")
+                .text('<< nieuw product aanmaken >>'));
+        for (var i = 0; i < response.Products.length; i++) {
+            $('#code')
+                .append($("<option></option>")
+                    .attr("value", response.Products[i].Id)
+                    .text(response.Products[i].Name + ' (' + response.Products[i].Sku + ')'));
+        }
+        updateActiveCode(response.ActiveProduct);
+        ignoreSelection = false;
+    }
+
+    $("#code").change(function () {
+        if (!ignoreSelection) {
+            requestCode();
+        }
+    });
+    $("#updateButton").click(function () {
+        saveCode();
+    });
+    $("#createButton").click(function () {
+        createCode();
+    });
+    $("#deleteButton").click(function () {
+        deleteCode();
+    });
+
+    updateAllPage(@Html.Raw(Json.Encode(Model)));
+</script>

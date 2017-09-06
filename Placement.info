@@ -51,4 +51,5 @@
   <Place Parts_FinancialYearStatus_Edit="Content:7.5"/>
   <Place Parts_LiveAPILogDownload="Content:1"/>
   <Place Parts_LiveAPILogSearch="Content:1"/>
+  <Place Parts_ShopUserProduct="Content:1"/>
 </Placement>
