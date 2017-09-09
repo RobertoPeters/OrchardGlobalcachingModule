@@ -10,6 +10,9 @@ using Globalcaching.Models;
 using Globalcaching.ViewModels;
 using NopCommerce.Api.AdapterLibrary;
 using System.Text;
+using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace Globalcaching.Services
 {
@@ -25,6 +28,8 @@ namespace Globalcaching.Services
         ShopUserProductModel AddUserProduct(int yafUserId, string name, int categoryId, string shortDescription, string fullDescription, double price);
         ShopUserProductModel DeleteUserProduct(int yafUserId, int productId);
         ShopUserProductModel SaveUserProduct(int yafUserId, int productId, string name, int categoryId, string shortDescription, string fullDescription, double price);
+        void SetUserProductImage(int yafUserId, int productId, string orgFilename, string imageFile);
+        void GetProductImage(HttpResponseBase response, int yafUserId, int productId);
     }
 
     public class ShopService: IShopService
@@ -46,10 +51,13 @@ namespace Globalcaching.Services
         public static string dbShopConnString = ConfigurationManager.ConnectionStrings["nopCommerceConnectionString"].ToString();
 
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IGCEuUserSettingsService _gcEuUserSettingsService;
 
-        public ShopService(IWorkContextAccessor workContextAccessor)
+        public ShopService(IWorkContextAccessor workContextAccessor,
+            IGCEuUserSettingsService gcEuUserSettingsService)
         {
             _workContextAccessor = workContextAccessor;
+            _gcEuUserSettingsService = gcEuUserSettingsService;
         }
 
         private HttpContextBase HttpContext
@@ -87,11 +95,14 @@ namespace Globalcaching.Services
             return HttpUtility.HtmlDecode((s ?? "").Replace("<br />", "\r\n"));
         }
 
-        private string FormatFullDescriptionForDatabase(string s)
+        private string FormatFullDescriptionForDatabase(string s, int yafUserId, string productCode)
         {
             var sb = new StringBuilder();
             sb.Append("<p>");
             sb.Append(HttpUtility.HtmlEncode(s ?? "")).Replace("\r", "").Replace("\n", "<br />");
+            sb.Append("</p>");
+            sb.Append("<p>");
+            sb.Append(string.Format("Dit product is geplaatst door <strong>{0}</strong>.", HttpUtility.HtmlEncode(_workContextAccessor.GetContext().CurrentUser.UserName)));
             sb.Append("</p>");
             return sb.ToString();
         }
@@ -275,24 +286,57 @@ namespace Globalcaching.Services
             return GetUserProduct(yafUserId, null);
         }
 
+        private bool IsCategorySubOfMasterCategory(ShopCategory c, int? masterId, List<ShopCategory> allCategories)
+        {
+            var result = false;
+            if (c != null)
+            {
+                if (c.Id == masterId)
+                {
+                    result = true;
+                }
+                else
+                {
+                    if (c.ParentCategoryId > 0)
+                    {
+                        var p = (from a in allCategories where a.Id == c.ParentCategoryId select a).FirstOrDefault();
+                        result = IsCategorySubOfMasterCategory(p, masterId, allCategories);
+                    }
+                }
+            }
+            return result;
+        }
+
         public ShopUserProductModel GetUserProduct(int yafUserId, int? accessProductId)
         {
             var result = new ShopUserProductModel();
             result.MaxAllowedProducts = MaxAllowedUserProducts;
             using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
             {
-                result.AllCategories = db.Fetch<ShopCategory>("where Deleted=0");
-                foreach (var c in result.AllCategories)
+                var m = db.FirstOrDefault<ShopAccess>("");
+                if (m != null)
                 {
-                    c.FullPath = GetFullPathOfCategory(c, result.AllCategories);
-                }
-                result.Products = db.Fetch<ShopUserProductModelItem>("select GcEuProducts.*, Product.Name as Name, Product.Sku as Sku, ShortDescription = null, FullDescription = null, Price = 0, CategoryId=0  from GcEuProducts inner join Product on GcEuProducts.ProductId=Product.Id where GcEuProducts.UserId=@0 and Product.Published=1", yafUserId);
-                result.ActiveProduct = db.FirstOrDefault<ShopUserProductModelItem>("select GcEuProducts.*, Product.Name as Name, Product.Sku as Sku, Product.ShortDescription as ShortDescription, Product.FullDescription as FullDescription, Product.Price as Price, CategoryId=0  from GcEuProducts inner join Product on GcEuProducts.ProductId=Product.Id where GcEuProducts.UserId=@0 and GcEuProducts.Id=@1", yafUserId, accessProductId);
-                if (result.ActiveProduct != null)
-                {
-                    result.ActiveProduct.CategoryId = db.FirstOrDefault<int>("select CategoryId from Product_Category_Mapping where ProductId=@0", result.ActiveProduct.ProductId);
-                    result.ActiveProduct.ShortDescription = FormatShortDescriptionForUser(result.ActiveProduct.ShortDescription);
-                    result.ActiveProduct.FullDescription = FormatFullDescriptionForUser(result.ActiveProduct.FullDescription);
+                    result.AllCategories = new List<ShopCategory>();
+                    var allCategories = db.Fetch<ShopCategory>("where Deleted=0");
+                    foreach (var c in allCategories)
+                    {
+                        if (IsCategorySubOfMasterCategory(c, m.MasterCategoryId, allCategories))
+                        {
+                            if (!(from a in allCategories where a.ParentCategoryId == c.Id select a).Any())
+                            {
+                                c.FullPath = GetFullPathOfCategory(c, allCategories);
+                                result.AllCategories.Add(c);
+                            }
+                        }
+                    }
+                    result.Products = db.Fetch<ShopUserProductModelItem>("select GcEuProducts.*, Product.Name as Name, Product.Sku as Sku, ShortDescription = null, FullDescription = null, Price = 0, CategoryId=0  from GcEuProducts inner join Product on GcEuProducts.ProductId=Product.Id where GcEuProducts.UserId=@0 and Product.Published=1", yafUserId);
+                    result.ActiveProduct = db.FirstOrDefault<ShopUserProductModelItem>("select GcEuProducts.*, Product.Name as Name, Product.Sku as Sku, Product.ShortDescription as ShortDescription, Product.FullDescription as FullDescription, Product.Price as Price, CategoryId=0  from GcEuProducts inner join Product on GcEuProducts.ProductId=Product.Id where GcEuProducts.UserId=@0 and GcEuProducts.Id=@1", yafUserId, accessProductId);
+                    if (result.ActiveProduct != null)
+                    {
+                        result.ActiveProduct.CategoryId = db.FirstOrDefault<int>("select CategoryId from Product_Category_Mapping where ProductId=@0", result.ActiveProduct.ProductId);
+                        result.ActiveProduct.ShortDescription = FormatShortDescriptionForUser(result.ActiveProduct.ShortDescription);
+                        result.ActiveProduct.FullDescription = FormatFullDescriptionForUser(result.ActiveProduct.FullDescription);
+                    }
                 }
             }
             return result;
@@ -326,6 +370,129 @@ namespace Globalcaching.Services
             return GetUserProduct(yafUserId, null);
         }
 
+        private bool IsProductValid(PetaPoco.Database db, ShopAccess sa, int yafUserId, string name, int categoryId, string shortDescription, string fullDescription, double price)
+        {
+            var result = true;
+            try
+            {
+                if (sa == null) result = false;
+                if (yafUserId <= 0) result = false;
+                if (name.Length < 3) result = false;
+                if (shortDescription.Length < 1) result = false;
+                if (price < 0) result = false;
+                var allCategories = db.Fetch<ShopCategory>("where Deleted=0");
+                var c = (from a in allCategories where a.Id == categoryId select a).FirstOrDefault();
+                if (c == null) result = false;
+                if (!IsCategorySubOfMasterCategory(c, sa.MasterCategoryId, allCategories)) result = false;
+                if ((from a in allCategories where a.ParentCategoryId == c.Id select a).Any()) result = false;
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
+        }
+
+
+        public void GetProductImage(HttpResponseBase response, int yafUserId, int productId)
+        {
+            using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
+            {
+                var userProduct = db.FirstOrDefault<GcEuProducts>("where Id=@0 and UserId=@1", productId, yafUserId);
+                if (userProduct != null)
+                {
+                    var picture = db.FirstOrDefault<ShopPicture>("select Picture.* from Product_Picture_Mapping inner join Picture on Product_Picture_Mapping.PictureId=Picture.Id where Product_Picture_Mapping.ProductId=@0", userProduct.ProductId);
+                    if (picture == null)
+                    {
+                        using (Bitmap bitmap = new Bitmap(System.Web.HttpContext.Current.Server.MapPath("~/Modules/Globalcaching/Media/default-image_550.png"), true))
+                        using (MemoryStream memStream = new MemoryStream())
+                        using (Graphics g = Graphics.FromImage(bitmap))
+                        {
+                            response.Clear();
+                            response.ContentType = "image/png";
+                            bitmap.Save(memStream, ImageFormat.Png);
+                            memStream.WriteTo(response.OutputStream);
+                        }
+                    }
+                    else
+                    {
+                        using (MemoryStream memStream = new MemoryStream(picture.PictureBinary))
+                        {
+                            response.Clear();
+                            response.ContentType = picture.MimeType;
+                            memStream.WriteTo(response.OutputStream);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void SetUserProductImage(int yafUserId, int productId, string orgFilename, string imageFile)
+        {
+            using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
+            {
+                var userProduct = db.FirstOrDefault<GcEuProducts>("where Id=@0 and UserId=@1", productId, yafUserId);
+                var m = db.FirstOrDefault<ShopAccess>("");
+                if (userProduct != null)
+                {
+                    byte[] imageData;
+                    string mimeType;
+                    using (Bitmap bitmap = new Bitmap(imageFile, true))
+                    using (MemoryStream memStream = new MemoryStream())
+                    using (Graphics g = Graphics.FromImage(bitmap))
+                    {
+                        float targetHeight = 550.0F;
+                        float targetWidth = 550.0F;
+                        float scaleX = (float)bitmap.Width / targetWidth;
+                        float scaleY = (float)bitmap.Height / targetHeight;
+                        var minScale = Math.Min(scaleX, scaleY);
+                        if (minScale < 1.0)
+                        {
+                            g.ScaleTransform(minScale, minScale);
+                        }
+                        var extension = Path.GetExtension(orgFilename).ToLower();
+                        switch (extension)
+                        {
+                            case ".bmp":
+                                bitmap.Save(memStream, ImageFormat.Bmp);
+                                mimeType = "image/bmp";
+                                break;
+                            case ".png":
+                                bitmap.Save(memStream, ImageFormat.Png);
+                                mimeType = "image/png";
+                                break;
+                            case ".jpg":
+                            case ".jpeg":
+                                bitmap.Save(memStream, ImageFormat.Jpeg);
+                                mimeType = "image/jpeg";
+                                break;
+                            default:
+                                bitmap.Save(memStream, ImageFormat.Jpeg);
+                                mimeType = "image/jpeg";
+                                break;
+                        }
+                        imageData = new byte[memStream.Length];
+                        imageData = memStream.ToArray();
+                    }
+
+                    var nopApiClient = new ApiClient(m.Token, ConfigurationManager.AppSettings["shopBaseUrl"]);
+                    string jsonUrl = string.Format("api/products/{0}", userProduct.ProductId);
+                    var newProduct = new
+                    {
+                        product = new
+                        {
+                            images = new[]
+                            {
+                                new {attachment = Convert.ToBase64String(imageData) }
+                            }
+                        }
+                    };
+                    string productJson = JsonConvert.SerializeObject(newProduct);
+                    var addResult = nopApiClient.Put(jsonUrl, productJson) as string;
+                }
+            }
+        }
+
         public ShopUserProductModel SaveUserProduct(int yafUserId, int productId, string name, int categoryId, string shortDescription, string fullDescription, double price)
         {
             using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
@@ -334,7 +501,7 @@ namespace Globalcaching.Services
                 if (userProduct != null)
                 {
                     var m = db.FirstOrDefault<ShopAccess>("");
-                    if (m != null)
+                    if (IsProductValid(db, m, yafUserId, name, categoryId, shortDescription, fullDescription, price))
                     {
                         var nopApiClient = new ApiClient(m.Token, ConfigurationManager.AppSettings["shopBaseUrl"]);
                         string jsonUrl = string.Format("api/products/{0}", userProduct.ProductId);
@@ -343,15 +510,16 @@ namespace Globalcaching.Services
                             product = new
                             {
                                 name = name,
+                                se_name = "",
                                 short_description = FormatShortDescriptionForDatabase(shortDescription),
-                                full_description = FormatFullDescriptionForDatabase(fullDescription),
+                                full_description = FormatFullDescriptionForDatabase(fullDescription, yafUserId, userProduct.ProductCode),
                                 price = price
                             }
                         };
                         string productJson = JsonConvert.SerializeObject(newProduct);
                         var addResult = nopApiClient.Put(jsonUrl, productJson) as string;
 
-                        var mappingId = db.FirstOrDefault<int>("select Id from Product_Category_Mapping where ProductId=@0", productId);
+                        var mappingId = db.FirstOrDefault<int>("select Id from Product_Category_Mapping where ProductId=@0", userProduct.ProductId);
                         if (mappingId > 0)
                         {
                             jsonUrl = string.Format("api/product_category_mappings/{0}", mappingId);
@@ -359,7 +527,7 @@ namespace Globalcaching.Services
                             {
                                 product_category_mapping = new
                                 {
-                                    product_id = productId,
+                                    product_id = userProduct.ProductId,
                                     category_id = categoryId
                                 }
                             };
@@ -373,7 +541,7 @@ namespace Globalcaching.Services
                             {
                                 product_category_mapping = new
                                 {
-                                    product_id = productId,
+                                    product_id = userProduct.ProductId,
                                     category_id = categoryId
                                 }
                             };
@@ -393,14 +561,17 @@ namespace Globalcaching.Services
             using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
             {
                 var m = db.FirstOrDefault<ShopAccess>("");
-                if (m != null)
+                if (IsProductValid(db, m, yafUserId, name, categoryId, shortDescription, fullDescription, price))
                 {
+                    var newProductCode = Guid.NewGuid().ToString("N");
                     var allUserProducts = db.Fetch<GcEuProducts>("where UserId=@0", yafUserId);
                     var deletedUserProducts = db.Fetch<GcEuProducts>("select GcEuProducts.* from GcEuProducts inner join Product on GcEuProducts.ProductId=Product.Id where GcEuProducts.UserId=@0 and Product.Published=0", yafUserId);
                     if (deletedUserProducts.Count > 0)
                     {
                         newProductId = deletedUserProducts[0].ProductId;
                         usrProductId = deletedUserProducts[0].Id;
+                        deletedUserProducts[0].ProductCode = newProductCode;
+                        db.Save(deletedUserProducts[0]);
                         var nopApiClient = new ApiClient(m.Token, ConfigurationManager.AppSettings["shopBaseUrl"]);
                         string jsonUrl = string.Format("api/products/{0}", newProductId);
                         var newProduct = new
@@ -408,8 +579,9 @@ namespace Globalcaching.Services
                             product = new
                             {
                                 name = name,
+                                se_name = "",
                                 short_description = FormatShortDescriptionForDatabase(shortDescription),
-                                full_description = FormatFullDescriptionForDatabase(fullDescription),
+                                full_description = FormatFullDescriptionForDatabase(fullDescription, yafUserId, newProductCode),
                                 price = price,
                                 published = true
                             }
@@ -462,7 +634,7 @@ namespace Globalcaching.Services
                                 name = name,
                                 sku = string.Format("usr-{0}-{1}", yafUserId, allUserProducts.Count+1),
                                 short_description = FormatShortDescriptionForDatabase(shortDescription),
-                                full_description = FormatFullDescriptionForDatabase(fullDescription),
+                                full_description = FormatFullDescriptionForDatabase(fullDescription, yafUserId, newProductCode),
                                 price = price,
                                 disable_buy_button = true,
                                 disable_wishlist_button = true,
@@ -490,7 +662,7 @@ namespace Globalcaching.Services
                             var userProduct = new GcEuProducts();
                             userProduct.ProductId = newProductId.Value;
                             userProduct.UserId = yafUserId;
-                            userProduct.ProductCode = Guid.NewGuid().ToString("N");
+                            userProduct.ProductCode = newProductCode;
                             db.Save(userProduct);
                             usrProductId = userProduct.Id;
 

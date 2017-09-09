@@ -165,5 +165,38 @@ namespace Globalcaching.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult UploadProductImage(int id, string filename)
+        {
+            var settings = _userSettingsService.GetSettings();
+            if (settings != null && settings.YafUserID > 1)
+            {
+                if (Request.Files.Count > 0)
+                {
+                    var file = Request.Files[0];
+
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        using (var tmp = new System.IO.TemporaryFile(true))
+                        {
+                            file.SaveAs(tmp.Path);
+                            _shopService.SetUserProductImage(settings.YafUserID, id, filename, tmp.Path);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        [OutputCache(Duration = 0, NoStore = true)]
+        public ActionResult GetProductImage(int id)
+        {
+            var settings = _userSettingsService.GetSettings();
+            if (settings != null && settings.YafUserID > 1)
+            {
+                _shopService.GetProductImage(Response, settings.YafUserID, id);
+            }
+            return null;
+        }
     }
 }

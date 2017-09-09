@@ -1,5 +1,11 @@
 ﻿@model Globalcaching.ViewModels.ShopUserProductModel
 
+@{
+    Script.Require("jQuery").AtFoot();
+    Script.Require("jQueryUI").AtFoot();
+    Script.Require("jQueryFileUpload").AtFoot();
+}
+
 <form role="form">
     <div class="form-group">
         <label class="control-label">Product:</label>
@@ -22,6 +28,15 @@
             }
         </select>
     </div>
+    <div class="form-group" id="productImage">
+        <label class="control-label">Plaatje:</label>
+        <div><img id="productImageSrc" style="max-height:150px;max-width:400px;" /></div>
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-success" onclick="uploadProductImage()"><i class="glyphicon glyphicon-plus"></i>&nbsp;Upload plaatje</button>
+            <input id="fileupload" type="file" name="file" accept="image/*" class="btn btn-primary">
+        </span>
+        <span> Let op: indien je een plaatje upload wordt het gelijk bijgewerkt zonder dat je op hoeft te slaan.</span>
+    </div>
     <div class="form-group">
         <label class="control-label">Korte beschrijving:</label>
         <textarea rows="5" class="form-control" id="shortdescription" placeholder="Geef een korte beschrijving van het product"></textarea>
@@ -37,8 +52,37 @@
     </div>
 </form>
 
+    <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="dlgclosebutton1" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Ongeldige invoer</h4>
+            </div>
+            <div class="modal-body" id="dlgwrongentry">
+            </div>
+            <div class="modal-footer">
+                <button id="dlgclosebutton2" type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     var ignoreSelection = false;
+
+    var tmpShouldBeRestored = false;
+    var tmp_name;
+    var tmp_categoryId;
+    var tmp_shortDescription;
+    var tmp_fullDescription;
+    var tmp_price;
+
+    function uploadProductImage() {
+        $("#fileupload").trigger("click");
+        return false;
+    }
 
     function htmlEncode(value) {
         return $('<div/>').text(value).html();
@@ -64,7 +108,22 @@
         });
     }
 
+    function checkFields() {
+        if ($("#editname").val().length < 3) {
+            $("#dlgwrongentry").text('De naam van het product moet minstens 3 karakters lang zijn.');
+            $('#myModal').modal();
+            return false;
+        }
+        if ($("#shortdescription").val().length < 1) {
+            $("#dlgwrongentry").text('Vul een korte beschrijving in.');
+            $('#myModal').modal();
+            return false;
+        }
+        return true;
+    }
+
     function createCode() {
+        if (!checkFields()) return;
         myApp.showPleaseWait();
         $.ajax({
             type: "POST",
@@ -94,6 +153,7 @@
     }
 
     function saveCode() {
+        if (!checkFields()) return;
         myApp.showPleaseWait();
         $.ajax({
             type: "POST",
@@ -149,16 +209,29 @@
     }
 
     function updateActiveCode(activeProduct) {
+        var imgUrl = '@Url.Action("GetProductImage", "Shop", new { id="1234", area = "Globalcaching" })';
         if (activeProduct != null) {
+            var url = imgUrl.replace('1234', activeProduct.Id);
             $('#code').val(activeProduct.Id);
-            $('#editname').val(activeProduct.Name);
-            $('#shortdescription').val(activeProduct.ShortDescription);
-            $('#fulldescription').val(activeProduct.FullDescription);
-            $('#price').val(activeProduct.Price);
-            $('#category').val(activeProduct.CategoryId);
+            if (tmpShouldBeRestored) {
+                $('#editname').val(tmp_name);
+                $('#shortdescription').val(tmp_shortDescription);
+                $('#fulldescription').val(tmp_shortDescription);
+                $('#price').val(tmp_price);
+                $('#category').val(tmp_categoryId);
+            }
+            else {
+                $('#editname').val(activeProduct.Name);
+                $('#shortdescription').val(activeProduct.ShortDescription);
+                $('#fulldescription').val(activeProduct.FullDescription);
+                $('#price').val(activeProduct.Price);
+                $('#category').val(activeProduct.CategoryId);
+            }
             $("#updateButton").show();
             $("#deleteButton").show();
             $("#createButton").hide();
+            $("#productImageSrc").attr("src", url);    
+            $("#productImage").show();           
         }
         else {
             $('#editname').val('');
@@ -168,7 +241,9 @@
             $("#updateButton").hide();
             $("#deleteButton").hide();
             $("#createButton").show();
+            $("#productImage").hide();           
         }
+        tmpShouldBeRestored = false;
     }
 
     function updateAllPage(response) {
@@ -203,5 +278,51 @@
         deleteCode();
     });
 
-    updateAllPage(@Html.Raw(Json.Encode(Model)));
+    $(function () {
+        var fileName = "";
+
+        $('#fileupload').fileupload({
+            url: '@Url.Action("UploadProductImage", "Shop", new { area = "Globalcaching" })',
+            autoUpload: true,
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .progress-bar').css('width', progress + '%');
+            },
+        });
+        $('#fileupload').bind('fileuploadadd', function (e, data) {
+            $.each(data.files, function (index, file) {
+                fileName = file.name;
+            });
+            data.submit();
+        });
+        $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+            // The example input, doesn't have to be part of the upload form:
+            tmp_name = $("#editname").val();
+            tmp_categoryId = $("#category").val();
+            tmp_shortDescription = $("#shortdescription").val();
+            tmp_fullDescription = $("#fulldescription").val();
+            tmp_price = $("#price").val();
+            tmpShouldBeRestored = true;
+            data.formData = {
+                id: $("#code").val(),
+                filename: fileName,
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            };
+            return true;
+        });
+        $('#fileupload').bind('fileuploadstart', function (e) {
+            // The example input, doesn't have to be part of the upload form:
+            $('#dialog-fileupload').appendTo('body').modal({ "backdrop": "static", "keyboard": false });
+            return true;
+        });
+        $('#fileupload').bind('fileuploadstop', function (e) {
+            // The example input, doesn't have to be part of the upload form:
+            $('#dialog-fileupload').modal('hide');
+            requestCode();
+            return true;
+        });
+        $('#fileupload').hide();
+
+        updateAllPage(@Html.Raw(Json.Encode(Model)));
+    });
 </script>
