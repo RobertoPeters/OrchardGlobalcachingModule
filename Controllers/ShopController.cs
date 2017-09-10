@@ -1,5 +1,7 @@
 ﻿using Globalcaching.Services;
+using Globalcaching.ViewModels;
 using Orchard;
+using Orchard.Localization;
 using Orchard.Themes;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,7 @@ namespace Globalcaching.Controllers
         private readonly IShopService _shopService;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IGCEuUserSettingsService _userSettingsService;
+        public Localizer T { get; set; }
 
         public ShopController(IOrchardServices services,
             IWorkContextAccessor workContextAccessor,
@@ -26,6 +29,7 @@ namespace Globalcaching.Controllers
             _workContextAccessor = workContextAccessor;
             _shopService = shopService;
             _userSettingsService = userSettingsService;
+            T = NullLocalizer.Instance;
         }
 
         [Themed]
@@ -198,5 +202,19 @@ namespace Globalcaching.Controllers
             }
             return null;
         }
+
+        [Themed]
+        [HttpPost]
+        public ActionResult SubmitContactUserProductForm(ShopContactUserProductModel m)
+        {
+            if (ModelState.IsValid)
+            {
+                _shopService.SubmitContactForm(m);
+                Services.Notifier.Add(Orchard.UI.Notify.NotifyType.Information, T("Het contactformulier is verstuurd naar de verkoper en een kopie naar jou."));
+                return Redirect("~/");
+            }
+            return View("../DisplayTemplates/Parts.ShopContactUserProduct", m);
+        }
+
     }
 }

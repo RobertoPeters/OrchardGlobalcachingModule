@@ -413,6 +413,7 @@
     <Content Include="Views\CheckCCC\Requests.cshtml" />
     <Content Include="Views\Shop\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.ShopUserProduct.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.ShopContactUserProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -497,6 +498,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\ShopContactUserProductPartDriver.cs" />
     <Compile Include="Drivers\FinancialYearStatusDriver.cs" />
     <Compile Include="Drivers\CombiRankingPartDriver.cs" />
     <Compile Include="Drivers\ForDonatorsOnlyPartDriver.cs" />
@@ -586,6 +588,7 @@
     <Compile Include="NopCommerce.Api.AdapterLibrary\ApiClient.cs" />
     <Compile Include="NopCommerce.Api.AdapterLibrary\HttpMethods.cs" />
     <Compile Include="Services\ShopService.cs" />
+    <Compile Include="ViewModels\ShopContactUserProductModel.cs" />
     <Compile Include="ViewModels\GCEuCCCRequestModel.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
     <Compile Include="Models\GCEuCodeCheckAttempt.cs" />

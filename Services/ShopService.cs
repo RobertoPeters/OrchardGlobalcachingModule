@@ -13,6 +13,8 @@ using System.Text;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Net.Mail;
+using System.Net;
 
 namespace Globalcaching.Services
 {
@@ -30,6 +32,8 @@ namespace Globalcaching.Services
         ShopUserProductModel SaveUserProduct(int yafUserId, int productId, string name, int categoryId, string shortDescription, string fullDescription, double price);
         void SetUserProductImage(int yafUserId, int productId, string orgFilename, string imageFile);
         void GetProductImage(HttpResponseBase response, int yafUserId, int productId);
+        ShopContactUserProductModel GetShopContactUserProductModel(string productCode);
+        void SubmitContactForm(ShopContactUserProductModel m);
     }
 
     public class ShopService: IShopService
@@ -97,12 +101,26 @@ namespace Globalcaching.Services
 
         private string FormatFullDescriptionForDatabase(string s, int yafUserId, string productCode)
         {
+            var request = HttpContext.Request;
+            var appUrl = HttpRuntime.AppDomainAppVirtualPath;
+            if (!appUrl.EndsWith("/"))
+            {
+                appUrl =appUrl + "/";
+            }
+            var baseUrl = string.Format("{0}://{1}{2}", HttpContext.Request.Url.Scheme, HttpContext.Request.Url.Authority, appUrl);
+            var contactForProductUrl = string.Format("{0}ContactMetVerkoper?code={1}", baseUrl, HttpUtility.HtmlEncode(productCode));
+
             var sb = new StringBuilder();
             sb.Append("<p>");
             sb.Append(HttpUtility.HtmlEncode(s ?? "")).Replace("\r", "").Replace("\n", "<br />");
             sb.Append("</p>");
             sb.Append("<p>");
-            sb.Append(string.Format("Dit product is geplaatst door <strong>{0}</strong>.", HttpUtility.HtmlEncode(_workContextAccessor.GetContext().CurrentUser.UserName)));
+            sb.Append(string.Format("<br /><div class=\"overview\"><div class=\"add-to-cart\"><div class=\"add-to-cart-panel\"><input type=\"button\" class=\"button-1 add-to-cart-button\" value=\"Neem contact op met verkoper\" onclick=\"window.location.href='{0}'; return false;\"></div></div></div><br /><br />", contactForProductUrl));
+            sb.Append(string.Format("Dit product is geplaatst door <strong><a href=\"{0}forum/yaf_profile{1}.aspx\" style=\"text-decoration: underline;\">{2}</a></strong>.<br />", baseUrl, yafUserId, HttpUtility.HtmlEncode(_workContextAccessor.GetContext().CurrentUser.UserName)));
+            sb.Append(string.Format("Wil je het product kopen of heb je vragen over het product? Neem dan <strong><a href=\"{0}\" style=\"text-decoration: underline;\">contact</a></strong> op met de plaatser van het product.<br />", contactForProductUrl));
+            sb.Append("</p>");
+            sb.Append("<p>");
+            sb.Append("<strong>De koper hoeft geen account te hebben op 4Geocaching.eu</strong>. Alleen indien je zelf producten wilt plaatsen in deze winkel moet je betaald lid zijn van 4Geocaching.eu.");
             sb.Append("</p>");
             return sb.ToString();
         }
@@ -436,7 +454,6 @@ namespace Globalcaching.Services
                 if (userProduct != null)
                 {
                     byte[] imageData;
-                    string mimeType;
                     using (Bitmap bitmap = new Bitmap(imageFile, true))
                     using (MemoryStream memStream = new MemoryStream())
                     using (Graphics g = Graphics.FromImage(bitmap))
@@ -455,20 +472,16 @@ namespace Globalcaching.Services
                         {
                             case ".bmp":
                                 bitmap.Save(memStream, ImageFormat.Bmp);
-                                mimeType = "image/bmp";
                                 break;
                             case ".png":
                                 bitmap.Save(memStream, ImageFormat.Png);
-                                mimeType = "image/png";
                                 break;
                             case ".jpg":
                             case ".jpeg":
                                 bitmap.Save(memStream, ImageFormat.Jpeg);
-                                mimeType = "image/jpeg";
                                 break;
                             default:
                                 bitmap.Save(memStream, ImageFormat.Jpeg);
-                                mimeType = "image/jpeg";
                                 break;
                         }
                         imageData = new byte[memStream.Length];
@@ -681,6 +694,76 @@ namespace Globalcaching.Services
                 }
             }
             return GetUserProduct(yafUserId, usrProductId);
+        }
+
+        public ShopContactUserProductModel GetShopContactUserProductModel(string productCode)
+        {
+            var result = new ShopContactUserProductModel();
+            result.ProductCode = productCode;
+            if (productCode != null)
+            {
+                using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
+                {
+                    var userProduct = db.FirstOrDefault<GcEuProducts>("select GcEuProducts.* from GcEuProducts inner join Product on GcEuProducts.ProductId=Product.Id where GcEuProducts.ProductCode=@0 and Product.Published=1", productCode);
+                    if (userProduct != null)
+                    {
+                        result.ProductName = db.FirstOrDefault<string>("select Name from Product where Id=@0", userProduct.ProductId);
+                        result.ProductSku = db.FirstOrDefault<string>("select Sku from Product where Id=@0", userProduct.ProductId);
+                        result.SellerName = _gcEuUserSettingsService.GetName(userProduct.UserId);
+                        var curSetting = _gcEuUserSettingsService.GetSettings();
+                        if (curSetting != null && curSetting.YafUserID > 1)
+                        {
+                            result.BuyerEmail = _gcEuUserSettingsService.GetEMail(curSetting.YafUserID);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        public void SubmitContactForm(ShopContactUserProductModel m)
+        {
+            string sellerName = null;
+            string sellerEMail = null;
+            string productName = null;
+            string productSku = null;
+
+            using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
+            {
+                var userProduct = db.FirstOrDefault<GcEuProducts>("select GcEuProducts.* from GcEuProducts inner join Product on GcEuProducts.ProductId=Product.Id where GcEuProducts.ProductCode=@0 and Product.Published=1", m.ProductCode);
+                if (userProduct != null)
+                {
+                    productName = db.FirstOrDefault<string>("select Name from Product where Id=@0", userProduct.ProductId);
+                    productSku = db.FirstOrDefault<string>("select Sku from Product where Id=@0", userProduct.ProductId);
+                    sellerName = _gcEuUserSettingsService.GetName(userProduct.UserId);
+                    sellerEMail = _gcEuUserSettingsService.GetEMail(userProduct.UserId);
+                }
+            }
+            if (sellerName != null && sellerEMail != null)
+            {
+                using (MailMessage mm = new MailMessage())
+                {
+                    mm.From = new MailAddress("info@4geocaching.eu", "4geocaching.eu");
+                    mm.ReplyToList.Add(new MailAddress(m.BuyerEmail, m.BuyerName));
+                    mm.To.Add(new MailAddress(sellerEMail, sellerName));
+                    mm.Bcc.Add(new MailAddress("info@4geocaching.eu", "4geocaching.eu"));
+                    mm.Bcc.Add(new MailAddress(m.BuyerEmail, m.BuyerName));
+                    mm.Subject = string.Format("Contact betreffende {0} - ({1})", productName, productSku);
+                    mm.Body = string.Format("{0}\r\n\r\nTekst aangemaakt door {1} ({2})", m.BuyerComment, m.BuyerName, m.BuyerEmail);
+                    mm.IsBodyHtml = false;
+
+                    NetworkCredential cred = new NetworkCredential(ConfigurationManager.AppSettings["emailName"], ConfigurationManager.AppSettings["emailPassword"]);
+                    using (System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient(ConfigurationManager.AppSettings["emailHost"]))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.EnableSsl = false;
+                        smtp.Credentials = cred;
+                        smtp.Port = int.Parse(ConfigurationManager.AppSettings["emailSmtpPort"]);
+
+                        smtp.Send(mm);
+                    }
+                }
+            }
         }
 
     }

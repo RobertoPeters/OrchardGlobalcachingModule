@@ -1,0 +1,57 @@
+﻿@model Globalcaching.ViewModels.ShopContactUserProductModel
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("SubmitContactUserProductForm", "Shop", new { area = "Globalcaching" }), FormMethod.Post, new { role = "form", @class = "form-horizontal" }))
+{
+        <div class="form-group">
+            <label for="Name" class="col-sm-3 control-label">@T("Naam")</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.BuyerName, new { placeholder = T("naam"), @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="EMail" class="col-sm-3 control-label">@T("EMail")</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.BuyerEmail, new { placeholder = T("email@email.com"), @class = "form-control", @type = "email" })
+                @Html.ValidationMessageFor(m => m.BuyerEmail, "", new { @class = "errormsg" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Title" class="col-sm-3 control-label">@T("Product")</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.ProductName, new { @readonly = true, @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Title" class="col-sm-3 control-label">@T("SKU")</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.ProductSku, new { @readonly = true, @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Title" class="col-sm-3 control-label">@T("Verkoper")</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(m => m.SellerName, new { @readonly = true, @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Comment" class="col-sm-3 control-label">@T("Vragen of opmerkingen")</label>
+            <div class="col-sm-9">
+                @Html.TextAreaFor(m => m.BuyerComment, new { rows="15", placeholder = T("vragen of opmerkingen"), @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.BuyerComment, "", new { @class = "errormsg" })
+            </div>
+        </div>
+
+        @Html.HiddenFor(m => m.ProductCode);
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" value="Update" class="btn btn-primary">@T("Verstuur")</button>
+            </div>
+        </div>
+    
+    @Html.ValidationSummary()
+}

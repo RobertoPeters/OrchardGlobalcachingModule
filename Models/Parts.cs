@@ -31,6 +31,10 @@ namespace Globalcaching.Models
         }
     }
 
+    public class ShopContactUserProductPart : ContentPart
+    {
+    }
+
     public class ShopUserProductPart : ContentPart
     {
     }

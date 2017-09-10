@@ -16,6 +16,7 @@ namespace Globalcaching.Services
         GCEuUserSettings GetSettings(long gcComUserID);
         void UpdateSettings(GCEuUserSettings settings);
         string GetEMail(int yafUserID);
+        string GetName(int yafUserID);
         List<ListMemberSettingsModel> GetAllMemberSettings();
     }
 
@@ -57,6 +58,20 @@ namespace Globalcaching.Services
             using (PetaPoco.Database db = new PetaPoco.Database(dbYafForumConnString, "System.Data.SqlClient"))
             {
                 var idl = db.Fetch<string>("select EMail from Yaf_User where UserID=@0", yafUserID);
+                if (idl != null && idl.Count > 0)
+                {
+                    result = idl[0];
+                }
+            }
+            return result;
+        }
+
+        public string GetName(int yafUserID)
+        {
+            string result = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbYafForumConnString, "System.Data.SqlClient"))
+            {
+                var idl = db.Fetch<string>("select Name from Yaf_User where UserID=@0", yafUserID);
                 if (idl != null && idl.Count > 0)
                 {
                     result = idl[0];
