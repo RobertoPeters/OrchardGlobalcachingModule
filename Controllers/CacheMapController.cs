@@ -16,6 +16,7 @@ using System.Web.Script.Serialization;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class CacheMapController: Controller
     {
         public class GCLocation

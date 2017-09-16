@@ -14,6 +14,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class LogGCComController : Controller
     {
         public static string dbGcComDataConnString = ConfigurationManager.ConnectionStrings["GCComDataConnectionString"].ToString();

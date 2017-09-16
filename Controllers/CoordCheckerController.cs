@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class CoordCheckerController: Controller
     {
         private ICoordCheckerService _coordCheckerService;

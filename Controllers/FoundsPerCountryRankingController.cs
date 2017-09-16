@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class FoundsPerCountryRankingController: Controller
     {
         private readonly IFoundsPerCountryRankingService _foundsPerCountryRankingService;

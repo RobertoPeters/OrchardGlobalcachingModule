@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class ContactFormController: Controller
     {
         public IContactFormService _contactFormServices { get; set; }

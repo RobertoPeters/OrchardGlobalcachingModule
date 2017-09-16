@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class CodeCheckerController: Controller
     {
         private ICodeCheckerService _codeCheckerService;

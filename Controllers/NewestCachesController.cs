@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class NewestCachesController: Controller
     {
         public readonly IGCEuUserSettingsService _gcEuUserSettingsService = null;

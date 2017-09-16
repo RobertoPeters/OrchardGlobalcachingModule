@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class TrackableGroupController: Controller
     {
         private readonly ITrackableGroupService _trackableGroupService;

@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class Athom : Controller
     {
         [OutputCache(Duration = 0, NoStore = true)]

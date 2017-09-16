@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class GCComSearchLogImagesController : Controller
     {
         private readonly IGCComSearchLogImagesService _gcComSearchLogImagesService;

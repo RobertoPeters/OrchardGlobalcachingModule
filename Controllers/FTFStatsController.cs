@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class FTFStatsController: Controller
     {
         private readonly IFTFStatsService _ftfStatsService;

@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class LiveAPIOAuthController : Controller
     {
         private static string WcfTokenManagerTag = "WcfTokenManager";

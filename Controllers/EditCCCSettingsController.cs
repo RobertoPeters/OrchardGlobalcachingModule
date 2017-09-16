@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class EditCCCSettingsController : Controller
     {
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;

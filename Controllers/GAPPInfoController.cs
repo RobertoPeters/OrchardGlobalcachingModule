@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class GAPPInfoController: Controller
     {
         public IOrchardServices Services { get; set; }

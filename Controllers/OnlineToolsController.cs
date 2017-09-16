@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class OnlineToolsController : Controller
     {
         public OnlineToolsController()

@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class ShopController : Controller
     {
         public IOrchardServices Services { get; set; }

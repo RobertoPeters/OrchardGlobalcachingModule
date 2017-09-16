@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class ForumController: Controller
     {
         private static string ForumBaseUrl = ConfigurationManager.AppSettings["forumBaseUrl"].ToString();

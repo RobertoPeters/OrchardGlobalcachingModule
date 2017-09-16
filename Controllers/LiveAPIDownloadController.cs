@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class LiveAPIDownloadController: Controller
     {
         private readonly ILiveAPIDownloadService _liveAPIDownloadService;

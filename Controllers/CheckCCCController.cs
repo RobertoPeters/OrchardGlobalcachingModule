@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class CheckCCCController: Controller
     {
         public IOrchardServices Services { get; set; }

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class CombiRankingController: Controller
     {
         private readonly ICombiRankingService _combiRankingService;

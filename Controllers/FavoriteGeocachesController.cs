@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class FavoriteGeocachesController: Controller
     {
         private readonly IFavoriteGeocachesService _favoriteGeocachesService;

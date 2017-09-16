@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class GeocacheSeriesController: Controller
     {
         private readonly IGeocacheSeriesService _geocacheSeriesService;

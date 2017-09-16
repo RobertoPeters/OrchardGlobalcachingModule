@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class DisplayGeocacheController : Controller
     {
         private readonly IGCEuUserSettingsService _gcEuUserSettingsService;

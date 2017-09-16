@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Globalcaching.Controllers
 {
+    [ValidateInput(false)]
     public class LogImageStatsController: Controller
     {
         private readonly ILogImageStatsService _logImageStatsService;
