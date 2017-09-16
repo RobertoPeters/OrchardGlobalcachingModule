@@ -43,6 +43,10 @@
 
     <script type="text/javascript">
 
+        function htmlEncode(value) {
+            return $('<div/>').text(value).html();
+        }
+
         initGlobalcachingPager("gccomSearchTopPager", "gccomSearch");
         initGlobalcachingPager("gccomSearchBottomPager", "gccomSearch");
 
@@ -63,7 +67,7 @@
                 for (var i = 0; i < response.Current.Users.length; i++) {
                     var line = response.Current.Users[i];
                     // insert after last row!
-                    $(resultElementName + ' > tbody:last').append('<tr><td>' + '<img src="' + line.AvatarUrl.replace('http://', 'https://') + '" height="48" width="48"/>' + '</td><td><a href="@Href("~/GCComGebruikerInfo/")' + line.ID + '">' + line.UserName + '</a></td><td>' + line.FindCount + '</td><td>' + line.HideCount + '</td></tr>');
+                    $(resultElementName + ' > tbody:last').append('<tr><td>' + '<img src="' + line.AvatarUrl.replace('http://', 'https://') + '" height="48" width="48"/>' + '</td><td><a href="@Href("~/GCComGebruikerInfo/")' + line.ID + '">' + htmlEncode(line.UserName) + '</a></td><td>' + line.FindCount + '</td><td>' + line.HideCount + '</td></tr>');
                 }
 
                 //=================
@@ -78,7 +82,7 @@
                 for (var i = 0; i < response.History.Users.length; i++) {
                     var line = response.History.Users[i];
                     // insert after last row!
-                    $(resultHistElementName + ' > tbody:last').append('<tr><td>' + '<img src="' + line.AvatarUrl.replace('http://','https://') + '" height="48" width="48"/>' + '</td><td><a href="@Href("~/GCComGebruikerInfo/")' + line.ID + '">' + line.UserName + '</a></td><td>' + line.FindCount + '</td><td>' + line.HideCount + '</td></tr>');
+                    $(resultHistElementName + ' > tbody:last').append('<tr><td>' + '<img src="' + line.AvatarUrl.replace('http://', 'https://') + '" height="48" width="48"/>' + '</td><td><a href="@Href("~/GCComGebruikerInfo/")' + line.ID + '">' + htmlEncode(line.UserName) + '</a></td><td>' + line.FindCount + '</td><td>' + line.HideCount + '</td></tr>');
                 }
 
                 //=================
