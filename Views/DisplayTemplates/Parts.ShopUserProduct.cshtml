@@ -35,7 +35,7 @@
             <button type="button" class="btn btn-success" onclick="uploadProductImage()"><i class="glyphicon glyphicon-plus"></i>&nbsp;Upload plaatje</button>
             <input id="fileupload" type="file" name="file" accept="image/*" class="btn btn-primary">
         </span>
-        <span> Let op: indien je een plaatje upload wordt het gelijk bijgewerkt zonder dat je op hoeft te slaan.</span>
+        <span> Let op: indien je een plaatje uploadt, wordt het gelijk bijgewerkt zonder dat je op hoeft te slaan. Het bestand mag niet te groot zijn.</span>
     </div>
     <div class="form-group">
         <label class="control-label">Korte beschrijving:</label>
@@ -231,7 +231,7 @@
             if (tmpShouldBeRestored) {
                 $('#editname').val(tmp_name);
                 $('#shortdescription').val(tmp_shortDescription);
-                $('#fulldescription').val(tmp_shortDescription);
+                $('#fulldescription').val(tmp_fullDescription);
                 $('#price').val(tmp_price);
                 $('#category').val(tmp_categoryId);
             }

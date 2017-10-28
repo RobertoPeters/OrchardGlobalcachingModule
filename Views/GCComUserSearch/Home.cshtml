@@ -92,8 +92,8 @@
             @if (Model.GCEuUserSettings!=null)
             { 
                 <div class="row">
-                    <div class="col-md-2"><strong>Donateur:</strong></div>
-                    <div class="col-md-10">
+                    <div class="col-md-3"><strong>Betalend lid:</strong></div>
+                    <div class="col-md-9">
                         @if (Model.GCEuUserSettings.IsDonator)
                         {
                             <span>Ja</span>
@@ -105,8 +105,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2"><strong>Nick:</strong></div>
-                    <div class="col-md-10">
+                    <div class="col-md-3"><strong>Nick:</strong></div>
+                    <div class="col-md-9">
                         <a href="@string.Format("forum/yaf_profile",Model.GCEuUserSettings.YafUserID)">@Model.GCEuUserName</a>
                     </div>
                 </div>

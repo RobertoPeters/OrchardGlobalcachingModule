@@ -233,7 +233,7 @@ namespace Globalcaching.Controllers
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
                         bool valid = false;
-                        var sql = PetaPoco.Sql.Builder.Append("SELECT Code, Archived, Available FROM GCComGeocache WHERE ");
+                        var sql = PetaPoco.Sql.Builder.Append("SELECT Code, Archived, Available FROM GCComGeocache WHERE 1=0");
 
                         try
                         {
@@ -243,7 +243,7 @@ namespace Globalcaching.Controllers
                                 var lst = (from a in sc.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) select (int.Parse(a))).ToArray();
                                 if (lst.Length > 0)
                                 {
-                                    sql = sql.Append("CountryID in (@countries)", new { countries = lst });
+                                    sql = sql.Append(" OR CountryID in (@countries)", new { countries = lst });
                                     valid = true;
                                 }
                             }
@@ -260,8 +260,7 @@ namespace Globalcaching.Controllers
                                 var lst2 = (from a in sc2.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) select (int.Parse(a))).ToArray();
                                 if (lst2.Length > 0)
                                 {
-                                    if (valid) sql.Append(" OR ");
-                                    sql = sql.Append("StateID in (@states)", new { states = lst2 });
+                                    sql = sql.Append("OR StateID in (@states)", new { states = lst2 });
                                     valid = true;
                                 }
                             }
@@ -280,8 +279,7 @@ namespace Globalcaching.Controllers
                                 var lat = double.Parse(slat, CultureInfo.InvariantCulture);
                                 var lon = double.Parse(slon, CultureInfo.InvariantCulture);
                                 var radius = double.Parse(sr, CultureInfo.InvariantCulture);
-                                if (valid) sql.Append(" OR ");
-                                sql.Append("dbo.F_GREAT_CIRCLE_DISTANCE(Latitude, Longitude, @0, @1) < @2", lat, lon, radius);
+                                sql.Append("OR dbo.F_GREAT_CIRCLE_DISTANCE(Latitude, Longitude, @0, @1) < @2", lat, lon, radius);
                                 valid = true;
                             }
                         }
