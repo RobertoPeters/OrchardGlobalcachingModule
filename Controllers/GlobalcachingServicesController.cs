@@ -227,13 +227,36 @@ namespace Globalcaching.Controllers
                 string token = Request.QueryString["token"];
                 string usr = Request.QueryString["usr"];
                 string pwd = Request.QueryString["pwd"];
+                string m = Request.QueryString["m"];
                 var settings = GetUserSettings("GeocacheCodesEx", token, usr, pwd);
                 if (settings != null && settings.IsDonator && !string.IsNullOrEmpty(settings.LiveAPIToken) && settings.GCComUserID != null)
                 {
                     using (PetaPoco.Database db = new PetaPoco.Database(dbGcComDataConnString, "System.Data.SqlClient"))
                     {
                         bool valid = false;
-                        var sql = PetaPoco.Sql.Builder.Append("SELECT Code, Archived, Available FROM GCComGeocache WHERE 1=0");
+                        var sql = PetaPoco.Sql.Builder.Append("SELECT a.Code, a.Archived, a.Available FROM GCComGeocache a");
+
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(m))
+                            {
+                                if (db.ExecuteScalar<long>(string.Format("SELECT count(1) FROM GCEuMacroData.sys.tables WHERE name = 'macro_{0}_Resultaat'", settings.YafUserID)) > 0)
+                                {
+                                    sql = sql.Append(string.Format(" left join GCEuMacroData.dbo.macro_{0}_Resultaat b on a.ID = b.ID", settings.YafUserID));
+                                    valid = true;
+                                }
+                                else
+                                {
+                                    m = null;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            m = null;
+                        }
+
+                        sql = sql.Append("WHERE 1=0");
 
                         try
                         {
@@ -243,7 +266,7 @@ namespace Globalcaching.Controllers
                                 var lst = (from a in sc.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) select (int.Parse(a))).ToArray();
                                 if (lst.Length > 0)
                                 {
-                                    sql = sql.Append(" OR CountryID in (@countries)", new { countries = lst });
+                                    sql = sql.Append(" OR a.CountryID in (@countries)", new { countries = lst });
                                     valid = true;
                                 }
                             }
@@ -260,7 +283,7 @@ namespace Globalcaching.Controllers
                                 var lst2 = (from a in sc2.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries) select (int.Parse(a))).ToArray();
                                 if (lst2.Length > 0)
                                 {
-                                    sql = sql.Append("OR StateID in (@states)", new { states = lst2 });
+                                    sql = sql.Append("OR a.StateID in (@states)", new { states = lst2 });
                                     valid = true;
                                 }
                             }
@@ -279,13 +302,25 @@ namespace Globalcaching.Controllers
                                 var lat = double.Parse(slat, CultureInfo.InvariantCulture);
                                 var lon = double.Parse(slon, CultureInfo.InvariantCulture);
                                 var radius = double.Parse(sr, CultureInfo.InvariantCulture);
-                                sql.Append("OR dbo.F_GREAT_CIRCLE_DISTANCE(Latitude, Longitude, @0, @1) < @2", lat, lon, radius);
+                                sql.Append("OR dbo.F_GREAT_CIRCLE_DISTANCE(a.Latitude, a.Longitude, @0, @1) < @2", lat, lon, radius);
                                 valid = true;
                             }
                         }
                         catch
                         {
                         }
+
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(m))
+                            {
+                                sql = sql.Append("OR (b.ID is not null)");
+                            }
+                        }
+                        catch
+                        {
+                        }
+
 
                         if (valid)
                         {
