@@ -204,6 +204,13 @@ namespace Globalcaching.Controllers
             return null;
         }
 
+        [OutputCache(Duration = 0, NoStore = true)]
+        public ActionResult GetShopArticleImage(int id)
+        {
+            _shopService.GetProductImage(Response, -1, id);
+            return null;
+        }
+
         [Themed]
         [HttpPost]
         public ActionResult SubmitContactUserProductForm(ShopContactUserProductModel m)

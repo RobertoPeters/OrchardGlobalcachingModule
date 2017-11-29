@@ -2672,6 +2672,21 @@ namespace Globalcaching
                         },
                         new MvcRouteHandler())
                 },
+                 new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetShopArticleImage/{id}",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "Shop"},
+                            {"action", "GetShopArticleImage"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(

@@ -1,0 +1,21 @@
+﻿@model Globalcaching.Models.ShopArticlePart
+
+<fieldset>
+    <legend>Map Fields</legend>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.ArticleNumber)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(model => model.ArticleNumber)
+        @Html.ValidationMessageFor(model => model.ArticleNumber)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Comment)
+    </div>
+    <div class="editor-field">
+        @Html.TextAreaFor(model => model.Comment)
+    </div>
+
+</fieldset>

@@ -754,5 +754,25 @@ namespace Globalcaching
             return 53;
         }
 
+        public int UpdateFrom53()
+        {
+            SchemaBuilder.CreateTable("ShopArticleRecord", table => table
+                            .ContentPartRecord()
+                            .Column("ArticleNumber", DbType.Int32)
+                            .Column("Comment", DbType.String)
+                        );
+
+            ContentDefinitionManager.AlterTypeDefinition("ShopArticleWidget",
+                cfg => cfg
+                    .DisplayedAs("ShopArticle")
+                    .WithPart("ShopArticlePart")
+                    .WithPart("CommonPart")
+                    .WithPart("WidgetPart")
+                    .WithSetting("Stereotype", "Widget")
+                );
+
+            return 54;
+        }
+
     }
 }

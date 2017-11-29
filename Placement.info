@@ -53,4 +53,6 @@
   <Place Parts_LiveAPILogSearch="Content:1"/>
   <Place Parts_ShopUserProduct="Content:1"/>
   <Place Parts_ShopContactUserProduct="Content:1"/>
+  <Place Parts_ShopArticle="Content:1"/>
+  <Place Parts_ShopArticle_Edit="Content:7.5"/>
 </Placement>

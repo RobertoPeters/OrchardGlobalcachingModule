@@ -1,0 +1,17 @@
+﻿@model Globalcaching.ViewModels.ShopArticleModel
+
+<table>
+    <tr>
+        <td>
+            <a href="@Model.Url" target="_blank"><img src="@Url.Action("GetShopArticleImage", "Shop", new { id=Model.ProductId, area = "Globalcaching" })" style="max-height:150px;max-width:400px;" /></a>
+        </td>
+        <td valign="top" style="position:relative;padding-left: 15px;">
+            <span style="color:steelblue"><strong><a href="@Model.Url" target="_blank">@Model.Name</a></strong></span><br />
+            <br />
+            <span>@Model.Comment</span><br />
+            <span>@Model.ShortDescription</span><br />
+            <span><strong>Prijs €@Model.Price.ToString("0.00")</strong></span><br />
+            <span style="position: absolute;bottom:0;"><a class="btn btn-primary" href="@Model.Url" target="_blank">@T("Ga naar shop")</a></span>
+        </td>
+    </tr>
+</table>

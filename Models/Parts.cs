@@ -8,6 +8,28 @@ using System.Web;
 
 namespace Globalcaching.Models
 {
+    public class ShopArticleRecord : ContentPartRecord
+    {
+        public virtual int ArticleNumber { get; set; }
+        public virtual string Comment { get; set; }
+    }
+
+    public class ShopArticlePart : ContentPart<ShopArticleRecord>
+    {
+        [Required]
+        public int ArticleNumber
+        {
+            get { return Retrieve(r => r.ArticleNumber); }
+            set { Store(r => r.ArticleNumber, value); }
+        }
+
+        public string Comment
+        {
+            get { return Retrieve(r => r.Comment); }
+            set { Store(r => r.Comment, value); }
+        }
+    }
+
     public class FinancialYearStatusRecord : ContentPartRecord
     {
         public virtual int Year { get; set; }

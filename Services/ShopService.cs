@@ -34,6 +34,8 @@ namespace Globalcaching.Services
         void GetProductImage(HttpResponseBase response, int yafUserId, int productId);
         ShopContactUserProductModel GetShopContactUserProductModel(string productCode);
         void SubmitContactForm(ShopContactUserProductModel m);
+
+        ShopArticleModel GetShopArticle(ShopArticlePart part);
     }
 
     public class ShopService: IShopService
@@ -416,10 +418,22 @@ namespace Globalcaching.Services
         {
             using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
             {
-                var userProduct = db.FirstOrDefault<GcEuProducts>("where Id=@0 and UserId=@1", productId, yafUserId);
-                if (userProduct != null)
+                var pId = -1;
+                if (yafUserId < 0)
                 {
-                    var picture = db.FirstOrDefault<ShopPicture>("select Picture.* from Product_Picture_Mapping inner join Picture on Product_Picture_Mapping.PictureId=Picture.Id where Product_Picture_Mapping.ProductId=@0", userProduct.ProductId);
+                    pId = productId;
+                }
+                else
+                {
+                    var userProduct = db.FirstOrDefault<GcEuProducts>("where Id=@0 and UserId=@1", productId, yafUserId);
+                    if (userProduct != null)
+                    {
+                        pId = userProduct.ProductId;
+                    }
+                }
+                if (pId >= 0)
+                {
+                    var picture = db.FirstOrDefault<ShopPicture>("select Picture.* from Product_Picture_Mapping inner join Picture on Product_Picture_Mapping.PictureId=Picture.Id where Product_Picture_Mapping.ProductId=@0", pId);
                     if (picture == null)
                     {
                         using (Bitmap bitmap = new Bitmap(System.Web.HttpContext.Current.Server.MapPath("~/Modules/Globalcaching/Media/default-image_550.png"), true))
@@ -766,5 +780,17 @@ namespace Globalcaching.Services
             }
         }
 
+        public ShopArticleModel GetShopArticle(ShopArticlePart part)
+        {
+            ShopArticleModel result = null;
+            using (PetaPoco.Database db = new PetaPoco.Database(dbShopConnString, "System.Data.SqlClient"))
+            {
+                result = db.FirstOrDefault<ShopArticleModel>("select Product.Name, Product.Sku, Product.ShortDescription, Product.FullDescription, Product.Price, UrlRecord.Slug as Url from Product inner join UrlRecord on Product.Id=UrlRecord.EntityId and UrlRecord.EntityName='Product' where Product.Id=@0", part.ArticleNumber);
+                result.Url = ConfigurationManager.AppSettings["shopBaseUrl"] + "/" + result.Url;
+                result.Comment = part.Comment;
+                result.ProductId = part.ArticleNumber;
+            }
+            return result;
+        }
     }
 }

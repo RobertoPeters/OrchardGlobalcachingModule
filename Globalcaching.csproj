@@ -414,6 +414,8 @@
     <Content Include="Views\Shop\Home.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.ShopUserProduct.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.ShopContactUserProduct.cshtml" />
+    <Content Include="Views\EditorTemplates\Parts\ShopArticle.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.ShopArticle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -498,6 +500,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\ShopArticleDriver.cs" />
     <Compile Include="Drivers\ShopContactUserProductPartDriver.cs" />
     <Compile Include="Drivers\FinancialYearStatusDriver.cs" />
     <Compile Include="Drivers\CombiRankingPartDriver.cs" />
@@ -558,6 +561,7 @@
     <Compile Include="Gavaghan.Geodesy\GeodeticMeasurement.cs" />
     <Compile Include="Gavaghan.Geodesy\GlobalCoordinates.cs" />
     <Compile Include="Gavaghan.Geodesy\GlobalPosition.cs" />
+    <Compile Include="Handlers\ShopArticleHandler.cs" />
     <Compile Include="Handlers\FinancialYearStatusHandler.cs" />
     <Compile Include="Migrations.cs" />
     <Compile Include="Models\CheckCCCResult.cs" />
@@ -588,6 +592,7 @@
     <Compile Include="NopCommerce.Api.AdapterLibrary\ApiClient.cs" />
     <Compile Include="NopCommerce.Api.AdapterLibrary\HttpMethods.cs" />
     <Compile Include="Services\ShopService.cs" />
+    <Compile Include="ViewModels\ShopArticleModel.cs" />
     <Compile Include="ViewModels\ShopContactUserProductModel.cs" />
     <Compile Include="ViewModels\GCEuCCCRequestModel.cs" />
     <Compile Include="Models\GCEuCCCUser.cs" />
