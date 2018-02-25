@@ -1,0 +1,215 @@
+﻿@{
+    Style.Require("datetimepicker.Style");
+    Script.Require("moment.Script").AtHead();
+}
+
+@if (Model.CanEdit)
+{
+    <h2>Bewerk of voeg een nieuwe code toe</h2>
+    <form role="form">
+        <input type="hidden" id="recordid" />
+        <div class="form-group">
+            <label class="control-label">Code:</label>
+            <input class="form-control" id="gccode" value="" placeholder="GC1234AB" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Opmerkingen:</label>
+            <textarea class="form-control" rows="5" id="comment" placeholder="opmerkingen"></textarea>
+        </div>
+        <br />
+        <button class="btn btn-primary" type="button" id="saveRecordButton">Opslaan</button>
+    </form>
+}
+
+<h2>Alle goedgekeurde codes</h2>
+
+<span>Filter op code:</span>
+<input id="gcfilter" value="" placeholder="GC1234AB" />
+<button class="btn btn-primary" type="button" id="searchRecordButton">Zoek</button>
+<br />
+<br />
+
+<div id="callsTopPager">
+</div>
+<table class="table" id="callsResults">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Datum</th>
+            <th>Code</th>
+            <th>Opmerking</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div id="callsBottomPager">
+</div>
+
+<script type="text/javascript">
+    initGlobalcachingPager("callsTopPager", "callsPager");
+    initGlobalcachingPager("callsBottomPager", "callsPager");
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function updateEditItem(response) {
+        if (response != null) {
+            $('#recordid').val(response.ID);
+            $('#gccode').val(response.Code);
+            $('#comment').val(response.Comment);
+        }
+        else {
+            $('#recordid').val("0");
+            $('#gccode').val("");
+            $('#comment').val("");
+        }
+    }
+
+    function updateFromResponse(response) {
+        var resultElementName = "#callsResults";
+        var pagerElementName = ".callsPager";
+
+        updateEditItem(response.EditItem)
+        currentPage = response.CurrentPage;
+
+        for (var i = 0; i < response.Items.length; i++) {
+            var line = response.Items[i];
+            // insert after last row!
+
+            var td0 = '<button class="btn btn-primary btn-xs" type="button" onclick="javascript:editRecord('+ line.ID.toString() +')" >bewerk</button>';
+
+            var d = eval('new' + line.LastEditAt.replace(/\//g, ' '));
+            var td1 = formatDateToShortDate(d);
+            var td2 = htmlEncode(line.Code);
+            var td3 = htmlEncode(line.Comment).replace('\n', '<br />');
+
+            var td4 = '<button class="btn btn-danger btn-xs" type="button" onclick="javascript:deleteRecord(' + line.ID.toString() + ')" >verwijder</button>';
+
+            $(resultElementName + ' > tbody:last').append('<tr><td>' + td0 + '</td><td>' + td1 + '</td><td>' + td2 + '</td><td>' + td3 + '</td><td>' + td4 + '</td></tr>');
+        }
+
+        $('#gcfilter').val(response.Filter);
+
+        setupGlobalcachingPage(response.CurrentPage, response.PageCount, response.TotalCount, pagerElementName, "requestCallsPage");
+    }
+
+    function editRecord(id) {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetApprovedRecord", "GCApproved", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                filter: $('#gcfilter').val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateEditItem(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function deleteRecord(id) {
+        myApp.showPleaseWait();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteApprovedRecord", "GCApproved", new { area = "Globalcaching" })',
+            data: {
+                id: id,
+                filter: $('#gcfilter').val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                requestCallsPage(1);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+
+    function requestCallsPage(page) {
+        var resultElementName = "#callsResults";
+        var pagerElementName = ".callsPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetApproved", "GCApproved", new { area = "Globalcaching" })',
+            data: {
+                page: page,
+                pageSize: "500",
+                filter: $('#gcfilter').val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateFromResponse(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    function saveRecord() {
+        var resultElementName = "#callsResults";
+        var pagerElementName = ".callsPager";
+
+        myApp.showPleaseWait();
+
+        $(resultElementName).find("tr:gt(0)").remove();
+        $(pagerElementName).find("li").remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveApprovedRecord", "GCApproved", new { area = "Globalcaching" })',
+            data: {
+                page: 1,
+                pageSize: "500",
+                id: $('#recordid').val(),
+                gccode: $('#gccode').val(),
+                comment: $('#comment').val(),
+                filter: $('#gcfilter').val(),
+                __RequestVerificationToken: '@Html.AntiForgeryTokenValueOrchard()'
+            },
+            success: function (response) {
+                myApp.hidePleaseWait();
+                updateFromResponse(response);
+            },
+            error: function (data, errorText) {
+                myApp.hidePleaseWait();
+                alert(errorText);
+            }
+        });
+    }
+
+    $(function () {
+
+        $("#saveRecordButton").click(function () {
+            saveRecord();
+        });
+
+        $("#searchRecordButton").click(function () {
+            requestCallsPage(1);
+        });
+
+        updateFromResponse(@Html.Raw(Json.Encode(@Model)));
+    });
+
+</script>

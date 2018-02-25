@@ -416,6 +416,7 @@
     <Content Include="Views\DisplayTemplates\Parts.ShopContactUserProduct.cshtml" />
     <Content Include="Views\EditorTemplates\Parts\ShopArticle.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.ShopArticle.cshtml" />
+    <Content Include="Views\GCApproved\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -453,6 +454,7 @@
     <Compile Include="Controllers\GeocacheMaintenanceController.cs" />
     <Compile Include="Controllers\GeocacheSeriesController.cs" />
     <Compile Include="Controllers\FavoriteGeocachersController.cs" />
+    <Compile Include="Controllers\GCApprovedController.cs" />
     <Compile Include="Controllers\GlobalcachingDonationController.cs" />
     <Compile Include="Controllers\GlobalcachingServicesController.cs" />
     <Compile Include="Controllers\ImagesController.cs" />
@@ -583,6 +585,7 @@
     <Compile Include="Models\GCComTrackable.cs" />
     <Compile Include="Models\GCComTrackableLog.cs" />
     <Compile Include="Models\GCComUser.cs" />
+    <Compile Include="Models\GCEuApprovedCode.cs" />
     <Compile Include="Models\GCEuCCCRequest.cs" />
     <Compile Include="Models\ShopPicture.cs" />
     <Compile Include="Models\ShopProducts.cs" />
@@ -592,6 +595,7 @@
     <Compile Include="NopCommerce.Api.AdapterLibrary\ApiClient.cs" />
     <Compile Include="NopCommerce.Api.AdapterLibrary\HttpMethods.cs" />
     <Compile Include="Services\ShopService.cs" />
+    <Compile Include="ViewModels\GCApprovedCodeModel.cs" />
     <Compile Include="ViewModels\ShopArticleModel.cs" />
     <Compile Include="ViewModels\ShopContactUserProductModel.cs" />
     <Compile Include="ViewModels\GCEuCCCRequestModel.cs" />

@@ -79,6 +79,81 @@ namespace Globalcaching
                 new RouteDescriptor {
                     Priority = 5,
                     Route = new Route(
+                        "GCApproved",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCApproved"},
+                            {"action", "Index"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetApprovedRecord",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCApproved"},
+                            {"action", "GetApprovedRecord"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "SaveApprovedRecord",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCApproved"},
+                            {"action", "SaveApprovedRecord"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "DeleteApprovedRecord",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCApproved"},
+                            {"action", "DeleteApprovedRecord"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "GetApproved",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GCApproved"},
+                            {"action", "GetApproved"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
                         "GCComSearchUser",
                         new RouteValueDictionary {
                             {"area", "Globalcaching"},

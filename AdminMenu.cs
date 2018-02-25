@@ -60,7 +60,11 @@ namespace Globalcaching {
             if (Services.Authorizer.Authorize(Permissions.GlobalAdmin) || Services.Authorizer.Authorize(Permissions.FTFAdmin))
             {
                 builder.Add(T("Activiteiten"), "1.0", item => item.Action("Index", "UsersOnline", new { Area = "Globalcaching" }));
-            }            
+            }
+            if (Services.Authorizer.Authorize(Permissions.GlobalAdmin) || Services.Authorizer.Authorize(Permissions.ApprovedEditor) || Services.Authorizer.Authorize(Permissions.ApprovedViewer))
+            {
+                builder.Add(T("Goedkeuringen"), "1.0", item => item.Action("Index", "GCApproved", new { Area = "Globalcaching" }));
+            }
         }
 
     }
