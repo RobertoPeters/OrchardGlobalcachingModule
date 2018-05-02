@@ -148,7 +148,7 @@ Deze data is niet toegevoegd, maar kun je opvragen bij geocaching.com.
 
         private void DownloadChatData(PetaPoco.Database db, int yafUsrId, ICSharpCode.SharpZipLib.Zip.ZipOutputStream zs)
         {
-            var record = db.FirstOrDefault<dynamic>(@"select * FROM [Jabbr].[dbo].[ChatUsers] where ChatUsers.Name=@0", _gcEuUserSettingsService.GetName(yafUsrId));
+            var record = db.FirstOrDefault<dynamic>(@"select * FROM [Jabbr].[dbo].[ChatUsers] where ChatUsers.Name=@0", _gcEuUserSettingsService.GetName(yafUsrId).Replace(" ","_"));
             if (record != null)
             {
                 int userKey = record.Key;
