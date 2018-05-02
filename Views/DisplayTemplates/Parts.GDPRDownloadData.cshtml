@@ -1,0 +1,17 @@
+﻿@model Globalcaching.Models.GCEuUserSettings
+
+@if (Model.YafUserID > 0)
+{
+<button class="btn btn-primary" type="button" id="gdprDownloadDataButton" onclick="downloadGDPRData()">Download</button>
+}
+else
+{
+    <span>Je moet ingelogd zijn om jouw data te kunnen opvragen</span>
+}
+<script type="text/javascript">
+
+    function downloadGDPRData() {
+        window.location.href = '@Url.Action("DownloadData", "GDPR", new { area = "Globalcaching" })';
+    }
+
+</script>

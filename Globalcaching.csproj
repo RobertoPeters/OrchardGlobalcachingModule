@@ -417,6 +417,7 @@
     <Content Include="Views\EditorTemplates\Parts\ShopArticle.cshtml" />
     <Content Include="Views\DisplayTemplates\Parts.ShopArticle.cshtml" />
     <Content Include="Views\GCApproved\Home.cshtml" />
+    <Content Include="Views\DisplayTemplates\Parts.GDPRDownloadData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
@@ -447,6 +448,7 @@
     <Compile Include="Controllers\CombiRankingController.cs" />
     <Compile Include="Controllers\FoundsPerCountryRankingController.cs" />
     <Compile Include="Controllers\FTFStatsController.cs" />
+    <Compile Include="Controllers\GDPRController.cs" />
     <Compile Include="Controllers\GAPPInfoController.cs" />
     <Compile Include="Controllers\BookmarksController.cs" />
     <Compile Include="Controllers\GeocacheBatchLogController.cs" />
@@ -476,6 +478,7 @@
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\TrackableGroupController.cs" />
     <Compile Include="Controllers\UsersOnlineController.cs" />
+    <Compile Include="Core\DynamicHelper.cs" />
     <Compile Include="Core\ShopAuthorizationManager.cs" />
     <Compile Include="Core\CachedData.cs" />
     <Compile Include="Core\DBCon.cs" />
@@ -502,6 +505,7 @@
     <Compile Include="Core\SHP\ShapeFilesManager.cs" />
     <Compile Include="Core\SmileySupport.cs" />
     <Compile Include="Core\TemporaryFile.cs" />
+    <Compile Include="Drivers\GDPRDownloadDataPartDriver.cs" />
     <Compile Include="Drivers\ShopArticleDriver.cs" />
     <Compile Include="Drivers\ShopContactUserProductPartDriver.cs" />
     <Compile Include="Drivers\FinancialYearStatusDriver.cs" />
@@ -594,6 +598,7 @@
     <Compile Include="NopCommerce.Api.AdapterLibrary\ApiAuthorizer.cs" />
     <Compile Include="NopCommerce.Api.AdapterLibrary\ApiClient.cs" />
     <Compile Include="NopCommerce.Api.AdapterLibrary\HttpMethods.cs" />
+    <Compile Include="Services\GDPRService.cs" />
     <Compile Include="Services\ShopService.cs" />
     <Compile Include="ViewModels\GCApprovedCodeModel.cs" />
     <Compile Include="ViewModels\ShopArticleModel.cs" />

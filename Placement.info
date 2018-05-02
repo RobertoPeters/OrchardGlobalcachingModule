@@ -55,4 +55,5 @@
   <Place Parts_ShopContactUserProduct="Content:1"/>
   <Place Parts_ShopArticle="Content:1"/>
   <Place Parts_ShopArticle_Edit="Content:7.5"/>
+  <Place Parts_GDPRDownloadData="Content:1"/>
 </Placement>

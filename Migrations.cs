@@ -774,5 +774,18 @@ namespace Globalcaching
             return 54;
         }
 
+        public int UpdateFrom54()
+        {
+            ContentDefinitionManager.AlterTypeDefinition("GDPRDownloadDataWidget",
+               cfg => cfg
+                   .DisplayedAs("GDPRDownloadData")
+                   .WithPart("GDPRDownloadDataPart")
+                   .WithPart("CommonPart")
+                   .WithPart("WidgetPart")
+                   .WithSetting("Stereotype", "Widget")
+               );
+
+            return 55;
+        }
     }
 }

@@ -2776,6 +2776,21 @@ namespace Globalcaching
                             {"area", "Globalcaching"}
                         },
                         new MvcRouteHandler())
+                },
+                new RouteDescriptor {
+                    Priority = 5,
+                    Route = new Route(
+                        "DownloadGDPRData",
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"},
+                            {"controller", "GDPR"},
+                            {"action", "DownloadData"}
+                        },
+                        new RouteValueDictionary(),
+                        new RouteValueDictionary {
+                            {"area", "Globalcaching"}
+                        },
+                        new MvcRouteHandler())
                 }
            };
         }

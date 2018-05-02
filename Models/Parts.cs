@@ -53,6 +53,10 @@ namespace Globalcaching.Models
         }
     }
 
+    public class GDPRDownloadDataPart : ContentPart
+    {
+    }
+
     public class ShopContactUserProductPart : ContentPart
     {
     }
