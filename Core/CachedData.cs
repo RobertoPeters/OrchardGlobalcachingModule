@@ -30,6 +30,12 @@ namespace Globalcaching.Core
                 AttributesInfo = db.Fetch<GCComAttributeType>("order by id");
                 StatesInfo = db.Fetch<GeocacheStateInfo>("select distinct StateID, State from GCComGeocache order by StateID");
                 GeocacheTypesFilter = db.Fetch<GCComGeocacheType>("where ID in (2, 3, 4, 5, 6, 8, 11, 12, 15, 137, 1858) order by ID");
+
+                var p = (from a in StatesInfo where a.StateID == 89 select a).FirstOrDefault();
+                if (p != null)
+                {
+                    p.State = string.Format("{0} BE", p.State);
+                }
             }
         }
 
